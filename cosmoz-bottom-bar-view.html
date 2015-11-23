@@ -1,0 +1,52 @@
+<link rel="import" href="cosmoz-bottom-bar.html">
+<link rel="import" href="../cosmoz-viewinfo/cosmoz-viewinfo.html">
+<dom-module id="cosmoz-bottom-bar-view">
+	<style type="text/css">
+
+		#scroller {
+			overflow-y: auto;
+			width: 100%;
+			height: 100%;
+			position: absolute;
+		}
+
+		#wrapper {
+			flex: 1;
+			position: relative;
+		}
+
+	</style>
+	<template>
+		<cosmoz-viewinfo class="layout vertical fit">
+			<div id="wrapper" class="flex">
+				<div id="scroller" class="scroller">
+					<content id="scrollerContent" select=".cosmoz-bottom-bar-scroll"></content>
+				</div>
+			</div>
+			<cosmoz-bottom-bar id="bar" fixed$="{{ viewInfo.desktop }}" scroller="{{ scroller }}" >
+				<content></content>
+			</cosmoz-bottom-bar>
+		</cosmoz-viewinfo>
+	</template>
+	<script type="text/javascript">
+/*global Polymer, Cosmoz*/
+
+"use strict";
+
+Polymer({
+	behaviors: [
+		Cosmoz.ViewInfoBehavior
+	],
+	is: 'cosmoz-bottom-bar-view',
+	properties: {
+		scroller: {
+			type: Object
+		}
+	},
+	attached: function () {
+		this.scroller = this.$.scroller;
+	}
+});
+
+	</script>
+</dom-module>
