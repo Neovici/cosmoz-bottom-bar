@@ -1,93 +1,53 @@
-/*global Cosmoz, document, Polymer, window, d3, nv */
+/*global Cosmoz, document, Polymer, window*/
 
-/**
- * <h5>cosmoz-bottom-bar</h5><br/>
- *
- * cosmoz-bottom-bar is meant as a (dynamic) bottom-bar that can house buttons/actions
- * and a menu for buttons that won't fit the available width.
- *
- * @namespace element/cosmoz-bottom-bar
- */
 (function () {
 
 	"use strict";
 
-	var polymer = Polymer;
-
-	polymer({
+	Polymer({
+		is: 'cosmoz-bottom-bar',
 		behaviors: [
 			Cosmoz.ViewInfoBehavior
 		],
-		is: 'cosmoz-bottom-bar',
 		listeners: {
 			'viewinfo-resize': '_viewInfoResize',
 			'iron-overlay-closed': '_dropdownClosed'
 		},
 		properties: {
-			/**
-			 * Whether the bar is active/shown (always active when fixed)
-			 * @type {Boolean}
-			 * @memberOf  element/cosmoz-bottom-bar
-			 */
+			/** Whether the bar is active/shown (always active when fixed) */
 			active: {
 				type: Boolean,
 				value: false,
 				observer: 'activeChanged',
 				reflectToAttribute: true
 			},
-			/**
-			 * Whether the bar is fixed (and take up space) or shows/hides
-			 * from the bottom when needed - usually fixed on desktop and not mobile
-			 * @type {Boolean}
-			 * @memberOf  element/cosmoz-bottom-bar
-			 */
+			/** Whether the bar is fixed (and take up space) or shows/hides from the bottom when needed - usually fixed on desktop and not mobile */
 			fixed: {
 				type: Boolean,
 				value: false,
 				observer: 'fixedChanged'
 			},
-			/**
-			 * Bar height (not applicable when "matchParent" or "matchElementHeight" is set)
-			 * @type {Number}
-			 * @memberOf  element/cosmoz-bottom-bar
-			 */
+			/** Bar height (not applicable when "matchParent" or "matchElementHeight" is set) */
 			barHeight: {
 				type: Number,
 				value: 64
 			},
-			/**
-			 * Optional text to display at bottom left corner
-			 * @type {String}
-			 * @memberOf  element/cosmoz-bottom-bar
-			 */
+			/** Optional text to display at bottom left corner */
 			info: {
 				type: String,
 				value: ''
 			},
-			/**
-			 * Reference element from which to inherit height
-			 * @type {Element}
-			 * @memberOf  element/cosmoz-bottom-bar
-			 */
+			/** Reference element from which to inherit height */
 			matchElementHeight: {
 				type: Object,
 				value: null
 			},
-			/**
-			 * Whether to match the height of parent (set reference element to parent)
-			 * @type {Boolean}
-			 * @memberOf  element/cosmoz-bottom-bar
-			 */
+			/** Whether to match the height of parent (set reference element to parent) */
 			matchParent: {
 				type: Boolean,
 				value: false
 			},
-			/**
-			 * Scroller element to listen to when deciding whether or not to show the bar
-			 * Bar will be shown while scrolling up or when reaching bottom
-			 * @type {Element}
-			 * @memberOf  element/cosmoz-bottom-bar
-			 */
+			/** Scroller element to listen to when deciding whether or not to show the bar. Bar will be shown while scrolling up or when reaching bottom */
 			scroller: {
 				type: Object,
 				observer: 'scrollerChanged'

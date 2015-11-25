@@ -22,7 +22,7 @@
   ],
   "dependencies": {
     "polymer": "^1.2.0",
-    "iron-component-page": "PolymerElements/iron-component-page#~1.0.7",
+    "iron-component-page": "PolymerElements/iron-component-page#~1.1.0",
     "iron-dropdown": "polymerelements/iron-dropdown#~1.0.6",
     "iron-flex-layout": "polymerelements/iron-flex-layout#~1.0.5",
     "cosmoz-viewinfo": "neovici/cosmoz-viewinfo",
