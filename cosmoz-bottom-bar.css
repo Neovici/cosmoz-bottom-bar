@@ -102,6 +102,7 @@
 #buttons ::content paper-button {
 	text-overflow: ellipsis;
 	white-space: nowrap;
+	color: black;
 }
 
 #menumenu ::content paper-button {

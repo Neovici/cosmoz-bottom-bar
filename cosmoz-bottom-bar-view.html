@@ -3,30 +3,23 @@
 <dom-module id="cosmoz-bottom-bar-view">
 	<style type="text/css">
 
+		:host {
+			@apply(--layout-vertical);
+			@apply(--layout-flex);
+		}
+
 		#scroller {
+			@apply(--layout-flex);
 			overflow-y: auto;
-			width: 100%;
-			height: 100%;
-			position: absolute;
 		}
-
-		#wrapper {
-			flex: 1;
-			position: relative;
-		}
-
 	</style>
 	<template>
-		<cosmoz-viewinfo class="layout vertical fit">
-			<div id="wrapper" class="flex">
-				<div id="scroller" class="scroller">
-					<content id="scrollerContent" select=".cosmoz-bottom-bar-scroll"></content>
-				</div>
-			</div>
-			<cosmoz-bottom-bar id="bar" fixed$="{{ viewInfo.desktop }}" scroller="{{ scroller }}" >
-				<content></content>
-			</cosmoz-bottom-bar>
-		</cosmoz-viewinfo>
+		<div id="scroller">
+			<content id="scrollerContent" select=".cosmoz-bottom-bar-scroll"></content>
+		</div>
+		<cosmoz-bottom-bar id="bar" fixed$="{{ viewInfo.desktop }}" scroller="{{ scroller }}" >
+			<content></content>
+		</cosmoz-bottom-bar>
 	</template>
 	<script type="text/javascript">
 /*global Polymer, Cosmoz*/

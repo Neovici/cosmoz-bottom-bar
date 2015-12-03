@@ -8,14 +8,10 @@
 
 	<script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 	<link rel="import" href="../../paper-button/paper-button.html">
+	<link rel="import" href="../../cosmoz-viewinfo/cosmoz-viewinfo.html">
 	<link rel="import" href="../cosmoz-bottom-bar-view.html">
 
 	<style type="text/css">
-
-		paper-button.menu {
-			background-color: rgba(0, 0, 0, 0.9);
-			color: #fff;
-		}
 
 		.item {
 			padding: 20px;
@@ -30,26 +26,28 @@
 </head>
 <body class="">
 	<template is="dom-bind">
-		<cosmoz-bottom-bar-view>
-			<div class="cosmoz-bottom-bar-scroll">
-				<div class="item">
-					Hey you!
-					<p>Try resizing the window and scrolling down for a reponsive bottom bar demonstration!</p>
+		<cosmoz-viewinfo class="vertical layout fit">
+			<cosmoz-bottom-bar-view>
+				<div class="cosmoz-bottom-bar-scroll">
+					<div class="item">
+						Hey you!
+						<p>Try resizing the window and scrolling down for a reponsive bottom bar demonstration!</p>
+					</div>
 				</div>
-			</div>
-			<paper-button raised class="menu">
-				button 1
-			</paper-button>
-			<paper-button raised class="menu">
-				button 2
-			</paper-button>
-			<paper-button raised class="menu">
-				big button 3
-			</paper-button>
-			<paper-button raised class="menu">
-				even bigger button 4
-			</paper-button>
-		</cosmoz-bottom-bar-view>
+				<paper-button raised class="menu">
+					button 1
+				</paper-button>
+				<paper-button raised class="menu">
+					button 2
+				</paper-button>
+				<paper-button raised class="menu">
+					big button 3
+				</paper-button>
+				<paper-button raised class="menu">
+					even bigger button 4
+				</paper-button>
+			</cosmoz-bottom-bar-view>
+		</cosmoz-viewinfo>
 	</template>
 </body>
 </html>
