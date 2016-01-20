@@ -37,6 +37,10 @@
 	opacity: 1;
 }
 
+#dropdownButton {
+	background-color: #51c1e0;
+}
+
 #canvas {
 	overflow: hidden;
 	max-width: 100%; /* Firefox fix */

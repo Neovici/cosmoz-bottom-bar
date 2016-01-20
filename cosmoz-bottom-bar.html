@@ -1,6 +1,8 @@
 <link rel="import" href="../polymer/polymer.html"/>
 <link rel="import" href="../paper-button/paper-button.html">
-<link rel="import" href="../iron-dropdown/iron-dropdown.html">
+<link rel="import" href="../paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../paper-menu/paper-menu.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
@@ -26,18 +28,14 @@ See demo for example usage
 				<div id="buttons" class="flex layout horizontal center end-justified">
 					<content id="actionButtons" select="[button]"></content>
 				</div>
-				<div id="menu" class="layout horizontal center" hidden$="{{ !menuActions }}">
-					<paper-button id="dropdownButton" toggles raised class="dropdown-trigger" on-tap="onMenuTap">
-						<iron-icon icon="menu"></iron-icon>
-					</paper-button>
-				</div>
+				<paper-menu-button id="menu" duration="250" vertical-offset="{{barHeight}}" vertical-align="bottom" horizontal-align="right" role="group" class="x-scope paper-menu-button-0 layout horizontal center">
+					<paper-icon-button icon="menu" id="dropdownButton" toggles raised class="dropdown-trigger" hidden$="{{ !menuActions }}"></paper-icon-button>
+						<paper-menu  id="dropdown" class="dropdown-content">
+							<content id="actionMenu"></content>
+						</paper-menu>
+				</paper-menu-button>
 			</div>
 		</div>
-		<iron-dropdown id="dropdown" duration="250" class="dropdown" horizontal-align="right" vertical-align="bottom" vertical-offset="{{barHeight}}">
-			<div id="menumenu" class="dropdown-content menu">
-				<content id="actionMenu"></content>
-			</div>
-		</iron-dropdown>
 	</template>
 	<script type="text/javascript" src="cosmoz-bottom-bar.js"></script>
 </dom-module>
