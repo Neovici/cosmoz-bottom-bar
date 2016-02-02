@@ -15,7 +15,7 @@
 		}
 	</style>
 	<template>
-		<div id="scroller">
+		<div id="scroller" style$="{{ _getPadding(viewInfo.desktop) }}">
 			<content id="scrollerContent" select=".cosmoz-bottom-bar-scroll"></content>
 		</div>
 		<cosmoz-bottom-bar id="bar" fixed$="{{ viewInfo.desktop }}" scroller="{{ scroller }}" >
@@ -39,6 +39,12 @@ Polymer({
 	},
 	attached: function () {
 		this.scroller = this.$.scroller;
+	},
+	_getPadding: function (desktop) {
+		if (desktop) {
+			return;
+		}
+		return 'padding-bottom: ' + this.$.bar.barHeight + 'px';
 	}
 });
 
