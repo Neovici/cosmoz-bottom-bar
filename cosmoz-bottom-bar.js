@@ -127,6 +127,7 @@
 			this.style.maxHeight = this.fixed
 				? 'initial'
 				: '0px';
+			this.scrollHandler();
 		},
 		getElements: function (contentElement) {
 			var
@@ -278,6 +279,9 @@
 			this.$.dropdown.open();
 		},
 		_scrollManagement: function (event) {
+			if (this.scroller === undefined) {
+				return;
+			}
 			var
 				scrollTop = this.scroller.scrollTop,
 				up = this.lastScroll > scrollTop,
