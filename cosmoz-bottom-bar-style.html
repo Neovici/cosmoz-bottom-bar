@@ -1,0 +1,122 @@
+<dom-module id="cosmoz-bottom-bar-style">
+	<template>
+		<style>
+			:host {
+				display: block;
+				@apply(--layout);
+				@apply(--layout-horizontal);
+			}
+
+			:host([bottom]) {
+				position: absolute;
+				bottom: 0;
+				width: 100%;
+			}
+
+			:host([matching]) {
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				right: 0;
+			}
+
+			:host([fixed]) #canvas {
+				top: initial;
+				height: initial;
+			}
+
+			:host([fixed]) #bar {
+				position: initial;
+			}
+
+			:host([fixed]) #bar,
+			:host([active]) #bar {
+				transform: translate3d(0,0,0);
+				-webkit-transform: translate3d(0,0,0);
+			}
+
+			:host([fixed]) #bar.fade,
+			:host([active]) #bar.fade {
+				opacity: 1;
+			}
+
+			#dropdownButton {
+				background-color: #51c1e0;
+			}
+
+			#canvas {
+				overflow: hidden;
+				max-width: 100%; /* Firefox fix */
+			}
+
+			#bar {
+				font-weight: 300;
+				font-size: 15px;
+				color: white;
+				background-color: #F5F5F5;
+				transition: all 0.5s ease;
+				padding: 0 3%;
+				height: inherit;
+			}
+
+			:host(.selection) #bar {
+				background-color: #49D593;
+			}
+
+			#bar.fade {
+				opacity: 0.3;
+			}
+
+			#info, #buttons {
+				height: inherit;
+			}
+
+			#info {
+				color: #000;
+				padding-right: 3%;
+			}
+
+			:host(.selection) #info {
+				color: inherit;
+			}
+
+			#buttons {
+				overflow: hidden;
+			}
+
+			#menu {
+				padding-left: 3%;
+			}
+
+			#menu > iron-dropdown {
+				outline: none;
+				cursor: pointer;
+			}
+
+			#info,
+			#menu > div {
+				white-space: nowrap;
+			}
+
+			#menu paper-button {
+				background-color: rgb(181, 181, 181);
+			}
+
+			#menu paper-button[toggles][active] {
+				background-color: rgb(101, 101, 101);
+			}
+
+			#buttons ::content paper-button {
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				color: black;
+			}
+
+			#menumenu ::content paper-button {
+				display: block;
+				margin-bottom: 5px;
+			}
+
+		</style>
+	</template>
+</dom-module>
