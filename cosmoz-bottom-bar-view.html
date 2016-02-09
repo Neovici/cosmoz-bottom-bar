@@ -1,18 +1,36 @@
 <link rel="import" href="cosmoz-bottom-bar.html">
 <link rel="import" href="../cosmoz-viewinfo/cosmoz-viewinfo.html">
+
+<!--
+`cosmoz-bottom-bar-view` contains a content section and a bottom bar with actions.
+
+__Important:__ The `cosmoz-bottom-bar-view` will not display if its parent does not have a height.
+
+-->
+
 <dom-module id="cosmoz-bottom-bar-view">
 	<style type="text/css">
 
 		:host {
+			position: relative;
 			@apply(--layout-vertical);
-			@apply(--layout-flex);
+			height: 100%;
 		}
 
 		#scroller {
 			@apply(--layout-flex);
-			@apply(--layout-vertical);
+			position: relative;
 			overflow-y: auto;
 		}
+
+		#scroller ::content > * {
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+		}
+
 	</style>
 	<template>
 		<div id="scroller" style$="{{ _getPadding(viewInfo.desktop) }}">
