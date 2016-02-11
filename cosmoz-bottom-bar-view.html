@@ -21,16 +21,8 @@ __Important:__ The `cosmoz-bottom-bar-view` will not display if its parent does 
 			@apply(--layout-flex);
 			position: relative;
 			overflow-y: auto;
+			overflow-x: hidden;
 		}
-
-		#scroller ::content > * {
-			position: absolute;
-			top: 0;
-			bottom: 0;
-			left: 0;
-			right: 0;
-		}
-
 	</style>
 	<template>
 		<div id="scroller" style$="{{ _getPadding(viewInfo.desktop) }}">
