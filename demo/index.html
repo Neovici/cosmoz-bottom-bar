@@ -19,7 +19,7 @@
 		.item {
 			padding: 20px;
 			width: 50%;
-			height: 1500px;
+			height: 1000px;
 			background-color: rgba(0, 0, 255, 0.5);
 			color: white;
 			font-size: 20px;
@@ -29,12 +29,17 @@
 </head>
 <body class="">
 	<template is="dom-bind">
-		<cosmoz-viewinfo class="vertical layout fit">
+		<cosmoz-viewinfo class="fit">
 			<cosmoz-bottom-bar-view>
 				<div class="cosmoz-bottom-bar-scroll">
 					<div class="item">
 						Hey you!
 						<p>Try resizing the window and scrolling down for a reponsive bottom bar demonstration!</p>
+					</div>
+					<div>
+						This is content<br/>
+						at the bottom<br/>
+						of the view
 					</div>
 				</div>
 				<paper-button raised class="menu">
