@@ -269,6 +269,7 @@
 				? 0
 				: -this.barHeight + 'px';
 			this.$.canvas.style.height = this.barHeight + 'px';
+			this._scrollManagement();
 			this.setBarTranslate();
 			if (event && (this.active || this.fixed)) {
 				var bigger = event && event.detail && event.detail.bigger;
