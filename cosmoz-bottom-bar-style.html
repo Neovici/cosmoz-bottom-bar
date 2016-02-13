@@ -40,10 +40,6 @@
 				opacity: 1;
 			}
 
-			#dropdownButton {
-				background-color: #51c1e0;
-			}
-
 			#canvas {
 				overflow: hidden;
 				max-width: 100%; /* Firefox fix */
@@ -52,8 +48,8 @@
 			#bar {
 				font-weight: 300;
 				font-size: 15px;
-				color: white;
-				background-color: #F5F5F5;
+				color: black;
+				background-color: var(--cosmoz-bottom-bar-background-color, --primary-background-color);
 				transition: all 0.5s ease;
 				padding: 0 3%;
 				height: inherit;
@@ -76,6 +72,12 @@
 				padding-right: 3%;
 			}
 
+			#dropdownButton {
+				color: var(--cosmoz-bottom-bar-menubutton-color, --light-primary-color);
+				background-color: var(--cosmoz-bottom-bar-menubutton-background-color, --dark-primary-color);
+				@apply(--cosmoz-bottom-bar-menubutton);
+			}
+
 			:host(.selection) #info {
 				color: inherit;
 			}
@@ -88,9 +90,8 @@
 				padding-left: 3%;
 			}
 
-			#menu > iron-dropdown {
-				outline: none;
-				cursor: pointer;
+			#menu ::content paper-button {
+				border: 0;
 			}
 
 			#info,
@@ -98,25 +99,16 @@
 				white-space: nowrap;
 			}
 
-			#menu paper-button {
-				background-color: rgb(181, 181, 181);
+			#buttons ::content paper-icon-button {
+				margin: 0 0.29em;
+				min-width: 40px;
+    			min-height: 40px;
 			}
 
-			#menu paper-button[toggles][active] {
-				background-color: rgb(101, 101, 101);
-			}
-
-			#buttons ::content paper-button {
+			#buttons ::content > * {
 				text-overflow: ellipsis;
 				white-space: nowrap;
-				color: black;
 			}
-
-			#menumenu ::content paper-button {
-				display: block;
-				margin-bottom: 5px;
-			}
-
 		</style>
 	</template>
 </dom-module>

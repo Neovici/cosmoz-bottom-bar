@@ -1,6 +1,6 @@
 <link rel="import" href="../polymer/polymer.html"/>
-<link rel="import" href="../paper-button/paper-button.html">
 <link rel="import" href="../paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../paper-menu-button/paper-menu-button.html">
 <link rel="import" href="../paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../paper-menu/paper-menu.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
@@ -29,11 +29,11 @@ See demo for example usage
 				<div id="buttons" class="flex layout horizontal center end-justified">
 					<content id="actionButtons" select="[button]"></content>
 				</div>
-				<paper-menu-button id="menu" duration="250" vertical-offset="{{barHeight}}" vertical-align="bottom" horizontal-align="right" role="group" class="x-scope paper-menu-button-0 layout horizontal center">
-					<paper-icon-button icon="menu" id="dropdownButton" toggles raised class="dropdown-trigger" hidden$="{{ !menuActions }}"></paper-icon-button>
-						<paper-menu  id="dropdown" class="dropdown-content">
-							<content id="actionMenu"></content>
-						</paper-menu>
+				<paper-menu-button hidden$="{{ !menuActions }}" id="menu" duration="250" vertical-offset="{{ barHeight }}" vertical-align="bottom" horizontal-align="right" role="group" class="layout horizontal center">
+					<paper-icon-button icon="menu" id="dropdownButton" toggles raised class="dropdown-trigger"></paper-icon-button>
+					<paper-menu id="dropdown" class="dropdown-content">
+						<content id="actionMenu"></content>
+					</paper-menu>
 				</paper-menu-button>
 			</div>
 		</div>
