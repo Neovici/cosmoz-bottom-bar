@@ -286,7 +286,7 @@
 			var
 				scrollTop = this.scroller.scrollTop,
 				up = this.lastScroll > scrollTop,
-				atBottom = (scrollTop + this.scroller.clientHeight) >= this.scroller.scrollHeight;
+				atBottom = (scrollTop + this.scroller.clientHeight + 1) >= this.scroller.scrollHeight;
 
 			this.active = up || atBottom;
 			this.lastScroll = scrollTop;

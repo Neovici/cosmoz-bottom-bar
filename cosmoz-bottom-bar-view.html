@@ -19,14 +19,22 @@ __Important:__ The `cosmoz-bottom-bar-view` will not display if its parent does 
 
 		#scroller {
 			@apply(--layout-flex);
+			@apply(--layout-vertical);
 			position: relative;
 			overflow-y: auto;
 			overflow-x: hidden;
 		}
+
+		#scrollerArea {
+			@apply(--layout-flex);
+			position: relative;
+		}
 	</style>
 	<template>
 		<div id="scroller" style$="{{ _getPadding(viewInfo.desktop) }}">
-			<content id="scrollerContent" select=".cosmoz-bottom-bar-scroll"></content>
+			<div id="scrollerArea">
+				<content id="scrollerContent" select=".cosmoz-bottom-bar-scroll"></content>
+			</div>
 		</div>
 		<cosmoz-bottom-bar id="bar" fixed$="{{ viewInfo.desktop }}" scroller="{{ scroller }}" >
 			<content></content>
