@@ -10,7 +10,7 @@
 			Cosmoz.ViewInfoBehavior
 		],
 		listeners: {
-			'viewinfo-resize': '_viewInfoResize',
+			'viewinfo-resize': 'onResize',
 			'iron-overlay-closed': '_dropdownClosed'
 		},
 		properties: {
@@ -52,6 +52,11 @@
 				type: Object,
 				observer: 'scrollerChanged'
 			},
+			scrollerOverflow: {
+				type: Boolean,
+				value: false,
+				notify: true
+			},
 			menuActions: {
 				type: Boolean,
 				value: false
@@ -78,9 +83,9 @@
 			}
 			this.onResize();
 		},
-		checkOverflow: function (event) {
+		setBarOverflow: function (event) {
 			/**
-			 * 'checkOverflow' will run as the bar transition is _completed_.
+			 * 'setBarOverflow' will run as the bar transition is _completed_.
 			 * After showing, turn canvas overflow on so that menus and other components in the bar can
 			 * overflow out of the bar.
 			 * After hiding, turn host overflow off so that it doesn't cover any other element on screen.
@@ -145,9 +150,6 @@
 		},
 		_dropdownClosed: function (e) {
 			this.$.dropdownButton.active = false;
-		},
-		_viewInfoResize: function (e) {
-			this.onResize(e);
 		},
 		_layoutActions: function (bigger, second) {
 			/**
@@ -286,9 +288,13 @@
 			var
 				scrollTop = this.scroller.scrollTop,
 				up = this.lastScroll > scrollTop,
-				atBottom = (scrollTop + this.scroller.clientHeight + 1) >= this.scroller.scrollHeight;
+				scrollerHeight = this.scroller.clientHeight,
+				scrollerScrollHeight = this.scroller.scrollHeight,
+				atBottom = (scrollTop + scrollerHeight + (this.barHeight * 0.7)) >= scrollerScrollHeight;
+
 
 			this.active = up || atBottom;
+			this.scrollerOverflow = scrollerScrollHeight > scrollerHeight;
 			this.lastScroll = scrollTop;
 		},
 		scrollerChanged: function (newScroller, oldScroller) {

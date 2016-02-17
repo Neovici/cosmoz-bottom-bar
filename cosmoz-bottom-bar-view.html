@@ -36,7 +36,7 @@ __Important:__ The `cosmoz-bottom-bar-view` will not display if its parent does 
 				<content id="scrollerContent" select=".cosmoz-bottom-bar-scroll"></content>
 			</div>
 		</div>
-		<cosmoz-bottom-bar id="bar" fixed$="{{ viewInfo.desktop }}" scroller="{{ scroller }}" >
+		<cosmoz-bottom-bar id="bar" fixed$="{{ viewInfo.desktop }}" scroller="{{ scroller }}" scroller-overflow="{{ overflowing }}">
 			<content></content>
 		</cosmoz-bottom-bar>
 	</template>
@@ -51,6 +51,11 @@ Polymer({
 	],
 	is: 'cosmoz-bottom-bar-view',
 	properties: {
+		overflowing: {
+			type: Boolean,
+			value: false,
+			reflectToAttribute: true
+		},
 		scroller: {
 			type: Object
 		}

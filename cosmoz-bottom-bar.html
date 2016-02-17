@@ -24,7 +24,7 @@ See demo for example usage
 	<template>
 		<style include="cosmoz-bottom-bar-style"></style>
 		<div id="canvas" class="flex relative layout vertical">
-			<div id="bar" class="horizontal layout center flex" on-transitionend="checkOverflow">
+			<div id="bar" class="horizontal layout center flex" on-transitionend="setBarOverflow">
 				<div id="info" class="layout horizontal center">{{ info }}</div>
 				<div id="buttons" class="flex layout horizontal center end-justified">
 					<content id="actionButtons" select="[button]"></content>
