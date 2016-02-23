@@ -34,6 +34,7 @@
     "paper-icon-button": "PolymerElements/paper-icon-button#^1.0.0"
   },
   "devDependencies": {
-    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0"
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "web-component-tester": "Polymer/web-component-tester#^4.2.1"
   }
 }

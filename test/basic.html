@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+	<title>cosmoz-bottom-bar-view basic test</title>
+	<script type="text/javascript">
+	var logStore = [],
+		errorStore = [],
+		oldLogFunc = console.log,
+		oldErrorFunc = console.error;
+
+	console.log = function (logMessage) {
+		logStore.push(logMessage);
+		oldLogFunc.apply(console, arguments);
+	};
+
+	console.error = function (errorMessage) {
+		errorStore.push(errorMessage);
+		oldErrorFunc.apply(console, arguments);
+	};
+
+	</script>
+	<script src="../../web-component-tester/browser.js"></script>
+	<script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+	<link rel="import" href="../cosmoz-bottom-bar-view.html">
+</head>
+<body>
+	<test-fixture id="cosmoz-bottom-bar-view-fixture">
+		<template>
+			<cosmoz-bottom-bar-view></cosmoz-bottom-bar-view>
+		</template>
+	</test-fixture>
+
+	<script>
+	/*global WCT, suite, fixture, setup, test, Polymer, assert, logStore, errorStore */
+	(function () {
+		'use strict';
+
+		suite('<cosmoz-bottom-bar-view>', function () {
+			var myElement;
+
+			setup(function () {
+				myElement = fixture('cosmoz-bottom-bar-view-fixture');
+			});
+
+			test('overflowing should be false', function () {
+				//Polymer.dom(myElement).()
+				assert.equal(myElement.overflowing, false);
+			});
+
+			test('No console logs should exist', function () {
+				assert.equal(logStore.length, 0, 'Log messages: ' + logStore.join(' | '));
+			});
+
+			test('No console errors should exist', function () {
+				assert.equal(errorStore.length, 0, 'Error messages: ' + errorStore.join(' | '));
+			});
+		});
+	}());
+
+	</script>
+</body>
+</html>
