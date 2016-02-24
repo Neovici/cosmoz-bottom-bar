@@ -15,4 +15,7 @@ before_script:
 script: xvfb-run wct
 env:
   global:
-    - CXX=g++-4.8
+  - CXX=g++-4.8
+notifications:
+  slack:
+    secure: wUdQ7WsRenhKaMtGiNwzvZQHpxdkLe6agFfjIh7iCosrcxhbBpIrE2hB830hKu4TNREvLzKyx+36QcJjWiSjm/yiSFLkTTNL1z6ZmG5x5EOkuB6CF7aD8sGJ6qvfVMSFq4aKF7tVxixhhIDT5ZkynNaHDcATdaWdyU5EB/kJSg1TBIbaXzpi3+tBqpxXKWX3bAl6X0vTSVxeMEhrWEVOZyNPuC2kaY7D8odbQ1jjTO+SmCLefoEt8GjgLjlzXdE7rlRn3NB+ojnW0Zgcbh8tnKvOKyRernZRCBNlr/ohzIixM84NhUqaNyha1sSKQM8zaeMPqQ7taWCO/dhKDuJuvQS+c+4zOoHfsme1eh3HqYxmdlCZcZf26eRCCS0Ce4L/+8gj5ncoWJuiXSFr33yK9tiu3kNK7CjEzabJD7GMHyjqsmlfVeKMG9pgJUyHUanTjz//CA1c7zyAqf8xHiW789Lnm9q/+2RHl7+rEu9OJOwMnmW9m53qfvAZB02SWanb/OKMK+0XbzCJmCk601dmILWARgoovibxDOd2JxG4ATN5dLCrPhYj5o/0Mv0LO8GeeaAntfoogfu5tsX9Jqtp2Fvn+ejpNrNzty5CEQPSByGdcfQRTx7EyQyYcVFGy3dGZbMnD7hEHfAzddVl2S8m1GDO0RVE8gj+CYt0Cvcq228=
