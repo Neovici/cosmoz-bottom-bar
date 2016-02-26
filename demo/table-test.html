@@ -12,8 +12,8 @@
 
 	<link rel="import" href="../cosmoz-bottom-bar-view.html">
 
+	<link rel="import" href="../../iron-flex-layout/iron-flex-layout-classes.html">
 	<link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
-	<link rel="import" href="../../iron-flex-layout/classes/iron-flex-layout.html">
 	<link rel="import" href="../../paper-button/paper-button.html">
 	<link rel="import" href="../../cosmoz-i18next/cosmoz-i18next.html">
 	<link rel="import" href="../../cosmoz-omnitable/cosmoz-omnitable.html">
@@ -21,40 +21,49 @@
 </head>
 <body class="fullbleed">
 	<dom-module id="x-page">
-		<template>
-			<cosmoz-viewinfo class="fit">
-				<div class="layout vertical fit">
-					<h3>Cosmoz bottom bar with table demo</h3>
-					<cosmoz-bottom-bar-view class="flex">
-						<div class="cosmoz-bottom-bar-scroll">
-							<cosmoz-omnitable data="{{ data }}" class="fit" selection-enabled group-on="group">
-								<header id="id">Id</header>
-								<header id="name">Name</header>
-								<header id="randomString">Random string</header>
-								<header id="randomString2">Random string 2</header>
-								<header id="randomString3">Random string 3</header>
-								<header id="randomString4">Random string 4</header>
-								<header id="amount" render-func="renderMoney">Amount</header>
-								<header id="date" type="date" render-func="Cosmoz.formatDate">Date</header>
-								<header id="group">Group</header>
+		<style include="iron-flex iron-positioning">
+			.cosmoz-bottom-bar-scroll {
+				display: block;
+				position: relative;
+				height: 100%;
+			}
 
-								<button action on-run="runAction">Hello</button>
-							</cosmoz-omnitable>
-						</div>
-						<paper-button>
-							button 1
-						</paper-button>
-						<paper-button>
-							button 2
-						</paper-button>
-						<paper-button>
-							big button 3
-						</paper-button>
-						<paper-button>
-							even bigger button 4
-						</paper-button>
-					</cosmoz-bottom-bar-view>
-				</div>
+			cosmoz-bottom-bar-view {
+				--cosmoz-bottom-bar-background-color: lightgreen;
+			}
+		</style>
+		<template>
+			<cosmoz-viewinfo class="layout vertical fit">
+				<h3>Cosmoz bottom bar with table demo</h3>
+				<cosmoz-bottom-bar-view class="flex">
+					<div class="cosmoz-bottom-bar-scroll">
+						<cosmoz-omnitable data="{{ data }}" class="fit" selection-enabled group-on="group">
+							<header id="id">Id</header>
+							<header id="name">Name</header>
+							<header id="randomString">Random string</header>
+							<header id="randomString2">Random string 2</header>
+							<header id="randomString3">Random string 3</header>
+							<header id="randomString4">Random string 4</header>
+							<header id="amount" render-func="renderMoney">Amount</header>
+							<header id="date" type="date" render-func="Cosmoz.formatDate">Date</header>
+							<header id="group">Group</header>
+
+							<button action on-run="runAction">Hello</button>
+						</cosmoz-omnitable>
+					</div>
+					<paper-button>
+						button 1
+					</paper-button>
+					<paper-button>
+						button 2
+					</paper-button>
+					<paper-button>
+						big button 3
+					</paper-button>
+					<paper-button>
+						even bigger button 4
+					</paper-button>
+				</cosmoz-bottom-bar-view>
 			</cosmoz-viewinfo>
 		</template>
 	</dom-module>
@@ -93,7 +102,7 @@
 			_generateData: function () {
 				var
 					data = [],
-					groupsCount = getRandomInt(10, 15),
+					groupsCount = getRandomInt(7, 13),
 					i,
 					j,
 					n = 0,
@@ -127,7 +136,7 @@
 				return data;
 			},
 
-			ready: function () {
+			attached: function () {
 				this.changeData();
 			},
 

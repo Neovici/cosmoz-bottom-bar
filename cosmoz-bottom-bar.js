@@ -5,135 +5,196 @@
 	"use strict";
 
 	Polymer({
+
 		is: 'cosmoz-bottom-bar',
+
 		behaviors: [
 			Cosmoz.ViewInfoBehavior
 		],
+
 		listeners: {
-			'viewinfo-resize': 'onResize',
+			'viewinfo-resize': '_onResize',
 			'iron-overlay-closed': '_dropdownClosed'
 		},
+
 		properties: {
+
 			/** Whether the bar is active/shown (always active when fixed) */
 			active: {
 				type: Boolean,
-				value: false,
-				observer: 'activeChanged',
+				value: false,				
 				reflectToAttribute: true
 			},
+
 			/** Whether the bar is fixed (and take up space) or shows/hides from the bottom when needed - usually fixed on desktop and not mobile */
 			fixed: {
 				type: Boolean,
-				value: false,
-				observer: 'fixedChanged'
+				value: false
 			},
+
 			/** Bar height (not applicable when "matchParent" or "matchElementHeight" is set) */
 			barHeight: {
 				type: Number,
-				value: 64
+				value: 64			
 			},
+
 			/** Optional text to display at bottom left corner */
 			info: {
 				type: String,
 				value: ''
 			},
+
 			/** Reference element from which to inherit height */
 			matchElementHeight: {
 				type: Object,
-				value: null
+				value: undefined
 			},
+
 			/** Whether to match the height of parent (set reference element to parent) */
 			matchParent: {
 				type: Boolean,
-				value: false
+				value: false,
+				observer: '_matchParentChanged'
 			},
+
 			/** Scroller element to listen to when deciding whether or not to show the bar. Bar will be shown while scrolling up or when reaching bottom */
 			scroller: {
 				type: Object,
-				observer: 'scrollerChanged'
+				observer: '_scrollerChanged'
 			},
+
 			scrollerOverflow: {
 				type: Boolean,
 				value: false,
 				notify: true
 			},
+			
 			menuActions: {
 				type: Boolean,
 				value: false
 			},
-			_observer: {
-				type: Object
+
+			_computedBarHeight: {
+				type: Number,
+				value: undefined
+			},
+
+			_visible: {
+				type: Boolean,
+				value: undefined
+			},
+
+			_attached: {
+				type: Boolean,
+				value: undefined
 			}
 		},
-		activeChanged: function (newValue, oldValue) {
-			/**
-			 * 'active' will change as the transition _starts_.
-			 * When turned on (before showing), turn the host overflow on so that
-			 * the component can take up more than 0px at all.
-			 * When turned off (before hiding), set canvas overflow to hidden so that
-			 * the bar disappears as the translate transform transition is performed.
-			 */
-			if (this.active || this.fixed) {
-				this.style.overflow = 'visible';
-				if (this._readied) {
-					this._layoutActions(true); // Retry fitting the buttons on activate
-				}
-			} else {
-				this.$.canvas.style.overflow = 'hidden';
-			}
-			this.onResize();
-		},
-		setBarOverflow: function (event) {
-			/**
-			 * 'setBarOverflow' will run as the bar transition is _completed_.
-			 * After showing, turn canvas overflow on so that menus and other components in the bar can
-			 * overflow out of the bar.
-			 * After hiding, turn host overflow off so that it doesn't cover any other element on screen.
-			 */
-			if (this.active || this.fixed) {
-				this.$.canvas.style.overflow = 'visible';
-			} else {
-				this.style.overflow = 'hidden';
-			}
-		},
+
+		observers: [
+			'_setVisible(active, fixed)',
+			'_showHideBottomBar(_visible, _computedBarHeight, _attached)'
+		],
+
+		_observer: undefined,
+
 		attached: function () {
 			this._observer = Polymer.dom(this).observeNodes(this.childrenUpdated);
+			this._attached = true;
+			this._computeBarHeight();
 		},
+
 		detached: function () {
 			Polymer.dom(this).unobserveNodes(this._observer);
 		},
+
 		created: function () {
 			this.scrollHandler = this._scrollManagement.bind(this);
 		},
-		ready: function () {
-			this.async(function () {
-				// Make sure 'fixed' bottom-bars get a chance to set 'initial' heights
-				this._layoutActions(true);
-				this.fixedChanged();
-				this.style.overflow = (this.active || this.fixed)
-					? 'visible'
-					: 'hidden';
-				this.$.canvas.style.overflow = this.style.overflow;
-				if (this.matchParent) {
-					this.setAttribute('matching', '');
-					this.matchElementHeight = this.parentElement;
-				}
-				if (this.effects > 0) {
-					this.$.bar.classList.add('fade');
-				}
-				this.onResize();
-			});
+
+		_setVisible: function (active, fixed) {
+			this._visible = this.active || this.fixed;
 		},
+
+		_matchParentChanged: function () {
+			if (this.matchParent) {
+				this.matchElementHeight = this.parentElement;
+			} else {
+				this.matchElementHeight = null;
+			}
+		},
+
+		_scrollerChanged: function (newScroller, oldScroller) {
+			if (newScroller === undefined) {
+				return;
+			}
+			if (oldScroller) {
+				oldScroller.removeEventListener('scroll', this.scrollHandler);
+			}
+			if (newScroller) {
+				if (!newScroller.addEventListener) {
+					console.warn("New scroller doesn't have addEventListener", newScroller);
+					return;
+				}
+				newScroller.addEventListener('scroll', this.scrollHandler);
+				this.lastScroll = newScroller.scrollTop;
+			}
+		},
+
+		_computeBarHeight: function () {
+			if (this.matchElementHeight) {
+				this._computedBarHeight = this.matchElementHeight.offsetHeight;
+			} else {
+				this._computedBarHeight = this.barHeight;
+			}
+
+			this.$.canvas.style.height = this._computedBarHeight + 'px';
+		},
+
+		_onResize: function (event) {
+
+			var bigger = event && event.detail && event.detail.bigger;
+
+			this._computeBarHeight();
+
+			this._scrollManagement();
+
+			this._layoutActions(bigger);
+		},
+
+		_scrollManagement: function (event) {
+
+			if (this.scroller === undefined) {
+				return;
+			}
+			var
+				scrollTop = this.scroller.scrollTop,
+				up = this.lastScroll > scrollTop,
+				scrollerHeight = this.scroller.clientHeight,
+				scrollerScrollHeight = this.scroller.scrollHeight,
+				atBottom = (scrollTop + scrollerHeight + (this.barHeight * 0.7)) >= scrollerScrollHeight;
+
+
+			this.active = up || atBottom;
+			this.scrollerOverflow = scrollerScrollHeight > scrollerHeight;
+			this.lastScroll = scrollTop;
+		},
+
+		_showHideBottomBar: function (visible, height, attached) {
+			console.log('_showHideBottomBar', arguments);
+			if (!this._attached) {
+				return;
+			}
+			var	translateY = this._visible
+				? 0
+				: this._computedBarHeight;
+
+			this.translate3d('0px', translateY + 'px', '0px');
+		},
+
 		childrenUpdated: function (info) {
 			this._layoutActions(true);
-			this.onResize();
 		},
-		fixedChanged: function () {
-			this.style.maxHeight = this.fixed
-				? 'initial'
-				: '0px';
-			this.scrollHandler();
-		},
+
 		getElements: function (contentElement) {
 			var
 				elements = [],
@@ -148,9 +209,11 @@
 
 			return elements;
 		},
+
 		_dropdownClosed: function (e) {
 			this.$.dropdownButton.active = false;
 		},
+
 		_layoutActions: function (bigger, second) {
 			/**
 			 * Layout the actions available as buttons or menu items
@@ -234,7 +297,7 @@
 				Polymer.dom(lastButton).removeAttribute('button');
 				this.menuActions = true;
 				this.async(this._layoutActions);
-			}
+			} 
 
 		},
 		onActionClick: function (event, detail, sender) {
@@ -263,64 +326,9 @@
 				event.stopPropagation();
 			}
 		},
-		onResize: function (event) {
-			if (this.matchElementHeight && this.matchElementHeight.offsetHeight) {
-				this.barHeight = this.matchElementHeight.offsetHeight;
-			}
-			this.$.canvas.style.top = this.fixed
-				? 0
-				: -this.barHeight + 'px';
-			this.$.canvas.style.height = this.barHeight + 'px';
-			this._scrollManagement();
-			this.setBarTranslate();
-			if (event && (this.active || this.fixed)) {
-				var bigger = event && event.detail && event.detail.bigger;
-				this._layoutActions(bigger);
-			}
-		},
+
 		onMenuTap: function (event) {
 			this.$.dropdown.open();
-		},
-		_scrollManagement: function (event) {
-			if (this.scroller === undefined) {
-				return;
-			}
-			var
-				scrollTop = this.scroller.scrollTop,
-				up = this.lastScroll > scrollTop,
-				scrollerHeight = this.scroller.clientHeight,
-				scrollerScrollHeight = this.scroller.scrollHeight,
-				atBottom = (scrollTop + scrollerHeight + (this.barHeight * 0.7)) >= scrollerScrollHeight;
-
-
-			this.active = up || atBottom;
-			this.scrollerOverflow = scrollerScrollHeight > scrollerHeight;
-			this.lastScroll = scrollTop;
-		},
-		scrollerChanged: function (newScroller, oldScroller) {
-			if (newScroller === undefined) {
-				return;
-			}
-			if (oldScroller) {
-				oldScroller.removeEventListener('scroll', this.scrollHandler);
-			}
-			if (newScroller) {
-				if (!newScroller.addEventListener) {
-					console.warn("New scroller doesn't have addEventListener", newScroller);
-					return;
-				}
-				newScroller.addEventListener('scroll', this.scrollHandler);
-				this.lastScroll = newScroller.scrollTop;
-			}
-		},
-		setBarTranslate: function () {
-			var
-				px = (this.active || this.fixed)
-					? 0
-					: this.barHeight,
-				transform = 'translate3d(0, ' + px + 'px, 0)';
-			this.$.bar.style.transform = transform;
-			this.$.bar.style.webkitTransform = transform; // Safari
 		}
 	});
 }());

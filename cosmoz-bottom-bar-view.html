@@ -1,4 +1,5 @@
 <link rel="import" href="cosmoz-bottom-bar.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../cosmoz-viewinfo/cosmoz-viewinfo.html">
 
 <!--
@@ -12,29 +13,35 @@ __Important:__ The `cosmoz-bottom-bar-view` will not display if its parent does 
 	<style type="text/css">
 
 		:host {
+			display: block;
 			position: relative;
-			@apply(--layout-vertical);
-			height: 100%;
+			overflow: hidden;
 		}
 
 		#scroller {
-			@apply(--layout-flex);
-			@apply(--layout-vertical);
-			position: relative;
-			overflow-y: auto;
+			position: absolute;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+
+			-webkit-overflow-scrolling: touch;
+
 			overflow-x: hidden;
+			overflow-y: auto;
 		}
 
 		#scrollerArea {
-			@apply(--layout-flex);
+			display: block;
+			height: 100%;
 			position: relative;
 		}
+
+
 	</style>
 	<template>
-		<div id="scroller" style$="{{ _getPadding(viewInfo.desktop) }}">
-			<div id="scrollerArea">
-				<content id="scrollerContent" select=".cosmoz-bottom-bar-scroll"></content>
-			</div>
+		<div id="scroller" style$="{{ _getPadding(viewInfo.desktop)}}">
+			<content id="scrollerContent" select=".cosmoz-bottom-bar-scroll"></content>
 		</div>
 		<cosmoz-bottom-bar id="bar" fixed$="{{ viewInfo.desktop }}" scroller="{{ scroller }}" scroller-overflow="{{ overflowing }}">
 			<content></content>
@@ -46,27 +53,34 @@ __Important:__ The `cosmoz-bottom-bar-view` will not display if its parent does 
 "use strict";
 
 Polymer({
+
+	is: 'cosmoz-bottom-bar-view',
+
 	behaviors: [
 		Cosmoz.ViewInfoBehavior
 	],
-	is: 'cosmoz-bottom-bar-view',
+
 	properties: {
+
 		overflowing: {
 			type: Boolean,
 			value: false,
 			reflectToAttribute: true
 		},
+
 		scroller: {
 			type: Object
 		}
 	},
+
 	attached: function () {
 		this.scroller = this.$.scroller;
 	},
+
 	_getPadding: function (desktop) {
-		if (desktop) {
-			return;
-		}
+		// if (desktop) {
+		// 	return;
+		// }
 		return 'padding-bottom: ' + this.$.bar.barHeight + 'px';
 	}
 });

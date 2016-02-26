@@ -6,7 +6,7 @@
 <link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
-<link rel="import" href="../iron-flex-layout/classes/iron-flex-layout.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../cosmoz-viewinfo/cosmoz-viewinfo.html">
 <link rel="import" href="cosmoz-bottom-bar-style.html">
 
@@ -22,9 +22,10 @@ See demo for example usage
 
 <dom-module id="cosmoz-bottom-bar">
 	<template>
+		<style include="iron-flex iron-flex-alignment"></style>
 		<style include="cosmoz-bottom-bar-style"></style>
-		<div id="canvas" class="flex relative layout vertical">
-			<div id="bar" class="horizontal layout center flex" on-transitionend="setBarOverflow">
+		<div id="canvas">
+			<div id="bar" class="horizontal layout center flex">
 				<div id="info" class="layout horizontal center">{{ info }}</div>
 				<div id="buttons" class="flex layout horizontal center end-justified">
 					<content id="actionButtons" select="[button]"></content>
