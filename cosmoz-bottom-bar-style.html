@@ -48,15 +48,10 @@
 			#bar {
 				font-weight: 300;
 				font-size: 15px;
-				color: black;
 				background-color: var(--cosmoz-bottom-bar-background-color, --primary-background-color);
 				transition: all 0.5s ease;
 				padding: 0 3%;
 				height: inherit;
-			}
-
-			:host(.selection) #bar {
-				background-color: #49D593;
 			}
 
 			#bar.fade {
@@ -68,7 +63,6 @@
 			}
 
 			#info {
-				color: #000;
 				padding-right: 3%;
 			}
 
@@ -76,10 +70,6 @@
 				color: var(--cosmoz-bottom-bar-menubutton-color, --light-primary-color);
 				background-color: var(--cosmoz-bottom-bar-menubutton-background-color, --dark-primary-color);
 				@apply(--cosmoz-bottom-bar-menubutton);
-			}
-
-			:host(.selection) #info {
-				color: inherit;
 			}
 
 			#buttons {
