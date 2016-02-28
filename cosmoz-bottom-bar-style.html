@@ -1,6 +1,8 @@
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+
 <dom-module id="cosmoz-bottom-bar-style">
 	<template>
-		<style include="iron-flex iron-flex-alignment">
+		<style>
 			:host {
 				position: absolute;
 				bottom: 0;
@@ -23,6 +25,9 @@
 			}
 
 			#bar {
+				@apply(--layout-center);
+				@apply(--layout-flex);
+				@apply(--layout-horizontal);
 				font-weight: 300;
 				font-size: 15px;
 				background-color: var(--cosmoz-bottom-bar-background-color, --primary-background-color);
@@ -39,6 +44,8 @@
 			}
 
 			#info {
+				@apply(--layout-center);
+				@apply(--layout-horizontal);
 				padding-right: 3%;
 			}
 
@@ -49,11 +56,17 @@
 			}
 
 			#buttons {
+				@apply(--layout-center);
+				@apply(--layout-flex);
+				@apply(--layout-horizontal);
+				@apply(--layout-end-justified);
 				overflow: hidden;
 			}
 
 			#menu {
 				padding-left: 3%;
+				@apply(--layout-center);
+				@apply(--layout-horizontal);
 			}
 
 			#menu ::content paper-button {

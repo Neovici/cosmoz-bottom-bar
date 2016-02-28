@@ -22,7 +22,7 @@
 			/** Whether the bar is active/shown (always active when fixed) */
 			active: {
 				type: Boolean,
-				value: false,				
+				value: false,
 				reflectToAttribute: true
 			},
 
@@ -35,7 +35,7 @@
 			/** Bar height (not applicable when "matchParent" or "matchElementHeight" is set) */
 			barHeight: {
 				type: Number,
-				value: 64			
+				value: 64
 			},
 
 			/** Optional text to display at bottom left corner */
@@ -68,7 +68,7 @@
 				value: false,
 				notify: true
 			},
-			
+
 			menuActions: {
 				type: Boolean,
 				value: false
@@ -180,7 +180,7 @@
 		},
 
 		_showHideBottomBar: function (visible, height, attached) {
-			console.log('_showHideBottomBar', arguments);
+			// console.log('_showHideBottomBar', arguments);
 			if (!this._attached) {
 				return;
 			}
@@ -297,7 +297,7 @@
 				Polymer.dom(lastButton).removeAttribute('button');
 				this.menuActions = true;
 				this.async(this._layoutActions);
-			} 
+			}
 
 		},
 		onActionClick: function (event, detail, sender) {
