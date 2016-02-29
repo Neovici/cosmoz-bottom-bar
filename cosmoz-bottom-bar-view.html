@@ -29,14 +29,17 @@ __Important:__ The `cosmoz-bottom-bar-view` will not display if its parent does 
 		}
 
 		#scroller ::content .cosmoz-bottom-bar-scroll {
-			@apply(--layout-flex);
-			@apply(--layout-vertical);
+			/* HACK(pasleq): setting flex-basis to a value results in a incorrect layout when minimizing the window on Chrome
+				Using flex-basis: auto; solves the issue. */
+			@apply(--layout-flex-auto);
+			position: relative;
 		}
 
 	</style>
 	<template>
-		<div id="scroller" style$="{{ _getPadding(viewInfo.desktop)}}">
+		<div id="scroller">
 			<content id="scrollerContent" select=".cosmoz-bottom-bar-scroll"></content>
+			<div id="bottomBarPlaceHolder" style$="{{_getBarHeight(viewInfo.desktop)}}"></div>
 		</div>
 		<cosmoz-bottom-bar id="bar" fixed$="{{ viewInfo.desktop }}" scroller="{{ scroller }}" scroller-overflow="{{ overflowing }}">
 			<content></content>

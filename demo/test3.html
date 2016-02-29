@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<title>Cosmoz Bottom Bar</title>
+
+	<script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+	<link rel="import" href="../../paper-button/paper-button.html">
+	<link rel="import" href="../../iron-flex-layout/iron-flex-layout-classes.html">
+	<link rel="import" href="../../cosmoz-viewinfo/cosmoz-viewinfo.html">
+	<link rel="import" href="../cosmoz-bottom-bar-view.html">
+
+	<style is="custom-style" include="iron-flex iron-flex-alignment iron-positioning">
+
+		.item {
+			padding: 20px;
+/*			width: 50%;
+			height: 1000px;
+*/			background-color: rgba(0, 0, 255, 0.5);
+			color: white;
+			font-size: 20px;
+		}
+
+		cosmoz-bottom-bar-view {
+			--cosmoz-bottom-bar-background-color: lightgreen;
+			background-color: lightblue;
+		}
+
+		.cosmoz-bottom-bar-scroll {
+			/*background-color: yellow;*/
+		}
+
+
+
+	</style>
+</head>
+<body class="">
+	<template is="dom-bind">
+		<cosmoz-viewinfo class="fit layout vertical">
+			<h1>Cosmoz Bottom Bar</h1>
+			<cosmoz-bottom-bar-view class="flex">
+				<div class="cosmoz-bottom-bar-scroll">
+					<div class="layout relative">
+					<div>
+						Hey you!
+						<p>Try resizing the window and scrolling down for a reponsive bottom bar demonstration!</p>
+					</div>
+					<div class="item flex">
+						<p>
+						Nam non enim vitae mauris pharetra semper nec sed lectus. 
+						</p>
+					</div>
+					<div>
+						This is content<br/>
+						at the bottom<br/>
+						of the view
+					</div>
+					</div>
+				</div>
+				<paper-button>
+					button 1
+				</paper-button>
+				<paper-button>
+					button 2
+				</paper-button>
+				<paper-button>
+					big button 3
+				</paper-button>
+				<paper-button>
+					even bigger button 4
+				</paper-button>
+				<paper-button>
+					even bigger button 4
+				</paper-button>
+				<paper-button>
+					even bigger button 4
+				</paper-button>
+				<paper-button>
+					even bigger button 4
+				</paper-button>
+				<paper-button>
+					even bigger button 4
+				</paper-button>
+				<paper-button>
+					even bigger button 4
+				</paper-button>
+				<paper-button>
+					even bigger button 4
+				</paper-button>
+			</cosmoz-bottom-bar-view>
+			<h1>End of Cosmoz Bottom Bar</h1>
+		</cosmoz-viewinfo>
+	</template>
+</body>
+</html>

@@ -34,6 +34,10 @@
 			// 	return;
 			// }
 			return 'padding-bottom: ' + this.$.bar.barHeight + 'px';
+		},
+
+		_getBarHeight: function (desktop) {
+			return 'min-height: ' + this.$.bar.barHeight + 'px';
 		}
 	});
 }());
