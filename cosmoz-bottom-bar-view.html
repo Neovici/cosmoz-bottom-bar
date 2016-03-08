@@ -1,11 +1,14 @@
 <link rel="import" href="cosmoz-bottom-bar.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="../cosmoz-viewinfo/cosmoz-viewinfo.html">
 
 <!--
 `cosmoz-bottom-bar-view` contains a content section and a bottom bar with actions.
 
-__Important:__ The `cosmoz-bottom-bar-view` will not display if its parent does not have a height.
+__Important:__ Because `cosmoz-bottom-bar-view` is handling scrolling of its content, it must be explicitly sized.
+By "explicitly sized", we mean it either has an explicit CSS height property set via a class or inline style,
+or else is sized by other layout means (e.g. the flex or fit classes).
 
 -->
 
@@ -13,34 +16,44 @@ __Important:__ The `cosmoz-bottom-bar-view` will not display if its parent does 
 	<style type="text/css">
 
 		:host {
-			display: block;
 			position: relative;
+			@apply(--layout-vertical);
 			overflow: hidden;
-			@apply(--layout-flex);
+			@apply(--layout-flex)
 		}
 
+
 		#scroller {
-			@apply(--layout-fit);
+			@apply(--layout-flex);
 			@apply(--layout-vertical);
+			position: relative;
+
 			-webkit-overflow-scrolling: touch;
 
 			overflow-x: hidden;
 			overflow-y: auto;
 		}
 
-		#scroller ::content .cosmoz-bottom-bar-scroll {
-			/* HACK(pasleq): setting flex-basis to a value results in a incorrect layout when minimizing the window on Chrome
-				Using flex-basis: auto; solves the issue. */
-			@apply(--layout-flex-auto);
+		#scrollerSizer {
+			@apply(--layout-flex);
 			@apply(--layout-vertical);
 			position: relative;
+		}
+
+		#scroller ::content .cosmoz-bottom-bar-scroll {
+			position: relative;
+			@apply(--layout-flex);
+			/* Default to vertical flex layout, but can be overriden locally */
+			@apply(--layout-vertical);
 		}
 
 	</style>
 	<template>
 		<div id="scroller">
-			<content id="scrollerContent" select=".cosmoz-bottom-bar-scroll"></content>
-			<div id="bottomBarPlaceHolder" style$="{{_getBarHeight(viewInfo.desktop)}}"></div>
+			<div id="scrollerSizer">
+				<content id="scrollerContent" select=".cosmoz-bottom-bar-scroll"></content>
+			</div>
+			<div id="bottomBarPlaceholder" style$="{{_getBarHeight(viewInfo.desktop)}}"></div>
 		</div>
 		<cosmoz-bottom-bar id="bar" fixed$="{{ viewInfo.desktop }}" scroller="{{ scroller }}" scroller-overflow="{{ overflowing }}">
 			<content></content>

@@ -9,7 +9,8 @@
 		is: 'cosmoz-bottom-bar-view',
 
 		behaviors: [
-			Cosmoz.ViewInfoBehavior
+			Cosmoz.ViewInfoBehavior,
+			Polymer.IronResizableBehavior
 		],
 
 		properties: {
@@ -25,8 +26,26 @@
 			}
 		},
 
+		listeners: {
+			'iron-resize': '_onResize'
+		},
+
 		attached: function () {
 			this.scroller = this.$.scroller;
+		},
+
+		_onResize: function () {
+			var scrollerSizer = this.$.scrollerSizer;
+
+			// HACK(pasleq): ensure scrollerSizer is sized correctly.
+			scrollerSizer.style.minHeight = '';
+			this.async(function () {
+				if (scrollerSizer.scrollHeight > scrollerSizer.offsetHeight) {
+					scrollerSizer.style.minHeight = scrollerSizer.scrollHeight + 'px';
+				}
+
+			});
+
 		},
 
 		_getPadding: function (desktop) {
