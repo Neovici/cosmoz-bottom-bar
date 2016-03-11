@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<title>Cosmoz Bottom Bar</title>
+	<title>cosmoz-bottom-bar-view demo</title>
 
 	<script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 	<link rel="import" href="../../paper-button/paper-button.html">
@@ -14,49 +14,33 @@
 
 	<style is="custom-style" include="iron-flex iron-flex-alignment iron-positioning">
 
-		.item {
-			padding: 20px;
-/*			width: 50%;
-			height: 1000px;
-*/			background-color: rgba(0, 0, 255, 0.5);
-			color: white;
-			font-size: 20px;
-		}
-
 		cosmoz-bottom-bar-view {
 			--cosmoz-bottom-bar-background-color: lightgreen;
-			background-color: lightblue;
 		}
-
-		.cosmoz-bottom-bar-scroll {
-			/*background-color: yellow;*/
-		}
-
-
 
 	</style>
 </head>
-<body class="">
+<body class="fullbleed">
 	<template is="dom-bind">
 		<cosmoz-viewinfo class="fit layout vertical">
-			<h1>Cosmoz Bottom Bar</h1>
+			<h1>cosmoz-bottom-bar-view demo</h1>
 			<cosmoz-bottom-bar-view class="flex">
 				<div class="cosmoz-bottom-bar-scroll">
-					<div class="layout relative flex">
-					<div>
-						Hey you!
-						<p>Try resizing the window and scrolling down for a reponsive bottom bar demonstration!</p>
-					</div>
-					<div class="item flex">
-						<p>
-						Nam non enim vitae mauris pharetra semper nec sed lectus. 
-						</p>
-					</div>
-					<div>
-						This is content<br/>
-						at the bottom<br/>
-						of the view
-					</div>
+					<div class="layout relative" style="padding: 20px">
+						<div>
+							<p>
+								As long as this text content can fit the height of the window, the bottom bar should always be visible.<br/>
+							</p>
+							<p>
+								Then try reducing the height of the window until a vertical scrollbar appears for this content.<br/>
+								Bottom should be fixed if width is bigger than 600px.<br/>
+								Otherwise, the bottom bar should be floating and should appear when you scroll close to the bottom, but should disappear while scrolling.<br/>
+								You should see the text at the bottom of the view.
+							</p>
+						</div>
+						<div>
+							<h1>This is content at the bottom of the view</h1>
+						</div>
 					</div>
 				</div>
 				<paper-button>
@@ -90,7 +74,7 @@
 					even bigger button 4
 				</paper-button>
 			</cosmoz-bottom-bar-view>
-			<h1>End of Cosmoz Bottom Bar</h1>
+			<h1>End of cosmoz-bottom-bar-view demo</h1>
 		</cosmoz-viewinfo>
 	</template>
 </body>
