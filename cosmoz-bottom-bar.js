@@ -98,7 +98,7 @@
 		_observer: undefined,
 
 		attached: function () {
-			this._observer = Polymer.dom(this).observeNodes(this.childrenUpdated);
+			this._observer = Polymer.dom(this).observeNodes(this.childrenUpdated.bind(this));
 			this._attached = true;
 			this._computeBarHeight();
 		},
@@ -202,7 +202,7 @@
 
 			Object.keys(nodeList).forEach(function (index) {
 				var node = nodeList[index];
-				if (node instanceof window.HTMLElement) {
+				if (node instanceof window.HTMLElement && !node.hasAttribute('hidden')) {
 					elements.push(node);
 				}
 			});
@@ -262,12 +262,11 @@
 				}
 			}
 
+			this.menuActions = !emptyMenu;
 
 			if (fits && actionButtons.length > 3) {
 				return;
 			}
-
-			this.menuActions = !emptyMenu;
 
 			if (fits && bigger && !emptyMenu) {
 				if (!upsync) {
