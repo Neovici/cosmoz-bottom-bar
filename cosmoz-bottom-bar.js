@@ -312,18 +312,16 @@
 				event.stopPropagation();
 			}
 		},
-		onActionSelect: function (event, detail, element) {
-			if (detail.isSelected) {
-				detail.item.dispatchEvent(new window.CustomEvent('action', {
-					bubbles: true,
-					cancelable: true,
-					detail: {
-						item: detail.item
-					}
-				}));
-				element.selected = undefined;
-				event.stopPropagation();
-			}
+		onActionSelect: function (event, detail) {
+			detail.item.dispatchEvent(new window.CustomEvent('action', {
+				bubbles: true,
+				cancelable: true,
+				detail: {
+					item: detail.item
+				}
+			}));
+			event.currentTarget.selected = undefined;
+			event.stopPropagation();
 		},
 
 		onMenuTap: function (event) {
