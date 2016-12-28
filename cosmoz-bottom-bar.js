@@ -75,18 +75,20 @@
 			},
 
 			_computedBarHeight: {
-				type: Number,
-				value: undefined
+				type: Number
 			},
 
 			_visible: {
-				type: Boolean,
-				value: undefined
+				type: Boolean
 			},
 
 			_attached: {
+				type: Boolean
+			},
+
+			_hasActions: {
 				type: Boolean,
-				value: undefined
+				value: true
 			}
 		},
 
@@ -112,7 +114,7 @@
 		},
 
 		_setVisible: function (active, fixed) {
-			this._visible = this.active || this.fixed;
+			this._visible = this._hasActions && (this.active || this.fixed);
 		},
 
 		_matchParentChanged: function () {
@@ -245,10 +247,16 @@
 				actionButtons = this.getElements(this.$.actionButtons),
 				lastButton,
 				nodes = this.getElements(this.$.actionMenu),
-				emptyMenu = nodes.length === 0,
 				upsync = (!!this._scalingUp === !!second),
 				i,
 				button;
+
+			this.menuActions = nodes.length !== 0;
+			this._hasActions = this.menuActions || actionButtons.length > 0;
+
+			if (!this._hasActions) {
+				return;
+			}
 
 			for (i = 0; i < actionButtons.length; i += 1) {
 				button = actionButtons[i];
@@ -262,13 +270,11 @@
 				}
 			}
 
-			this.menuActions = !emptyMenu;
-
 			if (fits && actionButtons.length > 3) {
 				return;
 			}
 
-			if (fits && bigger && !emptyMenu) {
+			if (fits && bigger && this.menuActions) {
 				if (!upsync) {
 					return;
 				}
