@@ -93,7 +93,7 @@
 		},
 
 		observers: [
-			'_setVisible(active, fixed)',
+			'_setVisible(_hasActions, active, fixed)',
 			'_showHideBottomBar(_visible, _computedBarHeight, _attached)'
 		],
 
@@ -113,8 +113,8 @@
 			this.scrollHandler = this._scrollManagement.bind(this);
 		},
 
-		_setVisible: function (active, fixed) {
-			this._visible = this._hasActions && (this.active || this.fixed);
+		_setVisible: function (hasActions, active, fixed) {
+			this._visible = hasActions && (this.active || this.fixed);
 		},
 
 		_matchParentChanged: function () {
@@ -245,6 +245,7 @@
 				buttonsBar = this.$.buttons,
 				fits = buttonsBar.scrollWidth <= (buttonsBar.clientWidth + 1),
 				actionButtons = this.getElements(this.$.actionButtons),
+				hadActions = this._hasActions,
 				lastButton,
 				nodes = this.getElements(this.$.actionMenu),
 				upsync = (!!this._scalingUp === !!second),
@@ -255,6 +256,16 @@
 			this._hasActions = this.menuActions || actionButtons.length > 0;
 
 			if (!this._hasActions) {
+				// No need to render if we don't have any actions
+				return;
+			}
+
+			if (this._hasActions !== hadActions) {
+				// If we went from none to some actions, defer _layoutActions()
+				// so we give _visible time to change and give us some space
+				this.async(function () {
+					this._layoutActions(true);
+				});
 				return;
 			}
 
