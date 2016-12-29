@@ -25,9 +25,9 @@
 			}
 
 			#bar {
-				@apply(--layout-center);
-				@apply(--layout-flex);
-				@apply(--layout-horizontal);
+				@apply --layout-center;
+				@apply --layout-flex;
+				@apply --layout-horizontal;
 				background-color: var(--cosmoz-bottom-bar-background-color, --primary-background-color);
 				padding: 0 3%;
 				height: inherit;
@@ -42,29 +42,29 @@
 			}
 
 			#info {
-				@apply(--layout-center);
-				@apply(--layout-horizontal);
+				@apply --layout-center;
+				@apply --layout-horizontal;
 				padding-right: 3%;
 			}
 
 			#dropdownButton {
 				color: var(--cosmoz-bottom-bar-menubutton-color, --light-primary-color);
 				background-color: var(--cosmoz-bottom-bar-menubutton-background-color, --dark-primary-color);
-				@apply(--cosmoz-bottom-bar-menubutton);
+				@apply --cosmoz-bottom-bar-menubutton;
 			}
 
 			#buttons {
-				@apply(--layout-center);
-				@apply(--layout-flex);
-				@apply(--layout-horizontal);
-				@apply(--layout-end-justified);
+				@apply --layout-center;
+				@apply --layout-flex;
+				@apply --layout-horizontal;
+				@apply --layout-end-justified;
 				overflow: hidden;
 			}
 
 			#menu {
 				padding-left: 3%;
-				@apply(--layout-center);
-				@apply(--layout-horizontal);
+				@apply --layout-center;
+				@apply --layout-horizontal;
 			}
 
 			#menu ::content paper-button {

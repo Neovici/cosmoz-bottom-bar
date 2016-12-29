@@ -17,15 +17,15 @@ or else is sized by other layout means (e.g. the flex or fit classes).
 
 		:host {
 			position: relative;
-			@apply(--layout-vertical);
+			@apply --layout-vertical;
 			overflow: hidden;
-			@apply(--layout-flex)
+			@apply --layout-flex;
 		}
 
 
 		#scroller {
-			@apply(--layout-flex);
-			@apply(--layout-vertical);
+			@apply --layout-flex;
+			@apply --layout-vertical;
 			position: relative;
 
 			-webkit-overflow-scrolling: touch;
@@ -35,16 +35,16 @@ or else is sized by other layout means (e.g. the flex or fit classes).
 		}
 
 		#scrollerSizer {
-			@apply(--layout-flex);
-			@apply(--layout-vertical);
+			@apply --layout-flex;
+			@apply --layout-vertical;
 			position: relative;
 		}
 
 		#scroller ::content .cosmoz-bottom-bar-scroll {
 			position: relative;
-			@apply(--layout-flex);
+			@apply --layout-flex;
 			/* Default to vertical flex layout, but can be overriden locally */
-			@apply(--layout-vertical);
+			@apply --layout-vertical;
 		}
 
 	</style>
