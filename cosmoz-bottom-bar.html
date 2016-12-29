@@ -20,17 +20,23 @@ See demo for example usage
 
 <dom-module id="cosmoz-bottom-bar">
 	<template>
-		<style include="cosmoz-bottom-bar-style"></style>
+		<style include="cosmoz-bottom-bar-style">
+			[hidden] {
+				display: none !important;
+			}
+		</style>
 		<div id="canvas">
 			<div id="bar">
-				<div id="info">{{ info }}</div>
-				<div id="buttons">
-					<content id="actionButtons" select="[button]"></content>
+				<div id="info">
+					<slot name="info"></slot>
 				</div>
-				<paper-menu-button hidden$="{{ !menuActions }}" id="menu" vertical-offset="{{ barHeight }}" vertical-align="bottom" horizontal-align="right" role="group" no-animations>
+				<div id="buttons">
+					<slot name="buttons" id="actionButtons"></slot>
+				</div>
+				<paper-menu-button hidden$="[[ !menuActions ]]" id="menu" vertical-offset="[[ barHeight ]]" vertical-align="bottom" horizontal-align="right" role="group" no-animations>
 					<paper-icon-button icon="menu" id="dropdownButton" toggles raised class="dropdown-trigger"></paper-icon-button>
 					<paper-menu id="dropdown" class="dropdown-content" selected-class="selected-item" on-iron-select="onActionSelect">
-						<content id="actionMenu"></content>
+						<slot id="actionMenu"></slot>
 					</paper-menu>
 				</paper-menu-button>
 			</div>

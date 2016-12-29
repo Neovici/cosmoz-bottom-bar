@@ -2,7 +2,7 @@
 
 (function () {
 
-	"use strict";
+	'use strict';
 
 	Polymer({
 
@@ -36,12 +36,6 @@
 			barHeight: {
 				type: Number,
 				value: 64
-			},
-
-			/** Optional text to display at bottom left corner */
-			info: {
-				type: String,
-				value: ''
 			},
 
 			/** Reference element from which to inherit height */
@@ -114,7 +108,7 @@
 		},
 
 		_setVisible: function (hasActions, active, fixed) {
-			this._visible = hasActions && (this.active || this.fixed);
+			this._visible = hasActions && (active || fixed);
 		},
 
 		_matchParentChanged: function () {
@@ -134,7 +128,7 @@
 			}
 			if (newScroller) {
 				if (!newScroller.addEventListener) {
-					console.warn("New scroller doesn't have addEventListener", newScroller);
+					console.warn('New scroller does not have addEventListener', newScroller);
 					return;
 				}
 				newScroller.addEventListener('scroll', this.scrollHandler);
@@ -173,7 +167,7 @@
 				up = this.lastScroll > scrollTop,
 				scrollerHeight = this.scroller.clientHeight,
 				scrollerScrollHeight = this.scroller.scrollHeight,
-				atBottom = (scrollTop + scrollerHeight + (this.barHeight * 0.7)) >= scrollerScrollHeight;
+				atBottom = scrollTop + scrollerHeight + this.barHeight * 0.7 >= scrollerScrollHeight;
 
 
 			this.active = up || atBottom;
@@ -243,12 +237,12 @@
 
 			var
 				buttonsBar = this.$.buttons,
-				fits = buttonsBar.scrollWidth <= (buttonsBar.clientWidth + 1),
+				fits = buttonsBar.scrollWidth <= buttonsBar.clientWidth + 1,
 				actionButtons = this.getElements(this.$.actionButtons),
 				hadActions = this._hasActions,
 				lastButton,
 				nodes = this.getElements(this.$.actionMenu),
-				upsync = (!!this._scalingUp === !!second),
+				upsync = !!this._scalingUp === !!second,
 				i,
 				button;
 
@@ -271,7 +265,7 @@
 
 			for (i = 0; i < actionButtons.length; i += 1) {
 				button = actionButtons[i];
-				if (typeof button.textOverflow === "function") {
+				if (typeof button.textOverflow === 'function') {
 					fits = !button.textOverflow();
 					break;
 				}
@@ -293,11 +287,11 @@
 				if (nodes.length > 1) {
 					this.menuActions = true;
 				}
-				if (nodes[0].hasAttribute('button')) {
+				if (nodes[0].hasAttribute('slot')) {
 					console.error('button in menu!');
 					return;
 				}
-				Polymer.dom(nodes[0]).setAttribute('button', '');
+				Polymer.dom(nodes[0]).setAttribute('slot', 'buttons');
 				nodes[0].onclick = this.onActionClick;
 				this._scalingUp = true;
 				this.async(function () {
@@ -310,7 +304,7 @@
 
 			if (!fits && actionButtons.length > 0) {
 				lastButton = actionButtons[actionButtons.length - 1];
-				Polymer.dom(lastButton).removeAttribute('button');
+				Polymer.dom(lastButton).removeAttribute('slot');
 				this.menuActions = true;
 				this.async(this._layoutActions);
 			}
@@ -318,7 +312,7 @@
 		},
 		onActionClick: function (event, detail, sender) {
 			var actionButton = event.currentTarget;
-			if (actionButton && actionButton.hasAttribute('button')) {
+			if (actionButton && actionButton.hasAttribute('slot')) {
 				actionButton.dispatchEvent(new window.CustomEvent('action', {
 					bubbles: true,
 					cancelable: true,

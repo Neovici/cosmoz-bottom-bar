@@ -2,7 +2,7 @@
 
 (function () {
 
-	"use strict";
+	'use strict';
 
 	Polymer({
 
@@ -43,7 +43,6 @@
 				if (scrollerSizer.scrollHeight > scrollerSizer.offsetHeight) {
 					scrollerSizer.style.minHeight = scrollerSizer.scrollHeight + 'px';
 				}
-
 			});
 
 		},

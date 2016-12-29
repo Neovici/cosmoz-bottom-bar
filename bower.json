@@ -24,7 +24,7 @@
     "tests"
   ],
   "dependencies": {
-    "polymer": "^1.0.0",
+    "polymer": "^1.7.0",
     "iron-dropdown": "polymerelements/iron-dropdown#^1.0.0",
     "iron-flex-layout": "polymerelements/iron-flex-layout#^1.0.0",
     "cosmoz-viewinfo": "neovici/cosmoz-viewinfo#master",

@@ -40,7 +40,7 @@ or else is sized by other layout means (e.g. the flex or fit classes).
 			position: relative;
 		}
 
-		#scroller ::content .cosmoz-bottom-bar-scroll {
+		#scroller ::slotted(*) {
 			position: relative;
 			@apply --layout-flex;
 			/* Default to vertical flex layout, but can be overriden locally */
@@ -51,12 +51,12 @@ or else is sized by other layout means (e.g. the flex or fit classes).
 	<template>
 		<div id="scroller">
 			<div id="scrollerSizer">
-				<content id="scrollerContent" select=".cosmoz-bottom-bar-scroll"></content>
+				<slot name="scroller-content"></slot>
 			</div>
-			<div id="bottomBarPlaceholder" style$="{{_getBarHeight(viewInfo.desktop)}}"></div>
+			<div id="bottomBarPlaceholder" style$="[[ _getBarHeight(viewInfo.desktop) ]]"></div>
 		</div>
-		<cosmoz-bottom-bar id="bar" fixed$="{{ viewInfo.desktop }}" scroller="{{ scroller }}" scroller-overflow="{{ overflowing }}">
-			<content></content>
+		<cosmoz-bottom-bar id="bar" fixed$="[[ viewInfo.desktop ]]" scroller="[[ scroller ]]" scroller-overflow="{{ overflowing }}">
+			<slot></slot>
 		</cosmoz-bottom-bar>
 	</template>
 	<script src="cosmoz-bottom-bar-view.js" type="text/javascript"></script>

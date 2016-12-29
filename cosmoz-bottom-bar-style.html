@@ -67,7 +67,7 @@
 				@apply --layout-horizontal;
 			}
 
-			#menu ::content paper-button {
+			#menu ::slotted(paper-button) {
 				border: 0;
 				font-weight: lighter !important;
 				border-radius: 0;
@@ -80,13 +80,13 @@
 				white-space: nowrap;
 			}
 
-			#buttons ::content paper-icon-button {
+			#buttons ::slotted(paper-icon-button) {
 				margin: 0 0.29em;
 				min-width: 40px;
     			min-height: 40px;
 			}
 
-			#buttons ::content > * {
+			#buttons ::slotted(*) {
 				text-overflow: ellipsis;
 				white-space: nowrap;
 			}

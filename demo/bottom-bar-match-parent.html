@@ -63,8 +63,9 @@
 					<div style="vertical-align: center">
 						The bottom bar will overlap this content
 					</div>
-					<cosmoz-bottom-bar id="bottomBar" match-parent info="10" active="{{active}}">
-						<content select="[bottom-bar-button]"></content>
+					<cosmoz-bottom-bar id="bottomBar" match-parent active="{{ active }}">
+						<span slot="info">10</span>
+						<slot></slot>
 					</cosmoz-bottom-bar>
 				</div>
 			</cosmoz-viewinfo>
@@ -72,40 +73,40 @@
 	</dom-module>
 
 	<x-view class="fit">
-		<paper-button bottom-bar-button>
+		<paper-button>
 			<iron-icon icon="bug-report"></iron-icon>
 			Button text 01
 		</paper-button>
-		<paper-button bottom-bar-button>
+		<paper-button>
 			<iron-icon icon="bug-report"></iron-icon>
 			Button text 02
 		</paper-button>
-		<paper-button bottom-bar-button>
+		<paper-button>
 			<iron-icon icon="bug-report"></iron-icon>
 			Button bigger text 03
 		</paper-button>
-		<paper-button bottom-bar-button>
+		<paper-button>
 			<iron-icon icon="bug-report"></iron-icon>
 			even bigger button 4
 		</paper-button>
-		<paper-button bottom-bar-button>
+		<paper-button>
 			<iron-icon icon="bug-report"></iron-icon>
 			even bigger button 5
 		</paper-button>
-		<paper-button bottom-bar-button>
+		<paper-button>
 			<iron-icon icon="bug-report"></iron-icon>
 			even bigger button 6
 		</paper-button>
-		<paper-button bottom-bar-button>
+		<paper-button>
 			even bigger button 7
 		</paper-button>
-		<paper-button bottom-bar-button>
+		<paper-button>
 			even bigger button 8
 		</paper-button>
-		<paper-button bottom-bar-button>
+		<paper-button>
 			even bigger button 9
 		</paper-button>
-		<paper-button bottom-bar-button>
+		<paper-button>
 			even bigger button 10
 		</paper-button>
 	</x-view>
