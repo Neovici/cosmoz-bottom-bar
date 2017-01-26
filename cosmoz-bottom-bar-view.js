@@ -55,7 +55,11 @@
 		},
 
 		_getBarHeight: function (desktop) {
-			return 'min-height: ' + this.$.bar.barHeight + 'px';
+			var height = this.$.bar.barHeight;
+			return [
+				'max-height: ' + height + 'px',
+				'min-height: ' + height + 'px'
+			].join(';');
 		}
 	});
 }());
