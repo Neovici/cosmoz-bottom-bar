@@ -40,7 +40,6 @@
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
     "web-component-tester": "Polymer/web-component-tester#^4.2.1",
     "cosmoz-omnitable": "Neovici/cosmoz-omnitable#master",
-    "cosmoz-viewinfo": "Neovici/cosmoz-viewinfo#master",
-    "moment": "~2.10.6"
+    "cosmoz-viewinfo": "Neovici/cosmoz-viewinfo#master"
   }
 }

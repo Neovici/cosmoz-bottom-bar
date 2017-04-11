@@ -7,8 +7,6 @@
 	<title>Cosmoz bottom bar with cosmoz-omnitable demo</title>
 
 	<script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-	<script src="../../moment/moment.js"></script>
-	<script src="../../moment/locale/sv.js"></script>
 
 	<link rel="import" href="../cosmoz-bottom-bar-view.html">
 
@@ -34,25 +32,25 @@
 				<cosmoz-bottom-bar-view class="flex">
 					<div slot="scroller-content">
 						<cosmoz-omnitable data="{{ data }}" class="fit" selection-enabled group-on="group">
-							<header id="id">Id</header>
-							<header id="name">Name</header>
-							<header id="randomString">Random string</header>
-							<header id="randomString2">Random string 2</header>
-							<header id="randomString3">Random string 3</header>
-							<header id="randomString4">Random string 4</header>
-							<header id="amount" render-func="renderMoney">Amount</header>
-							<header id="date" type="date" render-func="Cosmoz.formatDate">Date</header>
-							<header id="group">Group</header>
+							<cosmoz-omnitable-column title="Id" value-path="id"></cosmoz-omnitable-column>
+							<cosmoz-omnitable-column title="Name" value-path="name"></cosmoz-omnitable-column>
+							<cosmoz-omnitable-column title="Random string" value-path="randomString"></cosmoz-omnitable-column>
+							<cosmoz-omnitable-column title="Random string 2" value-path="randomString2"></cosmoz-omnitable-column>
+							<cosmoz-omnitable-column title="Random string 3" value-path="randomString3"></cosmoz-omnitable-column>
+							<cosmoz-omnitable-column title="Random string 4" value-path="randomString4"></cosmoz-omnitable-column>
+							<cosmoz-omnitable-column-amount title="Amount" value-path="amount"></cosmoz-omnitable-column-amount>
+							<cosmoz-omnitable-column-date title="Date" value-path="date"></cosmoz-omnitable-column-date>
+							<cosmoz-omnitable-column-autocomplete title="Group" value-path="group"></cosmoz-omnitable-column-autocomplete>
 
-							<paper-button action>
+							<paper-button slot="actions">
 								<iron-icon icon="bug-report"></iron-icon>
 								Button text 01
 							</paper-button>
-							<paper-button action>
+							<paper-button slot="actions">
 								<iron-icon icon="bug-report"></iron-icon>
 								Button text 02
 							</paper-button>
-							<paper-button action>
+							<paper-button slot="actions">
 								<iron-icon icon="bug-report"></iron-icon>
 								Button bigger text 03
 							</paper-button>
@@ -80,17 +78,9 @@
 	</template>
 
 	<script type="text/javascript">
-/*global document, moment, window, Cosmoz */
+/*global Polymer, window */
 (function () {
 	"use strict";
-
-	window.Cosmoz = {
-		formatDate: function (date) {
-			return moment(date).format('L');
-		}
-	};
-
-	moment.locale('sv');
 
 	window.addEventListener('WebComponentsReady', function () {
 
@@ -153,10 +143,6 @@
 
 			runAction: function (event, detail) {
 				console.log('runAction', event, detail, detail.items);
-			},
-
-			renderMoney: function (money) {
-				return money.amount + ' ' + money.currency;
 			}
 		});
 

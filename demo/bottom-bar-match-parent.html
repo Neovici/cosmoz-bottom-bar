@@ -7,8 +7,6 @@
 	<title>Cosmoz bottom bar demo</title>
 
 	<script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-	<script src="../../moment/moment.js"></script>
-	<script src="../../moment/locale/sv.js"></script>
 
 	<link rel="import" href="../../iron-flex-layout/iron-flex-layout-classes.html">
 	<link rel="import" href="../../iron-flex-layout/iron-flex-layout-classes.html">
@@ -111,7 +109,8 @@
 		</paper-button>
 	</x-view>
 	<script type="text/javascript">
-/*global document, moment, window, Cosmoz */
+	
+/*global Polymer */
 (function () {
 	"use strict";
 
@@ -127,9 +126,7 @@
 		showHideBottomBar: function () {
 			this.active = !this.active;
 		}
-
-	})
-
+	});
 }());
 
 	</script>
