@@ -277,7 +277,7 @@
 					}
 
 					Polymer.dom(this.$.buttons).appendChild(firstMenuItem);
-					firstMenuItem.onclick = this.onActionClick;
+					firstMenuItem.onclick = this.onActionClick.bind(this);
 					this.debounce('layoutActions', function () {
 						this._layoutActions(true);
 					}, 50);
@@ -298,33 +298,26 @@
 				}, 50);
 			}
 		},
-		onActionClick: function (event, detail, sender) {
-			var actionButton = event.currentTarget;
-			if (actionButton && actionButton.hasAttribute('slot')) {
-				actionButton.dispatchEvent(new window.CustomEvent('action', {
-					bubbles: true,
-					cancelable: true,
-					detail: {
-						item: actionButton
-					}
-				}));
-				event.stopPropagation();
+		fireAction: function (item) {
+			if (!item || !item.dispatchEvent) {
+				return;
 			}
-		},
-		onActionSelect: function (event, detail) {
-			detail.item.dispatchEvent(new window.CustomEvent('action', {
+			item.dispatchEvent(new window.CustomEvent('action', {
 				bubbles: true,
 				cancelable: true,
 				detail: {
-					item: detail.item
+					item: item
 				}
 			}));
-			event.currentTarget.selected = undefined;
+		},
+		onActionClick: function (event, detail, sender) {
+			this.fireAction(event.currentTarget);
 			event.stopPropagation();
 		},
-
-		onMenuTap: function (event) {
-			this.$.dropdown.open();
+		onActionSelect: function (event, detail) {
+			this.fireAction(detail.item);
+			event.currentTarget.selected = undefined;
+			event.stopPropagation();
 		}
 	});
 }());
