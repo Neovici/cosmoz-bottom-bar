@@ -67,12 +67,12 @@
 				@apply --layout-horizontal;
 			}
 
-			#menu ::slotted(paper-button) {
-				border: 0;
+			#dropdown * {
+				border: 0 !important;
 				font-weight: lighter !important;
-				border-radius: 0;
-				color: inherit;
-				background-color: inherit;
+				border-radius: 0 !important;
+				background-color: inherit !important;
+				white-space: nowrap !important;
 			}
 
 			#info,
@@ -80,13 +80,16 @@
 				white-space: nowrap;
 			}
 
-			#buttons ::slotted(paper-icon-button) {
+			paper-button > iron-icon {
+				margin-right: 0.4em;
+				min-height: 24px;
+				min-width: 24px;
+			}
+
+			#buttons > * {
 				margin: 0 0.29em;
 				min-width: 40px;
     			min-height: 40px;
-			}
-
-			#buttons ::slotted(*) {
 				text-overflow: ellipsis;
 				white-space: nowrap;
 			}

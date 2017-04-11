@@ -148,13 +148,16 @@
 
 		_onResize: function (event) {
 
-			var bigger = event && event.detail && event.detail.bigger;
 
 			this._computeBarHeight();
 
 			this._scrollManagement();
 
-			this._layoutActions(bigger);
+			var bigger = event && event.detail && event.detail.bigger;
+
+			this.debounce('layoutActions', function () {
+				this._layoutActions(bigger);
+			}, 50);
 		},
 
 		_scrollManagement: function (event) {
@@ -162,13 +165,12 @@
 			if (this.scroller === undefined) {
 				return;
 			}
-			var
-				scrollTop = this.scroller.scrollTop,
+
+			var scrollTop = this.scroller.scrollTop,
 				up = this.lastScroll > scrollTop,
 				scrollerHeight = this.scroller.clientHeight,
 				scrollerScrollHeight = this.scroller.scrollHeight,
 				atBottom = scrollTop + scrollerHeight + this.barHeight * 0.7 >= scrollerScrollHeight;
-
 
 			this.active = up || atBottom;
 			this.scrollerOverflow = scrollerScrollHeight > scrollerHeight;
@@ -176,7 +178,6 @@
 		},
 
 		_showHideBottomBar: function (visible, height, attached) {
-			// console.log('_showHideBottomBar', arguments);
 			if (!this._attached) {
 				return;
 			}
@@ -188,29 +189,31 @@
 		},
 
 		childrenUpdated: function (info) {
-			this._layoutActions(true);
-		},
-
-		getElements: function (contentElement) {
-			var
-				elements = [],
-				nodeList = Polymer.dom(contentElement).getDistributedNodes();
-
-			Object.keys(nodeList).forEach(function (index) {
-				var node = nodeList[index];
-				if (node instanceof window.HTMLElement && !node.hasAttribute('hidden')) {
-					elements.push(node);
-				}
+			var menuDom = Polymer.dom(this.$.dropdown);
+			// Move all nodes out of the slot and directly into the menu
+			// FIXME: Will this work with WC1 native..?
+			this.getElements(this.$.actionMenu, true).forEach(function (node) {
+				menuDom.appendChild(node);
 			});
-
-			return elements;
+			this.debounce('layoutActions', function () {
+				this._layoutActions(true);
+			});
 		},
 
-		_dropdownClosed: function (e) {
+		getElements: function (contentElement, dist) {
+			var polyDom = Polymer.dom(contentElement),
+				nodeList = dist ? polyDom.getDistributedNodes() : polyDom.children;
+
+			return nodeList.filter(function (node) {
+				return node instanceof window.HTMLElement && !node.hasAttribute('hidden') && node.tagName !== 'CONTENT';
+			});
+		},
+
+		_dropdownClosed: function (event) {
 			this.$.dropdownButton.active = false;
 		},
 
-		_layoutActions: function (bigger, second) {
+		_layoutActions: function (bigger) {
 			/**
 			 * Layout the actions available as buttons or menu items
 			 *
@@ -230,23 +233,18 @@
 			 * points.
 			 *
 			 * @param  {Boolean} bigger If we're sizing up
-			 * @param  {Boolean} second To make sure we don't end up in an endless loop, when we
-			 * trigger ourself 'bigger', we should make sure if it is the second run or a new event
 			 *
 			 */
 
-			var
-				buttonsBar = this.$.buttons,
+			var buttonsBar = this.$.buttons,
 				fits = buttonsBar.scrollWidth <= buttonsBar.clientWidth + 1,
-				actionButtons = this.getElements(this.$.actionButtons),
-				hadActions = this._hasActions,
+				actionButtons = this.getElements(buttonsBar),
+				menuItems = this.getElements(this.$.dropdown),
+				nodes = this.getElements(this.$.actionMenu, true),
 				lastButton,
-				nodes = this.getElements(this.$.actionMenu),
-				upsync = !!this._scalingUp === !!second,
-				i,
-				button;
+				firstMenuItem;
 
-			this.menuActions = nodes.length !== 0;
+			this.menuActions = nodes.length + menuItems.length > 0;
 			this._hasActions = this.menuActions || actionButtons.length > 0;
 
 			if (!this._hasActions) {
@@ -254,61 +252,51 @@
 				return;
 			}
 
-			if (this._hasActions !== hadActions) {
-				// If we went from none to some actions, defer _layoutActions()
-				// so we give _visible time to change and give us some space
-				this.async(function () {
-					this._layoutActions(true);
-				});
-				return;
-			}
-
-			for (i = 0; i < actionButtons.length; i += 1) {
-				button = actionButtons[i];
+			actionButtons.some(function (button) {
 				if (typeof button.textOverflow === 'function') {
 					fits = !button.textOverflow();
-					break;
+					return true;
 				}
 				if (button.scrollWidth > button.clientWidth) {
 					fits = false;
-					break;
+					return true;
 				}
-			}
+			});
 
-			if (fits && actionButtons.length > 3) {
-				return;
-			}
-
-			if (fits && bigger && this.menuActions) {
-				if (!upsync) {
+			if (fits) {
+				if (actionButtons.length > 3) {
 					return;
 				}
-				this.menuActions = false;
-				if (nodes.length > 1) {
-					this.menuActions = true;
-				}
-				if (nodes[0].hasAttribute('slot')) {
-					console.error('button in menu!');
+
+				if (fits && bigger && this.menuActions) {
+					this.menuActions = nodes.length + menuItems.length > 1;
+					if (menuItems.length > 0) {
+						firstMenuItem = menuItems[0];
+					} else {
+						firstMenuItem = nodes[0];
+					}
+
+					Polymer.dom(this.$.buttons).appendChild(firstMenuItem);
+					firstMenuItem.onclick = this.onActionClick;
+					this.debounce('layoutActions', function () {
+						this._layoutActions(true);
+					}, 50);
 					return;
 				}
-				Polymer.dom(nodes[0]).setAttribute('slot', 'buttons');
-				nodes[0].onclick = this.onActionClick;
-				this._scalingUp = true;
-				this.async(function () {
-					this._layoutActions(true, true);
-				});
-				return;
 			}
-
-			this._scalingUp = false;
 
 			if (!fits && actionButtons.length > 0) {
 				lastButton = actionButtons[actionButtons.length - 1];
-				Polymer.dom(lastButton).removeAttribute('slot');
+				if (menuItems.length > 0) {
+					Polymer.dom(this.$.dropdown).insertBefore(lastButton, menuItems[menuItems.length - 1]);
+				} else {
+					Polymer.dom(this.$.dropdown).appendChild(lastButton);
+				}
 				this.menuActions = true;
-				this.async(this._layoutActions);
+				this.debounce('layoutActions', function () {
+					this._layoutActions();
+				}, 50);
 			}
-
 		},
 		onActionClick: function (event, detail, sender) {
 			var actionButton = event.currentTarget;
