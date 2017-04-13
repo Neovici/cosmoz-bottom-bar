@@ -25,9 +25,8 @@
 			}
 
 			#bar {
-				@apply --layout-center;
-				@apply --layout-flex;
 				@apply --layout-horizontal;
+				@apply --layout-center;
 				background-color: var(--cosmoz-bottom-bar-background-color, --primary-background-color);
 				padding: 0 3%;
 				height: inherit;
@@ -67,14 +66,6 @@
 				@apply --layout-horizontal;
 			}
 
-			#dropdown * {
-				border: 0 !important;
-				font-weight: lighter !important;
-				border-radius: 0 !important;
-				background-color: inherit !important;
-				white-space: nowrap !important;
-			}
-
 			#info,
 			#menu > div {
 				white-space: nowrap;
@@ -86,7 +77,7 @@
 				min-width: 24px;
 			}
 
-			#buttons > * {
+			#buttons ::slotted(*) {
 				margin: 0 0.29em;
 				min-width: 40px;
     			min-height: 40px;
