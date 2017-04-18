@@ -309,7 +309,7 @@
 			// Allow up to 4 buttons in the button bar
 			// Ensure the buttons are not hidden before counting them.
 			var visibleButtonsCount = buttonsBarElements.reduce(function (count, el) {
-				if (el.clientWidth > 0) {
+				if (!el.hidden) {
 					return count + 1;
 				}
 				return count;
