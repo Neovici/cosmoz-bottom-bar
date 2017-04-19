@@ -301,6 +301,14 @@
 			}
 		},
 
+		onButtonsTap: function (event) {
+			var target = event.target;
+			if (target !== event.currentTarget) {
+				this.fireAction(target);
+			}
+
+		},
+
 		_debounceLayoutActions: function () {
 			this.debounce('layoutActions', this._layoutActions, 20);
 		},
@@ -346,11 +354,6 @@
 					item: item
 				}
 			}));
-		},
-
-		onActionClick: function (event) {
-			this.fireAction(event.currentTarget);
-			event.stopPropagation();
 		},
 
 		onActionSelect: function (event, detail) {

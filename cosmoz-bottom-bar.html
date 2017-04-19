@@ -28,7 +28,7 @@ See demo for example usage
 				<div id="info">
 					<slot name="info"></slot>
 				</div>
-				<div id="buttons">
+				<div id="buttons" on-tap="onButtonsTap">
 					<slot name="bottom-bar-buttons"></slot>
 				</div>
 				<paper-menu-button hidden$="[[ !menuActions ]]" id="menu"
