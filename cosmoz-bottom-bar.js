@@ -94,7 +94,7 @@
 		_observer: undefined,
 
 		attached: function () {
-			this._observer = Polymer.dom(this).observeNodes(this._childrenUpdated.bind(this));
+			this._observer = Polymer.dom(this).observeNodes(this.childrenUpdated.bind(this));
 			this._attached = true;
 			this._computeBarHeight();
 		},
@@ -153,10 +153,14 @@
 
 			this._scrollManagement();
 
-			this._debounceLayoutActions();
+			var bigger = event && event.detail && event.detail.bigger;
+
+			this.debounce('layoutActions', function () {
+				this._layoutActions(bigger);
+			}, 50);
 		},
 
-		_scrollManagement: function () {
+		_scrollManagement: function (event) {
 
 			if (this.scroller === undefined) {
 				return;
@@ -173,7 +177,7 @@
 			this.lastScroll = scrollTop;
 		},
 
-		_showHideBottomBar: function () {
+		_showHideBottomBar: function (visible, height, attached) {
 			if (!this._attached) {
 				return;
 			}
@@ -184,165 +188,116 @@
 			this.translate3d('0px', translateY + 'px', '0px');
 		},
 
-		_childrenUpdated: function () {
-			this._debounceLayoutActions();
-		},
-
-		_getElementToDistribute: function () {
-			var elements = this.getEffectiveChildren();
-			return elements.filter(function (e) {
-				return e.getAttribute('slot') !== 'info';
+		childrenUpdated: function (info) {
+			var menuDom = Polymer.dom(this.$.dropdown);
+			// Move all nodes out of the slot and directly into the menu
+			// FIXME: Will this work with WC1 native..?
+			this.getElements(this.$.actionMenu, true).forEach(function (node) {
+				menuDom.appendChild(node);
+			});
+			this.debounce('layoutActions', function () {
+				this._layoutActions(true);
 			});
 		},
 
-		_dropdownClosed: function () {
+		getElements: function (contentElement, dist) {
+			var polyDom = Polymer.dom(contentElement),
+				nodeList = dist ? polyDom.getDistributedNodes() : polyDom.children;
+
+			return nodeList.filter(function (node) {
+				return node instanceof window.HTMLElement && !node.hasAttribute('hidden') && node.tagName !== 'CONTENT';
+			});
+		},
+
+		_dropdownClosed: function (event) {
 			this.$.dropdownButton.active = false;
 		},
 
-		/**
-		 * Layout the actions available as buttons or menu items
-		 *
-		 * If the window is resizing down, just make sure that all buttons fits, and if not,
-		 * move one to menu and call itself async (to allow re-rendering) and see if we fit.
-		 * Repeat until the button fits or no buttons are left.
-		 *
-		 * If the window is sizing up, try to place a menu item out as a button, call itself
-		 * async (to allow re-rendering) and see if we fit - if we don't, remove the button again.
-		 *
-		 * We also need to keep track of `_scalingUp` between calls since the resize might fire
-		 * a lot of events, and we don't want to be starting multiple "calculation processes"
-		 * since this will result in an infinite loop.
-		 *
-		 * The actual layouting of actions will be performed by adding or removing the 'button'
-		 * attribute from the action, which will cause it to match different content insertion
-		 * points.
-		 *
-		 * @param  {Boolean} bigger If we're sizing up
-		 *
-		 */
-		_layoutActions: function () {
-			var
-				elements = this._getElementToDistribute(),
-				buttonsBarElements,
-				menuElements,
-				notDistributedElements,
-				buttonsBar = this.$.buttons,
-				currentWidth,
-				fits,
-				i;
+		_layoutActions: function (bigger) {
+			/**
+			 * Layout the actions available as buttons or menu items
+			 *
+			 * If the window is resizing down, just make sure that all buttons fits, and if not,
+			 * move one to menu and call itself async (to allow re-rendering) and see if we fit.
+			 * Repeat until the button fits or no buttons are left.
+			 *
+			 * If the window is sizing up, try to place a menu item out as a button, call itself
+			 * async (to allow re-rendering) and see if we fit - if we don't, remove the button again.
+			 *
+			 * We also need to keep track of `_scalingUp` between calls since the resize might fire
+			 * a lot of events, and we don't want to be starting multiple "calculation processes"
+			 * since this will result in an infinite loop.
+			 *
+			 * The actual layouting of actions will be performed by adding or removing the 'button'
+			 * attribute from the action, which will cause it to match different content insertion
+			 * points.
+			 *
+			 * @param  {Boolean} bigger If we're sizing up
+			 *
+			 */
 
-			this._hasAction = elements.length > 0;
+			var buttonsBar = this.$.buttons,
+				fits = buttonsBar.scrollWidth <= buttonsBar.clientWidth + 1,
+				actionButtons = this.getElements(buttonsBar),
+				menuItems = this.getElements(this.$.dropdown),
+				nodes = this.getElements(this.$.actionMenu, true),
+				lastButton,
+				firstMenuItem;
+
+			this.menuActions = nodes.length + menuItems.length > 0;
+			this._hasActions = this.menuActions || actionButtons.length > 0;
+
 			if (!this._hasActions) {
 				// No need to render if we don't have any actions
 				return;
 			}
 
-			buttonsBarElements = elements.filter(function (e) {
-				return e.getAttribute('slot') === 'bottom-bar-buttons';
-			});
-
-			menuElements = elements.filter(function (e) {
-				return e.getAttribute('slot') === 'bottom-bar-menu';
-			});
-
-			notDistributedElements = elements.filter(function (e) {
-				var attr = e.getAttribute('slot');
-				return attr !== 'bottom-bar-buttons' && attr !== 'bottom-bar-menu';
-			});
-
-
-			currentWidth = buttonsBar.clientWidth;
-			fits = buttonsBar.scrollWidth <= currentWidth + 1;
-
-			buttonsBarElements.some(function (e) {
-				if (typeof e.textOverflow === 'function') {
-					fits = !e.textOverflow();
+			actionButtons.some(function (button) {
+				if (typeof button.textOverflow === 'function') {
+					fits = !button.textOverflow();
 					return true;
 				}
-				if (e.scrollWidth > e.clientWidth) {
+				if (button.scrollWidth > button.clientWidth) {
 					fits = false;
 					return true;
 				}
 			});
 
 			if (fits) {
-				if (this._canAddMoreButtonToBar(currentWidth, buttonsBarElements, menuElements, notDistributedElements)) {
-					for (i = 0; i < elements.length; i+=1) {
-						if (elements[i].getAttribute('slot') !== 'bottom-bar-buttons') {
-							elements[i].setAttribute('slot', 'bottom-bar-buttons');
-							break;
-						}
-					}
+				if (actionButtons.length > 3) {
+					return;
+				}
 
-					i+=1;
-
-					if (i < elements.length) {
-						this.menuActions = true;
+				if (fits && bigger && this.menuActions) {
+					this.menuActions = nodes.length + menuItems.length > 1;
+					if (menuItems.length > 0) {
+						firstMenuItem = menuItems[0];
 					} else {
-						this.menuActions = false;
+						firstMenuItem = nodes[0];
 					}
 
-					for (; i < elements.length; i+=1) {
-						elements[i].setAttribute('slot', 'bottom-bar-menu');
-					}
-
-					this.distributeContent();
-
-					this._debounceLayoutActions();
-				}
-			} else {
-				this._overflowWidth = currentWidth;
-				if (buttonsBarElements.length > 0) {
-					buttonsBarElements[buttonsBarElements.length - 1].setAttribute('slot', 'bottom-bar-menu');
-					this.menuActions = true;
-					this.distributeContent();
-					this._debounceLayoutActions();
+					Polymer.dom(this.$.buttons).appendChild(firstMenuItem);
+					firstMenuItem.onclick = this.onActionClick.bind(this);
+					this.debounce('layoutActions', function () {
+						this._layoutActions(true);
+					}, 50);
+					return;
 				}
 			}
-		},
 
-		onButtonsTap: function (event) {
-			var target = event.target;
-			if (target !== event.currentTarget) {
-				this.fireAction(target);
-			}
-
-		},
-
-		_debounceLayoutActions: function () {
-			this.debounce('layoutActions', this._layoutActions, 20);
-		},
-
-		_canAddMoreButtonToBar: function (width, buttonsBarElements, menuElements, notDistributedElements) {
-			// Allow up to 4 buttons in the button bar
-			// Ensure the buttons are not hidden before counting them.
-			var visibleButtonsCount = buttonsBarElements.reduce(function (count, el) {
-				if (!el.hidden) {
-					return count + 1;
+			if (!fits && actionButtons.length > 0) {
+				lastButton = actionButtons[actionButtons.length - 1];
+				if (menuItems.length > 0) {
+					Polymer.dom(this.$.dropdown).insertBefore(lastButton, menuItems[menuItems.length - 1]);
+				} else {
+					Polymer.dom(this.$.dropdown).appendChild(lastButton);
 				}
-				return count;
-			}, 0);
-
-			if (visibleButtonsCount > 3) {
-				return false;
+				this.menuActions = true;
+				this.debounce('layoutActions', function () {
+					this._layoutActions();
+				}, 50);
 			}
-
-			if (menuElements.length === 0 && notDistributedElements.length === 0) {
-				// nothing to add
-				return false;
-			}
-
-			if (this._overflowWidth === undefined) {
-				return true;
-			}
-
-			if (width > this._overflowWidth) {
-				return true;
-			}
-
-			return false;
 		},
-
 		fireAction: function (item) {
 			if (!item || !item.dispatchEvent) {
 				return;
@@ -355,7 +310,10 @@
 				}
 			}));
 		},
-
+		onActionClick: function (event, detail, sender) {
+			this.fireAction(event.currentTarget);
+			event.stopPropagation();
+		},
 		onActionSelect: function (event, detail) {
 			this.fireAction(detail.item);
 			event.currentTarget.selected = undefined;
