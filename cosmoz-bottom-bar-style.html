@@ -36,7 +36,7 @@
 				opacity: 0.3;
 			}
 
-			#info, #buttons {
+			#info, #toolbar {
 				height: inherit;
 			}
 
@@ -52,7 +52,7 @@
 				@apply --cosmoz-bottom-bar-menubutton;
 			}
 
-			#buttons {
+			#toolbar {
 				@apply --layout-center;
 				@apply --layout-flex;
 				@apply --layout-horizontal;
@@ -71,13 +71,7 @@
 				white-space: nowrap;
 			}
 
-			paper-button > iron-icon {
-				margin-right: 0.4em;
-				min-height: 24px;
-				min-width: 24px;
-			}
-
-			#buttons ::slotted(*) {
+			#toolbar ::slotted(*) {
 				margin: 0 0.29em;
 				min-width: 40px;
     			min-height: 40px;

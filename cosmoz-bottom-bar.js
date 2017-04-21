@@ -1,19 +1,23 @@
-/*global Cosmoz, document, Polymer, window*/
+/*global document, Polymer, window*/
 
 (function () {
 
 	'use strict';
+
+	var
+		BOTTOM_BAR_TOOLBAR_SLOT = 'bottom-bar-toolbar',
+		BOTTOM_BAR_MENU_SLOT = 'bottom-bar-menu';
 
 	Polymer({
 
 		is: 'cosmoz-bottom-bar',
 
 		behaviors: [
-			Cosmoz.ViewInfoBehavior
+			Polymer.IronResizableBehavior
 		],
 
 		listeners: {
-			'viewinfo-resize': '_onResize',
+			'iron-resize': '_onResize',
 			'iron-overlay-closed': '_dropdownClosed'
 		},
 
@@ -63,9 +67,36 @@
 				notify: true
 			},
 
-			menuActions: {
+			/**
+			 * Indicates wether this bottom bar has items distributed to the menu.
+			 */
+			hasMenuItems: {
 				type: Boolean,
 				value: false
+			},
+
+			/**
+			 * Class applied the the selected item
+			 */
+			selectedClass: {
+				type: String,
+				value: 'cosmoz-bottom-bar-selected-item'
+			},
+
+			/**
+			 * Class applied to items distributed to the toolbar
+			 */
+			toolbarClass: {
+				type: String,
+				value: 'cosmoz-bottom-bar-toolbar'
+			},
+
+			/**
+			 * Class applied to items distributed to the menu
+			 */
+			menuClass: {
+				type: String,
+				value: 'cosmoz-bottom-bar-menu'
 			},
 
 			_computedBarHeight: {
@@ -73,7 +104,8 @@
 			},
 
 			_visible: {
-				type: Boolean
+				type: Boolean,
+				computed: '_computeVisible(_hasAction, active, fixed)'
 			},
 
 			_attached: {
@@ -87,7 +119,6 @@
 		},
 
 		observers: [
-			'_setVisible(_hasActions, active, fixed)',
 			'_showHideBottomBar(_visible, _computedBarHeight, _attached)'
 		],
 
@@ -107,8 +138,8 @@
 			this.scrollHandler = this._scrollManagement.bind(this);
 		},
 
-		_setVisible: function (hasActions, active, fixed) {
-			this._visible = hasActions && (active || fixed);
+		_computeVisible: function (hasActions, active, fixed) {
+			return hasActions && (active || fixed);
 		},
 
 		_matchParentChanged: function () {
@@ -146,8 +177,7 @@
 			this.$.canvas.style.height = this._computedBarHeight + 'px';
 		},
 
-		_onResize: function (event) {
-
+		_onResize: function () {
 
 			this._computeBarHeight();
 
@@ -185,6 +215,14 @@
 		},
 
 		_childrenUpdated: function () {
+			var elements = this._getElementToDistribute();
+			// Initially distribute elements to the menu.
+			elements.forEach(function (e) {
+				e.setAttribute('slot', BOTTOM_BAR_MENU_SLOT);
+				e.setAttribute('tabindex', '-1');
+				this.toggleClass(this.toolbarClass, false, e);
+				this.toggleClass(this.menuClass, true, e);
+			}, this);
 			this._debounceLayoutActions();
 		},
 
@@ -197,6 +235,11 @@
 
 		_dropdownClosed: function () {
 			this.$.dropdownButton.active = false;
+		},
+
+		forceLayout: function () {
+			this._overflowWidth = undefined;
+			this._childrenUpdated();
 		},
 
 		/**
@@ -223,13 +266,13 @@
 		_layoutActions: function () {
 			var
 				elements = this._getElementToDistribute(),
-				buttonsBarElements,
+				toolbarElements,
 				menuElements,
-				notDistributedElements,
-				buttonsBar = this.$.buttons,
+				toolbar = this.$.toolbar,
 				currentWidth,
 				fits,
-				i;
+				newToolbarElement,
+				newMenuElement;
 
 			this._hasAction = elements.length > 0;
 			if (!this._hasActions) {
@@ -237,97 +280,71 @@
 				return;
 			}
 
-			buttonsBarElements = elements.filter(function (e) {
-				return e.getAttribute('slot') === 'bottom-bar-buttons';
+			currentWidth = toolbar.clientWidth;
+			fits = toolbar.scrollWidth <= currentWidth + 1;
+
+			toolbarElements = elements.filter(function (e) {
+				if (e.hidden) {
+					return false;
+				}
+
+				if (e.getAttribute('slot') === BOTTOM_BAR_TOOLBAR_SLOT) {
+					if (e.scrollWidth > e.clientWidth) {
+						fits = false;
+					}
+					return true;
+				}
 			});
 
 			menuElements = elements.filter(function (e) {
-				return e.getAttribute('slot') === 'bottom-bar-menu';
-			});
-
-			notDistributedElements = elements.filter(function (e) {
-				var attr = e.getAttribute('slot');
-				return attr !== 'bottom-bar-buttons' && attr !== 'bottom-bar-menu';
-			});
-
-
-			currentWidth = buttonsBar.clientWidth;
-			fits = buttonsBar.scrollWidth <= currentWidth + 1;
-
-			buttonsBarElements.some(function (e) {
-				if (typeof e.textOverflow === 'function') {
-					fits = !e.textOverflow();
-					return true;
-				}
-				if (e.scrollWidth > e.clientWidth) {
-					fits = false;
-					return true;
-				}
+				return !e.hidden && e.getAttribute('slot') === BOTTOM_BAR_MENU_SLOT;
 			});
 
 			if (fits) {
-				if (this._canAddMoreButtonToBar(currentWidth, buttonsBarElements, menuElements, notDistributedElements)) {
-					for (i = 0; i < elements.length; i+=1) {
-						if (elements[i].getAttribute('slot') !== 'bottom-bar-buttons') {
-							elements[i].setAttribute('slot', 'bottom-bar-buttons');
-							break;
-						}
-					}
-
-					i+=1;
-
-					if (i < elements.length) {
-						this.menuActions = true;
+				if (this._canAddMoreButtonToBar(currentWidth, toolbarElements, menuElements)) {
+					newToolbarElement = menuElements[0];
+					newToolbarElement.setAttribute('slot', BOTTOM_BAR_TOOLBAR_SLOT);
+					newToolbarElement.setAttribute('tabindex', '0');
+					this.toggleClass(this.toolbarClass, true, newToolbarElement);
+					this.toggleClass(this.menuClass, false, newToolbarElement);
+					// (pasleq) If we are moving the focused element from the menu to the toolbar
+					// while the toolbar is open, this will cause an error in iron-control-state
+					// that tries to handle lost of focus on an element that has been removed.
+					if (toolbarElements.length > 0) {
+						toolbarElements[0].focus();
 					} else {
-						this.menuActions = false;
+						newToolbarElement.focus();
 					}
-
-					for (; i < elements.length; i+=1) {
-						elements[i].setAttribute('slot', 'bottom-bar-menu');
-					}
-
+					this.$.menu.close();
 					this.distributeContent();
-
 					this._debounceLayoutActions();
 				}
+				this.hasMenuItems = menuElements.length > 0;
 			} else {
 				this._overflowWidth = currentWidth;
-				if (buttonsBarElements.length > 0) {
-					buttonsBarElements[buttonsBarElements.length - 1].setAttribute('slot', 'bottom-bar-menu');
-					this.menuActions = true;
+				if (toolbarElements.length > 0) {
+					newMenuElement = toolbarElements[toolbarElements.length - 1];
+					newMenuElement.setAttribute('slot', BOTTOM_BAR_MENU_SLOT);
+					newMenuElement.setAttribute('tabindex', '-1');
+					this.toggleClass(this.menuClass, true, newMenuElement);
+					this.toggleClass(this.toolbarClass, false, newMenuElement);
+					this.hasMenuItems = true;
 					this.distributeContent();
 					this._debounceLayoutActions();
 				}
 			}
-		},
-
-		onButtonsTap: function (event) {
-			var target = event.target;
-			if (target !== event.currentTarget) {
-				this.fireAction(target);
-			}
-
 		},
 
 		_debounceLayoutActions: function () {
-			this.debounce('layoutActions', this._layoutActions, 20);
+			this.debounce('layoutActions', this._layoutActions, 30);
 		},
 
-		_canAddMoreButtonToBar: function (width, buttonsBarElements, menuElements, notDistributedElements) {
-			// Allow up to 4 buttons in the button bar
-			// Ensure the buttons are not hidden before counting them.
-			var visibleButtonsCount = buttonsBarElements.reduce(function (count, el) {
-				if (!el.hidden) {
-					return count + 1;
-				}
-				return count;
-			}, 0);
-
-			if (visibleButtonsCount > 3) {
+		_canAddMoreButtonToBar: function (width, bottomBarElements, menuElements) {
+			if (bottomBarElements.length > 3) {
 				return false;
 			}
 
-			if (menuElements.length === 0 && notDistributedElements.length === 0) {
+			if (menuElements.length === 0) {
 				// nothing to add
 				return false;
 			}
@@ -343,6 +360,12 @@
 			return false;
 		},
 
+		_onActionSelected: function (event, detail) {
+			this.fireAction(detail.item);
+			event.currentTarget.selected = undefined;
+			event.stopPropagation();
+		},
+
 		fireAction: function (item) {
 			if (!item || !item.dispatchEvent) {
 				return;
@@ -355,11 +378,5 @@
 				}
 			}));
 		},
-
-		onActionSelect: function (event, detail) {
-			this.fireAction(detail.item);
-			event.currentTarget.selected = undefined;
-			event.stopPropagation();
-		}
 	});
 }());
