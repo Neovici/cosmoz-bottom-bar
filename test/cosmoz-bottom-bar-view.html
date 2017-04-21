@@ -31,14 +31,37 @@
 	<script src="../../web-component-tester/browser.js"></script>
 	<script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
+	<lin rel="import" href="../../paper-button/paper-button.html">
 	<link rel="import" href="../cosmoz-bottom-bar-view.html">
+
 </head>
 <body>
-	<test-fixture id="cosmoz-bottom-bar-view-fixture">
+	<test-fixture id="bottomBarViewFixture">
 		<template>
-			<cosmoz-bottom-bar-view></cosmoz-bottom-bar-view>
+			<cosmoz-bottom-bar-view style="min-height: 100px";>
+				<div slot="scroller-content">
+					<div style="min-height:10px;">
+						content that does not need scroll
+					</div>
+				</div>
+				<paper-button>b</paper-button>
+			</cosmoz-bottom-bar-view>
 		</template>
 	</test-fixture>
+
+	<test-fixture id="scrollingBottomBarView">
+		<template>
+			<cosmoz-bottom-bar-view style="min-height: 100px";>
+				<div slot="scroller-content">
+					<div style="min-height:200px;">
+						content that does not need scroll
+					</div>
+				</div>
+				<paper-button>b</paper-button>
+			</cosmoz-bottom-bar-view>
+		</template>
+	</test-fixture>
+
 
 	<script>
 	/*global WCT, suite, fixture, setup, test, Polymer, assert, logStore, errorStore */
@@ -46,15 +69,14 @@
 		'use strict';
 
 		suite('<cosmoz-bottom-bar-view>', function () {
-			var myElement;
+			var bottomBarView;
 
 			setup(function () {
-				myElement = fixture('cosmoz-bottom-bar-view-fixture');
+				bottomBarView = fixture('bottomBarViewFixture');
 			});
 
 			test('overflowing should be false', function () {
-				//Polymer.dom(myElement).()
-				assert.equal(myElement.overflowing, false);
+				assert.equal(bottomBarView.overflowing, false);
 			});
 
 			test('No console logs should exist', function () {
@@ -67,6 +89,18 @@
 
 			test('No console errors should exist', function () {
 				assert.equal(errorStore.length, 0, 'Error messages: ' + errorStore.join(' | '));
+			});
+		});
+
+		suite('scrolling bottom-bar-view', function () {
+			var bottomBarView;
+
+			setup(function () {
+				bottomBarView = fixture('scrollingBottomBarView');
+			});
+
+			test('overflowing should be true', function () {
+				assert.equal(bottomBarView.overflowing, true);
 			});
 		});
 	}());
