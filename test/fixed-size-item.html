@@ -1,0 +1,47 @@
+<link rel="import" href="../../polymer/polymer.html"/>
+
+<dom-module id="fixed-size-item">
+	<template>
+		<style>
+			:host {
+				display: block;
+			}
+			#item {
+				display: block;
+			}
+		</style>
+
+		<div id="item" style="[[ _computeStyle(width, height, color) ]]">
+		</div>
+	</template>
+	<script>
+		Polymer({
+			is: 'fixed-size-item',
+
+			properties: {
+				height: {
+					type: String,
+					value: '32px'
+				},
+				width: {
+					type: String,
+					value: '32px'
+				},
+
+				color: {
+					type: String,
+					value: 'red'
+				}
+			},
+
+			_computeStyle: function (width, height, color) {
+				return 'min-width: ' + width + ';'
+					+ 'max-width: '+ width + ';'
+					+ 'min-height: '+ height + ';'
+					+ 'max-height: '+ height + ';'
+					+ 'background-color: ' + color;
+			}
+		})
+	</script>
+
+</dom-module>

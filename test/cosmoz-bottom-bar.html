@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>cosmoz-bottom-bar tests</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+	<script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+	<script src="../../web-component-tester/browser.js"></script>
+	<script src="../../test-fixture/test-fixture-mocha.js"></script>
+
+	<link rel="import" href="../cosmoz-bottom-bar.html">
+	<link rel="import" href="fixed-size-item.html">
+
+	<style>
+	</style>
+
+</head>
+<body>
+	<test-fixture id="bottomBarWithoutMenu">
+		<template>
+			<cosmoz-bottom-bar style="min-width:200px; max-width: 200px;">
+				<fixed-size-item width="50px" height="32px"></fixed-size-item>
+			</cosmoz-bottom-bar>
+		</template>
+	</test-fixture>
+
+	<test-fixture id="bottomBarWithOverflowingButton">
+		<template>
+			<cosmoz-bottom-bar style="min-width:300px; max-width: 300px;">
+				<fixed-size-item width="200px"></fixed-size-item>
+				<fixed-size-item width="200px"></fixed-size-item>
+			</cosmoz-bottom-bar>
+		</template>
+	</test-fixture>
+
+
+	<script>
+	/*global WCT, suite, fixture, setup, test, Polymer, assert, logStore, errorStore */
+	(function () {
+		'use strict';
+
+		suite('bottomBarWithoutMenu', function () {
+			var bottomBar;
+
+			setup(function () {
+				bottomBar = fixture('bottomBarWithoutMenu');
+			});
+
+			test('button should be placed in toolbar', function (done) {
+				Polymer.Base.async(function () {
+					var item = bottomBar.getEffectiveChildren()[0];
+					var slot = item.getAttribute('slot');
+					assert.equal(slot, 'bottom-bar-toolbar');
+					assert.equal(item, bottomBar.$.toolbar.children[0]);
+					done();
+				}, 100);
+			});
+
+			test('menu button should be hidden', function (done) {
+				Polymer.Base.async(function () {
+					assert.isTrue(bottomBar.$.menu.hidden);
+					done();
+				}, 100);
+			});
+
+		});
+
+		suite('bottomBarWithOverflowingButton', function () {
+			var bottomBar;
+
+			setup(function () {
+				bottomBar = fixture('bottomBarWithOverflowingButton');
+			});
+
+			test('First button should be placed in toolbar', function (done) {
+				Polymer.Base.async(function () {
+					var item = bottomBar.getEffectiveChildren()[0];
+					var slot = item.getAttribute('slot');
+					assert.equal(slot, 'bottom-bar-toolbar');
+					assert.equal(item, bottomBar.$.toolbar.children[0]);
+					done();
+				}, 200);
+			});
+
+			test('Second button should be placed in menu', function (done) {
+				Polymer.Base.async(function () {
+					var item = bottomBar.getEffectiveChildren()[1];
+					var slot = item.getAttribute('slot');
+					assert.equal(slot, 'bottom-bar-menu');
+					assert.equal(item, Polymer.dom(bottomBar.$.bottomBarMenu).getDistributedNodes()[0]);
+					done();
+				}, 200);
+			});
+
+			test('menu button should be visible', function (done) {
+				Polymer.Base.async(function () {
+					assert.isFalse(bottomBar.$.menu.hidden);
+					done();
+				}, 200);
+			});
+
+		});
+	}());
+
+	</script>
+</body>
+</html>

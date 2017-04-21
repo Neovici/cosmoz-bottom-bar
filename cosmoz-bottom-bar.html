@@ -42,7 +42,7 @@ See demo for example usage
 					<slot name="info"></slot>
 				</div>
 				<iron-selector id="toolbar" selected-class="[[ selectedClass ]]" on-iron-select="_onActionSelected">
-					<slot name="bottom-bar-toolbar"></slot>
+					<slot id="bottomBarToolbar" name="bottom-bar-toolbar"></slot>
 				</iron-selector>
 				<paper-menu-button hidden$="[[ !hasMenuItems ]]" id="menu"
 						vertical-offset="[[ barHeight ]]"
@@ -51,7 +51,7 @@ See demo for example usage
 						role="group" no-animations>
 					<paper-icon-button icon="menu" id="dropdownButton" toggles raised class="dropdown-trigger"></paper-icon-button>
 					<paper-menu id="dropdown" class="dropdown-content" selected-class="[[ selectedClass ]]" on-iron-select="_onActionSelected">
-						<slot name="bottom-bar-menu"></slot>
+						<slot id="bottomBarMenu" name="bottom-bar-menu"></slot>
 					</paper-menu>
 				</paper-menu-button>
 			</div>
