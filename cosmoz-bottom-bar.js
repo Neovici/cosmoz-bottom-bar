@@ -219,7 +219,7 @@
 			this.translate3d('0px', translateY + 'px', '0px');
 		},
 
-		_childrenUpdated: function (info) {
+		_childrenUpdated: function () {
 			var elements = this._getElementToDistribute();
 			// Initially distribute elements to the menu.
 			elements.forEach(function (e) {
@@ -247,7 +247,14 @@
 
 		forceLayout: function () {
 			this._overflowWidth = undefined;
-			this._childrenUpdated();
+			var elements = this._getElementToDistribute();
+			elements.forEach(function (e) {
+				e.setAttribute('slot', BOTTOM_BAR_MENU_SLOT);
+				e.setAttribute('tabindex', '-1');
+				this.toggleClass(this.toolbarClass, false, e);
+				this.toggleClass(this.menuClass, true, e);
+			}, this);
+			this._debounceLayoutActions();
 		},
 
 		/**
