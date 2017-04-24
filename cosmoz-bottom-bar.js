@@ -99,6 +99,11 @@
 				value: 'cosmoz-bottom-bar-menu'
 			},
 
+			maxToolbarItems: {
+				type: Number,
+				value: 3
+			},
+
 			_computedBarHeight: {
 				type: Number
 			},
@@ -214,14 +219,17 @@
 			this.translate3d('0px', translateY + 'px', '0px');
 		},
 
-		_childrenUpdated: function () {
+		_childrenUpdated: function (info) {
 			var elements = this._getElementToDistribute();
 			// Initially distribute elements to the menu.
 			elements.forEach(function (e) {
-				e.setAttribute('slot', BOTTOM_BAR_MENU_SLOT);
-				e.setAttribute('tabindex', '-1');
-				this.toggleClass(this.toolbarClass, false, e);
-				this.toggleClass(this.menuClass, true, e);
+				var slot = e.getAttribute('slot');
+				if (slot !== BOTTOM_BAR_MENU_SLOT && slot !== BOTTOM_BAR_TOOLBAR_SLOT) {
+					e.setAttribute('slot', BOTTOM_BAR_MENU_SLOT);
+					e.setAttribute('tabindex', '-1');
+					this.toggleClass(this.toolbarClass, false, e);
+					this.toggleClass(this.menuClass, true, e);
+				}
 			}, this);
 			this._debounceLayoutActions();
 		},
@@ -340,20 +348,8 @@
 		},
 
 		_canAddMoreButtonToBar: function (width, bottomBarElements, menuElements) {
-			if (bottomBarElements.length > 3) {
-				return false;
-			}
-
-			if (menuElements.length === 0) {
-				// nothing to add
-				return false;
-			}
-
-			if (this._overflowWidth === undefined) {
-				return true;
-			}
-
-			if (width > this._overflowWidth) {
+			if ((width > this._overflowWidth || this._overflowWidth === undefined)
+				&& bottomBarElements.length < this.maxToolbarItems && menuElements.length > 0) {
 				return true;
 			}
 
@@ -363,7 +359,6 @@
 		_onActionSelected: function (event, detail) {
 			this.fireAction(detail.item);
 			event.currentTarget.selected = undefined;
-			event.stopPropagation();
 		},
 
 		fireAction: function (item) {

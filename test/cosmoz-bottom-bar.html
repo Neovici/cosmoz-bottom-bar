@@ -34,6 +34,17 @@
 		</template>
 	</test-fixture>
 
+	<test-fixture id="bottomBarMaxToolbarItems">
+		<template>
+			<cosmoz-bottom-bar max-toolbar-items="3" style="min-width:400px; max-width: 400px;">
+				<fixed-size-item id="item1" width="50px"></fixed-size-item>
+				<fixed-size-item id="item2" width="50px"></fixed-size-item>
+				<fixed-size-item id="item3" width="50px"></fixed-size-item>
+				<fixed-size-item id="item4" width="50px"></fixed-size-item>
+			</cosmoz-bottom-bar>
+		</template>
+	</test-fixture>
+
 
 	<script>
 	/*global WCT, suite, fixture, setup, test, Polymer, assert, logStore, errorStore */
@@ -100,6 +111,32 @@
 				}, 200);
 			});
 
+		});
+
+		suite('bottomBarMaxToolbarItems', function () {
+			var bottomBar;
+
+			setup(function () {
+				bottomBar = fixture('bottomBarMaxToolbarItems');
+			});
+
+			test('Toolbar should not contains more than max-toolbar-items', function (done) {
+				Polymer.Base.async(function () {
+					var
+						item1 = bottomBar.$.toolbar.children[0],
+						item2 = bottomBar.$.toolbar.children[1],
+						item3 = bottomBar.$.toolbar.children[2],
+						item4 = Polymer.dom(bottomBar.$.bottomBarMenu).getDistributedNodes()[0],
+						count = bottomBar.$.toolbar.children.length;
+
+					assert.equal(item1.id, "item1");
+					assert.equal(item2.id, "item2");
+					assert.equal(item3.id, "item3");
+					assert.equal(item4.id, "item4");
+					assert.equal(count, 3);
+					done();
+				}, 200);
+			});
 		});
 	}());
 
