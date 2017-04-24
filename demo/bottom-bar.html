@@ -11,6 +11,9 @@
 	<link rel="import" href="../../iron-flex-layout/iron-flex-layout-classes.html">
 	<link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
 	<link rel="import" href="../../paper-button/paper-button.html">
+	<link rel="import" href="../../paper-item/paper-item.html">
+	<link rel="import" href="../../iron-icon/iron-icon.html">
+	<link rel="import" href="../../iron-icons/iron-icons.html">
 	<link rel="import" href="../cosmoz-bottom-bar.html">
 	<style is="custom-style" include="iron-flex iron-flex-alignment iron-positioning">
 
@@ -29,7 +32,7 @@
 					height: 64px;
 				}
 
-				cosmoz-viewinfo {
+				#main {
 					overflow: hidden;
 				}
 
@@ -39,10 +42,11 @@
 				}
 			</style>
 
-			<cosmoz-viewinfo class="layout vertical fit">
+			<div id="main" class="layout vertical fit">
 				<h3>Cosmoz bottom bar demo</h3>
 				<div class="flex" id="lipsum">
 					<paper-button on-tap="showHideBottomBar">Show/hide bottom bar</paper-button>
+					<paper-button on-tap="showHideButton1">Show/hide button 1</paper-button>
 					Bottom bar active: <span>[[active]]</span>
 					<p>
 						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque pretium erat et nulla euismod congue. Maecenas mattis sem ac viverra egestas. Praesent in commodo velit, id gravida lectus. Vivamus varius fringilla risus ut blandit. Sed laoreet venenatis risus, vitae tempus enim tempus a. Praesent ac maximus elit. Nam non semper ex. Ut eleifend urna sit amet sapien ultrices, vitae ultrices erat accumsan.
@@ -54,45 +58,40 @@
 				</div>
 				<cosmoz-bottom-bar id="bottomBar" active="{{active}}">
 					<span slot="info">Nice bottom bar</span>
+					<paper-button hidden$="[[ hideButton1 ]]">button 1</paper-button>
 					<paper-button>
-						button 1
+						<iron-icon icon="add"></iron-icon>
+						<span>button 2</span>
+					</paper-button>
+					<paper-button>bigger button 3</paper-button>
+					<paper-button>bigger bigger button 4</paper-button>
+					<paper-button>
+						bigger bigger button 5
 					</paper-button>
 					<paper-button>
-						button 2
+						bigger bigger bigger button 6
 					</paper-button>
 					<paper-button>
-						big button 3
+						bigger bigger bigger button 7
 					</paper-button>
 					<paper-button>
-						even bigger button 4
+						bigger bigger bigger bigger button 8
 					</paper-button>
 					<paper-button>
-						even bigger button 4
+						bigger bigger bigger bigger button 9
 					</paper-button>
 					<paper-button>
-						even bigger button 4
-					</paper-button>
-					<paper-button>
-						even bigger button 4
-					</paper-button>
-					<paper-button>
-						even bigger button 4
-					</paper-button>
-					<paper-button>
-						even bigger button 4
-					</paper-button>
-					<paper-button>
-						even bigger button 4
+						bigger bigger bigger bigger bigger button 10
 					</paper-button>
 				</cosmoz-bottom-bar>
-			</cosmoz-viewinfo>
+			</div>
 		</template>
 	</dom-module>
 
 	<x-view class="fit"></x-view>
 
 	<script type="text/javascript">
-	
+
 /*global Polymer */
 (function () {
 	"use strict";
@@ -103,10 +102,18 @@
 			active: {
 				type: Boolean,
 				value: false
+			},
+			hideButton1: {
+				type: Boolean,
+				value: false
 			}
 		},
 		showHideBottomBar: function () {
 			this.active = !this.active;
+		},
+		showHideButton1: function () {
+			this.hideButton1 = !this.hideButton1;
+			this.$.bottomBar.forceLayout();
 		}
 	});
 }());

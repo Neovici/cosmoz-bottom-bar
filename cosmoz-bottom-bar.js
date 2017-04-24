@@ -1,19 +1,23 @@
-/*global Cosmoz, document, Polymer, window*/
+/*global document, Polymer, window*/
 
 (function () {
 
 	'use strict';
+
+	var
+		BOTTOM_BAR_TOOLBAR_SLOT = 'bottom-bar-toolbar',
+		BOTTOM_BAR_MENU_SLOT = 'bottom-bar-menu';
 
 	Polymer({
 
 		is: 'cosmoz-bottom-bar',
 
 		behaviors: [
-			Cosmoz.ViewInfoBehavior
+			Polymer.IronResizableBehavior
 		],
 
 		listeners: {
-			'viewinfo-resize': '_onResize',
+			'iron-resize': '_onResize',
 			'iron-overlay-closed': '_dropdownClosed'
 		},
 
@@ -63,9 +67,41 @@
 				notify: true
 			},
 
-			menuActions: {
+			/**
+			 * Indicates wether this bottom bar has items distributed to the menu.
+			 */
+			hasMenuItems: {
 				type: Boolean,
 				value: false
+			},
+
+			/**
+			 * Class applied the the selected item
+			 */
+			selectedClass: {
+				type: String,
+				value: 'cosmoz-bottom-bar-selected-item'
+			},
+
+			/**
+			 * Class applied to items distributed to the toolbar
+			 */
+			toolbarClass: {
+				type: String,
+				value: 'cosmoz-bottom-bar-toolbar'
+			},
+
+			/**
+			 * Class applied to items distributed to the menu
+			 */
+			menuClass: {
+				type: String,
+				value: 'cosmoz-bottom-bar-menu'
+			},
+
+			maxToolbarItems: {
+				type: Number,
+				value: 3
 			},
 
 			_computedBarHeight: {
@@ -73,7 +109,8 @@
 			},
 
 			_visible: {
-				type: Boolean
+				type: Boolean,
+				computed: '_computeVisible(_hasAction, active, fixed)'
 			},
 
 			_attached: {
@@ -87,14 +124,13 @@
 		},
 
 		observers: [
-			'_setVisible(_hasActions, active, fixed)',
 			'_showHideBottomBar(_visible, _computedBarHeight, _attached)'
 		],
 
 		_observer: undefined,
 
 		attached: function () {
-			this._observer = Polymer.dom(this).observeNodes(this.childrenUpdated.bind(this));
+			this._observer = Polymer.dom(this).observeNodes(this._childrenUpdated.bind(this));
 			this._attached = true;
 			this._computeBarHeight();
 		},
@@ -107,8 +143,8 @@
 			this.scrollHandler = this._scrollManagement.bind(this);
 		},
 
-		_setVisible: function (hasActions, active, fixed) {
-			this._visible = hasActions && (active || fixed);
+		_computeVisible: function (hasActions, active, fixed) {
+			return hasActions && (active || fixed);
 		},
 
 		_matchParentChanged: function () {
@@ -146,21 +182,16 @@
 			this.$.canvas.style.height = this._computedBarHeight + 'px';
 		},
 
-		_onResize: function (event) {
-
+		_onResize: function () {
 
 			this._computeBarHeight();
 
 			this._scrollManagement();
 
-			var bigger = event && event.detail && event.detail.bigger;
-
-			this.debounce('layoutActions', function () {
-				this._layoutActions(bigger);
-			}, 50);
+			this._debounceLayoutActions();
 		},
 
-		_scrollManagement: function (event) {
+		_scrollManagement: function () {
 
 			if (this.scroller === undefined) {
 				return;
@@ -177,7 +208,7 @@
 			this.lastScroll = scrollTop;
 		},
 
-		_showHideBottomBar: function (visible, height, attached) {
+		_showHideBottomBar: function () {
 			if (!this._attached) {
 				return;
 			}
@@ -188,116 +219,155 @@
 			this.translate3d('0px', translateY + 'px', '0px');
 		},
 
-		childrenUpdated: function (info) {
-			var menuDom = Polymer.dom(this.$.dropdown);
-			// Move all nodes out of the slot and directly into the menu
-			// FIXME: Will this work with WC1 native..?
-			this.getElements(this.$.actionMenu, true).forEach(function (node) {
-				menuDom.appendChild(node);
-			});
-			this.debounce('layoutActions', function () {
-				this._layoutActions(true);
+		_childrenUpdated: function () {
+			var elements = this._getElementToDistribute();
+			// Initially distribute elements to the menu.
+			elements.forEach(function (e) {
+				var slot = e.getAttribute('slot');
+				if (slot !== BOTTOM_BAR_MENU_SLOT && slot !== BOTTOM_BAR_TOOLBAR_SLOT) {
+					e.setAttribute('slot', BOTTOM_BAR_MENU_SLOT);
+					e.setAttribute('tabindex', '-1');
+					this.toggleClass(this.toolbarClass, false, e);
+					this.toggleClass(this.menuClass, true, e);
+				}
+			}, this);
+			this._debounceLayoutActions();
+		},
+
+		_getElementToDistribute: function () {
+			var elements = this.getEffectiveChildren();
+			return elements.filter(function (e) {
+				return e.getAttribute('slot') !== 'info';
 			});
 		},
 
-		getElements: function (contentElement, dist) {
-			var polyDom = Polymer.dom(contentElement),
-				nodeList = dist ? polyDom.getDistributedNodes() : polyDom.children;
-
-			return nodeList.filter(function (node) {
-				return node instanceof window.HTMLElement && !node.hasAttribute('hidden') && node.tagName !== 'CONTENT';
-			});
-		},
-
-		_dropdownClosed: function (event) {
+		_dropdownClosed: function () {
 			this.$.dropdownButton.active = false;
 		},
 
-		_layoutActions: function (bigger) {
-			/**
-			 * Layout the actions available as buttons or menu items
-			 *
-			 * If the window is resizing down, just make sure that all buttons fits, and if not,
-			 * move one to menu and call itself async (to allow re-rendering) and see if we fit.
-			 * Repeat until the button fits or no buttons are left.
-			 *
-			 * If the window is sizing up, try to place a menu item out as a button, call itself
-			 * async (to allow re-rendering) and see if we fit - if we don't, remove the button again.
-			 *
-			 * We also need to keep track of `_scalingUp` between calls since the resize might fire
-			 * a lot of events, and we don't want to be starting multiple "calculation processes"
-			 * since this will result in an infinite loop.
-			 *
-			 * The actual layouting of actions will be performed by adding or removing the 'button'
-			 * attribute from the action, which will cause it to match different content insertion
-			 * points.
-			 *
-			 * @param  {Boolean} bigger If we're sizing up
-			 *
-			 */
+		forceLayout: function () {
+			this._overflowWidth = undefined;
+			var elements = this._getElementToDistribute();
+			elements.forEach(function (e) {
+				e.setAttribute('slot', BOTTOM_BAR_MENU_SLOT);
+				e.setAttribute('tabindex', '-1');
+				this.toggleClass(this.toolbarClass, false, e);
+				this.toggleClass(this.menuClass, true, e);
+			}, this);
+			this._debounceLayoutActions();
+		},
 
-			var buttonsBar = this.$.buttons,
-				fits = buttonsBar.scrollWidth <= buttonsBar.clientWidth + 1,
-				actionButtons = this.getElements(buttonsBar),
-				menuItems = this.getElements(this.$.dropdown),
-				nodes = this.getElements(this.$.actionMenu, true),
-				lastButton,
-				firstMenuItem;
+		/**
+		 * Layout the actions available as buttons or menu items
+		 *
+		 * If the window is resizing down, just make sure that all buttons fits, and if not,
+		 * move one to menu and call itself async (to allow re-rendering) and see if we fit.
+		 * Repeat until the button fits or no buttons are left.
+		 *
+		 * If the window is sizing up, try to place a menu item out as a button, call itself
+		 * async (to allow re-rendering) and see if we fit - if we don't, remove the button again.
+		 *
+		 * We also need to keep track of `_scalingUp` between calls since the resize might fire
+		 * a lot of events, and we don't want to be starting multiple "calculation processes"
+		 * since this will result in an infinite loop.
+		 *
+		 * The actual layouting of actions will be performed by adding or removing the 'button'
+		 * attribute from the action, which will cause it to match different content insertion
+		 * points.
+		 *
+		 * @param  {Boolean} bigger If we're sizing up
+		 *
+		 */
+		_layoutActions: function () {
+			var
+				elements = this._getElementToDistribute(),
+				toolbarElements,
+				menuElements,
+				toolbar = this.$.toolbar,
+				currentWidth,
+				fits,
+				newToolbarElement,
+				newMenuElement;
 
-			this.menuActions = nodes.length + menuItems.length > 0;
-			this._hasActions = this.menuActions || actionButtons.length > 0;
-
+			this._hasAction = elements.length > 0;
 			if (!this._hasActions) {
 				// No need to render if we don't have any actions
 				return;
 			}
 
-			actionButtons.some(function (button) {
-				if (typeof button.textOverflow === 'function') {
-					fits = !button.textOverflow();
-					return true;
+			currentWidth = toolbar.clientWidth;
+			fits = toolbar.scrollWidth <= currentWidth + 1;
+
+			toolbarElements = elements.filter(function (e) {
+				if (e.hidden) {
+					return false;
 				}
-				if (button.scrollWidth > button.clientWidth) {
-					fits = false;
+
+				if (e.getAttribute('slot') === BOTTOM_BAR_TOOLBAR_SLOT) {
+					if (e.scrollWidth > e.clientWidth) {
+						fits = false;
+					}
 					return true;
 				}
 			});
 
+			menuElements = elements.filter(function (e) {
+				return !e.hidden && e.getAttribute('slot') === BOTTOM_BAR_MENU_SLOT;
+			});
+
 			if (fits) {
-				if (actionButtons.length > 3) {
-					return;
-				}
-
-				if (fits && bigger && this.menuActions) {
-					this.menuActions = nodes.length + menuItems.length > 1;
-					if (menuItems.length > 0) {
-						firstMenuItem = menuItems[0];
+				if (this._canAddMoreButtonToBar(currentWidth, toolbarElements, menuElements)) {
+					newToolbarElement = menuElements[0];
+					newToolbarElement.setAttribute('slot', BOTTOM_BAR_TOOLBAR_SLOT);
+					newToolbarElement.setAttribute('tabindex', '0');
+					this.toggleClass(this.toolbarClass, true, newToolbarElement);
+					this.toggleClass(this.menuClass, false, newToolbarElement);
+					// (pasleq) If we are moving the focused element from the menu to the toolbar
+					// while the toolbar is open, this will cause an error in iron-control-state
+					// that tries to handle lost of focus on an element that has been removed.
+					if (toolbarElements.length > 0) {
+						toolbarElements[0].focus();
 					} else {
-						firstMenuItem = nodes[0];
+						newToolbarElement.focus();
 					}
-
-					Polymer.dom(this.$.buttons).appendChild(firstMenuItem);
-					firstMenuItem.onclick = this.onActionClick.bind(this);
-					this.debounce('layoutActions', function () {
-						this._layoutActions(true);
-					}, 50);
-					return;
+					this.$.menu.close();
+					this.distributeContent();
+					this._debounceLayoutActions();
 				}
-			}
-
-			if (!fits && actionButtons.length > 0) {
-				lastButton = actionButtons[actionButtons.length - 1];
-				if (menuItems.length > 0) {
-					Polymer.dom(this.$.dropdown).insertBefore(lastButton, menuItems[menuItems.length - 1]);
-				} else {
-					Polymer.dom(this.$.dropdown).appendChild(lastButton);
+				this.hasMenuItems = menuElements.length > 0;
+			} else {
+				this._overflowWidth = currentWidth;
+				if (toolbarElements.length > 0) {
+					newMenuElement = toolbarElements[toolbarElements.length - 1];
+					newMenuElement.setAttribute('slot', BOTTOM_BAR_MENU_SLOT);
+					newMenuElement.setAttribute('tabindex', '-1');
+					this.toggleClass(this.menuClass, true, newMenuElement);
+					this.toggleClass(this.toolbarClass, false, newMenuElement);
+					this.hasMenuItems = true;
+					this.distributeContent();
+					this._debounceLayoutActions();
 				}
-				this.menuActions = true;
-				this.debounce('layoutActions', function () {
-					this._layoutActions();
-				}, 50);
 			}
 		},
+
+		_debounceLayoutActions: function () {
+			this.debounce('layoutActions', this._layoutActions, 30);
+		},
+
+		_canAddMoreButtonToBar: function (width, bottomBarElements, menuElements) {
+			if ((width > this._overflowWidth || this._overflowWidth === undefined)
+				&& bottomBarElements.length < this.maxToolbarItems && menuElements.length > 0) {
+				return true;
+			}
+
+			return false;
+		},
+
+		_onActionSelected: function (event, detail) {
+			this.fireAction(detail.item);
+			event.currentTarget.selected = undefined;
+		},
+
 		fireAction: function (item) {
 			if (!item || !item.dispatchEvent) {
 				return;
@@ -310,14 +380,5 @@
 				}
 			}));
 		},
-		onActionClick: function (event, detail, sender) {
-			this.fireAction(event.currentTarget);
-			event.stopPropagation();
-		},
-		onActionSelect: function (event, detail) {
-			this.fireAction(detail.item);
-			event.currentTarget.selected = undefined;
-			event.stopPropagation();
-		}
 	});
 }());

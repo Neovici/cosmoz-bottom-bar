@@ -1,15 +1,26 @@
 <link rel="import" href="../polymer/polymer.html"/>
-<link rel="import" href="../paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../paper-menu-button/paper-menu-button.html">
 <link rel="import" href="../paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../paper-menu/paper-menu.html">
-<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
+<link rel="import" href="../iron-selector/iron-selector.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
-<link rel="import" href="../cosmoz-viewinfo/cosmoz-viewinfo.html">
+<link rel="import" href="../paper-menu/paper-menu.html">
+
 <link rel="import" href="cosmoz-bottom-bar-style.html">
 
 <!--
-`<cosmoz-bottom-bar>` is meant as a responsive bottom-bar that can house buttons/actions and a menu for buttons that won't fit the available width.
+`<cosmoz-bottom-bar>` is a horizontal responsive bottom toolbar containing items that
+can be used for actions.
+
+The items placed inside the `cosmoz-bottom-bar` are distributed into the toolbar in a horizontal container.
+If the items do not fit the available width, those that do not fit are placed in a dropdown
+menu triggered by a button in the toolbar.
+
+The class specified by the property `toolbarClass` (default `cosmoz-bottom-bar-toolbar`)
+is applied to items distributed to the toolbar.
+
+The class specified in the property `menuClass` (default `cosmoz-bottom-bar-menu`)
+is applied to items distributed to the menu.
 
 ### Usage
 See demo for example usage
@@ -30,11 +41,17 @@ See demo for example usage
 				<div id="info">
 					<slot name="info"></slot>
 				</div>
-				<div id="buttons"></div>
-				<paper-menu-button hidden$="[[ !menuActions ]]" id="menu" vertical-offset="[[ barHeight ]]" vertical-align="bottom" horizontal-align="right" role="group" no-animations>
+				<iron-selector id="toolbar" selected-class="[[ selectedClass ]]" on-iron-select="_onActionSelected">
+					<slot id="bottomBarToolbar" name="bottom-bar-toolbar"></slot>
+				</iron-selector>
+				<paper-menu-button hidden$="[[ !hasMenuItems ]]" id="menu"
+						vertical-offset="[[ barHeight ]]"
+						vertical-align="bottom"
+						horizontal-align="right"
+						role="group" no-animations>
 					<paper-icon-button icon="menu" id="dropdownButton" toggles raised class="dropdown-trigger"></paper-icon-button>
-					<paper-menu id="dropdown" class="dropdown-content" selected-class="selected-item" on-iron-select="onActionSelect">
-						<slot id="actionMenu"></slot>
+					<paper-menu id="dropdown" class="dropdown-content" selected-class="[[ selectedClass ]]" on-iron-select="_onActionSelected">
+						<slot id="bottomBarMenu" name="bottom-bar-menu"></slot>
 					</paper-menu>
 				</paper-menu-button>
 			</div>
