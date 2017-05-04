@@ -104,16 +104,18 @@
 			},
 
 			_computedBarHeight: {
+				type: Number,
+				computed: '_computeComputedBarHeight(matchElementHeight, barHeight, _computedBarHeightKicker)',
+				observer: '_computedBarHeightChanged'
+			},
+
+			_computedBarHeightKicker: {
 				type: Number
 			},
 
 			_visible: {
 				type: Boolean,
 				computed: '_computeVisible(_hasAction, active, fixed)'
-			},
-
-			_attached: {
-				type: Boolean
 			},
 
 			_hasActions: {
@@ -123,15 +125,14 @@
 		},
 
 		observers: [
-			'_showHideBottomBar(_visible, _computedBarHeight, _attached)'
+			'_showHideBottomBar(_visible, _computedBarHeight)'
 		],
 
 		_observer: undefined,
 
 		attached: function () {
 			this._observer = Polymer.dom(this).observeNodes(this._childrenUpdated.bind(this));
-			this._attached = true;
-			this._computeBarHeight();
+			this.set('_computedBarHeightKicker', 0);
 		},
 
 		detached: function () {
@@ -170,18 +171,19 @@
 			}
 		},
 
-		_computeBarHeight: function () {
-			if (this.matchElementHeight) {
-				this._computedBarHeight = this.matchElementHeight.offsetHeight;
-			} else {
-				this._computedBarHeight = this.barHeight;
+		_computeComputedBarHeight: function (matchElementHeight, barHeight, kicker) {
+			if (matchElementHeight) {
+				return matchElementHeight.offsetHeight;
 			}
+			return barHeight;
+		},
 
-			this.$.canvas.style.height = this._computedBarHeight + 'px';
+		_computedBarHeightChanged: function (newHeight) {
+			this.$.canvas.style.height = newHeight + 'px';
 		},
 
 		_onResize: function () {
-			this._computeBarHeight();
+			this._computedBarHeightKicker += 1;
 			this._scrollManagement();
 			this._debounceLayoutActions();
 		},
@@ -203,14 +205,8 @@
 			this.lastScroll = scrollTop;
 		},
 
-		_showHideBottomBar: function () {
-			if (!this._attached) {
-				return;
-			}
-			var	translateY = this._visible
-				? 0
-				: this._computedBarHeight;
-
+		_showHideBottomBar: function (visible, barHeight) {
+			var	translateY = visible ? 0 : barHeight;
 			this.translate3d('0px', translateY + 'px', '0px');
 		},
 
