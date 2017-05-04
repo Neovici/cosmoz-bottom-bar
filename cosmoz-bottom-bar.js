@@ -45,14 +45,13 @@
 			/** Reference element from which to inherit height */
 			matchElementHeight: {
 				type: Object,
-				value: undefined
+				computed: 'computeMatchElementHeight(matchParent)'
 			},
 
 			/** Whether to match the height of parent (set reference element to parent) */
 			matchParent: {
 				type: Boolean,
-				value: false,
-				observer: '_matchParentChanged'
+				value: false
 			},
 
 			/** Scroller element to listen to when deciding whether or not to show the bar. Bar will be shown while scrolling up or when reaching bottom */
@@ -147,12 +146,11 @@
 			return hasActions && (active || fixed);
 		},
 
-		_matchParentChanged: function () {
-			if (this.matchParent) {
-				this.matchElementHeight = this.parentElement;
-			} else {
-				this.matchElementHeight = null;
+		computeMatchElementHeight: function (matchParent) {
+			if (matchParent) {
+				return this.parentElement;
 			}
+			return null;
 		},
 
 		_scrollerChanged: function (newScroller, oldScroller) {
@@ -183,11 +181,8 @@
 		},
 
 		_onResize: function () {
-
 			this._computeBarHeight();
-
 			this._scrollManagement();
-
 			this._debounceLayoutActions();
 		},
 
