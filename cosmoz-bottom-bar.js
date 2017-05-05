@@ -18,7 +18,8 @@
 
 		listeners: {
 			'iron-resize': '_onResize',
-			'iron-overlay-closed': '_dropdownClosed'
+			'iron-overlay-closed': '_dropdownClosed',
+			'transitionend': '_onTransitionEnd'
 		},
 
 		properties: {
@@ -209,7 +210,18 @@
 
 		_showHideBottomBar: function (visible, barHeight) {
 			var	translateY = visible ? 0 : barHeight;
+
+			this.style['height'] = 'auto';
+			this.style['overflow'] = 'initial';
 			this.translate3d('0px', translateY + 'px', '0px');
+		},
+
+		_onTransitionEnd: function (event) {
+			if (Polymer.dom(event).rootTarget === this
+				&& !this._visible) {
+				this.style['height'] = '0px';
+				this.style['overflow'] = 'hidden';
+			}
 		},
 
 		_childrenUpdated: function () {
