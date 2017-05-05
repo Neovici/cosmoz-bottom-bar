@@ -47,6 +47,8 @@
 				<div class="flex" id="lipsum">
 					<paper-button on-tap="showHideBottomBar">Show/hide bottom bar</paper-button>
 					<paper-button on-tap="showHideButton1">Show/hide button 1</paper-button>
+					<paper-button on-tap="showHideButton2">Show/hide button 2</paper-button>
+					<paper-button on-tap="showHideButton4">Show/hide button 4</paper-button>
 					Bottom bar active: <span>[[active]]</span>
 					<p>
 						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque pretium erat et nulla euismod congue. Maecenas mattis sem ac viverra egestas. Praesent in commodo velit, id gravida lectus. Vivamus varius fringilla risus ut blandit. Sed laoreet venenatis risus, vitae tempus enim tempus a. Praesent ac maximus elit. Nam non semper ex. Ut eleifend urna sit amet sapien ultrices, vitae ultrices erat accumsan.
@@ -59,12 +61,12 @@
 				<cosmoz-bottom-bar id="bottomBar" active="{{active}}">
 					<span slot="info">Nice bottom bar</span>
 					<paper-button hidden$="[[ hideButton1 ]]">button 1</paper-button>
-					<paper-button>
+					<paper-button hidden$="[[ hideButton2 ]]">
 						<iron-icon icon="add"></iron-icon>
 						<span>button 2</span>
 					</paper-button>
 					<paper-button>bigger button 3</paper-button>
-					<paper-button>bigger bigger button 4</paper-button>
+					<paper-button hidden$="[[ hideButton4 ]]">bigger bigger button 4</paper-button>
 					<paper-button>
 						bigger bigger button 5
 					</paper-button>
@@ -94,7 +96,7 @@
 
 /*global Polymer */
 (function () {
-	"use strict";
+	'use strict';
 
 	Polymer({
 		is: 'x-view',
@@ -106,14 +108,28 @@
 			hideButton1: {
 				type: Boolean,
 				value: false
+			},
+			hideButton2: {
+				type: Boolean,
+				value: false
+			},
+			hideButton4: {
+				type: Boolean,
+				value: false
 			}
 		},
+
 		showHideBottomBar: function () {
 			this.active = !this.active;
 		},
 		showHideButton1: function () {
 			this.hideButton1 = !this.hideButton1;
-			// this.$.bottomBar.forceLayout();
+		},
+		showHideButton2: function () {
+			this.hideButton2 = !this.hideButton2;
+		},
+		showHideButton4: function () {
+			this.hideButton4 = !this.hideButton4;
 		}
 	});
 }());

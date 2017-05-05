@@ -45,6 +45,17 @@
 		</template>
 	</test-fixture>
 
+	<test-fixture id="bottomBarWithHiddenButton">
+		<template>
+			<cosmoz-bottom-bar active style="min-width:500px; max-width: 510px;">
+				<fixed-size-item id="item1" width="150px"></fixed-size-item>
+				<fixed-size-item id="item2" hidden width="150px"></fixed-size-item>
+				<fixed-size-item id="item3"width="150px"></fixed-size-item>
+				<fixed-size-item id="item4" hidden width="150px"></fixed-size-item>
+			</cosmoz-bottom-bar>
+		</template>
+	</test-fixture>
+
 
 	<script>
 	/*global WCT, suite, fixture, setup, test, Polymer, assert, logStore, errorStore */
@@ -129,13 +140,69 @@
 						item4 = Polymer.dom(bottomBar.$.bottomBarMenu).getDistributedNodes()[0],
 						count = bottomBar.$.toolbar.children.length;
 
-					assert.equal(item1.id, "item1");
-					assert.equal(item2.id, "item2");
-					assert.equal(item3.id, "item3");
-					assert.equal(item4.id, "item4");
+					assert.equal(item1.id, 'item1');
+					assert.equal(item2.id, 'item2');
+					assert.equal(item3.id, 'item3');
+					assert.equal(item4.id, 'item4');
 					assert.equal(count, 3);
 					done();
 				}, 200);
+			});
+		});
+
+		suite('bottomBarWithHiddenButton', function () {
+			var bottomBar;
+
+			setup(function () {
+				bottomBar = fixture('bottomBarWithHiddenButton');
+			});
+
+			test('Hidden items should not affect layout', function (done) {
+				Polymer.Base.async(function () {
+					var
+						item1 = bottomBar.$.toolbar.children[0],
+						item3 = bottomBar.$.toolbar.children[1],
+						menuCount = Polymer.dom(bottomBar.$.bottomBarMenu).getDistributedNodes().length,
+						toolbarCount = bottomBar.$.toolbar.children.length;
+
+					assert.equal(item1.id, 'item1');
+					assert.equal(item3.id, 'item3');
+					assert.equal(toolbarCount, 2);
+					assert.equal(menuCount, 0);
+					done();
+				}, 200);
+			});
+
+			test('Unhiding item', function (done) {
+				Polymer.Base.async(function () {
+					var
+						item1 = bottomBar.$.toolbar.children[0],
+						item3 = bottomBar.$.toolbar.children[1];
+
+					assert.equal(item1.id, 'item1');
+					assert.equal(item3.id, 'item3');
+
+					bottomBar.getEffectiveChildren()[1].removeAttribute('hidden');
+
+					Polymer.Base.async(function () {
+						var
+							item1 = bottomBar.$.toolbar.children[0],
+							item2 = bottomBar.$.toolbar.children[1],
+							item3 = Polymer.dom(bottomBar.$.bottomBarMenu).getDistributedNodes()[0],
+							menuCount = Polymer.dom(bottomBar.$.bottomBarMenu).getDistributedNodes().length,
+							toolbarCount = bottomBar.$.toolbar.children.length;
+
+						assert.equal(item1.id, 'item1');
+						assert.equal(item2.id, 'item2');
+						assert.equal(item3.id, 'item3');
+						assert.equal(toolbarCount, 2);
+						assert.equal(menuCount, 1);
+						done();
+					}, 200);
+
+
+				}, 200);
+
 			});
 		});
 	}());

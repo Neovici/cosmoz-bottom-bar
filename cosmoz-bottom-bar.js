@@ -125,8 +125,17 @@
 			},
 
 			_nodeObserver: {
+				type: Object,
+			},
+
+			_hiddenMutationObserver: {
+				type: Object
+			},
+
+			_scrollHandler: {
 				type: Object
 			}
+
 		},
 
 		observers: [
@@ -134,16 +143,30 @@
 		],
 
 		attached: function () {
+			var context = this;
+
+			this._hiddenMutationObserver = new MutationObserver(function (mutations) {
+				var layoutingChange = mutations.some(function (mutation) {
+					return mutation.attributeName === 'hidden';
+				});
+				if (layoutingChange) {
+					context._forceLayout();
+				}
+			});
 			this._nodeObserver = Polymer.dom(this).observeNodes(this._childrenUpdated.bind(this));
-			this.set('_computedBarHeightKicker', 0);
+			this._computedBarHeightKicker = 0;
 		},
 
 		detached: function () {
 			Polymer.dom(this).unobserveNodes(this._nodeObserver);
+			this._hiddenMutationObserver.disconnect();
+			if (this.scroller) {
+				this.scroller.removeEventListener('scroll', this._scrollHandler);
+			}
 		},
 
 		created: function () {
-			this.scrollHandler = this._scrollManagement.bind(this);
+			this._scrollHandler = this._scrollManagement.bind(this);
 		},
 
 		_computeVisible: function (hasActions, active, fixed) {
@@ -162,14 +185,14 @@
 				return;
 			}
 			if (oldScroller) {
-				oldScroller.removeEventListener('scroll', this.scrollHandler);
+				oldScroller.removeEventListener('scroll', this._scrollHandler);
 			}
 			if (newScroller) {
 				if (!newScroller.addEventListener) {
 					console.warn('New scroller does not have addEventListener', newScroller);
 					return;
 				}
-				newScroller.addEventListener('scroll', this.scrollHandler);
+				newScroller.addEventListener('scroll', this._scrollHandler);
 				this.lastScroll = newScroller.scrollTop;
 			}
 		},
@@ -224,7 +247,15 @@
 			}
 		},
 
-		_childrenUpdated: function () {
+		_childrenUpdated: function (info) {
+			info.addedNodes.forEach(function (node) {
+				if (node.nodeType === Node.ELEMENT_NODE) {
+					this._hiddenMutationObserver.observe(node, {
+						attributes: true
+					});
+				}
+			}, this);
+
 			// Initially distribute elements to the menu.
 			this._getElementToDistribute().forEach(function (element) {
 				var slot = element.getAttribute('slot');
@@ -238,22 +269,6 @@
 		_getElementToDistribute: function () {
 			return this.getEffectiveChildren()
 				.filter(function (element) {
-					if (!element._observer) {
-						var context = this;
-						element._observer = new MutationObserver(function(mutations) {
-							var layoutingChange = mutations.some(function (mutation) {
-								return mutation.attributeName === 'hidden';
-							});
-							if (layoutingChange.length > 0) {
-								context._overflowWidth = undefined;
-								context._debounceLayoutActions();
-							}
-						});
-						
-						element._observer.observe(element, {
-							attributes: true
-						});
-					}
 					return !element.hidden && element.getAttribute('slot') !== 'info';
 				}, this);
 		},
@@ -262,7 +277,12 @@
 			this.$.dropdownButton.active = false;
 		},
 
-		forceLayout: function () {
+		/**
+		 * Causes a new layouting of all the bottom bar elements after visibility of one of the element has changed.
+		 * This is implemented by placing all elements in the menu and trying to fill the toolbar.
+		 * @returns {void}
+		 */
+		_forceLayout: function () {
 			this._overflowWidth = undefined;
 			this._getElementToDistribute().forEach(function (element) {
 				this._moveElement(element, false);
@@ -344,8 +364,10 @@
 					this.$.menu.close();
 					this.distributeContent();
 					this._debounceLayoutActions();
+					this.hasMenuItems = menuElements.length > 1;
+				} else {
+					this.hasMenuItems = menuElements.length > 0;
 				}
-				this.hasMenuItems = menuElements.length > 0;
 				return;
 			}
 
@@ -363,11 +385,6 @@
 		},
 
 		_moveElement: function (element, toToolbar) {
-			if (!element) {
-				return;
-			}
-			toToolbar = !!toToolbar;
-
 			var slot = toToolbar ? BOTTOM_BAR_TOOLBAR_SLOT : BOTTOM_BAR_MENU_SLOT,
 				tabindex = toToolbar ? '0' : '-1';
 
