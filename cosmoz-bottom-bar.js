@@ -121,6 +121,10 @@
 			_hasActions: {
 				type: Boolean,
 				value: true
+			},
+
+			_nodeObserver: {
+				type: Object
 			}
 		},
 
@@ -128,15 +132,13 @@
 			'_showHideBottomBar(_visible, _computedBarHeight)'
 		],
 
-		_observer: undefined,
-
 		attached: function () {
-			this._observer = Polymer.dom(this).observeNodes(this._childrenUpdated.bind(this));
+			this._nodeObserver = Polymer.dom(this).observeNodes(this._childrenUpdated.bind(this));
 			this.set('_computedBarHeightKicker', 0);
 		},
 
 		detached: function () {
-			Polymer.dom(this).unobserveNodes(this._observer);
+			Polymer.dom(this).unobserveNodes(this._nodeObserver);
 		},
 
 		created: function () {
@@ -211,25 +213,34 @@
 		},
 
 		_childrenUpdated: function () {
-			var elements = this._getElementToDistribute();
 			// Initially distribute elements to the menu.
-			elements.forEach(function (e) {
-				var slot = e.getAttribute('slot');
+			this._getElementToDistribute().forEach(function (element) {
+				var slot = element.getAttribute('slot');
 				if (slot !== BOTTOM_BAR_MENU_SLOT && slot !== BOTTOM_BAR_TOOLBAR_SLOT) {
-					e.setAttribute('slot', BOTTOM_BAR_MENU_SLOT);
-					e.setAttribute('tabindex', '-1');
-					this.toggleClass(this.toolbarClass, false, e);
-					this.toggleClass(this.menuClass, true, e);
+					this._moveElement(element, false);
 				}
 			}, this);
 			this._debounceLayoutActions();
 		},
 
 		_getElementToDistribute: function () {
-			var elements = this.getEffectiveChildren();
-			return elements.filter(function (e) {
-				return e.getAttribute('slot') !== 'info';
-			});
+			return this.getEffectiveChildren()
+				.filter(function (element) {
+					if (!element._observer) {
+						var context = this;
+						element._observer = new MutationObserver(function(mutations) {
+							// FIXME: We need to inform that we migt have buttons that have
+							// become visible
+							// context._overflowWidth = undefined;
+							context._debounceLayoutActions(); 
+						});
+						
+						element._observer.observe(element, {
+							attributes: true
+						});
+					}
+					return !element.hidden && element.getAttribute('slot') !== 'info';
+				}, this);
 		},
 
 		_dropdownClosed: function () {
@@ -238,12 +249,8 @@
 
 		forceLayout: function () {
 			this._overflowWidth = undefined;
-			var elements = this._getElementToDistribute();
-			elements.forEach(function (e) {
-				e.setAttribute('slot', BOTTOM_BAR_MENU_SLOT);
-				e.setAttribute('tabindex', '-1');
-				this.toggleClass(this.toolbarClass, false, e);
-				this.toggleClass(this.menuClass, true, e);
+			this._getElementToDistribute().forEach(function (element) {
+				this._moveElement(element, false);
 			}, this);
 			this._debounceLayoutActions();
 		},
@@ -270,8 +277,7 @@
 		 *
 		 */
 		_layoutActions: function () {
-			var
-				elements = this._getElementToDistribute(),
+			var elements = this._getElementToDistribute(),
 				toolbarElements,
 				menuElements,
 				toolbar = this.$.toolbar,
@@ -289,30 +295,25 @@
 			currentWidth = toolbar.clientWidth;
 			fits = toolbar.scrollWidth <= currentWidth + 1;
 
-			toolbarElements = elements.filter(function (e) {
-				if (e.hidden) {
-					return false;
-				}
-
-				if (e.getAttribute('slot') === BOTTOM_BAR_TOOLBAR_SLOT) {
-					if (e.scrollWidth > e.clientWidth) {
-						fits = false;
-					}
+			toolbarElements = elements.filter(function (element) {
+				if (element.getAttribute('slot') === BOTTOM_BAR_TOOLBAR_SLOT) {
+					// make sure we only read scrollWidth and clientWidth until
+					// know that we don't fit
+					fits = fits && element.scrollWidth <= element.clientWidth;
 					return true;
 				}
 			});
 
+			fits = fits && toolbarElements.length <= this.maxToolbarItems;
+
 			menuElements = elements.filter(function (e) {
-				return !e.hidden && e.getAttribute('slot') === BOTTOM_BAR_MENU_SLOT;
+				return e.getAttribute('slot') === BOTTOM_BAR_MENU_SLOT;
 			});
 
 			if (fits) {
 				if (this._canAddMoreButtonToBar(currentWidth, toolbarElements, menuElements)) {
 					newToolbarElement = menuElements[0];
-					newToolbarElement.setAttribute('slot', BOTTOM_BAR_TOOLBAR_SLOT);
-					newToolbarElement.setAttribute('tabindex', '0');
-					this.toggleClass(this.toolbarClass, true, newToolbarElement);
-					this.toggleClass(this.menuClass, false, newToolbarElement);
+					this._moveElement(newToolbarElement, true);
 					// (pasleq) If we are moving the focused element from the menu to the toolbar
 					// while the toolbar is open, this will cause an error in iron-control-state
 					// that tries to handle lost of focus on an element that has been removed.
@@ -326,19 +327,35 @@
 					this._debounceLayoutActions();
 				}
 				this.hasMenuItems = menuElements.length > 0;
-			} else {
-				this._overflowWidth = currentWidth;
-				if (toolbarElements.length > 0) {
-					newMenuElement = toolbarElements[toolbarElements.length - 1];
-					newMenuElement.setAttribute('slot', BOTTOM_BAR_MENU_SLOT);
-					newMenuElement.setAttribute('tabindex', '-1');
-					this.toggleClass(this.menuClass, true, newMenuElement);
-					this.toggleClass(this.toolbarClass, false, newMenuElement);
-					this.hasMenuItems = true;
-					this.distributeContent();
-					this._debounceLayoutActions();
-				}
+				return;
 			}
+
+			this._overflowWidth = currentWidth;
+
+			if (toolbarElements.length < 1) {
+				return;
+			}
+
+			newMenuElement = toolbarElements[toolbarElements.length - 1];
+			this._moveElement(newMenuElement, false);
+			this.hasMenuItems = true;
+			this.distributeContent();
+			this._debounceLayoutActions();
+		},
+
+		_moveElement: function (element, toToolbar) {
+			if (!element) {
+				return;
+			}
+			toToolbar = !!toToolbar;
+
+			var slot = toToolbar ? BOTTOM_BAR_TOOLBAR_SLOT : BOTTOM_BAR_MENU_SLOT,
+				tabindex = toToolbar ? '0' : '-1';
+
+			element.setAttribute('slot', slot);
+			element.setAttribute('tabindex', tabindex);
+			this.toggleClass(this.menuClass, !toToolbar, element);
+			this.toggleClass(this.toolbarClass, toToolbar, element);
 		},
 
 		_debounceLayoutActions: function () {
@@ -346,12 +363,12 @@
 		},
 
 		_canAddMoreButtonToBar: function (width, bottomBarElements, menuElements) {
-			if ((width > this._overflowWidth || this._overflowWidth === undefined)
-				&& bottomBarElements.length < this.maxToolbarItems && menuElements.length > 0) {
-				return true;
-			}
 
-			return false;
+			var hasSpace = width > this._overflowWidth || this._overflowWidth === undefined,
+				hasPlace = bottomBarElements.length < this.maxToolbarItems,
+				hasCandidates = menuElements.length > 0;
+
+			return hasSpace && hasPlace && hasCandidates;
 		},
 
 		_onActionSelected: function (event, detail) {
