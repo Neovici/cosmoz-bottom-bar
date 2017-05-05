@@ -229,10 +229,13 @@
 					if (!element._observer) {
 						var context = this;
 						element._observer = new MutationObserver(function(mutations) {
-							// FIXME: We need to inform that we migt have buttons that have
-							// become visible
-							// context._overflowWidth = undefined;
-							context._debounceLayoutActions(); 
+							var layoutingChange = mutations.some(function (mutation) {
+								return mutation.attributeName === 'hidden';
+							});
+							if (layoutingChange.length > 0) {
+								context._overflowWidth = undefined;
+								context._debounceLayoutActions();
+							}
 						});
 						
 						element._observer.observe(element, {
@@ -304,7 +307,11 @@
 				}
 			});
 
-			fits = fits && toolbarElements.length <= this.maxToolbarItems;
+			if (fits && toolbarElements.length === this.maxToolbarItems) {
+				return;
+			}
+
+			fits = fits && toolbarElements.length < this.maxToolbarItems;
 
 			menuElements = elements.filter(function (e) {
 				return e.getAttribute('slot') === BOTTOM_BAR_MENU_SLOT;
