@@ -116,12 +116,17 @@
 
 			_visible: {
 				type: Boolean,
-				computed: '_computeVisible(_hasAction, active, fixed)'
+				computed: '_computeVisible(hasActions, active, fixed)'
 			},
 
-			_hasActions: {
+			/**
+			 * Whether we have any visible actions
+			 */
+			hasActions: {
 				type: Boolean,
-				value: true
+				value: false,
+				readOnly: true,
+				notify: true
 			},
 
 			_nodeObserver: {
@@ -321,8 +326,8 @@
 				newToolbarElement,
 				newMenuElement;
 
-			this._hasAction = elements.length > 0;
-			if (!this._hasActions) {
+			this._setHasActions(elements.length > 0);
+			if (!this.hasActions) {
 				// No need to render if we don't have any actions
 				return;
 			}
