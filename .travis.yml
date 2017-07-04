@@ -10,9 +10,9 @@ addons:
     packages:
     - google-chrome-stable
 before_script:
-- npm install -g bower polylint web-component-tester
+- npm install -g bower polymer-cli web-component-tester
 - bower install
-- polylint --no-recursion
+- polymer lint --input cosmoz-bottom-bar-style.html cosmoz-bottom-bar-view.html cosmoz-bottom-bar.html
 script: xvfb-run wct
 notifications:
   slack:
