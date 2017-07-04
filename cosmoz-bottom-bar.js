@@ -34,7 +34,8 @@
 			/** Whether the bar is fixed (and take up space) or shows/hides from the bottom when needed - usually fixed on desktop and not mobile */
 			fixed: {
 				type: Boolean,
-				value: false
+				value: false,
+				reflectToAttribute: true
 			},
 
 			/** Bar height (not applicable when "matchParent" or "matchElementHeight" is set) */

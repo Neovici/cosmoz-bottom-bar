@@ -24,6 +24,14 @@
 			},
 
 			/**
+			 * Fixed bar
+			 */
+			fixed: {
+				type: Boolean,
+				computed: 'computeFixed(viewInfo.desktop, active)'
+			},
+
+			/**
 			 * Scroller of bottom-bar is overflowing
 			 */
 			overflowing: {
@@ -54,6 +62,10 @@
 
 		attached: function () {
 			this.scroller = this.$.scroller;
+		},
+
+		computeFixed: function (desktop, active) {
+			return active && desktop;
 		},
 
 		_onResize: function () {
