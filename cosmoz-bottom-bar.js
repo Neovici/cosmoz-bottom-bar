@@ -114,8 +114,9 @@
 				type: Number
 			},
 
-			_visible: {
+			visible: {
 				type: Boolean,
+				notify: true,
 				computed: '_computeVisible(hasActions, active, fixed)'
 			},
 
@@ -144,7 +145,7 @@
 		},
 
 		observers: [
-			'_showHideBottomBar(_visible, _computedBarHeight)'
+			'_showHideBottomBar(visible, _computedBarHeight)'
 		],
 
 		attached: function () {
@@ -246,7 +247,7 @@
 
 		_onTransitionEnd: function (event) {
 			if (Polymer.dom(event).rootTarget === this
-				&& !this._visible) {
+				&& !this.visible) {
 				this.style['height'] = '0px';
 				this.style['overflow'] = 'hidden';
 			}

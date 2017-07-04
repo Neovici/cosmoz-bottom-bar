@@ -15,14 +15,36 @@
 
 		properties: {
 
+			/**
+			 * Bar-view and bar are active
+			 */
+			active: {
+				type: Boolean,
+				value: true
+			},
+
+			/**
+			 * Scroller of bottom-bar is overflowing
+			 */
 			overflowing: {
 				type: Boolean,
 				value: false,
 				reflectToAttribute: true
 			},
 
+			/**
+			 * The scroller for the scrolling part of the view
+			 */
 			scroller: {
 				type: Object
+			},
+
+			/**
+			 * Bar is visible
+			 */
+			visible: {
+				type: Boolean,
+				value: true
 			}
 		},
 
@@ -47,15 +69,8 @@
 
 		},
 
-		_getPadding: function (desktop) {
-			// if (desktop) {
-			// 	return;
-			// }
-			return 'padding-bottom: ' + this.$.bar.barHeight + 'px';
-		},
-
-		_getBarHeight: function (desktop) {
-			var height = this.$.bar.barHeight;
+		_getBarHeight: function (visible) {
+			var height = visible ? this.$.bar.barHeight : 0;
 			return [
 				'max-height: ' + height + 'px',
 				'min-height: ' + height + 'px'
