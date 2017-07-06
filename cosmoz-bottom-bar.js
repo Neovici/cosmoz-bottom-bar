@@ -276,7 +276,7 @@
 		_getElementToDistribute: function () {
 			return this.getEffectiveChildren()
 				.filter(function (element) {
-					return !element.hidden && element.getAttribute('slot') !== 'info';
+					return !element.hidden && element.getAttribute('slot') !== 'info' && element.tagName !== 'TEMPLATE';
 				}, this);
 		},
 
