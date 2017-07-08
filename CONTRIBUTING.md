@@ -26,6 +26,10 @@ The easiest way to conform to the guidelines is to run Sublime Text 3 and instal
 * SublimeLinter: `"show_errors_on_save": true`
 * TrailingSpaces: ` "trailing_spaces_trim_on_save": true`
 
+## Guide for Contributors
+
+Polymer Elements are built in the open, and the Polymer authors eagerly encourage any and all forms of community contribution. When contributing, please follow these guidelines:
+
 ### Filing Issues
 
 **If you are filing an issue to request a feature**, please provide a clear description of the feature. It can be helpful to describe answers to the following questions:
