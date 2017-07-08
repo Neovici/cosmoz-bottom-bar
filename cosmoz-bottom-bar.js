@@ -121,7 +121,7 @@
 
 			_computedBarHeight: {
 				type: Number,
-				computed: '_computeComputedBarHeight(matchElementHeight, barHeight)',
+				computed: '_computeComputedBarHeight(matchElementHeight, barHeight, _computedBarHeightKicker)',
 				observer: '_computedBarHeightChanged'
 			},
 
@@ -199,15 +199,17 @@
 			if (matchParent) {
 				return this.parentElement;
 			}
+
+			return null;
 		},
 
 		_scrollerChanged: function (newScroller, oldScroller) {
-			if (!newScroller) {
-				return;
-			}
-
 			if (oldScroller) {
 				oldScroller.removeEventListener('scroll', this._scrollHandler);
+			}
+
+			if (!newScroller) {
+				return;
 			}
 
 			if (!newScroller.addEventListener) {
@@ -219,7 +221,7 @@
 			this.lastScroll = newScroller.scrollTop;
 		},
 
-		_computeComputedBarHeight: function (matchElementHeight, barHeight) {
+		_computeComputedBarHeight: function (matchElementHeight, barHeight, kicker) {
 			if (matchElementHeight) {
 				return matchElementHeight.offsetHeight;
 			}
