@@ -43,7 +43,7 @@ Polymer Elements are built in the open, and the Polymer authors eagerly encourag
  1. **A clear description of the bug and related expectations.** Consider using the following example template for reporting a bug:
 
  ```markdown
- The `paper-foo` element causes the page to turn pink when clicked.
+ The `cosmoz-bottom-bar` element causes the page to turn pink when clicked.
 
  ## Expected outcome
 
@@ -55,9 +55,9 @@ Polymer Elements are built in the open, and the Polymer authors eagerly encourag
 
  ## Steps to reproduce
 
- 1. Put a `paper-foo` element in the page.
+ 1. Put a `cosmoz-bottom-bar` element in the page.
  2. Open the page in a web browser.
- 3. Click the `paper-foo` element.
+ 3. Click the `cosmoz-bottom-bar` element.
  ```
 
  2. **A reduced test case that demonstrates the problem.** If possible, please include the test case as a JSBin. Start with this template to easily import and use relevant Polymer Elements: [https://jsbin.com/cagaye/edit?html,output](https://jsbin.com/cagaye/edit?html,output).
@@ -83,7 +83,7 @@ When submitting pull requests, please provide:
  2. **A succinct description of the design** used to fix any related issues. For example:
 
  ```markdown
- This fixes #20 by removing styles that leaked which would cause the page to turn pink whenever `paper-foo` is clicked.
+ This fixes #20 by removing styles that leaked which would cause the page to turn pink whenever `cosmoz-bottom-bar` is clicked.
  ```
 
  3. **At least one test for each bug fixed or feature added** as part of the pull request. Pull requests that fix bugs or add features without accompanying tests will not be considered.
