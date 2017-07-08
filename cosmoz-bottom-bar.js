@@ -25,13 +25,17 @@
 		properties: {
 
 			/** Whether the bar is active/shown (always active when fixed) */
+
 			active: {
 				type: Boolean,
 				value: false,
 				reflectToAttribute: true
 			},
 
-			/** Whether the bar is fixed (and take up space) or shows/hides from the bottom when needed - usually fixed on desktop and not mobile */
+			/** Whether the bar is fixed (and take up space) or shows/hides from the bottom when needed
+			 ** usually fixed on desktop and not mobile
+			 */
+
 			fixed: {
 				type: Boolean,
 				value: false,
@@ -39,24 +43,30 @@
 			},
 
 			/** Bar height (not applicable when "matchParent" or "matchElementHeight" is set) */
+
 			barHeight: {
 				type: Number,
 				value: 64
 			},
 
 			/** Reference element from which to inherit height */
+
 			matchElementHeight: {
 				type: Object,
 				computed: 'computeMatchElementHeight(matchParent)'
 			},
 
 			/** Whether to match the height of parent (set reference element to parent) */
+
 			matchParent: {
 				type: Boolean,
 				value: false
 			},
 
-			/** Scroller element to listen to when deciding whether or not to show the bar. Bar will be shown while scrolling up or when reaching bottom */
+			/** Scroller element to listen to when deciding whether or not to show the bar.
+			 * 	Bar will be shown while scrolling up or when reaching bottom
+			 */
+
 			scroller: {
 				type: Object,
 				observer: '_scrollerChanged'
@@ -71,6 +81,7 @@
 			/**
 			 * Indicates wether this bottom bar has items distributed to the menu.
 			 */
+
 			hasMenuItems: {
 				type: Boolean,
 				value: false
@@ -79,6 +90,7 @@
 			/**
 			 * Class applied the the selected item
 			 */
+
 			selectedClass: {
 				type: String,
 				value: 'cosmoz-bottom-bar-selected-item'
@@ -87,6 +99,7 @@
 			/**
 			 * Class applied to items distributed to the toolbar
 			 */
+
 			toolbarClass: {
 				type: String,
 				value: 'cosmoz-bottom-bar-toolbar'
@@ -95,6 +108,7 @@
 			/**
 			 * Class applied to items distributed to the menu
 			 */
+
 			menuClass: {
 				type: String,
 				value: 'cosmoz-bottom-bar-menu'
@@ -124,6 +138,7 @@
 			/**
 			 * Whether we have any visible actions
 			 */
+
 			hasActions: {
 				type: Boolean,
 				value: false,
@@ -132,7 +147,7 @@
 			},
 
 			_nodeObserver: {
-				type: Object,
+				type: Object
 			},
 
 			_hiddenMutationObserver: {
@@ -184,24 +199,26 @@
 			if (matchParent) {
 				return this.parentElement;
 			}
+
 			return null;
 		},
 
 		_scrollerChanged: function (newScroller, oldScroller) {
-			if (newScroller === undefined) {
-				return;
-			}
 			if (oldScroller) {
 				oldScroller.removeEventListener('scroll', this._scrollHandler);
 			}
-			if (newScroller) {
-				if (!newScroller.addEventListener) {
-					console.warn('New scroller does not have addEventListener', newScroller);
-					return;
-				}
-				newScroller.addEventListener('scroll', this._scrollHandler);
-				this.lastScroll = newScroller.scrollTop;
+
+			if (!newScroller) {
+				return;
 			}
+
+			if (!newScroller.addEventListener) {
+				console.warn('New scroller does not have addEventListener', newScroller);
+				return;
+			}
+
+			newScroller.addEventListener('scroll', this._scrollHandler);
+			this.lastScroll = newScroller.scrollTop;
 		},
 
 		_computeComputedBarHeight: function (matchElementHeight, barHeight, kicker) {
@@ -223,7 +240,7 @@
 
 		_scrollManagement: function () {
 
-			if (this.scroller === undefined) {
+			if (!this.scroller) {
 				return;
 			}
 
@@ -289,6 +306,7 @@
 		 * This is implemented by placing all elements in the menu and trying to fill the toolbar.
 		 * @returns {void}
 		 */
+
 		_forceLayout: function () {
 			this._overflowWidth = undefined;
 			this._getElementToDistribute().forEach(function (element) {
@@ -318,6 +336,7 @@
 		 * @param  {Boolean} bigger If we're sizing up
 		 *
 		 */
+
 		_layoutActions: function () {
 			var elements = this._getElementToDistribute(),
 				toolbarElements,
@@ -415,14 +434,16 @@
 		},
 
 		_onActionSelected: function (event, detail) {
-			this.fireAction(detail.item);
+			this._fireAction(detail.item);
 			event.currentTarget.selected = undefined;
 		},
 
-		fireAction: function (item) {
+		_fireAction: function (item) {
+
 			if (!item || !item.dispatchEvent) {
 				return;
 			}
+
 			item.dispatchEvent(new window.CustomEvent('action', {
 				bubbles: true,
 				cancelable: true,
@@ -430,6 +451,6 @@
 					item: item
 				}
 			}));
-		},
+		}
 	});
 }());
