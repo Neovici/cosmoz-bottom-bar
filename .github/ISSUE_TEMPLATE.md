@@ -1,4 +1,4 @@
-<!-- Instructions: https://github.com/PolymerElements/app-layout/CONTRIBUTING.md#filing-issues -->
+<!-- Instructions: https://github.com/cosmoz-bottom-bar/blob/master/CONTRIBUTING.md#filing-issues -->
 ### Description
 <!-- Example: The `cosmoz-button-bar` element causes the page to turn pink when clicked. -->
 
