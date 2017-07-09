@@ -58,7 +58,7 @@
 
 
 	<script>
-	/*global WCT, suite, fixture, setup, test, Polymer, assert, logStore, errorStore */
+	/*global WCT, suite, fixture, setup, test, Polymer, assert, logStore, errorStore, expect */
 	(function () {
 		'use strict';
 
@@ -84,6 +84,48 @@
 					assert.isTrue(bottomBar.$.menu.hidden);
 					done();
 				}, 100);
+			});
+
+			test('on call of attach API', function () {
+				bottomBar.attached();
+
+				expect(bottomBar._hiddenMutationObserver.observe).to.be.an('function');
+				assert.equal(bottomBar._nodeObserver.function,
+						Polymer.dom(bottomBar).observeNodes(bottomBar._childrenUpdated.bind(bottomBar)).function);
+				assert.equal(bottomBar._computedBarHeightKicker, 0);
+			});
+
+			test('on call of scrollChanged event with null value in newScrollbar', function () {
+				bottomBar.create();
+
+				var eventListener = {
+					removeEventListener: function (event, handler) {
+						return true;
+					}
+				};
+				var expected = bottomBar._scrollerChanged(undefined, eventListener);
+
+				assert.equal(expected, undefined);
+				assert.equal(bottomBar.lastScroll, bottomBar.lastScroll);
+			});
+
+			test('on call of scrollChanged event with some value in newScrollbar', function () {
+				bottomBar.create();
+
+				var eventListener = {
+					removeEventListener: function (event, handler) {
+						return true;
+					}
+				};
+				var newEventListener = eventListener;
+				newEventListener.addEventListener = function () {
+					return;
+				};
+				newEventListener.scrollTop = 20;
+
+				var expected = bottomBar._scrollerChanged(newEventListener, eventListener);
+
+				assert.equal(bottomBar.lastScroll, newEventListener.scrollTop);
 			});
 
 		});
