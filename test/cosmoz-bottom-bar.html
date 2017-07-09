@@ -96,21 +96,19 @@
 			});
 
 			test('on call of scrollChanged event with null value in newScrollbar', function () {
-				bottomBar.create();
 
 				var eventListener = {
 					removeEventListener: function (event, handler) {
 						return true;
 					}
 				};
-				var expected = bottomBar._scrollerChanged(undefined, eventListener);
+				var expected = bottomBar._scrollerChanged('foo	', eventListener);
 
 				assert.equal(expected, undefined);
 				assert.equal(bottomBar.lastScroll, bottomBar.lastScroll);
 			});
 
 			test('on call of scrollChanged event with some value in newScrollbar', function () {
-				bottomBar.create();
 
 				var eventListener = {
 					removeEventListener: function (event, handler) {
@@ -126,6 +124,26 @@
 				var expected = bottomBar._scrollerChanged(newEventListener, eventListener);
 
 				assert.equal(bottomBar.lastScroll, newEventListener.scrollTop);
+			});
+
+			test('on call of _computeComputedBarHeight with matchElementHeight', function () {
+				var elementHeight = {
+					offsetHeight: '20px'
+				};
+
+				var expected = bottomBar._computeComputedBarHeight(elementHeight, {});
+
+				assert.equal(expected, elementHeight.offsetHeight);
+			});
+
+			test('on call of _computeComputedBarHeight with barHeight', function () {
+				var barHeight = {
+					offsetHeight: '20px'
+				};
+
+				var expected = bottomBar._computeComputedBarHeight(null, barHeight);
+
+				assert.equal(expected, barHeight);
 			});
 
 		});
