@@ -102,7 +102,7 @@
 						return true;
 					}
 				};
-				var expected = bottomBar._scrollerChanged('foo	', eventListener);
+				var expected = bottomBar._scrollerChanged(undefined, eventListener);
 
 				assert.equal(expected, undefined);
 				assert.equal(bottomBar.lastScroll, bottomBar.lastScroll);
@@ -144,6 +144,12 @@
 				var expected = bottomBar._computeComputedBarHeight(null, barHeight);
 
 				assert.equal(expected, barHeight);
+			});
+
+			test('on call of _computedBarHeightChanged', function () {
+				var expected = bottomBar._computedBarHeightChanged(20);
+
+				assert.equal(bottomBar.$.canvas.style.height, '20px');
 			});
 
 		});
