@@ -57,6 +57,27 @@
 	</test-fixture>
 
 
+	<test-fixture id="heightManagement">
+		<template>
+			<div id="heightManagementParent" style="min-height: 100px; max-height: 100px">
+				<cosmoz-bottom-bar>
+					<fixed-size-item width="50px" height="32px"></fixed-size-item>
+				</cosmoz-bottom-bar>
+			</div>
+		</template>
+	</test-fixture>
+
+	<test-fixture id="scrollerManagement">
+		<template>
+			<div id="scrollerManagementParent" style="min-height: 500px; max-height: 100px">
+				<cosmoz-bottom-bar>
+					<fixed-size-item width="50px" height="32px"></fixed-size-item>
+				</cosmoz-bottom-bar>
+			</div>
+		</template>
+	</test-fixture>
+
+
 	<script>
 	/*global WCT, suite, fixture, setup, test, Polymer, assert, logStore, errorStore, expect */
 	(function () {
@@ -85,73 +106,6 @@
 					done();
 				}, 100);
 			});
-
-			test('on call of attach API', function () {
-				bottomBar.attached();
-
-				expect(bottomBar._hiddenMutationObserver.observe).to.be.an('function');
-				assert.equal(bottomBar._nodeObserver.function,
-						Polymer.dom(bottomBar).observeNodes(bottomBar._childrenUpdated.bind(bottomBar)).function);
-				assert.equal(bottomBar._computedBarHeightKicker, 0);
-			});
-
-			test('on call of scrollChanged event with null value in newScrollbar', function () {
-
-				var eventListener = {
-					removeEventListener: function (event, handler) {
-						return true;
-					}
-				};
-				var expected = bottomBar._scrollerChanged(undefined, eventListener);
-
-				assert.equal(expected, undefined);
-				assert.equal(bottomBar.lastScroll, bottomBar.lastScroll);
-			});
-
-			test('on call of scrollChanged event with some value in newScrollbar', function () {
-
-				var eventListener = {
-					removeEventListener: function (event, handler) {
-						return true;
-					}
-				};
-				var newEventListener = eventListener;
-				newEventListener.addEventListener = function () {
-					return;
-				};
-				newEventListener.scrollTop = 20;
-
-				var expected = bottomBar._scrollerChanged(newEventListener, eventListener);
-
-				assert.equal(bottomBar.lastScroll, newEventListener.scrollTop);
-			});
-
-			test('on call of _computeComputedBarHeight with matchElementHeight', function () {
-				var elementHeight = {
-					offsetHeight: '20px'
-				};
-
-				var expected = bottomBar._computeComputedBarHeight(elementHeight, {});
-
-				assert.equal(expected, elementHeight.offsetHeight);
-			});
-
-			test('on call of _computeComputedBarHeight with barHeight', function () {
-				var barHeight = {
-					offsetHeight: '20px'
-				};
-
-				var expected = bottomBar._computeComputedBarHeight(null, barHeight);
-
-				assert.equal(expected, barHeight);
-			});
-
-			test('on call of _computedBarHeightChanged', function () {
-				var expected = bottomBar._computedBarHeightChanged(20);
-
-				assert.equal(bottomBar.$.canvas.style.height, '20px');
-			});
-
 		});
 
 		suite('bottomBarWithOverflowingButton', function () {
@@ -269,6 +223,25 @@
 
 				}, 200);
 
+			});
+		});
+
+		suite('height management', function () {
+			var heightManagementParent, bottomBar;
+
+			setup(function () {
+				heightManagementParent = fixture('heightManagement');
+				bottomBar = Polymer.dom(heightManagementParent).querySelector('cosmoz-bottom-bar');
+			});
+
+			test('setting matchParent to true should set bottom-bar height to the height of the parent', function () {
+				bottomBar.matchParent = true;
+				assert.equal(bottomBar.offsetHeight, 100);
+			});
+
+			test('setting matchParent to false should set bottom-bar height to the height of the parent', function () {
+				bottomBar.matchParent = false;
+				assert.isBelow(bottomBar.offsetHeight, 100);
 			});
 		});
 	}());
