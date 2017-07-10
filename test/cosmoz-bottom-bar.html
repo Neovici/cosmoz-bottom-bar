@@ -228,7 +228,7 @@
 				assert.equal(bottomBar.offsetHeight, 100);
 			});
 
-			test('setting matchParent to false should set bottom-bar less than to the height of the parent', function () {
+			test('setting matchParent to false should set bottom-bar height to the height of the bar', function () {
 				bottomBar.matchParent = false;
 				assert.equal(bottomBar.offsetHeight, bottomBar.barHeight);
 			});
