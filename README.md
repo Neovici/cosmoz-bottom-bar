@@ -23,7 +23,11 @@ Example:
 ```
 -->
 ```html
-<cosmoz-bottom-bar style="min-width:200px; max-width: 200px;">
-     <paper-button width="50px" height="32px"></paper-button>
+<cosmoz-bottom-bar>
+	<div slot="info">My app toolbar</div>
+     <paper-button>Button 1</paper-button>
+		 <paper-button>Button 2</paper-button>
+		 <paper-button>Button 3</paper-button>
+		 <paper-button>Button 4</paper-button>
 </cosmoz-bottom-bar>
 ```
