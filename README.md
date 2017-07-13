@@ -15,15 +15,31 @@ Example:
   <template>
     <script src="../webcomponentsjs/webcomponents-lite.js"></script>
 		<link rel="import" href="../paper-button/paper-button.html">
+		<link rel="import" href="../paper-checkbox/paper-checkbox.html">
     <link rel="import" href="cosmoz-bottom-bar.html">
 		<style is="custom-style">
 			html, body {
 				margin: 0;
 				min-height: 368px;
 				max-height: 368px;
+				font-family: 'Roboto', 'Noto', sans-serif;
 			}
+
+			paper-button {
+				whitespace: no-wrap;
+			}
+
+			cosmoz-bottom-bar {
+				--cosmoz-bottom-bar-background-color: #4285f4;
+			}
+
+			#container {
+				display: flex;
+				flex-direction: row;
+			}
+
 		</style>
-    <div id="container">
+    <div id="nextCodeBlock">
 			<next-code-block></next-code-block>
 		</div>
   </template>
@@ -31,11 +47,14 @@ Example:
 ```
 -->
 ```html
-<cosmoz-bottom-bar active>
-	<div slot="info">My app toolbar</div>
-	<paper-button>Button 1</paper-button>
-	<paper-button>Button 2</paper-button>
-	<paper-button>Button 3</paper-button>
-	<paper-button>Button 4</paper-button>
-</cosmoz-bottom-bar>
+<div id="container">
+	<paper-checkbox checked$="{{checked}}">Activate bottom bar</paper-checkbox>
+	<cosmoz-bottom-bar active$="[[checked]]">
+		<div slot="info">My app toolbar</div>
+		<paper-button>Button 1</paper-button>
+		<paper-button>Button 2</paper-button>
+		<paper-button>Button 3</paper-button>
+		<paper-button>Button 4</paper-button>
+	</cosmoz-bottom-bar>
+</div>
 ```
