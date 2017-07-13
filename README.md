@@ -34,13 +34,14 @@ Example:
 			}
 
 			#container {
-				display: flex;
-				flex-direction: row;
+				margin: 20px;
 			}
 
 		</style>
     <div id="nextCodeBlock">
-			<next-code-block></next-code-block>
+			<template is="dom-bind">
+				<next-code-block></next-code-block>
+			</template>
 		</div>
   </template>
 </custom-element-demo>
