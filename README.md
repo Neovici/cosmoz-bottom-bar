@@ -20,13 +20,12 @@ Example:
 		<style is="custom-style">
 			html, body {
 				margin: 0;
-				min-height: 368px;
-				max-height: 368px;
+				min-height: 200px;
 				font-family: 'Roboto', 'Noto', sans-serif;
 			}
 
 			paper-button {
-				whitespace: no-wrap;
+				white-space: no-wrap;
 			}
 
 			cosmoz-bottom-bar {
@@ -49,8 +48,7 @@ Example:
 -->
 ```html
 <div id="container">
-	<paper-checkbox checked$="{{checked}}">Activate bottom bar</paper-checkbox>
-	<cosmoz-bottom-bar active$="[[checked]]">
+	<cosmoz-bottom-bar>
 		<div slot="info">My app toolbar</div>
 		<paper-button>Button 1</paper-button>
 		<paper-button>Button 2</paper-button>
