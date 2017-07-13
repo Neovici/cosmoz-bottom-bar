@@ -14,7 +14,7 @@ Example:
 <custom-element-demo>
   <template>
     <script src="../webcomponentsjs/webcomponents-lite.js"></script>
-    <link rel="import" href="cosmoz-button-bar.html">
+    <link rel="import" href="cosmoz-bottom-bar.html">
     <div id="container">
       <cosmoz-bottom-bar style="min-width:200px; max-width: 200px;">
       		<paper-button width="50px" height="32px"></paper-button>
