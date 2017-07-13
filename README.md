@@ -17,7 +17,7 @@ Example:
     <link rel="import" href="cosmoz-button-bar.html">
     <div id="container">
       <cosmoz-bottom-bar style="min-width:200px; max-width: 200px;">
-      		<fixed-size-item width="50px" height="32px"></fixed-size-item>
+      		<paper-button width="50px" height="32px"></paper-button>
       </cosmoz-bottom-bar>
     </div>
   </template>
@@ -26,6 +26,6 @@ Example:
 -->
 ```html
 <cosmoz-bottom-bar style="min-width:200px; max-width: 200px;">
-     <fixed-size-item width="50px" height="32px"></fixed-size-item>
+     <paper-button width="50px" height="32px"></paper-button>
 </cosmoz-bottom-bar>
 ```
