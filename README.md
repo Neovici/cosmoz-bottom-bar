@@ -32,12 +32,8 @@ Example:
 				--cosmoz-bottom-bar-background-color: #4285f4;
 			}
 
-			#container {
-				margin: 20px;
-			}
-
 		</style>
-    <div id="nextCodeBlock">
+		<div id="container">
 			<template is="dom-bind">
 				<next-code-block></next-code-block>
 			</template>
@@ -47,7 +43,7 @@ Example:
 ```
 -->
 ```html
-<div id="container">
+<div>
 	<cosmoz-bottom-bar>
 		<div slot="info">My app toolbar</div>
 		<paper-button>Button 1</paper-button>
