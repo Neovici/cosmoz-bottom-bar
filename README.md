@@ -2,6 +2,7 @@ cosmoz-bottom-bar
 ==================
 
 [![Build Status](https://travis-ci.org/Neovici/cosmoz-bottom-bar.svg?branch=master)](https://travis-ci.org/Neovici/cosmoz-bottom-bar)
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://beta.webcomponents.org/element/PolymerElements/paper-button)
 
 ## &lt;cosmoz-bottom-bar&gt;
 
@@ -16,16 +17,14 @@ Example:
     <script src="../webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="cosmoz-bottom-bar.html">
     <div id="container">
-      <cosmoz-bottom-bar style="min-width:200px; max-width: 200px;">
-      		<paper-button width="50px" height="32px"></paper-button>
-      </cosmoz-bottom-bar>
+      <next-code-block></next-code-block>
     </div>
   </template>
 </custom-element-demo>
 ```
 -->
 ```html
-<cosmoz-bottom-bar style="min-width:200px; max-width: 200px;">
-     <paper-button width="50px" height="32px"></paper-button>
+<cosmoz-bottom-bar>
+     <paper-button> Cosmoz Bottomm Bar</paper-button>
 </cosmoz-bottom-bar>
 ```
