@@ -15,7 +15,7 @@
     "polymer",
     "cosmoz"
   ],
-  "license": "https://raw.githubusercontent.com/Neovici/cosmoz-bottom-bar/master/LICENSE",
+  "license": "Apache-2.0",
   "ignore": [
     "**/.*",
     "node_modules",

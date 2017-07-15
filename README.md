@@ -16,16 +16,18 @@ Example:
   <template>
     <script src="../webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="cosmoz-bottom-bar.html">
-    <div id="container">
-      <next-code-block></next-code-block>
-    </div>
+    <link rel="import" href="../paper-button/paper-button.html">
+    <next-code-block></next-code-block>
   </template>
 </custom-element-demo>
 ```
 -->
 ```html
-<cosmoz-bottom-bar>
-     <paper-button> Cosmoz Bottomm Bar</paper-button>
-     <paper-button> Cosmoz Bottomm Bar 2</paper-button>
+<cosmoz-bottom-bar active>
+  <paper-button>Action 1</paper-button>
+  <paper-button>Action 2</paper-button>
+  <paper-button>Action 3</paper-button>
+  <paper-button>Action 4</paper-button>
+  <paper-button>Action 5</paper-button>
 </cosmoz-bottom-bar>
 ```
