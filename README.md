@@ -26,5 +26,6 @@ Example:
 ```html
 <cosmoz-bottom-bar>
      <paper-button> Cosmoz Bottomm Bar</paper-button>
+     <paper-button> Cosmoz Bottomm Bar 2</paper-button>
 </cosmoz-bottom-bar>
 ```
