@@ -18,6 +18,10 @@
 				opacity: 1;
 			}
 
+			[hidden] {
+				display: none !important;
+			}
+
 			#canvas {
 				display: block;
 				width: 100%;
@@ -79,6 +83,12 @@
 				white-space: nowrap;
 			}
 
+			#dropdown ::slotted(*) {
+				display: flex;
+				@apply --layout-center;
+				@apply --layout-horizontal;
+				position: relative;
+			}
 		</style>
 	</template>
 </dom-module>

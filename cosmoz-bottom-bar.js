@@ -245,12 +245,13 @@
 			}
 
 			var scrollTop = this.scroller.scrollTop,
-				up = this.lastScroll > scrollTop,
+				isScrollingUp = this.lastScroll > scrollTop,
 				scrollerHeight = this.scroller.clientHeight,
 				scrollerScrollHeight = this.scroller.scrollHeight,
-				atBottom = scrollTop + scrollerHeight + this.barHeight * 0.7 >= scrollerScrollHeight;
+				isAtBottom = scrollTop + scrollerHeight + this.barHeight * 0.7 >= scrollerScrollHeight,
+				isAtTop = scrollTop === 0;
 
-			this.active = up || atBottom;
+			this.active = isAtTop || isScrollingUp || isAtBottom;
 			this.scrollerOverflow = scrollerScrollHeight > scrollerHeight;
 			this.lastScroll = scrollTop;
 		},
