@@ -67,6 +67,16 @@
 		</template>
 	</test-fixture>
 
+	<test-fixture id="toggleBottomBar">
+		<template>
+			<div id="toggleBottomBarParent" style="min-height: 100px; max-height: 100px">
+				<cosmoz-bottom-bar>
+					<fixed-size-item width="50px" height="32px"></fixed-size-item>
+				</cosmoz-bottom-bar>
+			</div>
+		</template>
+	</test-fixture>
+
 	<script>
 	/*global WCT, suite, fixture, setup, test, Polymer, assert, logStore, errorStore, expect */
 	(function () {
@@ -231,6 +241,37 @@
 			test('setting matchParent to false should set bottom-bar height to the height of the bar', function () {
 				bottomBar.matchParent = false;
 				assert.equal(bottomBar.offsetHeight, bottomBar.barHeight);
+			});
+		});
+
+		suite('toggle bottom bar', function () {
+			var bottomBar;
+
+			suite('default hide the bottom bar', function () {
+				setup(function () {
+					bottomBar = fixture('toggleBottomBar');
+					bottomBar.active = false;
+				});
+
+				test('menu should not be visible on screen', function () {
+					Polymer.Base.async(function () {
+						assert.isTrue(bottomBar.$.menu.hidden);
+						done();
+					}, 100);
+				});
+			});
+
+			suite('now visible the bottom bar', function () {
+				setup(function () {
+					bottomBar.active = true;
+				});
+
+				test('menu should be visible on screen', function () {
+					Polymer.Base.async(function () {
+						assert.isFalse(bottomBar.$.menu.hidden);
+						done();
+					}, 100);
+				});
 			});
 		});
 	}());
