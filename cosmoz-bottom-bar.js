@@ -132,6 +132,7 @@
 			visible: {
 				type: Boolean,
 				notify: true,
+				readOnly: true,
 				computed: '_computeVisible(hasActions, active, fixed)'
 			},
 
