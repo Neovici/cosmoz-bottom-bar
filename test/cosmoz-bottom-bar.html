@@ -250,7 +250,7 @@
 			suite('default hide the bottom bar', function () {
 				setup(function () {
 					bottomBar = fixture('toggleBottomBar');
-					bottomBar.visible = false;
+					bottomBar.active = false;
 				});
 
 				test('menu should not be visible on screen', function () {
@@ -263,7 +263,7 @@
 
 			suite('now visible the bottom bar', function () {
 				setup(function () {
-					bottomBar.visible = true;
+					bottomBar.active = true;
 				});
 
 				test('menu should be visible on screen', function () {
