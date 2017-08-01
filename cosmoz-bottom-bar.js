@@ -90,7 +90,6 @@
 			/**
 			 * Class applied the the selected item
 			 */
-
 			selectedClass: {
 				type: String,
 				value: 'cosmoz-bottom-bar-selected-item'
@@ -99,7 +98,6 @@
 			/**
 			 * Class applied to items distributed to the toolbar
 			 */
-
 			toolbarClass: {
 				type: String,
 				value: 'cosmoz-bottom-bar-toolbar'
@@ -108,7 +106,6 @@
 			/**
 			 * Class applied to items distributed to the menu
 			 */
-
 			menuClass: {
 				type: String,
 				value: 'cosmoz-bottom-bar-menu'
