@@ -119,10 +119,10 @@
 				value: 3
 			},
 
-			_computedBarHeight: {
+			computedBarHeight: {
 				type: Number,
 				computed: '_computeComputedBarHeight(matchElementHeight, barHeight, _computedBarHeightKicker)',
-				observer: '_computedBarHeightChanged'
+				notify: true
 			},
 
 			_computedBarHeightKicker: {
@@ -162,7 +162,7 @@
 		},
 
 		observers: [
-			'_showHideBottomBar(visible, _computedBarHeight)'
+			'_showHideBottomBar(visible, computedBarHeight)'
 		],
 
 		attached: function () {
@@ -229,8 +229,8 @@
 			return barHeight;
 		},
 
-		_computedBarHeightChanged: function (newHeight) {
-			this.$.canvas.style.height = newHeight + 'px';
+		_getHeightStyle: function (height) {
+			return 'height: ' + height + 'px;';
 		},
 
 		_onResize: function () {

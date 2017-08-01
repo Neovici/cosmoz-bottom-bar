@@ -50,7 +50,7 @@
 			<cosmoz-bottom-bar active style="min-width:500px; max-width: 510px;">
 				<fixed-size-item id="item1" width="150px"></fixed-size-item>
 				<fixed-size-item id="item2" hidden width="150px"></fixed-size-item>
-				<fixed-size-item id="item3"width="150px"></fixed-size-item>
+				<fixed-size-item id="item3" width="150px"></fixed-size-item>
 				<fixed-size-item id="item4" hidden width="150px"></fixed-size-item>
 			</cosmoz-bottom-bar>
 		</template>
@@ -91,8 +91,8 @@
 
 			test('button should be placed in toolbar', function (done) {
 				Polymer.Base.async(function () {
-					var item = bottomBar.getEffectiveChildren()[0];
-					var slot = item.getAttribute('slot');
+					var item = bottomBar.getEffectiveChildren()[0],
+						slot = item.getAttribute('slot');
 					assert.equal(slot, 'bottom-bar-toolbar');
 					assert.equal(item, bottomBar.$.toolbar.children[0]);
 					done();
@@ -116,8 +116,8 @@
 
 			test('First button should be placed in toolbar', function (done) {
 				Polymer.Base.async(function () {
-					var item = bottomBar.getEffectiveChildren()[0];
-					var slot = item.getAttribute('slot');
+					var item = bottomBar.getEffectiveChildren()[0],
+						slot = item.getAttribute('slot');
 					assert.equal(slot, 'bottom-bar-toolbar');
 					assert.equal(item, bottomBar.$.toolbar.children[0]);
 					done();
@@ -126,8 +126,8 @@
 
 			test('Second button should be placed in menu', function (done) {
 				Polymer.Base.async(function () {
-					var item = bottomBar.getEffectiveChildren()[1];
-					var slot = item.getAttribute('slot');
+					var item = bottomBar.getEffectiveChildren()[1],
+						slot = item.getAttribute('slot');
 					assert.equal(slot, 'bottom-bar-menu');
 					assert.equal(item, Polymer.dom(bottomBar.$.bottomBarMenu).getDistributedNodes()[0]);
 					done();
@@ -152,8 +152,7 @@
 
 			test('Toolbar should not contains more than max-toolbar-items', function (done) {
 				Polymer.Base.async(function () {
-					var
-						item1 = bottomBar.$.toolbar.children[0],
+					var item1 = bottomBar.$.toolbar.children[0],
 						item2 = bottomBar.$.toolbar.children[1],
 						item3 = bottomBar.$.toolbar.children[2],
 						item4 = Polymer.dom(bottomBar.$.bottomBarMenu).getDistributedNodes()[0],
@@ -178,8 +177,7 @@
 
 			test('Hidden items should not affect layout', function (done) {
 				Polymer.Base.async(function () {
-					var
-						item1 = bottomBar.$.toolbar.children[0],
+					var item1 = bottomBar.$.toolbar.children[0],
 						item3 = bottomBar.$.toolbar.children[1],
 						menuCount = Polymer.dom(bottomBar.$.bottomBarMenu).getDistributedNodes().length,
 						toolbarCount = bottomBar.$.toolbar.children.length;
@@ -194,8 +192,7 @@
 
 			test('Unhiding item', function (done) {
 				Polymer.Base.async(function () {
-					var
-						item1 = bottomBar.$.toolbar.children[0],
+					var item1 = bottomBar.$.toolbar.children[0],
 						item3 = bottomBar.$.toolbar.children[1];
 
 					assert.equal(item1.id, 'item1');
@@ -204,8 +201,7 @@
 					bottomBar.getEffectiveChildren()[1].removeAttribute('hidden');
 
 					Polymer.Base.async(function () {
-						var
-							item1 = bottomBar.$.toolbar.children[0],
+						var item1 = bottomBar.$.toolbar.children[0],
 							item2 = bottomBar.$.toolbar.children[1],
 							item3 = Polymer.dom(bottomBar.$.bottomBarMenu).getDistributedNodes()[0],
 							menuCount = Polymer.dom(bottomBar.$.bottomBarMenu).getDistributedNodes().length,
@@ -226,7 +222,8 @@
 		});
 
 		suite('height management', function () {
-			var heightManagementParent, bottomBar;
+			var heightManagementParent,
+				bottomBar;
 
 			setup(function () {
 				heightManagementParent = fixture('heightManagement');

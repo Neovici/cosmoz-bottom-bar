@@ -25,6 +25,13 @@
 			},
 
 			/**
+			 * Height of the bar
+			 */
+			barHeight: {
+				type: Number
+			},
+
+			/**
 			 * Fixed bar
 			 */
 
@@ -86,8 +93,8 @@
 
 		},
 
-		_getBarHeight: function (visible) {
-			var height = visible ? this.$.bar.barHeight : 0;
+		_getHeightStyle: function (overflowing, barHeight) {
+			var height = overflowing ? barHeight : 0;
 			return [
 				'max-height: ' + height + 'px',
 				'min-height: ' + height + 'px'
