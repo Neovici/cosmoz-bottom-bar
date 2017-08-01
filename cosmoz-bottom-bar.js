@@ -25,7 +25,6 @@
 		properties: {
 
 			/** Whether the bar is active/shown (always active when fixed) */
-
 			active: {
 				type: Boolean,
 				value: false,
@@ -35,7 +34,6 @@
 			/** Whether the bar is fixed (and take up space) or shows/hides from the bottom when needed
 			 ** usually fixed on desktop and not mobile
 			 */
-
 			fixed: {
 				type: Boolean,
 				value: false,
@@ -43,21 +41,18 @@
 			},
 
 			/** Bar height (not applicable when "matchParent" or "matchElementHeight" is set) */
-
 			barHeight: {
 				type: Number,
 				value: 64
 			},
 
 			/** Reference element from which to inherit height */
-
 			matchElementHeight: {
 				type: Object,
 				computed: 'computeMatchElementHeight(matchParent)'
 			},
 
 			/** Whether to match the height of parent (set reference element to parent) */
-
 			matchParent: {
 				type: Boolean,
 				value: false
@@ -66,7 +61,6 @@
 			/** Scroller element to listen to when deciding whether or not to show the bar.
 			 * 	Bar will be shown while scrolling up or when reaching bottom
 			 */
-
 			scroller: {
 				type: Object,
 				observer: '_scrollerChanged'
@@ -81,7 +75,6 @@
 			/**
 			 * Indicates wether this bottom bar has items distributed to the menu.
 			 */
-
 			hasMenuItems: {
 				type: Boolean,
 				value: false
@@ -136,27 +129,20 @@
 			/**
 			 * Whether we have any visible actions
 			 */
-
 			hasActions: {
 				type: Boolean,
 				value: false,
 				readOnly: true,
 				notify: true
-			},
-
-			_nodeObserver: {
-				type: Object
-			},
-
-			_hiddenMutationObserver: {
-				type: Object
-			},
-
-			_scrollHandler: {
-				type: Object
 			}
-
 		},
+
+		/**
+		 * Non-Polymer properties
+		 */
+		_nodeObserver: undefined,
+		_hiddenMutationObserver: undefined,
+		_scrollHandler: undefined,
 
 		observers: [
 			'_showHideBottomBar(visible, computedBarHeight)'
