@@ -18,7 +18,6 @@
 			/**
 			 * Bar-view and bar are active
 			 */
-
 			active: {
 				type: Boolean,
 				value: true
@@ -34,7 +33,6 @@
 			/**
 			 * Fixed bar
 			 */
-
 			fixed: {
 				type: Boolean,
 				computed: 'computeFixed(viewInfo.desktop, active)'
@@ -43,7 +41,6 @@
 			/**
 			 * Scroller of bottom-bar is overflowing
 			 */
-
 			overflowing: {
 				type: Boolean,
 				value: false,
@@ -53,7 +50,6 @@
 			/**
 			 * The scroller for the scrolling part of the view
 			 */
-
 			scroller: {
 				type: Object
 			},
@@ -61,7 +57,6 @@
 			/**
 			 * Bar is visible
 			 */
-
 			visible: {
 				type: Boolean,
 				value: true
@@ -90,7 +85,6 @@
 					scrollerSizer.style.minHeight = scrollerSizer.scrollHeight + 'px';
 				}
 			});
-
 		},
 
 		_getHeightStyle: function (overflowing, barHeight) {

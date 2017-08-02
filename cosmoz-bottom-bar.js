@@ -24,15 +24,20 @@
 
 		properties: {
 
-			/** Whether the bar is active/shown (always active when fixed) */
+			/**
+			 * Whether the bar is active (shown)
+			 * NOTE: This has no effect when `fixed` is `true`
+			 */
 			active: {
 				type: Boolean,
 				value: false,
+				notify: true,
 				reflectToAttribute: true
 			},
 
-			/** Whether the bar is fixed (and take up space) or shows/hides from the bottom when needed
-			 ** usually fixed on desktop and not mobile
+			/**
+			 * Whether the bar is fixed (and take up space) or shows/hides from the bottom when needed
+			 * (Usually fixed on desktop and not mobile.)
 			 */
 			fixed: {
 				type: Boolean,
@@ -40,44 +45,49 @@
 				reflectToAttribute: true
 			},
 
-			/** Bar height (not applicable when "matchParent" or "matchElementHeight" is set) */
+			/**
+			 * Bar height (not used when `matchParent` or `matchElementHeight` is set)
+			 */
 			barHeight: {
 				type: Number,
 				value: 64
 			},
 
-			/** Reference element from which to inherit height */
-			matchElementHeight: {
-				type: Object,
-				computed: 'computeMatchElementHeight(matchParent)'
-			},
-
-			/** Whether to match the height of parent (set reference element to parent) */
+			/**
+			 * Whether to match the height of parent
+			 */
 			matchParent: {
 				type: Boolean,
 				value: false
 			},
 
-			/** Scroller element to listen to when deciding whether or not to show the bar.
-			 * 	Bar will be shown while scrolling up or when reaching bottom
+			/**
+			 * Scroller element to listen to when deciding whether or not to show the bar.
+			 * Bar will be shown while scrolling up or when reaching bottom
 			 */
 			scroller: {
 				type: Object,
 				observer: '_scrollerChanged'
 			},
 
+			/**
+			 * Whether the `scroller` is overflowing (can scroll) or not
+			 */
 			scrollerOverflow: {
 				type: Boolean,
 				value: false,
+				readOnly: true,
 				notify: true
 			},
 
 			/**
-			 * Indicates wether this bottom bar has items distributed to the menu.
+			 * Whether this bottom bar has items distributed to the menu
 			 */
 			hasMenuItems: {
 				type: Boolean,
-				value: false
+				value: false,
+				readOnly: true,
+				notify: true
 			},
 
 			/**
@@ -104,21 +114,34 @@
 				value: 'cosmoz-bottom-bar-menu'
 			},
 
+			/**
+			 * Maximum number of items in toolbar, regardless of space
+			 */
 			maxToolbarItems: {
 				type: Number,
 				value: 3
 			},
 
+			/**
+			 * The actual bar height, depending on if we `matchParent` or set `barHeight`
+			 */
 			computedBarHeight: {
 				type: Number,
-				computed: '_computeComputedBarHeight(matchElementHeight, barHeight, _computedBarHeightKicker)',
-				notify: true
+				computed: '_computeComputedBarHeight(_matchHeightElement, barHeight, _computedBarHeightKicker)',
+				notify: true,
+				readOnly: true
 			},
 
+			/**
+			 * Kicker to make `computedBarHeight` recalculate
+			 */
 			_computedBarHeightKicker: {
 				type: Number
 			},
 
+			/**
+			 * Whether the bar is visible (has actions and is `active` or `fixed`)
+			 */
 			visible: {
 				type: Boolean,
 				notify: true,
@@ -134,7 +157,15 @@
 				value: false,
 				readOnly: true,
 				notify: true
-			}
+			},
+
+			/**
+			 * Reference element from which to inherit height
+			 */
+			_matchHeightElement: {
+				type: Object,
+				computed: '_getHeightMatchingElement(matchParent)'
+			},
 		},
 
 		/**
@@ -175,16 +206,16 @@
 			this._scrollHandler = this._scrollManagement.bind(this);
 		},
 
-		_computeVisible: function (hasActions, active, fixed) {
-			return hasActions && (active || fixed);
-		},
-
-		computeMatchElementHeight: function (matchParent) {
+		_getHeightMatchingElement: function (matchParent) {
 			if (matchParent) {
 				return this.parentElement;
 			}
 
 			return null;
+		},
+
+		_computeVisible: function (hasActions, active, fixed) {
+			return hasActions && (active || fixed);
 		},
 
 		_scrollerChanged: function (newScroller, oldScroller) {
@@ -236,7 +267,7 @@
 				isAtTop = scrollTop === 0;
 
 			this.active = isAtTop || isScrollingUp || isAtBottom;
-			this.scrollerOverflow = scrollerScrollHeight > scrollerHeight;
+			this._setScrollerOverflow(scrollerScrollHeight > scrollerHeight);
 			this.lastScroll = scrollTop;
 		},
 
@@ -375,9 +406,9 @@
 					this.$.menu.close();
 					this.distributeContent();
 					this._debounceLayoutActions();
-					this.hasMenuItems = menuElements.length > 1;
+					this._setHasMenuItems(menuElements.length > 1);
 				} else {
-					this.hasMenuItems = menuElements.length > 0;
+					this._setHasMenuItems(menuElements.length > 0);
 				}
 				return;
 			}
@@ -390,7 +421,7 @@
 
 			newMenuElement = toolbarElements[toolbarElements.length - 1];
 			this._moveElement(newMenuElement, false);
-			this.hasMenuItems = true;
+			this._setHasMenuItems(true);
 			this.distributeContent();
 			this._debounceLayoutActions();
 		},
