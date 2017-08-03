@@ -22,6 +22,12 @@ Example:
 				background-color: lightblue;
 				font-family: sans-serif;
 				margin: 0;
+				height: 100vh;
+				flex-direction: column;
+				display: flex;
+			}
+			p {
+				margin: 40px 0;
 			}
 		</style>
 		<next-code-block></next-code-block>
@@ -30,7 +36,7 @@ Example:
 ```
 -->
 ```html
-<cosmoz-bottom-bar-view style="height: 300px;">
+<cosmoz-bottom-bar-view>
 	<div slot="scroller-content" style="padding: 0 18px;">
 		<h3>Sample page</h3>
 		<p>Nam non enim vitae mauris pharetra semper nec sed lectus.</p>
