@@ -35,7 +35,8 @@
 			 */
 			fixed: {
 				type: Boolean,
-				computed: 'computeFixed(viewInfo.desktop, active)'
+				computed: '_computeFixed(viewInfo.desktop, active)',
+				readOnly: true
 			},
 
 			/**
@@ -71,7 +72,7 @@
 			this.scroller = this.$.scroller;
 		},
 
-		computeFixed: function (desktop, active) {
+		_computeFixed: function (desktop, active) {
 			return active && desktop;
 		},
 
