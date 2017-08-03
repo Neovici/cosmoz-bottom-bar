@@ -233,7 +233,7 @@
 			}
 
 			newScroller.addEventListener('scroll', this._scrollHandler);
-			this.lastScroll = newScroller.scrollTop;
+			this._scrollManagement();
 		},
 
 		_computeComputedBarHeight: function (matchElementHeight, barHeight, kicker) {
@@ -274,16 +274,15 @@
 		_showHideBottomBar: function (visible, barHeight) {
 			var	translateY = visible ? 0 : barHeight;
 
-			this.style['height'] = 'auto';
-			this.style['overflow'] = 'initial';
+			this.style.height = 'auto';
+			this.style.overflow = 'initial';
 			this.translate3d('0px', translateY + 'px', '0px');
 		},
 
 		_onTransitionEnd: function (event) {
-			if (Polymer.dom(event).rootTarget === this
-				&& !this.visible) {
-				this.style['height'] = '0px';
-				this.style['overflow'] = 'hidden';
+			if (!this.visible && Polymer.dom(event).rootTarget === this) {
+				this.style.height = '0px';
+				this.style.overflow = 'hidden';
 			}
 		},
 
@@ -373,7 +372,7 @@
 			fits = toolbar.scrollWidth <= currentWidth + 1;
 
 			toolbarElements = elements.filter(function (element) {
-				if (element.getAttribute('slot') === BOTTOM_BAR_TOOLBAR_SLOT) {
+				if (element.slot === BOTTOM_BAR_TOOLBAR_SLOT) {
 					// make sure we only read scrollWidth and clientWidth until
 					// know that we don't fit
 					fits = fits && element.scrollWidth <= element.clientWidth;
@@ -387,8 +386,8 @@
 
 			fits = fits && toolbarElements.length < this.maxToolbarItems;
 
-			menuElements = elements.filter(function (e) {
-				return e.getAttribute('slot') === BOTTOM_BAR_MENU_SLOT;
+			menuElements = elements.filter(function (element) {
+				return element.slot === BOTTOM_BAR_MENU_SLOT;
 			});
 
 			if (fits) {
