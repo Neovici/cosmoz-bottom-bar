@@ -279,6 +279,12 @@
 			}
 		},
 
+		_isActionNode: function (node) {
+			return node.nodeType === Node.ELEMENT_NODE &&
+				node.slot !== 'info' &&
+				node.tagName !== 'TEMPLATE';
+		},
+
 		_childrenUpdated: function (info) {
 			info.addedNodes.forEach(function (node) {
 				if (node.nodeType === Node.ELEMENT_NODE) {
@@ -303,9 +309,10 @@
 
 		_getElementToDistribute: function () {
 			return this.getEffectiveChildren()
+				.filter(this._isActionNode)
 				.filter(function (element) {
-					return !element.hidden && element.getAttribute('slot') !== 'info' && element.tagName !== 'TEMPLATE';
-				}, this);
+					return !element.hidden;
+				});
 		},
 
 		_dropdownClosed: function () {
