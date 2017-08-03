@@ -180,16 +180,9 @@
 		],
 
 		attached: function () {
-			var context = this;
-
 			this._hiddenMutationObserver = new MutationObserver(function (mutations) {
-				var layoutingChange = mutations.some(function (mutation) {
-					return mutation.attributeName === 'hidden';
-				});
-				if (layoutingChange) {
-					context._forceLayout();
-				}
-			});
+				this._forceLayout();
+			}.bind(this));
 			this._nodeObserver = Polymer.dom(this).observeNodes(this._childrenUpdated.bind(this));
 			this._computedBarHeightKicker = 0;
 		},
@@ -290,7 +283,10 @@
 			info.addedNodes.forEach(function (node) {
 				if (node.nodeType === Node.ELEMENT_NODE) {
 					this._hiddenMutationObserver.observe(node, {
-						attributes: true
+						attributes: true,
+						attributeFilter: [
+							'hidden'
+						]
 					});
 				}
 			}, this);
