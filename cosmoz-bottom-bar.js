@@ -376,15 +376,11 @@
 				}
 			});
 
-			if (fits && toolbarElements.length === this.maxToolbarItems) {
-				return;
-			}
-
-			fits = fits && toolbarElements.length < this.maxToolbarItems;
-
 			menuElements = elements.filter(function (element) {
 				return element.slot === BOTTOM_BAR_MENU_SLOT;
 			});
+
+			this._setHasMenuItems(menuElements.length > 0);
 
 			if (fits) {
 				if (this._canAddMoreButtonToBar(currentWidth, toolbarElements, menuElements)) {
@@ -401,9 +397,6 @@
 					this.$.menu.close();
 					this.distributeContent();
 					this._debounceLayoutActions();
-					this._setHasMenuItems(menuElements.length > 1);
-				} else {
-					this._setHasMenuItems(menuElements.length > 0);
 				}
 				return;
 			}
@@ -416,7 +409,6 @@
 
 			newMenuElement = toolbarElements[toolbarElements.length - 1];
 			this._moveElement(newMenuElement, false);
-			this._setHasMenuItems(true);
 			this.distributeContent();
 			this._debounceLayoutActions();
 		},
