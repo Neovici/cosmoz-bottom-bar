@@ -286,24 +286,28 @@
 		},
 
 		_childrenUpdated: function (info) {
-			info.addedNodes.forEach(function (node) {
-				if (node.nodeType === Node.ELEMENT_NODE) {
+			var addedNodes = info.addedNodes.filter(this._isActionNode),
+				removedNodes = info.removedNodes.filter(this._isActionNode);
+
+			if (addedNodes.length === 0 && removedNodes.length === 0) {
+				return;
+			}
+
+			addedNodes
+				.filter(function (node) {
+					// ignore nodes that are moved between slots
+					return removedNodes.indexOf(node) === -1;
+				})
+				.forEach(function (node) {
 					this._hiddenMutationObserver.observe(node, {
 						attributes: true,
 						attributeFilter: [
 							'hidden'
 						]
 					});
-				}
-			}, this);
+					this._moveElement(node, false);
+				}, this);
 
-			// Initially distribute elements to the menu.
-			this._getElementToDistribute().forEach(function (element) {
-				var slot = element.getAttribute('slot');
-				if (slot !== BOTTOM_BAR_MENU_SLOT && slot !== BOTTOM_BAR_TOOLBAR_SLOT) {
-					this._moveElement(element, false);
-				}
-			}, this);
 			this._debounceLayoutActions();
 		},
 
