@@ -181,7 +181,8 @@
 
 		attached: function () {
 			this._hiddenMutationObserver = new MutationObserver(function (mutations) {
-				this._forceLayout();
+				this._overflowWidth = undefined;
+				this._debounceLayoutActions();
 			}.bind(this));
 			this._nodeObserver = Polymer.dom(this).observeNodes(this._childrenUpdated.bind(this));
 			this._computedBarHeightKicker = 0;
@@ -281,7 +282,7 @@
 
 		_isActionNode: function (node) {
 			return node.nodeType === Node.ELEMENT_NODE &&
-				node.slot !== 'info' &&
+				node.getAttribute('slot') !== 'info' &&
 				node.tagName !== 'TEMPLATE';
 		},
 
@@ -305,7 +306,9 @@
 							'hidden'
 						]
 					});
-					this._moveElement(node, false);
+					if (!node.hidden) {
+						this._moveElement(node, false);
+					}
 				}, this);
 
 			this._debounceLayoutActions();
@@ -321,20 +324,6 @@
 
 		_dropdownClosed: function () {
 			this.$.dropdownButton.active = false;
-		},
-
-		/**
-		 * Causes a new layouting of all the bottom bar elements after visibility of one of the element has changed.
-		 * This is implemented by placing all elements in the menu and trying to fill the toolbar.
-		 * @returns {void}
-		 */
-
-		_forceLayout: function () {
-			this._overflowWidth = undefined;
-			this._getElementToDistribute().forEach(function (element) {
-				this._moveElement(element, false);
-			}, this);
-			this._debounceLayoutActions();
 		},
 
 		/**
@@ -379,7 +368,7 @@
 			fits = toolbar.scrollWidth <= currentWidth + 1;
 
 			toolbarElements = elements.filter(function (element) {
-				if (element.slot === BOTTOM_BAR_TOOLBAR_SLOT) {
+				if (element.getAttribute('slot') === BOTTOM_BAR_TOOLBAR_SLOT) {
 					// make sure we only read scrollWidth and clientWidth until
 					// know that we don't fit
 					fits = fits && element.scrollWidth <= element.clientWidth;
@@ -388,10 +377,12 @@
 			});
 
 			menuElements = elements.filter(function (element) {
-				return element.slot === BOTTOM_BAR_MENU_SLOT;
+				return element.getAttribute('slot') === BOTTOM_BAR_MENU_SLOT;
 			});
 
 			this._setHasMenuItems(menuElements.length > 0);
+
+			fits = toolbarElements.length <= this.maxToolbarItems;
 
 			if (fits) {
 				if (this._canAddMoreButtonToBar(currentWidth, toolbarElements, menuElements)) {
@@ -406,7 +397,6 @@
 						newToolbarElement.focus();
 					}
 					this.$.menu.close();
-					this.distributeContent();
 					this._debounceLayoutActions();
 				}
 				return;
@@ -420,7 +410,6 @@
 
 			newMenuElement = toolbarElements[toolbarElements.length - 1];
 			this._moveElement(newMenuElement, false);
-			this.distributeContent();
 			this._debounceLayoutActions();
 		},
 
