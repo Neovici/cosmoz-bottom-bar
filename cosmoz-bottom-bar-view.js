@@ -18,25 +18,30 @@
 			/**
 			 * Bar-view and bar are active
 			 */
-
 			active: {
 				type: Boolean,
 				value: true
 			},
 
 			/**
+			 * Height of the bar
+			 */
+			barHeight: {
+				type: Number
+			},
+
+			/**
 			 * Fixed bar
 			 */
-
 			fixed: {
 				type: Boolean,
-				computed: 'computeFixed(viewInfo.desktop, active)'
+				computed: '_computeFixed(viewInfo.desktop, active)',
+				readOnly: true
 			},
 
 			/**
 			 * Scroller of bottom-bar is overflowing
 			 */
-
 			overflowing: {
 				type: Boolean,
 				value: false,
@@ -46,7 +51,6 @@
 			/**
 			 * The scroller for the scrolling part of the view
 			 */
-
 			scroller: {
 				type: Object
 			},
@@ -54,7 +58,6 @@
 			/**
 			 * Bar is visible
 			 */
-
 			visible: {
 				type: Boolean,
 				value: true
@@ -69,7 +72,7 @@
 			this.scroller = this.$.scroller;
 		},
 
-		computeFixed: function (desktop, active) {
+		_computeFixed: function (desktop, active) {
 			return active && desktop;
 		},
 
@@ -83,11 +86,10 @@
 					scrollerSizer.style.minHeight = scrollerSizer.scrollHeight + 'px';
 				}
 			});
-
 		},
 
-		_getBarHeight: function (visible) {
-			var height = visible ? this.$.bar.barHeight : 0;
+		_getHeightStyle: function (overflowing, barHeight) {
+			var height = overflowing ? barHeight : 0;
 			return [
 				'max-height: ' + height + 'px',
 				'min-height: ' + height + 'px'

@@ -11,129 +11,68 @@
 	<link rel="import" href="../../iron-flex-layout/iron-flex-layout-classes.html">
 	<link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
 	<link rel="import" href="../../paper-button/paper-button.html">
+	<link rel="import" href="../../paper-toggle-button/paper-toggle-button.html">
 	<link rel="import" href="../../paper-item/paper-item.html">
 	<link rel="import" href="../../iron-icon/iron-icon.html">
 	<link rel="import" href="../../iron-icons/iron-icons.html">
 	<link rel="import" href="../cosmoz-bottom-bar.html">
 	<style is="custom-style" include="iron-flex iron-flex-alignment iron-positioning">
-
+		body {
+			font-family: sans-serif;
+		}
+		cosmoz-bottom-bar {
+			background-color: green;
+		}
 	</style>
 </head>
 <body class="fullbleed">
-	<dom-module id="x-view">
-		<template>
-			<style include="iron-flex iron-flex-alignment iron-positioning">
-				:host {
-					position: relative;
-					display: block;
-				}
-
-				#bottomBar {
-					height: 64px;
-				}
-
-				#main {
-					overflow: hidden;
-				}
-
-				#lipsum {
-					overflow: auto;
-					background-color: #dddddd;
-				}
-			</style>
-
-			<div id="main" class="layout vertical fit">
-				<h3>Cosmoz bottom bar demo</h3>
-				<div class="flex" id="lipsum">
-					<paper-button on-tap="showHideBottomBar">Show/hide bottom bar</paper-button>
-					<paper-button on-tap="showHideButton1">Show/hide button 1</paper-button>
-					<paper-button on-tap="showHideButton2">Show/hide button 2</paper-button>
-					<paper-button on-tap="showHideButton4">Show/hide button 4</paper-button>
-					Bottom bar active: <span>[[active]]</span>
-					<p>
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque pretium erat et nulla euismod congue. Maecenas mattis sem ac viverra egestas. Praesent in commodo velit, id gravida lectus. Vivamus varius fringilla risus ut blandit. Sed laoreet venenatis risus, vitae tempus enim tempus a. Praesent ac maximus elit. Nam non semper ex. Ut eleifend urna sit amet sapien ultrices, vitae ultrices erat accumsan.
-					</p>
-					<p>
-						Nullam eros leo, pharetra eget posuere sed, tempor sit amet magna. Suspendisse a augue vitae est eleifend faucibus. Duis sodales nulla ac est sollicitudin mollis. Cras quis dapibus sem, sit amet vestibulum elit. Nulla in pellentesque tellus, vitae molestie dolor. Nunc sed ex placerat, finibus arcu in, sollicitudin neque. Maecenas eu vehicula nibh. Morbi ultrices nibh enim, ac congue purus aliquam sed.
-					</p>
-
+	<template is="dom-bind">
+		<div id="main" class="layout vertical fit">
+			<h3>Cosmoz bottom bar demo</h3>
+			<div class="flex" style="overflow: auto;">
+				<div class="layout horizontal around-justified center wrap">
+					<paper-toggle-button checked="{{ active }}">Activate cosmoz-bottom-bar</paper-toggle-button>
+					<paper-toggle-button checked="{{ hideButton1 }}">Hide button 1</paper-toggle-button>
+					<paper-toggle-button checked="{{ hideButton2 }}">Hide button 2</paper-toggle-button>
+					<paper-toggle-button checked="{{ hideButton4 }}">Hide button 4</paper-toggle-button>
+					<div>Bottom bar active: [[ active ]]</div>
 				</div>
-				<cosmoz-bottom-bar id="bottomBar" active="{{active}}">
-					<span slot="info">Nice bottom bar</span>
-					<paper-button hidden$="[[ hideButton1 ]]">button 1</paper-button>
-					<paper-button hidden$="[[ hideButton2 ]]">
-						<iron-icon icon="add"></iron-icon>
-						<span>button 2</span>
-					</paper-button>
-					<paper-button>bigger button 3</paper-button>
-					<paper-button hidden$="[[ hideButton4 ]]">bigger bigger button 4</paper-button>
-					<paper-button>
-						bigger bigger button 5
-					</paper-button>
-					<paper-button>
-						bigger bigger bigger button 6
-					</paper-button>
-					<paper-button>
-						bigger bigger bigger button 7
-					</paper-button>
-					<paper-button>
-						bigger bigger bigger bigger button 8
-					</paper-button>
-					<paper-button>
-						bigger bigger bigger bigger button 9
-					</paper-button>
-					<paper-button>
-						bigger bigger bigger bigger bigger button 10
-					</paper-button>
-				</cosmoz-bottom-bar>
+				<p>
+					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque pretium erat et nulla euismod congue. Maecenas mattis sem ac viverra egestas. Praesent in commodo velit, id gravida lectus. Vivamus varius fringilla risus ut blandit. Sed laoreet venenatis risus, vitae tempus enim tempus a. Praesent ac maximus elit. Nam non semper ex. Ut eleifend urna sit amet sapien ultrices, vitae ultrices erat accumsan.
+				</p>
+				<p>
+					Nullam eros leo, pharetra eget posuere sed, tempor sit amet magna. Suspendisse a augue vitae est eleifend faucibus. Duis sodales nulla ac est sollicitudin mollis. Cras quis dapibus sem, sit amet vestibulum elit. Nulla in pellentesque tellus, vitae molestie dolor. Nunc sed ex placerat, finibus arcu in, sollicitudin neque. Maecenas eu vehicula nibh. Morbi ultrices nibh enim, ac congue purus aliquam sed.
+				</p>
 			</div>
-		</template>
-	</dom-module>
-
-	<x-view class="fit"></x-view>
-
-	<script type="text/javascript">
-
-/*global Polymer */
-(function () {
-	'use strict';
-
-	Polymer({
-		is: 'x-view',
-		properties: {
-			active: {
-				type: Boolean,
-				value: false
-			},
-			hideButton1: {
-				type: Boolean,
-				value: false
-			},
-			hideButton2: {
-				type: Boolean,
-				value: false
-			},
-			hideButton4: {
-				type: Boolean,
-				value: false
-			}
-		},
-
-		showHideBottomBar: function () {
-			this.active = !this.active;
-		},
-		showHideButton1: function () {
-			this.hideButton1 = !this.hideButton1;
-		},
-		showHideButton2: function () {
-			this.hideButton2 = !this.hideButton2;
-		},
-		showHideButton4: function () {
-			this.hideButton4 = !this.hideButton4;
-		}
-	});
-}());
-
-	</script>
+			<cosmoz-bottom-bar id="bottomBar" active="[[ active ]]">
+				<span slot="info">Nice bottom bar</span>
+				<paper-button hidden$="[[ hideButton1 ]]">button 1</paper-button>
+				<paper-button hidden$="[[ hideButton2 ]]">
+					<iron-icon icon="add"></iron-icon>
+					<span>button 2</span>
+				</paper-button>
+				<paper-button>bigger button 3</paper-button>
+				<paper-button hidden$="[[ hideButton4 ]]">bigger bigger button 4</paper-button>
+				<paper-button>
+					bigger bigger button 5
+				</paper-button>
+				<paper-button>
+					bigger bigger bigger button 6
+				</paper-button>
+				<paper-button>
+					bigger bigger bigger button 7
+				</paper-button>
+				<paper-button>
+					bigger bigger bigger bigger button 8
+				</paper-button>
+				<paper-button>
+					bigger bigger bigger bigger button 9
+				</paper-button>
+				<paper-button>
+					bigger bigger bigger bigger bigger button 10
+				</paper-button>
+			</cosmoz-bottom-bar>
+		</div>
+	</template>
 </body>
 </html>

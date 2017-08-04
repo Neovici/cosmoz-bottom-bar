@@ -22,6 +22,10 @@ or else is sized by other layout means (e.g. the flex or fit classes).
 			@apply --layout-flex;
 		}
 
+		#bottomBarPlaceholder {
+			background-color: rgba(100, 100, 100, 0.1);
+		}
+
 		#scroller {
 			@apply --layout-flex;
 			@apply --layout-vertical;
@@ -46,16 +50,21 @@ or else is sized by other layout means (e.g. the flex or fit classes).
 			@apply --layout-vertical;
 		}
 
+		cosmoz-bottom-bar {
+			background-color: var(--cosmoz-bottom-bar-view-bar-color, rgba(230, 230, 230, 0.8));
+			@apply --cosmoz-bottom-bar-view-bar;
+		}
+
 	</style>
 	<template>
 		<div id="scroller">
 			<div id="scrollerSizer">
 				<slot name="scroller-content"></slot>
 			</div>
-			<div id="bottomBarPlaceholder" style$="[[ _getBarHeight(visible) ]]"></div>
+			<div id="bottomBarPlaceholder" style$="[[ _getHeightStyle(overflowing, barHeight) ]]"></div>
 		</div>
-		<cosmoz-bottom-bar id="bar" active="[[ active ]]" fixed="[[ fixed ]]" visible="{{ visible }}"
-				scroller="[[ scroller ]]" scroller-overflow="{{ overflowing }}">
+		<cosmoz-bottom-bar active="[[ active ]]" fixed="[[ fixed ]]" visible="{{ visible }}"
+				scroller="[[ scroller ]]" scroller-overflow="{{ overflowing }}" computed-bar-height="{{ barHeight }}">
 			<slot></slot>
 		</cosmoz-bottom-bar>
 	</template>

@@ -18,16 +18,20 @@
 				opacity: 1;
 			}
 
+			[hidden] {
+				display: none !important;
+			}
+
 			#canvas {
 				display: block;
 				width: 100%;
 				max-width: 100%; /* Firefox fix */
+				background-color: inherit;
 			}
 
 			#bar {
 				@apply --layout-horizontal;
 				@apply --layout-center;
-				background-color: var(--cosmoz-bottom-bar-background-color, --primary-background-color);
 				padding: 0 3%;
 				height: inherit;
 			}
@@ -43,6 +47,7 @@
 			#info {
 				@apply --layout-center;
 				@apply --layout-horizontal;
+				min-width: 5px;
 				padding-right: 3%;
 			}
 
@@ -52,11 +57,13 @@
 				@apply --cosmoz-bottom-bar-menubutton;
 			}
 
+			#flex {
+				@apply --layout-flex;
+			}
+
 			#toolbar {
 				@apply --layout-center;
-				@apply --layout-flex;
 				@apply --layout-horizontal;
-				@apply --layout-end-justified;
 				overflow: hidden;
 			}
 
@@ -77,8 +84,16 @@
     			min-height: 40px;
 				text-overflow: ellipsis;
 				white-space: nowrap;
+				@apply --cosmoz-bottom-bar-toolbar-item;
 			}
 
+			#dropdown ::slotted(*) {
+				display: flex;
+				@apply --layout-center;
+				@apply --layout-horizontal;
+				position: relative;
+				@apply --cosmoz-bottom-bar-menu-item;
+			}
 		</style>
 	</template>
 </dom-module>

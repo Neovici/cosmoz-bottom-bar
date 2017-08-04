@@ -4,7 +4,7 @@
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="../iron-selector/iron-selector.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
-<link rel="import" href="../paper-menu/paper-menu.html">
+<link rel="import" href="../paper-listbox/paper-listbox.html">
 
 <link rel="import" href="cosmoz-bottom-bar-style.html">
 
@@ -31,28 +31,23 @@ See demo for example usage
 
 <dom-module id="cosmoz-bottom-bar">
 	<template>
-		<style include="cosmoz-bottom-bar-style">
-			[hidden] {
-				display: none !important;
-			}
-		</style>
-		<div id="canvas">
+		<style include="cosmoz-bottom-bar-style"></style>
+		<div id="canvas" style$="[[ _getHeightStyle(computedBarHeight) ]]">
 			<div id="bar">
 				<div id="info">
 					<slot name="info"></slot>
 				</div>
+				<div id="flex"></div>
 				<iron-selector id="toolbar" selected-class="[[ selectedClass ]]" on-iron-select="_onActionSelected">
 					<slot id="bottomBarToolbar" name="bottom-bar-toolbar"></slot>
 				</iron-selector>
-				<paper-menu-button hidden$="[[ !hasMenuItems ]]" id="menu"
-						vertical-offset="[[ barHeight ]]"
-						vertical-align="bottom"
-						horizontal-align="right"
-						role="group" no-animations>
+				<paper-menu-button hidden$="[[ !hasMenuItems ]]" id="menu" role="group" no-animations
+						vertical-offset="[[ barHeight ]]" vertical-align="bottom" horizontal-align="right">
 					<paper-icon-button icon="menu" id="dropdownButton" toggles raised class="dropdown-trigger"></paper-icon-button>
-					<paper-menu id="dropdown" class="dropdown-content" selected-class="[[ selectedClass ]]" on-iron-select="_onActionSelected">
+					<paper-listbox id="dropdown" class="dropdown-content" selected-class="[[ selectedClass ]]" on-iron-select="_onActionSelected">
+						<span></span>
 						<slot id="bottomBarMenu" name="bottom-bar-menu"></slot>
-					</paper-menu>
+					</paper-listbox>
 				</paper-menu-button>
 			</div>
 		</div>

@@ -24,73 +24,75 @@
 
 		properties: {
 
-			/** Whether the bar is active/shown (always active when fixed) */
-
+			/**
+			 * Whether the bar is active (shown)
+			 * NOTE: This has no effect when `fixed` is `true`
+			 */
 			active: {
 				type: Boolean,
 				value: false,
+				notify: true,
 				reflectToAttribute: true
 			},
 
-			/** Whether the bar is fixed (and take up space) or shows/hides from the bottom when needed
-			 ** usually fixed on desktop and not mobile
+			/**
+			 * Whether the bar is fixed (and take up space) or shows/hides from the bottom when needed
+			 * (Usually fixed on desktop and not mobile.)
 			 */
-
 			fixed: {
 				type: Boolean,
 				value: false,
 				reflectToAttribute: true
 			},
 
-			/** Bar height (not applicable when "matchParent" or "matchElementHeight" is set) */
-
+			/**
+			 * Bar height (not used when `matchParent` or `matchElementHeight` is set)
+			 */
 			barHeight: {
 				type: Number,
 				value: 64
 			},
 
-			/** Reference element from which to inherit height */
-
-			matchElementHeight: {
-				type: Object,
-				computed: 'computeMatchElementHeight(matchParent)'
-			},
-
-			/** Whether to match the height of parent (set reference element to parent) */
-
+			/**
+			 * Whether to match the height of parent
+			 */
 			matchParent: {
 				type: Boolean,
 				value: false
 			},
 
-			/** Scroller element to listen to when deciding whether or not to show the bar.
-			 * 	Bar will be shown while scrolling up or when reaching bottom
+			/**
+			 * Scroller element to listen to when deciding whether or not to show the bar.
+			 * Bar will be shown while scrolling up or when reaching bottom
 			 */
-
 			scroller: {
 				type: Object,
 				observer: '_scrollerChanged'
 			},
 
+			/**
+			 * Whether the `scroller` is overflowing (can scroll) or not
+			 */
 			scrollerOverflow: {
 				type: Boolean,
 				value: false,
+				readOnly: true,
 				notify: true
 			},
 
 			/**
-			 * Indicates wether this bottom bar has items distributed to the menu.
+			 * Whether this bottom bar has items distributed to the menu
 			 */
-
 			hasMenuItems: {
 				type: Boolean,
-				value: false
+				value: false,
+				readOnly: true,
+				notify: true
 			},
 
 			/**
 			 * Class applied the the selected item
 			 */
-
 			selectedClass: {
 				type: String,
 				value: 'cosmoz-bottom-bar-selected-item'
@@ -99,7 +101,6 @@
 			/**
 			 * Class applied to items distributed to the toolbar
 			 */
-
 			toolbarClass: {
 				type: String,
 				value: 'cosmoz-bottom-bar-toolbar'
@@ -108,37 +109,49 @@
 			/**
 			 * Class applied to items distributed to the menu
 			 */
-
 			menuClass: {
 				type: String,
 				value: 'cosmoz-bottom-bar-menu'
 			},
 
+			/**
+			 * Maximum number of items in toolbar, regardless of space
+			 */
 			maxToolbarItems: {
 				type: Number,
 				value: 3
 			},
 
-			_computedBarHeight: {
+			/**
+			 * The actual bar height, depending on if we `matchParent` or set `barHeight`
+			 */
+			computedBarHeight: {
 				type: Number,
-				computed: '_computeComputedBarHeight(matchElementHeight, barHeight, _computedBarHeightKicker)',
-				observer: '_computedBarHeightChanged'
+				computed: '_computeComputedBarHeight(_matchHeightElement, barHeight, _computedBarHeightKicker)',
+				notify: true,
+				readOnly: true
 			},
 
+			/**
+			 * Kicker to make `computedBarHeight` recalculate
+			 */
 			_computedBarHeightKicker: {
 				type: Number
 			},
 
+			/**
+			 * Whether the bar is visible (has actions and is `active` or `fixed`)
+			 */
 			visible: {
 				type: Boolean,
 				notify: true,
+				readOnly: true,
 				computed: '_computeVisible(hasActions, active, fixed)'
 			},
 
 			/**
 			 * Whether we have any visible actions
 			 */
-
 			hasActions: {
 				type: Boolean,
 				value: false,
@@ -146,35 +159,31 @@
 				notify: true
 			},
 
-			_nodeObserver: {
-				type: Object
+			/**
+			 * Reference element from which to inherit height
+			 */
+			_matchHeightElement: {
+				type: Object,
+				computed: '_getHeightMatchingElement(matchParent)'
 			},
-
-			_hiddenMutationObserver: {
-				type: Object
-			},
-
-			_scrollHandler: {
-				type: Object
-			}
-
 		},
 
+		/**
+		 * Non-Polymer properties
+		 */
+		_nodeObserver: undefined,
+		_hiddenMutationObserver: undefined,
+		_scrollHandler: undefined,
+
 		observers: [
-			'_showHideBottomBar(visible, _computedBarHeight)'
+			'_showHideBottomBar(visible, computedBarHeight)'
 		],
 
 		attached: function () {
-			var context = this;
-
 			this._hiddenMutationObserver = new MutationObserver(function (mutations) {
-				var layoutingChange = mutations.some(function (mutation) {
-					return mutation.attributeName === 'hidden';
-				});
-				if (layoutingChange) {
-					context._forceLayout();
-				}
-			});
+				this._overflowWidth = undefined;
+				this._debounceLayoutActions();
+			}.bind(this));
 			this._nodeObserver = Polymer.dom(this).observeNodes(this._childrenUpdated.bind(this));
 			this._computedBarHeightKicker = 0;
 		},
@@ -191,16 +200,16 @@
 			this._scrollHandler = this._scrollManagement.bind(this);
 		},
 
-		_computeVisible: function (hasActions, active, fixed) {
-			return hasActions && (active || fixed);
-		},
-
-		computeMatchElementHeight: function (matchParent) {
+		_getHeightMatchingElement: function (matchParent) {
 			if (matchParent) {
 				return this.parentElement;
 			}
 
 			return null;
+		},
+
+		_computeVisible: function (hasActions, active, fixed) {
+			return hasActions && (active || fixed);
 		},
 
 		_scrollerChanged: function (newScroller, oldScroller) {
@@ -218,7 +227,7 @@
 			}
 
 			newScroller.addEventListener('scroll', this._scrollHandler);
-			this.lastScroll = newScroller.scrollTop;
+			this._scrollManagement();
 		},
 
 		_computeComputedBarHeight: function (matchElementHeight, barHeight, kicker) {
@@ -228,8 +237,8 @@
 			return barHeight;
 		},
 
-		_computedBarHeightChanged: function (newHeight) {
-			this.$.canvas.style.height = newHeight + 'px';
+		_getHeightStyle: function (height) {
+			return 'height: ' + height + 'px;';
 		},
 
 		_onResize: function () {
@@ -245,74 +254,76 @@
 			}
 
 			var scrollTop = this.scroller.scrollTop,
-				up = this.lastScroll > scrollTop,
+				isScrollingUp = this.lastScroll > scrollTop,
 				scrollerHeight = this.scroller.clientHeight,
 				scrollerScrollHeight = this.scroller.scrollHeight,
-				atBottom = scrollTop + scrollerHeight + this.barHeight * 0.7 >= scrollerScrollHeight;
+				isAtBottom = scrollTop + scrollerHeight + this.barHeight * 0.7 >= scrollerScrollHeight,
+				isAtTop = scrollTop === 0;
 
-			this.active = up || atBottom;
-			this.scrollerOverflow = scrollerScrollHeight > scrollerHeight;
+			this.active = isAtTop || isScrollingUp || isAtBottom;
+			this._setScrollerOverflow(scrollerScrollHeight > scrollerHeight);
 			this.lastScroll = scrollTop;
 		},
 
 		_showHideBottomBar: function (visible, barHeight) {
 			var	translateY = visible ? 0 : barHeight;
 
-			this.style['height'] = 'auto';
-			this.style['overflow'] = 'initial';
+			this.style.height = 'auto';
+			this.style.overflow = 'initial';
 			this.translate3d('0px', translateY + 'px', '0px');
 		},
 
 		_onTransitionEnd: function (event) {
-			if (Polymer.dom(event).rootTarget === this
-				&& !this.visible) {
-				this.style['height'] = '0px';
-				this.style['overflow'] = 'hidden';
+			if (!this.visible && Polymer.dom(event).rootTarget === this) {
+				this.style.height = '0px';
+				this.style.overflow = 'hidden';
 			}
 		},
 
-		_childrenUpdated: function (info) {
-			info.addedNodes.forEach(function (node) {
-				if (node.nodeType === Node.ELEMENT_NODE) {
-					this._hiddenMutationObserver.observe(node, {
-						attributes: true
-					});
-				}
-			}, this);
+		_isActionNode: function (node) {
+			return node.nodeType === Node.ELEMENT_NODE &&
+				node.getAttribute('slot') !== 'info' &&
+				node.tagName !== 'TEMPLATE';
+		},
 
-			// Initially distribute elements to the menu.
-			this._getElementToDistribute().forEach(function (element) {
-				var slot = element.getAttribute('slot');
-				if (slot !== BOTTOM_BAR_MENU_SLOT && slot !== BOTTOM_BAR_TOOLBAR_SLOT) {
-					this._moveElement(element, false);
-				}
-			}, this);
+		_childrenUpdated: function (info) {
+			var addedNodes = info.addedNodes.filter(this._isActionNode),
+				removedNodes = info.removedNodes.filter(this._isActionNode);
+
+			if (addedNodes.length === 0 && removedNodes.length === 0) {
+				return;
+			}
+
+			addedNodes
+				.filter(function (node) {
+					// ignore nodes that are moved between slots
+					return removedNodes.indexOf(node) === -1;
+				})
+				.forEach(function (node) {
+					this._hiddenMutationObserver.observe(node, {
+						attributes: true,
+						attributeFilter: [
+							'hidden'
+						]
+					});
+					this._moveElement(node, true);
+					this._toolbarMoveToStart(node);
+				}, this);
+
 			this._debounceLayoutActions();
 		},
 
-		_getElementToDistribute: function () {
-			return this.getEffectiveChildren()
-				.filter(function (element) {
-					return !element.hidden && element.getAttribute('slot') !== 'info' && element.tagName !== 'TEMPLATE';
-				}, this);
+		_toolbarMoveToStart: function (node) {
+			var toolbar = this.$.toolbar;
+			if (toolbar.children.length === 0) {
+				toolbar.appendChild(node);
+				return;
+			}
+			toolbar.insertBefore(node, toolbar.children[0]);
 		},
 
 		_dropdownClosed: function () {
 			this.$.dropdownButton.active = false;
-		},
-
-		/**
-		 * Causes a new layouting of all the bottom bar elements after visibility of one of the element has changed.
-		 * This is implemented by placing all elements in the menu and trying to fill the toolbar.
-		 * @returns {void}
-		 */
-
-		_forceLayout: function () {
-			this._overflowWidth = undefined;
-			this._getElementToDistribute().forEach(function (element) {
-				this._moveElement(element, false);
-			}, this);
-			this._debounceLayoutActions();
 		},
 
 		/**
@@ -338,7 +349,11 @@
 		 */
 
 		_layoutActions: function () {
-			var elements = this._getElementToDistribute(),
+			var elements = this.getEffectiveChildren()
+					.filter(this._isActionNode)
+					.filter(function (element) {
+						return !element.hidden;
+					}),
 				toolbarElements,
 				menuElements,
 				toolbar = this.$.toolbar,
@@ -365,15 +380,13 @@
 				}
 			});
 
-			if (fits && toolbarElements.length === this.maxToolbarItems) {
-				return;
-			}
-
-			fits = fits && toolbarElements.length < this.maxToolbarItems;
-
-			menuElements = elements.filter(function (e) {
-				return e.getAttribute('slot') === BOTTOM_BAR_MENU_SLOT;
+			menuElements = elements.filter(function (element) {
+				return element.getAttribute('slot') === BOTTOM_BAR_MENU_SLOT;
 			});
+
+			this._setHasMenuItems(menuElements.length > 0);
+
+			fits = fits && toolbarElements.length <= this.maxToolbarItems;
 
 			if (fits) {
 				if (this._canAddMoreButtonToBar(currentWidth, toolbarElements, menuElements)) {
@@ -388,11 +401,7 @@
 						newToolbarElement.focus();
 					}
 					this.$.menu.close();
-					this.distributeContent();
 					this._debounceLayoutActions();
-					this.hasMenuItems = menuElements.length > 1;
-				} else {
-					this.hasMenuItems = menuElements.length > 0;
 				}
 				return;
 			}
@@ -405,8 +414,6 @@
 
 			newMenuElement = toolbarElements[toolbarElements.length - 1];
 			this._moveElement(newMenuElement, false);
-			this.hasMenuItems = true;
-			this.distributeContent();
 			this._debounceLayoutActions();
 		},
 
