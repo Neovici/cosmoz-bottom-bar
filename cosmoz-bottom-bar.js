@@ -306,20 +306,20 @@
 							'hidden'
 						]
 					});
-					if (!node.hidden) {
-						this._moveElement(node, false);
-					}
+					this._moveElement(node, true);
+					this._toolbarMoveToStart(node);
 				}, this);
 
 			this._debounceLayoutActions();
 		},
 
-		_getElementToDistribute: function () {
-			return this.getEffectiveChildren()
-				.filter(this._isActionNode)
-				.filter(function (element) {
-					return !element.hidden;
-				});
+		_toolbarMoveToStart: function (node) {
+			var toolbar = this.$.toolbar;
+			if (toolbar.children.length === 0) {
+				toolbar.appendChild(node);
+				return;
+			}
+			toolbar.insertBefore(node, toolbar.children[0]);
 		},
 
 		_dropdownClosed: function () {
@@ -349,7 +349,11 @@
 		 */
 
 		_layoutActions: function () {
-			var elements = this._getElementToDistribute(),
+			var elements = this.getEffectiveChildren()
+					.filter(this._isActionNode)
+					.filter(function (element) {
+						return !element.hidden;
+					}),
 				toolbarElements,
 				menuElements,
 				toolbar = this.$.toolbar,
@@ -382,7 +386,7 @@
 
 			this._setHasMenuItems(menuElements.length > 0);
 
-			fits = toolbarElements.length <= this.maxToolbarItems;
+			fits = fits && toolbarElements.length <= this.maxToolbarItems;
 
 			if (fits) {
 				if (this._canAddMoreButtonToBar(currentWidth, toolbarElements, menuElements)) {

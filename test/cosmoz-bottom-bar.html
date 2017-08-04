@@ -47,7 +47,7 @@
 
 	<test-fixture id="bottomBarWithHiddenButton">
 		<template>
-			<cosmoz-bottom-bar active style="min-width:500px; max-width: 510px;">
+			<cosmoz-bottom-bar active style="min-width:400px; max-width: 410px;">
 				<fixed-size-item id="item1" width="150px"></fixed-size-item>
 				<fixed-size-item id="item2" hidden width="150px"></fixed-size-item>
 				<fixed-size-item id="item3" width="150px"></fixed-size-item>
@@ -78,7 +78,7 @@
 	</test-fixture>
 
 	<script>
-	/*global WCT, suite, fixture, setup, test, Polymer, assert, logStore, errorStore, expect */
+	/*global suite, fixture, setup, test, Polymer, assert, done */
 	(function () {
 		'use strict';
 
@@ -158,66 +158,79 @@
 						item4 = Polymer.dom(bottomBar.$.bottomBarMenu).getDistributedNodes()[0],
 						count = bottomBar.$.toolbar.children.length;
 
+					assert.equal(count, 3);
 					assert.equal(item1.id, 'item1');
 					assert.equal(item2.id, 'item2');
 					assert.equal(item3.id, 'item3');
 					assert.equal(item4.id, 'item4');
-					assert.equal(count, 3);
 					done();
 				}, 200);
 			});
 		});
 
 		suite('bottomBarWithHiddenButton', function () {
-			var bottomBar;
+			var bottomBar,
+				visibleFilter = function (item) {
+					return item.offsetWidth > 0 && item.offsetHeight > 0;
+				},
+				menu,
+				toolbar;
 
 			setup(function () {
 				bottomBar = fixture('bottomBarWithHiddenButton');
+				menu = bottomBar.$.bottomBarMenu;
+				toolbar = bottomBar.$.toolbar;
 			});
 
 			test('Hidden items should not affect layout', function (done) {
 				Polymer.Base.async(function () {
-					var item1 = bottomBar.$.toolbar.children[0],
-						item3 = bottomBar.$.toolbar.children[1],
-						menuCount = Polymer.dom(bottomBar.$.bottomBarMenu).getDistributedNodes().length,
-						toolbarCount = bottomBar.$.toolbar.children.length;
+					var item1 = toolbar.children[0],
+						item2 = toolbar.children[1],
+						item3 = toolbar.children[2],
+						menuItems = Polymer.dom(menu).getDistributedNodes(),
+						visibleMenuItems = menuItems.filter(visibleFilter).length,
+						visibleToolbarCount = Polymer.dom(bottomBar.$.bottomBarToolbar).getDistributedNodes().filter(visibleFilter).length;
 
 					assert.equal(item1.id, 'item1');
+					assert.equal(item2.id, 'item2');
 					assert.equal(item3.id, 'item3');
-					assert.equal(toolbarCount, 2);
-					assert.equal(menuCount, 0);
+					assert.equal(visibleToolbarCount, 2);
+					assert.equal(visibleMenuItems, 0);
+					assert.isTrue(bottomBar.$.menu.hidden);
 					done();
 				}, 200);
 			});
 
 			test('Unhiding item', function (done) {
 				Polymer.Base.async(function () {
-					var item1 = bottomBar.$.toolbar.children[0],
-						item3 = bottomBar.$.toolbar.children[1];
+					var item1 = toolbar.children[0],
+						item2 = toolbar.children[1],
+						item3 = toolbar.children[2];
 
 					assert.equal(item1.id, 'item1');
+					assert.equal(item2.id, 'item2');
 					assert.equal(item3.id, 'item3');
 
-					bottomBar.getEffectiveChildren()[1].removeAttribute('hidden');
+					item2.removeAttribute('hidden');
 
 					Polymer.Base.async(function () {
-						var item1 = bottomBar.$.toolbar.children[0],
-							item2 = bottomBar.$.toolbar.children[1],
-							item3 = Polymer.dom(bottomBar.$.bottomBarMenu).getDistributedNodes()[0],
-							menuCount = Polymer.dom(bottomBar.$.bottomBarMenu).getDistributedNodes().length,
-							toolbarCount = bottomBar.$.toolbar.children.length;
+						var item1 = toolbar.children[0],
+							item2 = toolbar.children[1],
+							menuItems = Polymer.dom(menu).getDistributedNodes(),
+							item3 = menuItems[0],
+							nonHiddenMenuItems = menuItems.filter(function (item) {
+								return !item.hidden;
+							}).length,
+							visibleToolbarCount = Polymer.dom(bottomBar.$.bottomBarToolbar).getDistributedNodes().filter(visibleFilter).length;
 
 						assert.equal(item1.id, 'item1');
 						assert.equal(item2.id, 'item2');
 						assert.equal(item3.id, 'item3');
-						assert.equal(toolbarCount, 2);
-						assert.equal(menuCount, 1);
+						assert.equal(visibleToolbarCount, 2);
+						assert.equal(nonHiddenMenuItems, 1);
 						done();
 					}, 200);
-
-
 				}, 200);
-
 			});
 		});
 
