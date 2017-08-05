@@ -32,7 +32,8 @@
     "paper-icon-button": "PolymerElements/paper-icon-button#^1.0.0",
     "paper-listbox": "PolymerElements/paper-listbox#^1.0.0",
     "paper-menu-button": "PolymerElements/paper-menu-button#^1.0.0",
-    "cosmoz-viewinfo": "neovici/cosmoz-viewinfo#master"
+    "cosmoz-viewinfo": "neovici/cosmoz-viewinfo#master",
+    "iron-demo-helpers": "^2.0.0"
   },
   "devDependencies": {
     "cosmoz-omnitable": "Neovici/cosmoz-omnitable#master",

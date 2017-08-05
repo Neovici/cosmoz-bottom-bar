@@ -6,23 +6,190 @@
 
 	<link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
 	<link rel="import" href="../../iron-flex-layout/iron-flex-layout-classes.html">
+	<link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+	<link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+	<link rel="import" href="../../paper-button/paper-button.html">
+
+	<link rel="import" href="../../cosmoz-viewinfo/cosmoz-viewinfo.html">
+	<link rel="import" href="../../cosmoz-i18next/cosmoz-i18next.html">
+	<link rel="import" href="../../cosmoz-omnitable/cosmoz-omnitable.html">
+
+	<link rel="import" href="../cosmoz-bottom-bar-view.html">
 	<title>Cosmoz Bottom Bar Demos</title>
-	<style>
-		a {
-			display: block;
-		}
-	</style>
+	<custom-style>
+		<style is="custom-style" include="demo-pages-shared-styles iron-flex iron-flex-alignment iron-positioning">
+			demo-snippet {
+				--demo-snippet-demo: {
+					background: var(--paper-grey-200);
+					padding: 16px;
+					position: relative;
+					height: 200px;
+				};
+				--demo-snippet-code: {
+					max-height: 300px;
+				}
+			}
+
+			.vertical-section-container {
+				max-width: 600px;
+			}
+		</style>
+	</custom-style>
 </head>
-<body>
-	<div>
-		<h4>Cosmoz bottom bar demos</h4>
-		<div class="layout vertical">
-			<a href="bottom-bar-view.html">cosmoz-bottom-bar-view</a>
-			<a href="small-content.html">cosmoz-bottom-bar-view with less content</a>
-			<a href="table-test.html">cosmoz-bottom-bar-view with cosmoz-omnitable content</a>
-			<a href="bottom-bar.html">bottom-bar demo</a>
-			<a href="bottom-bar-match-parent.html">bottom-bar with match-parent demo</a>
-		</div>
+<body unresolved>
+	<div class="vertical-section-container centered">
+		<h3>cosmoz-bottom-bar-view with less content</h3>
+		<demo-snippet>
+			<template>
+				<cosmoz-viewinfo class="fit layout vertical">
+					<cosmoz-bottom-bar-view class="flex">
+						<div slot="scroller-content">
+							<div class="layout relative" style="padding: 20px">
+								<div>
+									<p>
+										As long as this text content can fit the height of the window, the bottom bar should always be visible.<br/>
+									</p>
+									<p>
+										Then try reducing the height of the window until a vertical scrollbar appears for this content.<br/>
+										Bottom should be fixed if width is bigger than 600px.<br/>
+										Otherwise, the bottom bar should be floating and should appear when you scroll close to the bottom, but should disappear while scrolling.<br/>
+										You should see the text at the bottom of the view.
+									</p>
+								</div>
+								<div>
+									<h1>This is content at the bottom of the view</h1>
+								</div>
+							</div>
+						</div>
+						<paper-button>
+							button 1
+						</paper-button>
+						<paper-button>
+							button 2
+						</paper-button>
+						<paper-button>
+							big button 3
+						</paper-button>
+						<paper-button>
+							even bigger button 4
+						</paper-button>
+						<paper-button>
+							even bigger button 4
+						</paper-button>
+						<paper-button>
+							even bigger button 4
+						</paper-button>
+						<paper-button>
+							even bigger button 4
+						</paper-button>
+						<paper-button>
+							even bigger button 4
+						</paper-button>
+						<paper-button>
+							even bigger button 4
+						</paper-button>
+						<paper-button>
+							even bigger button 4
+						</paper-button>
+					</cosmoz-bottom-bar-view>
+				</cosmoz-viewinfo>
+			</template>
+		</demo-snippet>
+
+		<h3>Cosmoz bottom bar with cosmoz-omnitable demo</h3>
+		<demo-snippet>
+			<template is="dom-bind" id="t">
+				<cosmoz-viewinfo class="layout vertical fit">
+					<cosmoz-bottom-bar-view class="flex">
+						<div slot="scroller-content">
+							<cosmoz-omnitable data="[[ data ]]" class="fit" selection-enabled group-on="group">
+								<cosmoz-omnitable-column title="Id" value-path="id"></cosmoz-omnitable-column>
+								<cosmoz-omnitable-column title="Name" value-path="name"></cosmoz-omnitable-column>
+								<cosmoz-omnitable-column title="Random string" value-path="randomString"></cosmoz-omnitable-column>
+								<cosmoz-omnitable-column title="Random string 2" value-path="randomString2"></cosmoz-omnitable-column>
+								<cosmoz-omnitable-column title="Random string 3" value-path="randomString3"></cosmoz-omnitable-column>
+								<cosmoz-omnitable-column title="Random string 4" value-path="randomString4"></cosmoz-omnitable-column>
+								<cosmoz-omnitable-column-amount title="Amount" value-path="amount"></cosmoz-omnitable-column-amount>
+								<cosmoz-omnitable-column-date title="Date" value-path="date"></cosmoz-omnitable-column-date>
+								<cosmoz-omnitable-column-autocomplete title="Group" value-path="group"></cosmoz-omnitable-column-autocomplete>
+
+								<paper-button slot="actions">
+									<iron-icon icon="bug-report"></iron-icon>
+									Button text 01
+								</paper-button>
+								<paper-button slot="actions">
+									<iron-icon icon="bug-report"></iron-icon>
+									Button text 02
+								</paper-button>
+								<paper-button slot="actions">
+									<iron-icon icon="bug-report"></iron-icon>
+									Button bigger text 03
+								</paper-button>
+							</cosmoz-omnitable>
+						</div>
+						<paper-button>
+							button 1
+						</paper-button>
+						<paper-button>
+							button 2
+						</paper-button>
+						<paper-button>
+							big button 3
+						</paper-button>
+						<paper-button>
+							even bigger button 4
+						</paper-button>
+					</cosmoz-bottom-bar-view>
+				</cosmoz-viewinfo>
+			</template>
+		</demo-snippet>
 	</div>
-</body>
+	</body>
+
+	<script type="text/javascript">
+	/*global Polymer, window */
+	(function () {
+		'use strict';
+
+		var getRandomInt = function (min, max) {
+					return Math.floor(Math.random() * (max - min + 1)) + min;
+				},
+				getRandomDate = function () {
+					return new Date(2015, getRandomInt(1, 12), getRandomInt(1, 28));
+				},
+				_generateData = function () {
+					var
+							data = [],
+							i,
+							j,
+							n = 0,
+							group;
+
+					for (i = 0; i < getRandomInt(7, 13); i += 1) {
+						group = 'Group ' + i;
+						for (j = 0; j < i * 2 + 1; j+= 1) {
+							data.push({
+								id: n += 1,
+								name: group + ' item ' + j,
+								value: 0,
+								randomString: 'Random string ' + getRandomInt(1, 10),
+								randomString2: 'Random string 2 ' + getRandomInt(1, 10),
+								randomString3: 'Random string 3 ' + getRandomInt(1, 10),
+								randomString4: 'Random string 4 ' + getRandomInt(1, 10),
+								date: getRandomDate(),
+								amount: {
+									amount: getRandomInt(10, 100),
+									currency: 'SEK'
+								},
+								group: group
+							});
+						}
+					}
+					console.log('generated ' + n + ' data items');
+					return data;
+				};
+
+		document.querySelector('#t').data = _generateData();
+	}());
+</script>
 </html>
