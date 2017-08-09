@@ -40,15 +40,6 @@
 			},
 
 			/**
-			 * Scroller of bottom-bar is overflowing
-			 */
-			overflowing: {
-				type: Boolean,
-				value: false,
-				reflectToAttribute: true
-			},
-
-			/**
 			 * The scroller for the scrolling part of the view
 			 */
 			scroller: {
@@ -88,11 +79,10 @@
 			});
 		},
 
-		_getHeightStyle: function (overflowing, barHeight) {
-			var height = overflowing ? barHeight : 0;
+		_getHeightStyle: function (barHeight) {
 			return [
-				'max-height: ' + height + 'px',
-				'min-height: ' + height + 'px'
+				'max-height: ' + barHeight + 'px',
+				'min-height: ' + barHeight + 'px'
 			].join(';');
 		}
 	});

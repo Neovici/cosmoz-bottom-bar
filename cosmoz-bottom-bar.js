@@ -71,16 +71,6 @@
 			},
 
 			/**
-			 * Whether the `scroller` is overflowing (can scroll) or not
-			 */
-			scrollerOverflow: {
-				type: Boolean,
-				value: false,
-				readOnly: true,
-				notify: true
-			},
-
-			/**
 			 * Whether this bottom bar has items distributed to the menu
 			 */
 			hasMenuItems: {
@@ -261,7 +251,6 @@
 				isAtTop = scrollTop === 0;
 
 			this.active = isAtTop || isScrollingUp || isAtBottom;
-			this._setScrollerOverflow(scrollerScrollHeight > scrollerHeight);
 			this.lastScroll = scrollTop;
 		},
 

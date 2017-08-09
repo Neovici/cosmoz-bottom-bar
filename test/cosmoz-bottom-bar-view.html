@@ -4,30 +4,6 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
 	<title>cosmoz-bottom-bar-view basic test</title>
-	<script type="text/javascript">
-	var logStore = [],
-		errorStore = [],
-		warnStore = [],
-		oldLogFunc = console.log,
-		oldErrorFunc = console.error,
-		oldWarnFunc = console.warn;
-
-	console.log = function (logMessage) {
-		logStore.push(logMessage);
-		oldLogFunc.apply(console, arguments);
-	};
-
-	console.error = function (errorMessage) {
-		errorStore.push(errorMessage);
-		oldErrorFunc.apply(console, arguments);
-	};
-
-	console.warn = function (warnMessage) {
-		warnStore.push(warnMessage);
-		oldWarnFunc.apply(console, arguments);
-	};
-
-	</script>
 	<script src="../../web-component-tester/browser.js"></script>
 	<script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
@@ -38,10 +14,12 @@
 <body>
 	<test-fixture id="bottomBarViewFixture">
 		<template>
-			<cosmoz-bottom-bar-view style="min-height: 100px";>
+			<cosmoz-bottom-bar-view style="width: 300px; height: 400px;">
 				<div slot="scroller-content">
-					<div style="min-height:10px;">
-						content that does need scroll
+					<div>
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+						Donec tristique diam nisl, at dapibus tortor pulvinar malesuada.
+						Nulla tempus congue sem, at auctor tellus.
 					</div>
 				</div>
 				<paper-button>b</paper-button>
@@ -49,60 +27,81 @@
 		</template>
 	</test-fixture>
 
-	<test-fixture id="scrollingBottomBarView">
+	<test-fixture id="scrollingBottomBarViewFixture">
 		<template>
-			<cosmoz-bottom-bar-view style="min-height: 100px";>
+			<cosmoz-bottom-bar-view style="width: 300px; height: 300px";>
 				<div slot="scroller-content">
-					<div style="min-height:200px;">
-						content that does not need scroll
+					<div style="min-height:350px;">
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+						Donec tristique diam nisl, at dapibus tortor pulvinar malesuada.
+						Nulla tempus congue sem, at auctor tellus.
 					</div>
 				</div>
 				<paper-button>b</paper-button>
 			</cosmoz-bottom-bar-view>
 		</template>
 	</test-fixture>
-
 
 	<script>
-	/*global WCT, suite, fixture, setup, test, Polymer, assert, logStore, errorStore */
+	/*global WCT, suite, fixture, setup, test, Polymer, assert, flush */
 	(function () {
 		'use strict';
 
 		suite('<cosmoz-bottom-bar-view>', function () {
-			var bottomBarView;
+			var
+				bottomBarView,
+				bottomBar;
 
 			setup(function () {
 				bottomBarView = fixture('bottomBarViewFixture');
+				bottomBar = bottomBarView.querySelector('cosmoz-bottom-bar');
 			});
 
-			test('overflowing should be false', function () {
-				assert.equal(bottomBarView.overflowing, false);
-			});
+			test('bottomBar is visible', function (done) {
+				// Mutation observer is async, so wait before testing.
+				Polymer.Base.async(function () {
+					assert.equal(bottomBar.visible, true);
+					done();
+				}, 100);
 
-			test('No console logs should exist', function () {
-				assert.equal(logStore.length, 0, 'Log messages: ' + logStore.join(' | '));
-			});
-
-			test('No console warn should exist', function () {
-				assert.equal(warnStore.length, 0, 'Warn messages: ' + warnStore.join(' | '));
-			});
-
-			test('No console errors should exist', function () {
-				assert.equal(errorStore.length, 0, 'Error messages: ' + errorStore.join(' | '));
 			});
 		});
 
 		suite('scrolling bottom-bar-view', function () {
-			var bottomBarView;
+			var
+				bottomBarView,
+				bottomBar;
 
 			setup(function () {
-				bottomBarView = fixture('scrollingBottomBarView');
+				bottomBarView = fixture('scrollingBottomBarViewFixture');
+				bottomBar = bottomBarView.querySelector('cosmoz-bottom-bar');
 			});
 
-			test('overflowing should be true', function () {
-				assert.equal(bottomBarView.overflowing, true);
+			test('bottomBar is hidden when scrolling down', function (done) {
+				bottomBarView.$.scroller.scrollTop = 10;
+				// Mutation observer is async, so wait before testing.
+				Polymer.Base.async(function () {
+					assert.equal(bottomBar.visible, false);
+					done();
+				}, 100);
+
+			});
+
+			test('bottomBar is visible when scroll is at bottom', function (done) {
+				// Mutation observer is async, so wait before testing.
+				Polymer.Base.async(function () {
+					bottomBarView.$.scroller.scrollTop = 350;
+					// Scroll management is async, so wait again
+					Polymer.Base.async(function () {
+						assert.equal(bottomBar.visible, true);
+						done();
+					}, 100);
+				}, 100);
+
 			});
 		});
+
+
 	}());
 
 	</script>
