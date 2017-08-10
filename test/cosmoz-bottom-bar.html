@@ -262,7 +262,7 @@
 					bottomBar.active = false;
 				});
 
-				test('menu should not be visible on screen', function () {
+				test('menu should not be visible on screen', function (done) {
 					Polymer.Base.async(function () {
 						assert.isTrue(bottomBar.$.menu.hidden);
 						done();
@@ -275,7 +275,7 @@
 					bottomBar.active = true;
 				});
 
-				test('menu should be visible on screen', function () {
+				test('menu should be visible on screen', function (done) {
 					Polymer.Base.async(function () {
 						assert.isFalse(bottomBar.$.menu.hidden);
 						done();
