@@ -109,25 +109,21 @@
 		</paper-button>
 	</x-view>
 	<script type="text/javascript">
-	
-/*global Polymer */
-(function () {
-	"use strict";
-
-
-	Polymer({
-		is: 'x-view',
-		properties: {
-			active: {
-				type: Boolean,
-				value: false
-			}
-		},
-		showHideBottomBar: function () {
-			this.active = !this.active;
-		}
-	});
-}());
+		(function () {
+			'use strict';
+			Polymer({
+				is: 'x-view',
+				properties: {
+					active: {
+						type: Boolean,
+						value: false
+					}
+				},
+				showHideBottomBar: function () {
+					this.active = !this.active;
+				}
+			});
+		}());
 
 	</script>
 </body>
