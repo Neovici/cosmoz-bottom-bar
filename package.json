@@ -15,7 +15,7 @@
 	"scripts": {
 		"start": "polymer serve -o",
 		"postinstall": "polymer install",
-		"lint": "eslint --cache cosmoz-* test/*.html demo/*.html && polymer lint cosmoz-*.html",
+		"lint": "eslint --cache --ext .js,.html . && polymer lint cosmoz-*.html",
 		"test": "polymer test"
 	},
 	"repository": {
