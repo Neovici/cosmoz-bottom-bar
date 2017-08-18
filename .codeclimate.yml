@@ -23,3 +23,4 @@ ratings:
   paths:
   - "**.js"
   - "**.html"
+  - "demo/*.html"
