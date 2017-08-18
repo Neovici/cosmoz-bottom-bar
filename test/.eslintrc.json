@@ -8,6 +8,6 @@
 		"fixture": false,
 		"locale": true,
 		"MockInteractions": false,
-		"test": false,
+		"test": false
 	}
 }
