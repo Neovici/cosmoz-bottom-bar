@@ -6,6 +6,7 @@ engines:
       complexity:
         enabled: false
     config:
+      sanitize_batch: false
       extensions:
        - .js
        - .html
