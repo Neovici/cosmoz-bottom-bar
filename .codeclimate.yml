@@ -1,0 +1,19 @@
+---
+engines:
+  eslint:
+    enabled: true
+    checks:
+      complexity:
+        enabled: false
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - javascript
+  fixme:
+    enabled: true
+ratings:
+  paths:
+    - cosmoz-*
+    - demo/*
+    - test/*
