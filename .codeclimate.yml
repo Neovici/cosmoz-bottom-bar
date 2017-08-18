@@ -18,6 +18,7 @@ engines:
     enabled: true
 ratings:
   paths:
-    - "cosmoz-*"
+    - "cosmoz-*.html"
+    - "comsoz-*.js"
     - "demo/*"
     - "test/*"
