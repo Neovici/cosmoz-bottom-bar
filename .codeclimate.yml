@@ -9,16 +9,17 @@ engines:
       extensions:
         - "*.js"
         - "*.html"
+
   duplication:
     enabled: true
     config:
       languages:
         - javascript
+
   fixme:
     enabled: true
 
 ratings:
   paths:
-    - "cosmoz-*"
-    - "demo/*"
-    - "test/*"
+    - "**.js"
+    - "**.html"
