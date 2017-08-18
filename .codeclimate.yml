@@ -7,8 +7,8 @@ engines:
         enabled: false
     config:
       extensions:
-        - *.js
-        - *.html
+        - "*.js"
+        - "*.html"
   duplication:
     enabled: true
     config:
@@ -18,6 +18,6 @@ engines:
     enabled: true
 ratings:
   paths:
-    - cosmoz-*
-    - demo/*
-    - test/*
+    - "cosmoz-*"
+    - "demo/*"
+    - "test/*"
