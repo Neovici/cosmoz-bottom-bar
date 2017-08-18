@@ -5,6 +5,10 @@ engines:
     checks:
       complexity:
         enabled: false
+    config:
+      extensions:
+        - *.js
+        - *.html
   duplication:
     enabled: true
     config:
