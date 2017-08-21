@@ -4184,7 +4184,7 @@ polymer-bundler@^3.0.1:
     polymer-analyzer "^2.0.0"
     source-map "^0.5.6"
 
-polymer-cli@^1.4.0:
+polymer-cli@^1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/polymer-cli/-/polymer-cli-1.4.1.tgz#59d53e7304c1e0998d0a8bb063dca89a70741280"
   dependencies:
