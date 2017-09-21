@@ -16,7 +16,8 @@
 		"start": "polymer serve -o",
 		"postinstall": "polymer install --variants",
 		"lint": "eslint --cache --ext .js,.html . && polymer lint cosmoz-*.html",
-		"test": "polymer test"
+		"test": "polymer test",
+		"analyze": "polymer analyze --input cosmoz-*  > analysis.json"
 	},
 	"repository": {
 		"type": "git",
