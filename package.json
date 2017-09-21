@@ -17,7 +17,7 @@
 		"postinstall": "polymer install --variants",
 		"lint": "eslint --cache --ext .js,.html . && polymer lint cosmoz-*.html",
 		"test": "polymer test",
-		"analyze": "polymer analyze --input cosmoz-*  > analysis.json"
+		"analyze": "polymer analyze --input cosmoz-*.html  > analysis.json"
 	},
 	"repository": {
 		"type": "git",
