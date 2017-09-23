@@ -63,7 +63,7 @@ or else is sized by other layout means (e.g. the flex or fit classes).
 			</div>
 			<div id="bottomBarPlaceholder" style$="[[ _getHeightStyle(barHeight) ]]"></div>
 		</div>
-		<cosmoz-bottom-bar active="[[ active ]]" fixed="[[ fixed ]]" visible="{{ visible }}"
+		<cosmoz-bottom-bar id="bottomBar" active="[[ active ]]" fixed="[[ fixed ]]" visible="{{ visible }}"
 				scroller="[[ scroller ]]" computed-bar-height="{{ barHeight }}">
 			<slot></slot>
 		</cosmoz-bottom-bar>

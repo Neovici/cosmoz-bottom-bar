@@ -53,7 +53,7 @@
 
 			setup(function () {
 				bottomBarView = fixture('bottomBarViewFixture');
-				bottomBar = bottomBarView.querySelector('cosmoz-bottom-bar');
+				bottomBar = bottomBarView.$.bottomBar;
 			});
 
 			test('bottomBar is visible', function (done) {
@@ -73,7 +73,7 @@
 
 			setup(function () {
 				bottomBarView = fixture('scrollingBottomBarViewFixture');
-				bottomBar = bottomBarView.querySelector('cosmoz-bottom-bar');
+				bottomBar = bottomBarView.$.bottomBar;
 			});
 
 			test('bottomBar is hidden when scrolling down', function (done) {
@@ -96,8 +96,8 @@
 						done();
 					}, 100);
 				}, 100);
-
 			});
+
 		});
 
 
