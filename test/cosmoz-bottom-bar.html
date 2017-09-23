@@ -20,7 +20,7 @@
 	<test-fixture id="bottomBarWithoutMenu">
 		<template>
 			<cosmoz-bottom-bar style="min-width:200px; max-width: 200px;">
-				<fixed-size-item width="50px" height="32px"></fixed-size-item>
+				<fixed-size-item width="50px" height="32px" id="bottomBarWithoutMenuItem"></fixed-size-item>
 			</cosmoz-bottom-bar>
 		</template>
 	</test-fixture>
@@ -28,8 +28,8 @@
 	<test-fixture id="bottomBarWithOverflowingButton">
 		<template>
 			<cosmoz-bottom-bar style="min-width:300px; max-width: 300px;">
-				<fixed-size-item width="200px"></fixed-size-item>
-				<fixed-size-item width="200px"></fixed-size-item>
+				<fixed-size-item width="200px" id="bottomBarWithOverflowingButtonItem1"></fixed-size-item>
+				<fixed-size-item width="200px" id="bottomBarWithOverflowingButtonItem2"></fixed-size-item>
 			</cosmoz-bottom-bar>
 		</template>
 	</test-fixture>
@@ -37,10 +37,10 @@
 	<test-fixture id="bottomBarMaxToolbarItems">
 		<template>
 			<cosmoz-bottom-bar max-toolbar-items="3" style="min-width:400px; max-width: 400px;">
-				<fixed-size-item id="item1" width="50px"></fixed-size-item>
-				<fixed-size-item id="item2" width="50px"></fixed-size-item>
-				<fixed-size-item id="item3" width="50px"></fixed-size-item>
-				<fixed-size-item id="item4" width="50px"></fixed-size-item>
+				<fixed-size-item id="bottomBarMaxToolbarItemsItem1" width="50px"></fixed-size-item>
+				<fixed-size-item id="bottomBarMaxToolbarItemsItem2" width="50px"></fixed-size-item>
+				<fixed-size-item id="bottomBarMaxToolbarItemsItem3" width="50px"></fixed-size-item>
+				<fixed-size-item id="bottomBarMaxToolbarItemsItem4" width="50px"></fixed-size-item>
 			</cosmoz-bottom-bar>
 		</template>
 	</test-fixture>
@@ -85,16 +85,18 @@
 		suite('bottomBarWithoutMenu', function () {
 			var bottomBar;
 
-			setup(function () {
+			setup(function (done) {
 				bottomBar = fixture('bottomBarWithoutMenu');
+				flush(done);
 			});
 
 			test('button should be placed in toolbar', function (done) {
 				Polymer.Base.async(function () {
 					var item = bottomBar.getEffectiveChildren()[0],
 						slot = item.getAttribute('slot');
+					assert.equal(item.id, 'bottomBarWithoutMenuItem');
 					assert.equal(slot, 'bottom-bar-toolbar');
-					assert.equal(item, bottomBar.$.toolbar.children[0]);
+					assert.equal(item, Polymer.dom(bottomBar.$.bottomBarToolbar).getDistributedNodes()[0]);
 					done();
 				}, 100);
 			});
@@ -119,7 +121,8 @@
 					var item = bottomBar.getEffectiveChildren()[0],
 						slot = item.getAttribute('slot');
 					assert.equal(slot, 'bottom-bar-toolbar');
-					assert.equal(item, bottomBar.$.toolbar.children[0]);
+					assert.equal(item.id, 'bottomBarWithOverflowingButtonItem1');
+					assert.equal(item, Polymer.dom(bottomBar.$.bottomBarToolbar).getDistributedNodes()[0]);
 					done();
 				}, 200);
 			});
@@ -129,6 +132,7 @@
 					var item = bottomBar.getEffectiveChildren()[1],
 						slot = item.getAttribute('slot');
 					assert.equal(slot, 'bottom-bar-menu');
+					assert.equal(item.id, 'bottomBarWithOverflowingButtonItem2');
 					assert.equal(item, Polymer.dom(bottomBar.$.bottomBarMenu).getDistributedNodes()[0]);
 					done();
 				}, 200);
@@ -152,17 +156,17 @@
 
 			test('Toolbar should not contains more than max-toolbar-items', function (done) {
 				Polymer.Base.async(function () {
-					var item1 = bottomBar.$.toolbar.children[0],
-						item2 = bottomBar.$.toolbar.children[1],
-						item3 = bottomBar.$.toolbar.children[2],
+					var item1 = Polymer.dom(bottomBar.$.bottomBarToolbar).getDistributedNodes()[0],
+						item2 = Polymer.dom(bottomBar.$.bottomBarToolbar).getDistributedNodes()[1],
+						item3 = Polymer.dom(bottomBar.$.bottomBarToolbar).getDistributedNodes()[2],
 						item4 = Polymer.dom(bottomBar.$.bottomBarMenu).getDistributedNodes()[0],
-						count = bottomBar.$.toolbar.children.length;
+						count = Polymer.dom(bottomBar.$.bottomBarToolbar).getDistributedNodes().length;
 
 					assert.equal(count, 3);
-					assert.equal(item1.id, 'item1');
-					assert.equal(item2.id, 'item2');
-					assert.equal(item3.id, 'item3');
-					assert.equal(item4.id, 'item4');
+					assert.equal(item1.id, 'bottomBarMaxToolbarItemsItem1');
+					assert.equal(item2.id, 'bottomBarMaxToolbarItemsItem2');
+					assert.equal(item3.id, 'bottomBarMaxToolbarItemsItem3');
+					assert.equal(item4.id, 'bottomBarMaxToolbarItemsItem4');
 					done();
 				}, 200);
 			});
