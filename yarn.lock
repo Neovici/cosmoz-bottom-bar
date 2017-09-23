@@ -4208,9 +4208,9 @@ polymer-bundler@^3.0.1:
     polymer-analyzer "^2.0.0"
     source-map "^0.5.6"
 
-polymer-cli@^1.5.4:
-  version "1.5.4"
-  resolved "https://registry.yarnpkg.com/polymer-cli/-/polymer-cli-1.5.4.tgz#7244075bfa1cf33c281b39651e9c883d14099645"
+polymer-cli@^1.5.5:
+  version "1.5.5"
+  resolved "https://registry.yarnpkg.com/polymer-cli/-/polymer-cli-1.5.5.tgz#bc758b79e689fa35ed6172681bc971a085081f27"
   dependencies:
     "@types/babel-core" "^6.7.14"
     "@types/chalk" "^0.4.31"
@@ -4256,7 +4256,7 @@ polymer-cli@^1.5.4:
     polymer-build "^2.0.0"
     polymer-linter "^2.0.2"
     polymer-project-config "^3.4.0"
-    polyserve "^0.20.0"
+    polyserve "^0.22.1"
     request "^2.72.0"
     rimraf "^2.6.1"
     semver "^5.3.0"
@@ -4265,7 +4265,7 @@ polymer-cli@^1.5.4:
     update-notifier "^1.0.0"
     vinyl "^1.1.1"
     vinyl-fs "^2.4.3"
-    web-component-tester "^6.1.5"
+    web-component-tester "^6.2.0"
     yeoman-environment "^1.5.2"
     yeoman-generator "^1.0.1"
 
@@ -4292,64 +4292,6 @@ polymer-project-config@^3.2.1, polymer-project-config@^3.4.0:
     jsonschema "^1.1.1"
     minimatch-all "^1.1.0"
     plylog "^0.5.0"
-
-polyserve@^0.20.0:
-  version "0.20.0"
-  resolved "https://registry.yarnpkg.com/polyserve/-/polyserve-0.20.0.tgz#0ea78702224d26f1ed4c7f564bbfee627786763e"
-  dependencies:
-    "@types/assert" "0.0.29"
-    "@types/babel-core" "^6.7.14"
-    "@types/compression" "^0.0.33"
-    "@types/content-type" "^1.1.0"
-    "@types/express" "^4.0.36"
-    "@types/mime" "0.0.29"
-    "@types/mz" "0.0.29"
-    "@types/node" "^8.0.0"
-    "@types/opn" "^3.0.28"
-    "@types/parse5" "^2.2.34"
-    "@types/pem" "^1.8.1"
-    "@types/serve-static" "^1.7.31"
-    "@types/spdy" "^3.4.1"
-    "@types/ua-parser-js" "^0.7.30"
-    babel-core "^6.18.2"
-    babel-plugin-transform-es2015-arrow-functions "^6.8.0"
-    babel-plugin-transform-es2015-block-scoped-functions "^6.8.0"
-    babel-plugin-transform-es2015-block-scoping "^6.18.0"
-    babel-plugin-transform-es2015-classes "^6.18.0"
-    babel-plugin-transform-es2015-computed-properties "^6.8.0"
-    babel-plugin-transform-es2015-destructuring "^6.19.0"
-    babel-plugin-transform-es2015-duplicate-keys "^6.8.0"
-    babel-plugin-transform-es2015-for-of "^6.18.0"
-    babel-plugin-transform-es2015-function-name "^6.9.0"
-    babel-plugin-transform-es2015-literals "^6.8.0"
-    babel-plugin-transform-es2015-object-super "^6.8.0"
-    babel-plugin-transform-es2015-parameters "^6.18.0"
-    babel-plugin-transform-es2015-shorthand-properties "^6.18.0"
-    babel-plugin-transform-es2015-spread "^6.8.0"
-    babel-plugin-transform-es2015-sticky-regex "^6.8.0"
-    babel-plugin-transform-es2015-template-literals "^6.8.0"
-    babel-plugin-transform-es2015-typeof-symbol "^6.18.0"
-    babel-plugin-transform-es2015-unicode-regex "^6.11.0"
-    babel-plugin-transform-regenerator "^6.16.1"
-    command-line-args "^3.0.1"
-    command-line-usage "^3.0.3"
-    compression "^1.6.2"
-    content-type "^1.0.2"
-    dom5 "^2.0.1"
-    express "^4.8.5"
-    find-port "^1.0.1"
-    http-proxy-middleware "^0.17.2"
-    lru-cache "^4.0.2"
-    mime "^1.3.4"
-    mz "^2.4.0"
-    opn "^3.0.2"
-    parse5 "^2.2.3"
-    pem "^1.8.3"
-    polymer-build "^2.0.0"
-    resolve "^1.0.0"
-    send "^0.14.1"
-    spdy "^3.3.3"
-    ua-parser-js "^0.7.12"
 
 polyserve@^0.22.1:
   version "0.22.1"
@@ -5517,7 +5459,7 @@ typical@^2.6.0:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/typical/-/typical-2.6.1.tgz#5c080e5d661cbbe38259d2e70a3c7253e873881d"
 
-ua-parser-js@^0.7.12, ua-parser-js@^0.7.14:
+ua-parser-js@^0.7.14:
   version "0.7.14"
   resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.14.tgz#110d53fa4c3f326c121292bbeac904d2e03387ca"
 
@@ -5763,7 +5705,7 @@ wd@^1.2.0:
     underscore.string "3.3.4"
     vargs "0.1.0"
 
-web-component-tester@^6.1.5:
+web-component-tester@^6.2.0:
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/web-component-tester/-/web-component-tester-6.2.0.tgz#6ca92f9e7671e97273c6850ab8d3f9fae8b175ff"
   dependencies:
