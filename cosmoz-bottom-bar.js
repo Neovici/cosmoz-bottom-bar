@@ -174,7 +174,7 @@
 				this._overflowWidth = undefined;
 				this._debounceLayoutActions();
 			}.bind(this));
-			this._nodeObserver = Polymer.dom(this).observeNodes(this._childrenUpdated.bind(this));
+			this._nodeObserver = Polymer.dom(this.$.content).observeNodes(this._childrenUpdated.bind(this));
 			this._computedBarHeightKicker = 0;
 		},
 
