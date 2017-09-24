@@ -12,8 +12,7 @@
 	<link rel="import" href="../cosmoz-bottom-bar.html">
 	<link rel="import" href="helpers/fixed-size-item.html">
 
-	<style>
-	</style>
+	<style></style>
 
 </head>
 <body>
@@ -48,10 +47,10 @@
 	<test-fixture id="bottomBarWithHiddenButton">
 		<template>
 			<cosmoz-bottom-bar active style="min-width:400px; max-width: 410px;">
-				<fixed-size-item id="item1" width="150px"></fixed-size-item>
-				<fixed-size-item id="item2" hidden width="150px"></fixed-size-item>
-				<fixed-size-item id="item3" width="150px"></fixed-size-item>
-				<fixed-size-item id="item4" hidden width="150px"></fixed-size-item>
+				<fixed-size-item id="bottomBarWithHiddenButtonItem1" width="150px"></fixed-size-item>
+				<fixed-size-item id="bottomBarWithHiddenButtonItem2" hidden width="150px"></fixed-size-item>
+				<fixed-size-item id="bottomBarWithHiddenButtonItem3" width="150px"></fixed-size-item>
+				<fixed-size-item id="bottomBarWithHiddenButtonItem4" hidden width="150px"></fixed-size-item>
 			</cosmoz-bottom-bar>
 		</template>
 	</test-fixture>
@@ -69,80 +68,84 @@
 
 	<test-fixture id="toggleBottomBar">
 		<template>
-			<div id="toggleBottomBarParent" style="min-height: 100px; max-height: 100px">
-				<cosmoz-bottom-bar>
+				<cosmoz-bottom-bar style="min-height: 100px; max-height: 100px">
 					<fixed-size-item width="50px" height="32px"></fixed-size-item>
 				</cosmoz-bottom-bar>
-			</div>
 		</template>
 	</test-fixture>
 
 	<script>
 	(function () {
-		/*globals done*/
 		'use strict';
+
+		var flushBottomBar = function (bottomBar, done){
+			var _observer = bottomBar._nodeObserver;
+			if (_observer && _observer.flush === 'function') {
+				_observer.flush();
+			}
+			flush(done);
+		};
 
 		suite('bottomBarWithoutMenu', function () {
 			var bottomBar;
 
 			setup(function (done) {
 				bottomBar = fixture('bottomBarWithoutMenu');
-				flush(done);
+				flushBottomBar(bottomBar, done);
 			});
 
 			test('button should be placed in toolbar', function (done) {
-				Polymer.Base.async(function () {
-					var item = bottomBar.getEffectiveChildren()[0],
-						slot = item.getAttribute('slot');
-					assert.equal(item.id, 'bottomBarWithoutMenuItem');
-					assert.equal(slot, 'bottom-bar-toolbar');
-					assert.equal(item, Polymer.dom(bottomBar.$.bottomBarToolbar).getDistributedNodes()[0]);
-					done();
-				}, 100);
+				var item = bottomBar.getEffectiveChildren()[0],
+					slot = item.getAttribute('slot');
+
+				assert.equal(item.id, 'bottomBarWithoutMenuItem');
+				assert.equal(slot, 'bottom-bar-toolbar');
+				assert.equal(item, Polymer.dom(bottomBar.$.bottomBarToolbar).getDistributedNodes()[0]);
+
+				done();
 			});
 
 			test('menu button should be hidden', function (done) {
-				Polymer.Base.async(function () {
-					assert.isTrue(bottomBar.$.menu.hidden);
-					done();
-				}, 100);
+				assert.isTrue(bottomBar.$.menu.hidden);
+				done();
 			});
 		});
 
 		suite('bottomBarWithOverflowingButton', function () {
 			var bottomBar;
 
-			setup(function () {
+			setup(function (done) {
 				bottomBar = fixture('bottomBarWithOverflowingButton');
+				flushBottomBar(bottomBar, function (){
+					Polymer.Base.async(done, 90);
+				});
 			});
 
 			test('First button should be placed in toolbar', function (done) {
-				Polymer.Base.async(function () {
-					var item = bottomBar.getEffectiveChildren()[0],
-						slot = item.getAttribute('slot');
-					assert.equal(slot, 'bottom-bar-toolbar');
-					assert.equal(item.id, 'bottomBarWithOverflowingButtonItem1');
-					assert.equal(item, Polymer.dom(bottomBar.$.bottomBarToolbar).getDistributedNodes()[0]);
-					done();
-				}, 200);
+				var item = bottomBar.getEffectiveChildren()[0],
+					slot = item.getAttribute('slot');
+
+				assert.equal(slot, 'bottom-bar-toolbar');
+				assert.equal(item.id, 'bottomBarWithOverflowingButtonItem1');
+				assert.equal(item, Polymer.dom(bottomBar.$.bottomBarToolbar).getDistributedNodes()[0]);
+
+				done();
 			});
 
 			test('Second button should be placed in menu', function (done) {
-				Polymer.Base.async(function () {
-					var item = bottomBar.getEffectiveChildren()[1],
-						slot = item.getAttribute('slot');
-					assert.equal(slot, 'bottom-bar-menu');
-					assert.equal(item.id, 'bottomBarWithOverflowingButtonItem2');
-					assert.equal(item, Polymer.dom(bottomBar.$.bottomBarMenu).getDistributedNodes()[0]);
-					done();
-				}, 200);
+				var item = bottomBar.getEffectiveChildren()[1],
+					slot = item.getAttribute('slot');
+
+				assert.equal(slot, 'bottom-bar-menu');
+				assert.equal(item.id, 'bottomBarWithOverflowingButtonItem2');
+				assert.equal(item, Polymer.dom(bottomBar.$.bottomBarMenu).getDistributedNodes()[0]);
+
+				done();
 			});
 
 			test('menu button should be visible', function (done) {
-				Polymer.Base.async(function () {
-					assert.isFalse(bottomBar.$.menu.hidden);
-					done();
-				}, 200);
+				assert.isFalse(bottomBar.$.menu.hidden);
+				done();
 			});
 
 		});
@@ -150,86 +153,93 @@
 		suite('bottomBarMaxToolbarItems', function () {
 			var bottomBar;
 
-			setup(function () {
+			setup(function (done) {
 				bottomBar = fixture('bottomBarMaxToolbarItems');
+				flushBottomBar(bottomBar, function (){
+					Polymer.Base.async(done, 60);
+				});
 			});
 
 			test('Toolbar should not contains more than max-toolbar-items', function (done) {
-				Polymer.Base.async(function () {
-					var item1 = Polymer.dom(bottomBar.$.bottomBarToolbar).getDistributedNodes()[0],
-						item2 = Polymer.dom(bottomBar.$.bottomBarToolbar).getDistributedNodes()[1],
-						item3 = Polymer.dom(bottomBar.$.bottomBarToolbar).getDistributedNodes()[2],
-						item4 = Polymer.dom(bottomBar.$.bottomBarMenu).getDistributedNodes()[0],
-						count = Polymer.dom(bottomBar.$.bottomBarToolbar).getDistributedNodes().length;
+				var item1 = Polymer.dom(bottomBar.$.bottomBarToolbar).getDistributedNodes()[0],
+					item2 = Polymer.dom(bottomBar.$.bottomBarToolbar).getDistributedNodes()[1],
+					item3 = Polymer.dom(bottomBar.$.bottomBarToolbar).getDistributedNodes()[2],
+					item4 = Polymer.dom(bottomBar.$.bottomBarMenu).getDistributedNodes()[0],
+					count = Polymer.dom(bottomBar.$.bottomBarToolbar).getDistributedNodes().length;
 
-					assert.equal(count, 3);
-					assert.equal(item1.id, 'bottomBarMaxToolbarItemsItem1');
-					assert.equal(item2.id, 'bottomBarMaxToolbarItemsItem2');
-					assert.equal(item3.id, 'bottomBarMaxToolbarItemsItem3');
-					assert.equal(item4.id, 'bottomBarMaxToolbarItemsItem4');
-					done();
-				}, 200);
+				assert.equal(count, 3);
+				assert.equal(item1.id, 'bottomBarMaxToolbarItemsItem1');
+				assert.equal(item2.id, 'bottomBarMaxToolbarItemsItem2');
+				assert.equal(item3.id, 'bottomBarMaxToolbarItemsItem3');
+				assert.equal(item4.id, 'bottomBarMaxToolbarItemsItem4');
+
+				done();
 			});
 		});
 
 		suite('bottomBarWithHiddenButton', function () {
 			var bottomBar,
+				toolbar,
+				menu,
 				visibleFilter = function (item) {
 					return item.offsetWidth > 0 && item.offsetHeight > 0;
-				},
-				menu,
-				toolbar;
+				};
 
-			setup(function () {
+			setup(function (done) {
 				bottomBar = fixture('bottomBarWithHiddenButton');
+				toolbar = bottomBar.$.bottomBarToolbar;
 				menu = bottomBar.$.bottomBarMenu;
-				toolbar = bottomBar.$.toolbar;
+				flushBottomBar(bottomBar, function (){
+					Polymer.Base.async(done, 60);
+				});
 			});
 
 			test('Hidden items should not affect layout', function (done) {
-				Polymer.Base.async(function () {
-					var item1 = toolbar.children[0],
-						item2 = toolbar.children[1],
-						item3 = toolbar.children[2],
-						menuItems = Polymer.dom(menu).getDistributedNodes(),
-						visibleMenuItems = menuItems.filter(visibleFilter).length,
-						visibleToolbarCount = Polymer.dom(bottomBar.$.bottomBarToolbar).getDistributedNodes().filter(visibleFilter).length;
+				var toolbarItems = Polymer.dom(toolbar).getDistributedNodes(),
+					menuItems = Polymer.dom(menu).getDistributedNodes(),
+					item1 = toolbarItems[0],
+					item2 = toolbarItems[1],
+					item3 = toolbarItems[2],
+					visibleMenuItems = menuItems.filter(visibleFilter).length,
+					visibleToolbarCount = toolbarItems.filter(visibleFilter).length;
 
-					assert.equal(item1.id, 'item1');
-					assert.equal(item2.id, 'item2');
-					assert.equal(item3.id, 'item3');
-					assert.equal(visibleToolbarCount, 2);
-					assert.equal(visibleMenuItems, 0);
-					assert.isTrue(bottomBar.$.menu.hidden);
-					done();
-				}, 200);
+
+				assert.equal(item1.id, 'bottomBarWithHiddenButtonItem1');
+				assert.equal(item2.id, 'bottomBarWithHiddenButtonItem2');
+				assert.equal(item3.id, 'bottomBarWithHiddenButtonItem3');
+
+				assert.equal(visibleToolbarCount, 2);
+				assert.equal(visibleMenuItems, 0);
+				assert.isTrue(bottomBar.$.menu.hidden);
+
+				done();
 			});
 
 			test('Unhiding item', function (done) {
 				Polymer.Base.async(function () {
-					var item1 = toolbar.children[0],
-						item2 = toolbar.children[1],
-						item3 = toolbar.children[2];
+					var item1 = Polymer.dom(toolbar).getDistributedNodes()[0],
+						item2 =  Polymer.dom(toolbar).getDistributedNodes()[1],
+						item3 =  Polymer.dom(toolbar).getDistributedNodes()[2];
 
-					assert.equal(item1.id, 'item1');
-					assert.equal(item2.id, 'item2');
-					assert.equal(item3.id, 'item3');
+					assert.equal(item1.id, 'bottomBarWithHiddenButtonItem1');
+					assert.equal(item2.id, 'bottomBarWithHiddenButtonItem2');
+					assert.equal(item3.id, 'bottomBarWithHiddenButtonItem3');
 
 					item2.removeAttribute('hidden');
 
 					Polymer.Base.async(function () {
-						var item1 = toolbar.children[0],
-							item2 = toolbar.children[1],
+						var item1 =  Polymer.dom(toolbar).getDistributedNodes()[0],
+							item2 =  Polymer.dom(toolbar).getDistributedNodes()[1],
 							menuItems = Polymer.dom(menu).getDistributedNodes(),
 							item3 = menuItems[0],
 							nonHiddenMenuItems = menuItems.filter(function (item) {
 								return !item.hidden;
 							}).length,
-							visibleToolbarCount = Polymer.dom(bottomBar.$.bottomBarToolbar).getDistributedNodes().filter(visibleFilter).length;
+							visibleToolbarCount = Polymer.dom(toolbar).getDistributedNodes().filter(visibleFilter).length;
 
-						assert.equal(item1.id, 'item1');
-						assert.equal(item2.id, 'item2');
-						assert.equal(item3.id, 'item3');
+						assert.equal(item1.id, 'bottomBarWithHiddenButtonItem1');
+						assert.equal(item2.id, 'bottomBarWithHiddenButtonItem2');
+						assert.equal(item3.id, 'bottomBarWithHiddenButtonItem3');
 						assert.equal(visibleToolbarCount, 2);
 						assert.equal(nonHiddenMenuItems, 1);
 						done();
@@ -261,33 +271,29 @@
 		suite('toggle bottom bar', function () {
 			var bottomBar;
 
-			suite('default hide the bottom bar', function () {
-				setup(function () {
-					bottomBar = fixture('toggleBottomBar');
-					bottomBar.active = false;
-				});
-
-				test('menu should not be visible on screen', function () {
-					Polymer.Base.async(function () {
-						assert.isTrue(bottomBar.$.menu.hidden);
-						done();
-					}, 100);
-				});
+			setup(function (done){
+				bottomBar = fixture('toggleBottomBar');
+				flushBottomBar(bottomBar, done);
 			});
 
-			suite('now visible the bottom bar', function () {
-				setup(function () {
-					bottomBar.active = true;
+			test('menu should not be visible on screen', function (done) {
+				Polymer.Base.async(function () {
+					assert.isFalse(bottomBar.visible);
+					done();
 				});
 
-				test('menu should be visible on screen', function () {
-					Polymer.Base.async(function () {
-						assert.isFalse(bottomBar.$.menu.hidden);
-						done();
-					}, 100);
-				});
 			});
+
+			test('menu should be visible on screen', function (done) {
+				bottomBar.active = true;
+				Polymer.Base.async(function () {
+					assert.isTrue(bottomBar.visible);
+					done();
+				}, 30);
+			});
+
 		});
+
 	}());
 
 	</script>
