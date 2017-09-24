@@ -12,113 +12,98 @@
 	<link rel="import" href="../../cosmoz-viewinfo/cosmoz-viewinfo.html">
 	<link rel="import" href="../cosmoz-bottom-bar-view.html">
 
-	<style is="custom-style" include="iron-flex iron-flex-alignment iron-positioning">
-		body {
-			font-family: sans-serif;
-		}
-		.item {
-			padding: 20px;
-			background-color: rgba(0, 0, 255, 0.5);
-			color: white;
-			font-size: 20px;
-		}
+	<custom-style>
+		<style is="custom-style" include="iron-flex iron-flex-alignment iron-positioning">
+			body {
+				font-family: sans-serif;
+			}
+			.item {
+				padding: 20px;
+				background-color: rgba(0, 0, 255, 0.5);
+				color: white;
+				font-size: 20px;
+			}
 
-		cosmoz-bottom-bar-view {
-			--cosmoz-bottom-bar-view-bar-color: lightgreen;
-		}
+			cosmoz-bottom-bar-view {
+				--cosmoz-bottom-bar-view-bar-color: lightgreen;
+			}
 
-	</style>
+		</style>
+	</custom-style>
+
 </head>
 <body class="fullbleed">
-	<template is="dom-bind">
-		<cosmoz-viewinfo class="fit layout vertical">
-			<h1>cosmoz-bottom-bar-view demo</h1>
-			<cosmoz-bottom-bar-view class="flex">
-				<div slot="scroller-content">
-					<div class="layout relative" style="padding: 20px">
-						<div>
-							<p>
-								When the window width exceed 600px, the bottom bar should be fixed.
-								When you scroll to the bottom of the "lipsum" text, you should see the text at the bottom of the view.
-							</p>
-							<p>
-								If the window width is below 600px, then the bottom bar should be floating.
-								Meaning the bottom bar should appear when you scroll close to the bottom, but should disappear
-								while scrolling down.<br/>
-								You should see the text at the bottom of the view.
-							</p>
-						</div>
-						<div class="item flex">
-							<p>
-							Nam non enim vitae mauris pharetra semper nec sed lectus. Maecenas gravida sollicitudin mauris, id gravida odio commodo iaculis. Nulla pulvinar justo vel sodales sollicitudin. Proin turpis tortor, sagittis sit amet consequat ut, tempor non velit. Proin finibus elit libero, vitae scelerisque lacus maximus ac. Vivamus ut finibus ligula. Mauris sollicitudin vitae orci eu scelerisque. Duis nec placerat mauris, at tincidunt libero. Nullam non magna eget mauris porta tempor. Proin non sagittis enim. Sed pharetra ante ipsum, in porta dolor sagittis non. Cras odio quam, pretium consectetur finibus eu, elementum at risus. Proin feugiat vitae sem eu imperdiet. Maecenas sed dolor id odio pretium vulputate.
+	<dom-bind>
+		<template is="dom-bind">
+			<cosmoz-viewinfo class="fit layout vertical">
+				<h1>cosmoz-bottom-bar-view demo</h1>
+				<cosmoz-bottom-bar-view class="flex">
+					<div slot="scroller-content">
+						<div class="layout relative" style="padding: 20px">
+							<div>
+								<p>
+									When the window width exceed 600px, the bottom bar should be fixed.
+									When you scroll to the bottom of the "lipsum" text, you should see the text at the bottom of the view.
+								</p>
+								<p>
+									If the window width is below 600px, then the bottom bar should be floating.
+									Meaning the bottom bar should appear when you scroll close to the bottom, but should disappear
+									while scrolling down.<br/>
+									You should see the text at the bottom of the view.
+								</p>
+							</div>
+							<div class="item flex">
+								<p>
+									Nam non enim vitae mauris pharetra semper nec sed lectus. Maecenas gravida sollicitudin mauris, id gravida odio commodo iaculis. Nulla pulvinar justo vel sodales sollicitudin. Proin turpis tortor, sagittis sit amet consequat ut, tempor non velit. Proin finibus elit libero, vitae scelerisque lacus maximus ac. Vivamus ut finibus ligula. Mauris sollicitudin vitae orci eu scelerisque. Duis nec placerat mauris, at tincidunt libero. Nullam non magna eget mauris porta tempor. Proin non sagittis enim. Sed pharetra ante ipsum, in porta dolor sagittis non. Cras odio quam, pretium consectetur finibus eu, elementum at risus. Proin feugiat vitae sem eu imperdiet. Maecenas sed dolor id odio pretium vulputate.
 
-	Quisque ante erat, hendrerit nec consectetur ultricies, volutpat eu leo. Pellentesque imperdiet iaculis fringilla. Nullam ullamcorper purus neque, eget convallis mi placerat at. Aenean quis diam quis est sagittis suscipit. Praesent vel erat lacus. Donec eu suscipit nibh, vel placerat elit. Aliquam erat volutpat.
+									Quisque ante erat, hendrerit nec consectetur ultricies, volutpat eu leo. Pellentesque imperdiet iaculis fringilla. Nullam ullamcorper purus neque, eget convallis mi placerat at. Aenean quis diam quis est sagittis suscipit. Praesent vel erat lacus. Donec eu suscipit nibh, vel placerat elit. Aliquam erat volutpat.
 
-	Praesent aliquam bibendum orci nec mollis. Sed eu mattis tortor. Nulla in ultricies mi. Nunc molestie dui nec lacus pellentesque, non laoreet tellus fermentum. Integer eleifend nec tellus sed finibus. Vestibulum eget turpis in nulla tempus hendrerit at at diam. Aliquam orci elit, lacinia a tempus id, suscipit vitae ex. Aenean in urna id ex ultricies posuere. Donec rutrum metus massa, vel interdum mauris posuere eu. Sed et odio nulla. Pellentesque eu orci dignissim, venenatis sem nec, porttitor diam. Quisque non ligula arcu. Nullam condimentum elementum nibh, eu pharetra leo dignissim ut.
+									Praesent aliquam bibendum orci nec mollis. Sed eu mattis tortor. Nulla in ultricies mi. Nunc molestie dui nec lacus pellentesque, non laoreet tellus fermentum. Integer eleifend nec tellus sed finibus. Vestibulum eget turpis in nulla tempus hendrerit at at diam. Aliquam orci elit, lacinia a tempus id, suscipit vitae ex. Aenean in urna id ex ultricies posuere. Donec rutrum metus massa, vel interdum mauris posuere eu. Sed et odio nulla. Pellentesque eu orci dignissim, venenatis sem nec, porttitor diam. Quisque non ligula arcu. Nullam condimentum elementum nibh, eu pharetra leo dignissim ut.
 
-	Sed luctus tortor nulla, in tristique elit efficitur posuere. Sed interdum ullamcorper nunc vitae imperdiet. Maecenas hendrerit, velit ac accumsan malesuada, velit lectus imperdiet sapien, in gravida ligula massa ac orci. Nunc nulla lectus, iaculis nec ullamcorper id, eleifend non est. Nullam dignissim consequat enim, a fermentum est condimentum non. In fermentum libero ut tortor mollis, sed scelerisque justo consectetur. Curabitur tempor bibendum gravida. Maecenas pharetra, tortor eget pretium congue, mi arcu maximus lacus, condimentum porta ex velit ut augue. Integer egestas turpis velit, sed facilisis mi tempor ut. Pellentesque at odio lorem. Nam eget accumsan libero, sed dictum nunc. Mauris eu libero tempus nulla accumsan tincidunt.
+									Sed luctus tortor nulla, in tristique elit efficitur posuere. Sed interdum ullamcorper nunc vitae imperdiet. Maecenas hendrerit, velit ac accumsan malesuada, velit lectus imperdiet sapien, in gravida ligula massa ac orci. Nunc nulla lectus, iaculis nec ullamcorper id, eleifend non est. Nullam dignissim consequat enim, a fermentum est condimentum non. In fermentum libero ut tortor mollis, sed scelerisque justo consectetur. Curabitur tempor bibendum gravida. Maecenas pharetra, tortor eget pretium congue, mi arcu maximus lacus, condimentum porta ex velit ut augue. Integer egestas turpis velit, sed facilisis mi tempor ut. Pellentesque at odio lorem. Nam eget accumsan libero, sed dictum nunc. Mauris eu libero tempus nulla accumsan tincidunt.
 
-	Curabitur ligula turpis, sagittis vitae magna ut, posuere maximus sem. Duis dapibus elit in erat condimentum, non semper mauris tincidunt. Quisque accumsan risus tellus, at volutpat velit sollicitudin a. Vivamus volutpat, augue nec laoreet consectetur, massa odio tempor ligula, quis auctor lorem erat eu lorem. Nullam consectetur libero sit amet neque viverra, quis interdum tellus vestibulum. Nulla dignissim sem bibendum, suscipit massa at, interdum augue. Aenean non gravida tortor. Ut blandit ornare dolor ut sagittis. Curabitur non lobortis justo. Quisque quis leo commodo, pharetra orci porttitor, condimentum nulla. Cras fringilla urna eget felis sagittis ultrices. Aliquam justo sem, rhoncus ac suscipit a, sodales quis lacus. Suspendisse hendrerit venenatis dolor, non facilisis nisi feugiat quis. Donec a ipsum metus. Nullam eget tristique felis.
+									Curabitur ligula turpis, sagittis vitae magna ut, posuere maximus sem. Duis dapibus elit in erat condimentum, non semper mauris tincidunt. Quisque accumsan risus tellus, at volutpat velit sollicitudin a. Vivamus volutpat, augue nec laoreet consectetur, massa odio tempor ligula, quis auctor lorem erat eu lorem. Nullam consectetur libero sit amet neque viverra, quis interdum tellus vestibulum. Nulla dignissim sem bibendum, suscipit massa at, interdum augue. Aenean non gravida tortor. Ut blandit ornare dolor ut sagittis. Curabitur non lobortis justo. Quisque quis leo commodo, pharetra orci porttitor, condimentum nulla. Cras fringilla urna eget felis sagittis ultrices. Aliquam justo sem, rhoncus ac suscipit a, sodales quis lacus. Suspendisse hendrerit venenatis dolor, non facilisis nisi feugiat quis. Donec a ipsum metus. Nullam eget tristique felis.
 
-	Aenean sit amet commodo ipsum, vitae convallis nibh. Quisque id turpis sollicitudin, ornare velit ut, vehicula purus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean vitae quam rhoncus arcu imperdiet volutpat et at tellus. Maecenas interdum posuere ante, vel dapibus purus ullamcorper a. Etiam imperdiet magna id enim malesuada sagittis. Donec dapibus, purus in molestie pulvinar, lectus lacus pulvinar diam, eu ornare elit nisi eu turpis. Donec placerat augue id ipsum interdum ornare. Curabitur luctus nibh quis dapibus dictum. Aenean eget nibh ac libero elementum eleifend vel et felis. Vestibulum vel ligula quis risus varius volutpat eu volutpat nibh. Integer id tellus nec orci gravida congue ut eu leo. Maecenas consectetur et orci ac rhoncus. Phasellus lacus leo, posuere at rhoncus hendrerit, semper ac velit.
+									Aenean sit amet commodo ipsum, vitae convallis nibh. Quisque id turpis sollicitudin, ornare velit ut, vehicula purus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean vitae quam rhoncus arcu imperdiet volutpat et at tellus. Maecenas interdum posuere ante, vel dapibus purus ullamcorper a. Etiam imperdiet magna id enim malesuada sagittis. Donec dapibus, purus in molestie pulvinar, lectus lacus pulvinar diam, eu ornare elit nisi eu turpis. Donec placerat augue id ipsum interdum ornare. Curabitur luctus nibh quis dapibus dictum. Aenean eget nibh ac libero elementum eleifend vel et felis. Vestibulum vel ligula quis risus varius volutpat eu volutpat nibh. Integer id tellus nec orci gravida congue ut eu leo. Maecenas consectetur et orci ac rhoncus. Phasellus lacus leo, posuere at rhoncus hendrerit, semper ac velit.
 
-	Nullam vulputate ut tortor at euismod. Ut dictum accumsan tellus, nec tristique enim tempor eu. Aenean dolor lacus, tincidunt at diam sit amet, ultricies ullamcorper purus. Mauris sed sapien sit amet leo scelerisque consequat. Vestibulum mattis, orci semper luctus commodo, nunc sapien aliquet dolor, ultricies hendrerit orci urna nec mauris. Pellentesque aliquam urna at nunc imperdiet auctor. Mauris ultricies non purus quis pulvinar. Donec vitae efficitur velit. Praesent posuere mi ac dui viverra posuere. Ut eget erat nunc. Nullam quam purus, faucibus et volutpat facilisis, accumsan sed libero. Donec mattis vestibulum metus, volutpat commodo ante lacinia nec. Aenean non accumsan nisi, vel imperdiet odio.
+									Nullam vulputate ut tortor at euismod. Ut dictum accumsan tellus, nec tristique enim tempor eu. Aenean dolor lacus, tincidunt at diam sit amet, ultricies ullamcorper purus. Mauris sed sapien sit amet leo scelerisque consequat. Vestibulum mattis, orci semper luctus commodo, nunc sapien aliquet dolor, ultricies hendrerit orci urna nec mauris. Pellentesque aliquam urna at nunc imperdiet auctor. Mauris ultricies non purus quis pulvinar. Donec vitae efficitur velit. Praesent posuere mi ac dui viverra posuere. Ut eget erat nunc. Nullam quam purus, faucibus et volutpat facilisis, accumsan sed libero. Donec mattis vestibulum metus, volutpat commodo ante lacinia nec. Aenean non accumsan nisi, vel imperdiet odio.
 
-	Proin euismod lacus vitae lacus pharetra aliquam. Praesent eu dolor posuere, hendrerit ipsum scelerisque, tempus ipsum. Quisque vel malesuada lacus. Nullam sit amet odio diam. Quisque sit amet tellus bibendum, convallis leo lacinia, auctor mi. Nullam at tristique sapien. Nam id turpis ac erat ullamcorper porta.
+									Proin euismod lacus vitae lacus pharetra aliquam. Praesent eu dolor posuere, hendrerit ipsum scelerisque, tempus ipsum. Quisque vel malesuada lacus. Nullam sit amet odio diam. Quisque sit amet tellus bibendum, convallis leo lacinia, auctor mi. Nullam at tristique sapien. Nam id turpis ac erat ullamcorper porta.
 
-	Nullam venenatis dictum velit a feugiat. Nunc auctor enim eget enim ullamcorper posuere. Phasellus in suscipit orci, nec interdum nulla. Aliquam commodo sagittis facilisis. Pellentesque ac vulputate quam, nec facilisis lectus. Donec pulvinar nec mauris ac posuere. Nunc sit amet ex consequat, tempus dui vel, dictum tortor. Praesent metus massa, laoreet sit amet consequat tempus, lobortis quis elit.
+									Nullam venenatis dictum velit a feugiat. Nunc auctor enim eget enim ullamcorper posuere. Phasellus in suscipit orci, nec interdum nulla. Aliquam commodo sagittis facilisis. Pellentesque ac vulputate quam, nec facilisis lectus. Donec pulvinar nec mauris ac posuere. Nunc sit amet ex consequat, tempus dui vel, dictum tortor. Praesent metus massa, laoreet sit amet consequat tempus, lobortis quis elit.
 
-	Integer metus odio, eleifend at eleifend ut, tempus ut nunc. Nam sodales, velit auctor gravida iaculis, ipsum mi vehicula ipsum, et accumsan neque quam id orci. Sed auctor accumsan lacinia. Praesent iaculis justo vitae nisi suscipit, at lobortis enim pellentesque. Donec quis ligula sapien. Proin finibus ullamcorper bibendum. Fusce laoreet orci vel lectus facilisis, venenatis vestibulum tortor dignissim. Integer commodo orci eget nibh volutpat vehicula. Aenean in lobortis purus. Aenean nec magna et ante mattis ornare a sed lectus. Mauris accumsan lectus in viverra ornare. Duis magna sapien, dictum vitae risus non, tincidunt blandit velit. Integer ullamcorper eu mi a blandit.
+									Integer metus odio, eleifend at eleifend ut, tempus ut nunc. Nam sodales, velit auctor gravida iaculis, ipsum mi vehicula ipsum, et accumsan neque quam id orci. Sed auctor accumsan lacinia. Praesent iaculis justo vitae nisi suscipit, at lobortis enim pellentesque. Donec quis ligula sapien. Proin finibus ullamcorper bibendum. Fusce laoreet orci vel lectus facilisis, venenatis vestibulum tortor dignissim. Integer commodo orci eget nibh volutpat vehicula. Aenean in lobortis purus. Aenean nec magna et ante mattis ornare a sed lectus. Mauris accumsan lectus in viverra ornare. Duis magna sapien, dictum vitae risus non, tincidunt blandit velit. Integer ullamcorper eu mi a blandit.
 
-	Integer quis aliquam magna, ac sollicitudin magna. Curabitur in vehicula quam, sed congue arcu. Vivamus sodales magna vitae commodo aliquam. Morbi dapibus condimentum lectus, eu posuere felis. Sed et urna ullamcorper, imperdiet tellus id, luctus velit. Nam luctus sapien posuere convallis lobortis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Praesent fringilla, quam quis faucibus rutrum, mauris massa finibus mi, sit amet rhoncus ipsum nisi ultricies purus. Nunc vitae nulla aliquet, sollicitudin lorem at, rutrum elit. Integer quis urna velit. Vivamus arcu leo, sodales quis mi ac, ornare auctor dui. Donec ligula augue, viverra vitae suscipit at, auctor sed turpis. Morbi gravida, orci in facilisis feugiat, nulla dolor fermentum mi, ac pharetra erat erat eget massa. Mauris cursus nulla enim, vel hendrerit lacus interdum vitae.
+									Integer quis aliquam magna, ac sollicitudin magna. Curabitur in vehicula quam, sed congue arcu. Vivamus sodales magna vitae commodo aliquam. Morbi dapibus condimentum lectus, eu posuere felis. Sed et urna ullamcorper, imperdiet tellus id, luctus velit. Nam luctus sapien posuere convallis lobortis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Praesent fringilla, quam quis faucibus rutrum, mauris massa finibus mi, sit amet rhoncus ipsum nisi ultricies purus. Nunc vitae nulla aliquet, sollicitudin lorem at, rutrum elit. Integer quis urna velit. Vivamus arcu leo, sodales quis mi ac, ornare auctor dui. Donec ligula augue, viverra vitae suscipit at, auctor sed turpis. Morbi gravida, orci in facilisis feugiat, nulla dolor fermentum mi, ac pharetra erat erat eget massa. Mauris cursus nulla enim, vel hendrerit lacus interdum vitae.
 
-	Integer sed magna tincidunt, gravida tortor quis, egestas dolor. Duis justo elit, vestibulum nec sem vel, varius blandit libero. Praesent eu ipsum purus. Cras fringilla ante a velit varius aliquam. Donec ullamcorper placerat nibh ac hendrerit. Fusce vel diam velit. Nunc in neque varius, vestibulum dolor sit amet, porta enim. Duis vitae leo ex. Praesent a consequat mi. Suspendisse potenti.
+									Integer sed magna tincidunt, gravida tortor quis, egestas dolor. Duis justo elit, vestibulum nec sem vel, varius blandit libero. Praesent eu ipsum purus. Cras fringilla ante a velit varius aliquam. Donec ullamcorper placerat nibh ac hendrerit. Fusce vel diam velit. Nunc in neque varius, vestibulum dolor sit amet, porta enim. Duis vitae leo ex. Praesent a consequat mi. Suspendisse potenti.
 
-	Sed cursus pretium est ac auctor. Phasellus libero sapien, ullamcorper ac arcu in, laoreet malesuada risus. Nam eu blandit nulla, sit amet volutpat dui. Nunc vitae lacus orci. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Praesent et nulla efficitur, bibendum purus in, eleifend ipsum. Quisque posuere justo ut dui posuere, sit amet congue velit fermentum.
+									Sed cursus pretium est ac auctor. Phasellus libero sapien, ullamcorper ac arcu in, laoreet malesuada risus. Nam eu blandit nulla, sit amet volutpat dui. Nunc vitae lacus orci. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Praesent et nulla efficitur, bibendum purus in, eleifend ipsum. Quisque posuere justo ut dui posuere, sit amet congue velit fermentum.
 
-	Duis aliquam justo in ante sodales, ac pretium lectus tristique. Fusce iaculis nisl sit amet risus maximus fringilla. Aliquam enim leo, consequat vitae tortor vel, pulvinar ultricies risus. Integer sit amet vulputate tortor, non consectetur massa. Curabitur gravida neque in magna malesuada rhoncus. Cras posuere quam ac nisi maximus congue. Nunc eget tellus eget ex tempor sollicitudin. Aliquam ut rhoncus purus. Nulla eleifend, mauris a commodo faucibus, ipsum felis volutpat massa, in fringilla neque eros et lacus. Quisque urna orci, pharetra scelerisque pretium eu, suscipit nec ante. Mauris fringilla ac turpis id tempor. Phasellus facilisis leo eget erat porta, vitae fermentum ipsum dictum. Proin at maximus felis. Nam lobortis ex aliquet condimentum eleifend.
+									Duis aliquam justo in ante sodales, ac pretium lectus tristique. Fusce iaculis nisl sit amet risus maximus fringilla. Aliquam enim leo, consequat vitae tortor vel, pulvinar ultricies risus. Integer sit amet vulputate tortor, non consectetur massa. Curabitur gravida neque in magna malesuada rhoncus. Cras posuere quam ac nisi maximus congue. Nunc eget tellus eget ex tempor sollicitudin. Aliquam ut rhoncus purus. Nulla eleifend, mauris a commodo faucibus, ipsum felis volutpat massa, in fringilla neque eros et lacus. Quisque urna orci, pharetra scelerisque pretium eu, suscipit nec ante. Mauris fringilla ac turpis id tempor. Phasellus facilisis leo eget erat porta, vitae fermentum ipsum dictum. Proin at maximus felis. Nam lobortis ex aliquet condimentum eleifend.
 
-	Morbi nec erat nulla. Curabitur sed varius sem. Proin quis leo egestas, bibendum arcu sed, condimentum nibh. Donec non tristique mi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Fusce purus est, dignissim in sodales in, ultrices ut felis. Nunc faucibus eget nulla ut laoreet. Phasellus sit amet justo ac sem condimentum imperdiet. Duis tempus elit dolor. Maecenas velit ex, ornare id ante vel, vehicula efficitur lectus. Duis magna diam, posuere vel cursus pellentesque, finibus in diam. Nam posuere dignissim sem.
-							</p>
-						</div>
-						<div>
-							<h1>This is content at the bottom of the view</h1>
+									Morbi nec erat nulla. Curabitur sed varius sem. Proin quis leo egestas, bibendum arcu sed, condimentum nibh. Donec non tristique mi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Fusce purus est, dignissim in sodales in, ultrices ut felis. Nunc faucibus eget nulla ut laoreet. Phasellus sit amet justo ac sem condimentum imperdiet. Duis tempus elit dolor. Maecenas velit ex, ornare id ante vel, vehicula efficitur lectus. Duis magna diam, posuere vel cursus pellentesque, finibus in diam. Nam posuere dignissim sem.
+								</p>
+							</div>
+							<div>
+								<h1>This is content at the bottom of the view</h1>
+							</div>
 						</div>
 					</div>
-				</div>
-				<paper-button>
-					button 1
-				</paper-button>
-				<paper-button>
-					button 2
-				</paper-button>
-				<paper-button>
-					big button 3
-				</paper-button>
-				<paper-button>
-					even bigger button 4
-				</paper-button>
-				<paper-button>
-					even bigger button 4
-				</paper-button>
-				<paper-button>
-					even bigger button 4
-				</paper-button>
-				<paper-button>
-					even bigger button 4
-				</paper-button>
-				<paper-button>
-					even bigger button 4
-				</paper-button>
-				<paper-button>
-					even bigger button 4
-				</paper-button>
-				<paper-button>
-					even bigger button 4
-				</paper-button>
-			</cosmoz-bottom-bar-view>
-			<h1>End of cosmoz-bottom-bar-view demo</h1>
-		</cosmoz-viewinfo>
-	</template>
+					<paper-button>button 1</paper-button>
+					<paper-button>button 2</paper-button>
+					<paper-button>big button 3</paper-button>
+					<paper-button>even bigger button 4</paper-button>
+					<paper-button>even bigger button 5</paper-button>
+					<paper-button>even bigger button 6</paper-button>
+					<paper-button>even bigger button 7</paper-button>
+					<paper-button>even bigger button 8</paper-button>
+					<paper-button>even bigger button 9</paper-button>
+					<paper-button>even bigger button 10</paper-button>
+				</cosmoz-bottom-bar-view>
+				<h1>End of cosmoz-bottom-bar-view demo</h1>
+			</cosmoz-viewinfo>
+		</template>
+	</dom-bind>
 </body>
 </html>
