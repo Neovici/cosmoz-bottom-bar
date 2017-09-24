@@ -295,8 +295,11 @@
 							'hidden'
 						]
 					});
+					if (Polymer.dom(node).parentNode !== this) {
+						Polymer.dom(this).appendChild(node);
+					}
 					this._moveElement(node, true);
-					this._toolbarMoveToStart(node);
+					//this._toolbarMoveToStart(node);
 				}, this);
 
 			this._debounceLayoutActions();
