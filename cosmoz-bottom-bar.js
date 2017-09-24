@@ -417,6 +417,7 @@
 			element.setAttribute('tabindex', tabindex);
 			this.toggleClass(this.menuClass, !toToolbar, element);
 			this.toggleClass(this.toolbarClass, toToolbar, element);
+			this.updateStyles();
 		},
 
 		_debounceLayoutActions: function () {
