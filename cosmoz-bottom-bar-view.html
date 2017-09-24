@@ -1,3 +1,4 @@
+<link rel="import" href="../polymer/polymer.html"/>
 <link rel="import" href="cosmoz-bottom-bar.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
@@ -14,49 +15,48 @@ or else is sized by other layout means (e.g. the flex or fit classes).
 
 <dom-module id="cosmoz-bottom-bar-view">
 	<template>
-	<style type="text/css">
+		<style>
+			:host {
+				position: relative;
+				@apply --layout-vertical;
+				overflow: hidden;
+				@apply --layout-flex;
+			}
 
-		:host {
-			position: relative;
-			@apply --layout-vertical;
-			overflow: hidden;
-			@apply --layout-flex;
-		}
+			#bottomBarPlaceholder {
+				opacity: 0.0;
+			}
 
-		#bottomBarPlaceholder {
-			opacity: 0.0;
-		}
+			#scroller {
+				@apply --layout-flex;
+				@apply --layout-vertical;
+				position: relative;
 
-		#scroller {
-			@apply --layout-flex;
-			@apply --layout-vertical;
-			position: relative;
+				-webkit-overflow-scrolling: touch;
 
-			-webkit-overflow-scrolling: touch;
+				overflow-x: hidden;
+				overflow-y: auto;
+			}
 
-			overflow-x: hidden;
-			overflow-y: auto;
-		}
+			#scrollerSizer {
+				@apply --layout-flex;
+				@apply --layout-vertical;
+				position: relative;
+			}
 
-		#scrollerSizer {
-			@apply --layout-flex;
-			@apply --layout-vertical;
-			position: relative;
-		}
+			#scroller ::slotted(*) {
+				position: relative;
+				@apply --layout-flex;
+				/* Default to vertical flex layout, but can be overriden locally */
+				@apply --layout-vertical;
+			}
 
-		#scroller ::slotted(*) {
-			position: relative;
-			@apply --layout-flex;
-			/* Default to vertical flex layout, but can be overriden locally */
-			@apply --layout-vertical;
-		}
+			cosmoz-bottom-bar {
+				background-color: var(--cosmoz-bottom-bar-view-bar-color, rgba(230, 230, 230, 0.8));
+				@apply --cosmoz-bottom-bar-view-bar;
+			}
 
-		cosmoz-bottom-bar {
-			background-color: var(--cosmoz-bottom-bar-view-bar-color, rgba(230, 230, 230, 0.8));
-			@apply --cosmoz-bottom-bar-view-bar;
-		}
-
-	</style>
+		</style>
 		<div id="scroller">
 			<div id="scrollerSizer">
 				<slot name="scroller-content"></slot>
