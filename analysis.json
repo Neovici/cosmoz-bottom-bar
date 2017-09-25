@@ -1385,11 +1385,11 @@
           "range": {
             "file": "cosmoz-bottom-bar.html",
             "start": {
-              "line": 41,
+              "line": 38,
               "column": 5
             },
             "end": {
-              "line": 41,
+              "line": 38,
               "column": 30
             }
           }
@@ -1400,11 +1400,11 @@
           "range": {
             "file": "cosmoz-bottom-bar.html",
             "start": {
-              "line": 45,
+              "line": 42,
               "column": 5
             },
             "end": {
-              "line": 45,
+              "line": 42,
               "column": 66
             }
           }
@@ -1415,11 +1415,11 @@
           "range": {
             "file": "cosmoz-bottom-bar.html",
             "start": {
-              "line": 52,
+              "line": 49,
               "column": 6
             },
             "end": {
-              "line": 52,
+              "line": 49,
               "column": 61
             }
           }
@@ -1430,11 +1430,11 @@
           "range": {
             "file": "cosmoz-bottom-bar.html",
             "start": {
-              "line": 58,
+              "line": 55,
               "column": 3
             },
             "end": {
-              "line": 58,
+              "line": 55,
               "column": 29
             }
           }
@@ -1963,6 +1963,10 @@
         {
           "url": "demo/bottom-bar-view.html",
           "description": "Basic Demo"
+        },
+        {
+          "url": "demo/bottom-bar-view-small-content.html",
+          "description": "small content Demo"
         }
       ],
       "metadata": {},
@@ -2098,11 +2102,11 @@
           "range": {
             "file": "cosmoz-bottom-bar-view.html",
             "start": {
-              "line": 62,
+              "line": 63,
               "column": 4
             },
             "end": {
-              "line": 62,
+              "line": 63,
               "column": 41
             }
           }
@@ -2113,11 +2117,11 @@
           "range": {
             "file": "cosmoz-bottom-bar-view.html",
             "start": {
-              "line": 68,
+              "line": 69,
               "column": 3
             },
             "end": {
-              "line": 68,
+              "line": 69,
               "column": 16
             }
           }
