@@ -174,7 +174,7 @@
 				this._overflowWidth = undefined;
 				this._debounceLayoutActions();
 			}.bind(this));
-			this._nodeObserver = Polymer.dom(this).observeNodes(this._childrenUpdated.bind(this));
+			this._nodeObserver = Polymer.dom(this.$.content).observeNodes(this._childrenUpdated.bind(this));
 			this._computedBarHeightKicker = 0;
 		},
 
@@ -295,8 +295,11 @@
 							'hidden'
 						]
 					});
+					if (Polymer.dom(node).parentNode !== this) {
+						Polymer.dom(this).appendChild(node);
+					}
 					this._moveElement(node, true);
-					this._toolbarMoveToStart(node);
+					//this._toolbarMoveToStart(node);
 				}, this);
 
 			this._debounceLayoutActions();
@@ -414,6 +417,7 @@
 			element.setAttribute('tabindex', tabindex);
 			this.toggleClass(this.menuClass, !toToolbar, element);
 			this.toggleClass(this.toolbarClass, toToolbar, element);
+			this.updateStyles();
 		},
 
 		_debounceLayoutActions: function () {

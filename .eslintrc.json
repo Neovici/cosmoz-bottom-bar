@@ -1,15 +1,18 @@
 {
 	"env": {
-		"browser": true
+		"browser": true,
+		"es6": true
 	},
 	"extends": "eslint:recommended",
 	"globals": {
 		"Cosmoz": false,
 		"CustomElements": false,
 		"HTMLImports": false,
-		"moment": false,
 		"Polymer": false,
 		"WeakMap": false
+	},
+	"parserOptions": {
+		"ecmaVersion": 6
 	},
 	"plugins": [
 		"html"

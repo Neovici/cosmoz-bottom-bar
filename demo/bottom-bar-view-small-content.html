@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<title>cosmoz-bottom-bar-view demo</title>
+
+	<script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+	<link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html" />
+	<link rel="import" href="../../iron-demo-helpers/demo-snippet.html" />
+
+	<link rel="import" href="../../paper-button/paper-button.html">
+	<link rel="import" href="../../iron-flex-layout/iron-flex-layout-classes.html">
+	<link rel="import" href="../../cosmoz-viewinfo/cosmoz-viewinfo.html">
+
+	<link rel="import" href="../cosmoz-bottom-bar-view.html">
+
+	<custom-style>
+		<style is="custom-style" include="iron-flex iron-flex-alignment iron-positioning">
+			cosmoz-bottom-bar-view {
+				--cosmoz-bottom-bar-view-bar-color: lightgreen;
+			}
+		</style>
+	</custom-style>
+</head>
+<body unresolved class="fullbleed">
+	<dom-bind>
+		<template is="dom-bind">
+			<cosmoz-viewinfo class="fit layout vertical">
+				<h1>cosmoz-bottom-bar-view small content demo</h1>
+				<cosmoz-bottom-bar-view class="flex">
+					<div slot="scroller-content">
+						<div class="layout relative" style="padding: 20px">
+							<div>
+								<p>
+									As long as this text content can fit the height of the window, the bottom bar should always be visible.<br/>
+								</p>
+								<p>
+									Then try reducing the height of the window until a vertical scrollbar appears for this content.<br/>
+									Bottom should be fixed if width is bigger than 600px.<br/>
+									Otherwise, the bottom bar should be floating and should appear when you scroll close to the bottom, but should disappear while scrolling.<br/>
+									You should see the text at the bottom of the view.
+								</p>
+							</div>
+							<div>
+								<h1>This is content at the bottom of the view</h1>
+							</div>
+						</div>
+					</div>
+					<paper-button>button 1</paper-button>
+					<paper-button>button 2</paper-button>
+					<paper-button>big button 3</paper-button>
+					<paper-button>even bigger button 4</paper-button>
+					<paper-button>even bigger button 5</paper-button>
+					<paper-button>even bigger button 6</paper-button>
+					<paper-button>even bigger button 7</paper-button>
+					<paper-button>even bigger button 8</paper-button>
+					<paper-button>even bigger button 9</paper-button>
+					<paper-button>even bigger button 10</paper-button>
+				</cosmoz-bottom-bar-view>
+				<h1>End of cosmoz-bottom-bar-view demo</h1>
+			</cosmoz-viewinfo>
+		</template>
+	</dom-bind>
+</body>
+</html>

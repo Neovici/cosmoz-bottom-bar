@@ -87,6 +87,10 @@
 				@apply --cosmoz-bottom-bar-toolbar-item;
 			}
 
+			#toolbar ::slotted([hidden]) {
+				display: none !important;
+			}
+
 			#dropdown ::slotted(*) {
 				display: flex;
 				@apply --layout-center;

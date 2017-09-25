@@ -1,9 +1,9 @@
 <link rel="import" href="../polymer/polymer.html"/>
-<link rel="import" href="../paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
 <link rel="import" href="../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../paper-menu-button/paper-menu-button.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="../iron-selector/iron-selector.html">
-<link rel="import" href="../iron-icons/iron-icons.html">
 <link rel="import" href="../paper-listbox/paper-listbox.html">
 
 <link rel="import" href="cosmoz-bottom-bar-style.html">
@@ -26,7 +26,8 @@ is applied to items distributed to the menu.
 See demo for example usage
 
 @element cosmoz-bottom-bar
-@demo demo/index.html
+@demo demo/bottom-bar.html Basic Demo
+@demo demo/bottom-bar-match-parent.html match parent Demo
 -->
 
 <dom-module id="cosmoz-bottom-bar">
@@ -43,13 +44,16 @@ See demo for example usage
 				</iron-selector>
 				<paper-menu-button hidden$="[[ !hasMenuItems ]]" id="menu" role="group" no-animations
 						vertical-offset="[[ barHeight ]]" vertical-align="bottom" horizontal-align="right">
-					<paper-icon-button icon="menu" id="dropdownButton" toggles raised class="dropdown-trigger"></paper-icon-button>
-					<paper-listbox id="dropdown" class="dropdown-content" selected-class="[[ selectedClass ]]" on-iron-select="_onActionSelected">
+					<paper-icon-button icon="menu" id="dropdownButton" toggles raised class="dropdown-trigger" slot="dropdown-trigger"></paper-icon-button>
+					<paper-listbox id="dropdown" class="dropdown-content" selected-class="[[ selectedClass ]]" on-iron-select="_onActionSelected" slot="dropdown-content">
 						<span></span>
 						<slot id="bottomBarMenu" name="bottom-bar-menu"></slot>
 					</paper-listbox>
 				</paper-menu-button>
 			</div>
+		</div>
+		<div hidden style="display:none">
+			<slot id="content"></slot>
 		</div>
 	</template>
 	<script type="text/javascript" src="cosmoz-bottom-bar.js"></script>

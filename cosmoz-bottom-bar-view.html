@@ -1,3 +1,4 @@
+<link rel="import" href="../polymer/polymer.html"/>
 <link rel="import" href="cosmoz-bottom-bar.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
@@ -10,60 +11,61 @@ __Important:__ Because `cosmoz-bottom-bar-view` is handling scrolling of its con
 By "explicitly sized", we mean it either has an explicit CSS height property set via a class or inline style,
 or else is sized by other layout means (e.g. the flex or fit classes).
 
+@demo demo/bottom-bar-view.html Basic Demo
+@demo demo/bottom-bar-view-small-content.html small content Demo
 -->
 
 <dom-module id="cosmoz-bottom-bar-view">
-	<style type="text/css">
-
-		:host {
-			position: relative;
-			@apply --layout-vertical;
-			overflow: hidden;
-			@apply --layout-flex;
-		}
-
-		#bottomBarPlaceholder {
-			opacity: 0.0;
-		}
-
-		#scroller {
-			@apply --layout-flex;
-			@apply --layout-vertical;
-			position: relative;
-
-			-webkit-overflow-scrolling: touch;
-
-			overflow-x: hidden;
-			overflow-y: auto;
-		}
-
-		#scrollerSizer {
-			@apply --layout-flex;
-			@apply --layout-vertical;
-			position: relative;
-		}
-
-		#scroller ::slotted(*) {
-			position: relative;
-			@apply --layout-flex;
-			/* Default to vertical flex layout, but can be overriden locally */
-			@apply --layout-vertical;
-		}
-
-		cosmoz-bottom-bar {
-			background-color: var(--cosmoz-bottom-bar-view-bar-color, rgba(230, 230, 230, 0.8));
-			@apply --cosmoz-bottom-bar-view-bar;
-		}
-
-	</style>
 	<template>
+		<style>
+			:host {
+				position: relative;
+				@apply --layout-vertical;
+				overflow: hidden;
+				@apply --layout-flex;
+			}
+
+			#bottomBarPlaceholder {
+				opacity: 0.0;
+			}
+
+			#scroller {
+				@apply --layout-flex;
+				@apply --layout-vertical;
+				position: relative;
+
+				-webkit-overflow-scrolling: touch;
+
+				overflow-x: hidden;
+				overflow-y: auto;
+			}
+
+			#scrollerSizer {
+				@apply --layout-flex;
+				@apply --layout-vertical;
+				position: relative;
+			}
+
+			#scroller ::slotted(*) {
+				position: relative;
+				@apply --layout-flex;
+				/* Default to vertical flex layout, but can be overriden locally */
+				@apply --layout-vertical;
+			}
+
+			cosmoz-bottom-bar {
+				background-color: var(--cosmoz-bottom-bar-view-bar-color, rgba(230, 230, 230, 0.8));
+				@apply --cosmoz-bottom-bar-view-bar;
+			}
+
+		</style>
 		<div id="scroller">
 			<div id="scrollerSizer">
 				<slot name="scroller-content"></slot>
 			</div>
 			<div id="bottomBarPlaceholder" style$="[[ _getHeightStyle(barHeight) ]]"></div>
 		</div>
-		<cosmoz-bottom-bar active="[[ active ]]" fixed="[[ fixed ]]" visible="{{ visible }}"
+		<cosmoz-bottom-bar id="bottomBar" active="[[ active ]]" fixed="[[ fixed ]]" visible="{{ visible }}"
 				scroller="[[ scroller ]]" computed-bar-height="{{ barHeight }}">
 			<slot></slot>
 		</cosmoz-bottom-bar>
