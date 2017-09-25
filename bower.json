@@ -44,6 +44,7 @@
 		"web-component-tester": "^6.0.0",
 		"webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0",
 
+		"paper-behaviors": "PolymerElements/paper-behaviors#^2.0.0",
 		"iron-dropdown": "PolymerElements/iron-dropdown#^2.0.0",
 		"iron-meta":"PolymerElements/iron-meta#^2.0.0"
 	},
@@ -70,7 +71,8 @@
 				"web-component-tester": "^4.0.0",
 				"webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0",
 
-				"iron-dropdown": "PolymerElements/iron-dropdown#^2.0.0",
+				"paper-behaviors": "PolymerElements/paper-behaviors#^1.0.0",
+				"iron-dropdown": "PolymerElements/iron-dropdown#^1.0.0",
 				"iron-meta":"PolymerElements/iron-meta#^1.0.0"
 			},
 			"resolutions": {
@@ -88,6 +90,7 @@
 				"paper-listbox": "^1.0.0",
 				"paper-ripple": "^1.0.0",
 				"paper-button": "^1.0.0",
+				"paper-behaviors": "^1.0.0",
 				"paper-material": "^1.0.0",
 				"iron-meta": "^1.0.0"
 			}
@@ -108,6 +111,7 @@
 		"paper-listbox": "^2.0.0",
 		"paper-ripple": "^2.0.0",
 		"paper-button": "^2.0.0",
+		"paper-behaviors": "^2.0.0",
 		"paper-material": "^2.0.0",
 		"iron-meta": "^2.0.0"
 	}

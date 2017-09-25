@@ -1,19 +1,19 @@
 <!doctype html>
 <html>
 <head>
-	<meta charset="UTF-8">
 	<title>cosmoz-bottom-bar tests</title>
+	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
 	<script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 	<script src="../../web-component-tester/browser.js"></script>
 	<script src="../../test-fixture/test-fixture-mocha.js"></script>
 
+	<link rel="import" href="../../test-fixture/test-fixture.html">
+	<link rel="import" href="../../iron-test-helpers/iron-test-helpers.html">
+
 	<link rel="import" href="../cosmoz-bottom-bar.html">
 	<link rel="import" href="helpers/fixed-size-item.html">
-
-	<style></style>
-
 </head>
 <body>
 	<test-fixture id="bottomBarWithoutMenu">
@@ -216,35 +216,33 @@
 			});
 
 			test('Unhiding item', function (done) {
+				var item1 = Polymer.dom(toolbar).getDistributedNodes()[0],
+					item2 =  Polymer.dom(toolbar).getDistributedNodes()[1],
+					item3 =  Polymer.dom(toolbar).getDistributedNodes()[2];
+
+				assert.equal(item1.id, 'bottomBarWithHiddenButtonItem1');
+				assert.equal(item2.id, 'bottomBarWithHiddenButtonItem2');
+				assert.equal(item3.id, 'bottomBarWithHiddenButtonItem3');
+
+				item2.removeAttribute('hidden');
+
 				Polymer.Base.async(function () {
-					var item1 = Polymer.dom(toolbar).getDistributedNodes()[0],
+					var item1 =  Polymer.dom(toolbar).getDistributedNodes()[0],
 						item2 =  Polymer.dom(toolbar).getDistributedNodes()[1],
-						item3 =  Polymer.dom(toolbar).getDistributedNodes()[2];
+						menuItems = Polymer.dom(menu).getDistributedNodes(),
+						item3 = menuItems[0],
+						nonHiddenMenuItems = menuItems.filter(function (item) {
+							return !item.hidden;
+						}).length,
+						visibleToolbarCount = Polymer.dom(toolbar).getDistributedNodes().filter(visibleFilter).length;
 
 					assert.equal(item1.id, 'bottomBarWithHiddenButtonItem1');
 					assert.equal(item2.id, 'bottomBarWithHiddenButtonItem2');
 					assert.equal(item3.id, 'bottomBarWithHiddenButtonItem3');
-
-					item2.removeAttribute('hidden');
-
-					Polymer.Base.async(function () {
-						var item1 =  Polymer.dom(toolbar).getDistributedNodes()[0],
-							item2 =  Polymer.dom(toolbar).getDistributedNodes()[1],
-							menuItems = Polymer.dom(menu).getDistributedNodes(),
-							item3 = menuItems[0],
-							nonHiddenMenuItems = menuItems.filter(function (item) {
-								return !item.hidden;
-							}).length,
-							visibleToolbarCount = Polymer.dom(toolbar).getDistributedNodes().filter(visibleFilter).length;
-
-						assert.equal(item1.id, 'bottomBarWithHiddenButtonItem1');
-						assert.equal(item2.id, 'bottomBarWithHiddenButtonItem2');
-						assert.equal(item3.id, 'bottomBarWithHiddenButtonItem3');
-						assert.equal(visibleToolbarCount, 2);
-						assert.equal(nonHiddenMenuItems, 1);
-						done();
-					}, 200);
-				}, 200);
+					assert.equal(visibleToolbarCount, 2);
+					assert.equal(nonHiddenMenuItems, 1);
+					done();
+				}, 60);
 			});
 		});
 
