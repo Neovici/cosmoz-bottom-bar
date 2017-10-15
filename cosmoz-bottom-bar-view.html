@@ -20,35 +20,27 @@ or else is sized by other layout means (e.g. the flex or fit classes).
 		<style>
 			:host {
 				position: relative;
-				@apply --layout-vertical;
 				overflow: hidden;
+				display: block;
+				/* TODO(plequang): Remove this, as it was added for convenience when the component was not public. */
 				@apply --layout-flex;
-			}
-
-			#bottomBarPlaceholder {
-				opacity: 0.0;
 			}
 
 			#scroller {
-				@apply --layout-flex;
-				@apply --layout-vertical;
-				position: relative;
-
+				@apply --layout-fit;
 				-webkit-overflow-scrolling: touch;
-
 				overflow-x: hidden;
 				overflow-y: auto;
 			}
 
-			#scrollerSizer {
-				@apply --layout-flex;
+			#scrollerContent {
+				box-sizing: border-box;
+				min-height: 100%;
 				@apply --layout-vertical;
-				position: relative;
 			}
 
-			#scroller ::slotted(*) {
+			#scrollerContent ::slotted(*) {
 				position: relative;
-				@apply --layout-flex;
 				/* Default to vertical flex layout, but can be overriden locally */
 				@apply --layout-vertical;
 			}
@@ -60,13 +52,15 @@ or else is sized by other layout means (e.g. the flex or fit classes).
 
 		</style>
 		<div id="scroller">
-			<div id="scrollerSizer">
+			<div id="scrollerContent" style$="[[ _computeScrollerContentStyle(_computedBarHeight, _bottomBarVisible, _computedFixed)]]">
 				<slot name="scroller-content"></slot>
 			</div>
-			<div id="bottomBarPlaceholder" style$="[[ _getHeightStyle(barHeight) ]]"></div>
 		</div>
-		<cosmoz-bottom-bar id="bottomBar" active="[[ active ]]" fixed="[[ fixed ]]" visible="{{ visible }}"
-				scroller="[[ scroller ]]" computed-bar-height="{{ barHeight }}">
+		<cosmoz-bottom-bar id="bottomBar"
+			active="[[ active ]]"
+			visible="{{ _bottomBarVisible }}"
+			bar-height="[[ barHeight ]]"
+			computed-bar-height="{{ _computedBarHeight }}">
 			<slot></slot>
 		</cosmoz-bottom-bar>
 	</template>

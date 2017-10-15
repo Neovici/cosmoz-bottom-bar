@@ -19,29 +19,17 @@
 		listeners: {
 			'iron-resize': '_onResize',
 			'iron-overlay-closed': '_dropdownClosed',
-			'transitionend': '_onTransitionEnd'
 		},
 
 		properties: {
 
 			/**
 			 * Whether the bar is active (shown)
-			 * NOTE: This has no effect when `fixed` is `true`
 			 */
 			active: {
 				type: Boolean,
 				value: false,
 				notify: true,
-				reflectToAttribute: true
-			},
-
-			/**
-			 * Whether the bar is fixed (and take up space) or shows/hides from the bottom when needed
-			 * (Usually fixed on desktop and not mobile.)
-			 */
-			fixed: {
-				type: Boolean,
-				value: false,
 				reflectToAttribute: true
 			},
 
@@ -59,15 +47,6 @@
 			matchParent: {
 				type: Boolean,
 				value: false
-			},
-
-			/**
-			 * Scroller element to listen to when deciding whether or not to show the bar.
-			 * Bar will be shown while scrolling up or when reaching bottom
-			 */
-			scroller: {
-				type: Object,
-				observer: '_scrollerChanged'
 			},
 
 			/**
@@ -118,8 +97,7 @@
 			computedBarHeight: {
 				type: Number,
 				computed: '_computeComputedBarHeight(_matchHeightElement, barHeight, _computedBarHeightKicker)',
-				notify: true,
-				readOnly: true
+				notify: true
 			},
 
 			/**
@@ -130,13 +108,13 @@
 			},
 
 			/**
-			 * Whether the bar is visible (has actions and is `active` or `fixed`)
+			 * Whether the bar is visible (has actions and is `active`)
 			 */
 			visible: {
 				type: Boolean,
 				notify: true,
 				readOnly: true,
-				computed: '_computeVisible(hasActions, active, fixed)'
+				computed: '_computeVisible(hasActions, active)'
 			},
 
 			/**
@@ -163,13 +141,13 @@
 		 */
 		_nodeObserver: undefined,
 		_hiddenMutationObserver: undefined,
-		_scrollHandler: undefined,
 
 		observers: [
 			'_showHideBottomBar(visible, computedBarHeight)'
 		],
 
 		attached: function () {
+			// eslint-disable-next-line no-unused-vars
 			this._hiddenMutationObserver = new MutationObserver(function (mutations) {
 				this._overflowWidth = undefined;
 				this._debounceLayoutActions();
@@ -181,13 +159,10 @@
 		detached: function () {
 			Polymer.dom(this).unobserveNodes(this._nodeObserver);
 			this._hiddenMutationObserver.disconnect();
-			if (this.scroller) {
-				this.scroller.removeEventListener('scroll', this._scrollHandler);
-			}
 		},
 
-		created: function () {
-			this._scrollHandler = this._scrollManagement.bind(this);
+		_computeVisible: function (hasActions, active) {
+			return hasActions && active;
 		},
 
 		_getHeightMatchingElement: function (matchParent) {
@@ -198,28 +173,7 @@
 			return null;
 		},
 
-		_computeVisible: function (hasActions, active, fixed) {
-			return hasActions && (active || fixed);
-		},
-
-		_scrollerChanged: function (newScroller, oldScroller) {
-			if (oldScroller) {
-				oldScroller.removeEventListener('scroll', this._scrollHandler);
-			}
-
-			if (!newScroller) {
-				return;
-			}
-
-			if (!newScroller.addEventListener) {
-				console.warn('New scroller does not have addEventListener', newScroller);
-				return;
-			}
-
-			newScroller.addEventListener('scroll', this._scrollHandler);
-			this._scrollManagement();
-		},
-
+		// eslint-disable-next-line no-unused-vars
 		_computeComputedBarHeight: function (matchElementHeight, barHeight, kicker) {
 			if (matchElementHeight) {
 				return matchElementHeight.offsetHeight;
@@ -233,40 +187,12 @@
 
 		_onResize: function () {
 			this._computedBarHeightKicker += 1;
-			this._scrollManagement();
 			this._debounceLayoutActions();
-		},
-
-		_scrollManagement: function () {
-
-			if (!this.scroller) {
-				return;
-			}
-
-			var scrollTop = this.scroller.scrollTop,
-				isScrollingUp = this.lastScroll > scrollTop,
-				scrollerHeight = this.scroller.clientHeight,
-				scrollerScrollHeight = this.scroller.scrollHeight,
-				isAtBottom = scrollTop + scrollerHeight + this.barHeight * 0.7 >= scrollerScrollHeight,
-				isAtTop = scrollTop === 0;
-
-			this.active = isAtTop || isScrollingUp || isAtBottom;
-			this.lastScroll = scrollTop;
 		},
 
 		_showHideBottomBar: function (visible, barHeight) {
 			var	translateY = visible ? 0 : barHeight;
-
-			this.style.height = 'auto';
-			this.style.overflow = 'initial';
 			this.translate3d('0px', translateY + 'px', '0px');
-		},
-
-		_onTransitionEnd: function (event) {
-			if (!this.visible && Polymer.dom(event).rootTarget === this) {
-				this.style.height = '0px';
-				this.style.overflow = 'hidden';
-			}
 		},
 
 		_isActionNode: function (node) {

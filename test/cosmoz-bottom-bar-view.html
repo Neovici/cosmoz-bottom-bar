@@ -68,7 +68,7 @@
 				bottomBarView = fixture('bottomBarViewFixture');
 				bottomBar = bottomBarView.$.bottomBar;
 				flushBottomBar(bottomBar, function (){
-					Polymer.Base.async(done, 30);
+					Polymer.Base.async(done, 50);
 				});
 			});
 
@@ -104,7 +104,7 @@
 				Polymer.Base.async(function () {
 					assert.isTrue(bottomBar.visible);
 					done();
-				}, 30);
+				}, 50);
 			});
 		});
 

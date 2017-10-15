@@ -36,7 +36,7 @@
 	},
 	"devDependencies": {
 		"paper-button": "PolymerElements/paper-button#1 - 2",
-  	"paper-toggle-button": "polymerelements/paper-toggle-button#1 - 2",
+  		"paper-toggle-button": "polymerelements/paper-toggle-button#1 - 2",
 		"iron-component-page": "PolymerElements/iron-component-page#1 - 3",
 		"iron-demo-helpers": "PolymerElements/iron-demo-helpers#1 - 2",
 		"iron-test-helpers": "PolymerElements/iron-test-helpers#1 - 2",

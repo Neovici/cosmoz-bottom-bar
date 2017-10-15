@@ -16,14 +16,6 @@
 		properties: {
 
 			/**
-			 * Bar-view and bar are active
-			 */
-			active: {
-				type: Boolean,
-				value: true
-			},
-
-			/**
 			 * Height of the bar
 			 */
 			barHeight: {
@@ -31,59 +23,106 @@
 			},
 
 			/**
-			 * Fixed bar
+			 * When set to true, activate the bottom bar.
+			 */
+			active: {
+				type: Boolean,
+				value: true,
+				notify: true
+			},
+
+			/**
+			 * Set to true to have a fixed bottom that does not disappear upon scrolling.
 			 */
 			fixed: {
 				type: Boolean,
-				computed: '_computeFixed(viewInfo.desktop, active)',
-				readOnly: true
+				value: null,
 			},
 
-			/**
-			 * The scroller for the scrolling part of the view
-			 */
-			scroller: {
-				type: Object
+			_bottomBarActive: {
+				type: Boolean
 			},
 
-			/**
-			 * Bar is visible
-			 */
-			visible: {
+			_bottomBarVisible: {
+				type: Boolean
+			},
+
+			_computedBarHeight: {
+				type: Number
+			},
+
+			_computedFixed: {
 				type: Boolean,
-				value: true
+				computed: '_computeFixed(fixed, viewInfo.desktop)',
+			},
+
+			_scroller: {
+				type: Object
 			}
 		},
 
-		listeners: {
-			'iron-resize': '_onResize'
+		observers: [
+			'_updateScrollManagenent(_computedFixed, _scroller)'
+		],
+
+		created: function () {
+			this._scrollHandler = this._scrollManagement.bind(this);
 		},
 
 		attached: function () {
-			this.scroller = this.$.scroller;
+			this._scroller = this.$.scroller;
 		},
 
-		_computeFixed: function (desktop, active) {
-			return active && desktop;
+		detached: function () {
+			this._scroller.removeEventListener('scroll', this._scrollHandler);
 		},
 
-		_onResize: function () {
-			var scrollerSizer = this.$.scrollerSizer;
+		_updateScrollManagenent: function (fixed, scroller) {
+			if (!scroller) {
+				return;
+			}
 
-			// HACK(pasleq): ensure scrollerSizer is sized correctly.
-			scrollerSizer.style.minHeight = '';
+			if (fixed) {
+				scroller.removeEventListener('scroll', this._scrollHandler);
+			} else {
+				scroller.addEventListener('scroll', this._scrollHandler);
+				this._scrollManagement();
+			}
+		},
+
+		_scrollManagement: function (e) {
+			var scrollTop = this._scroller.scrollTop,
+				isScrollingUp = this._lastScroll > scrollTop,
+				scrollerHeight = this._scroller.clientHeight,
+				scrollerScrollHeight = this._scroller.scrollHeight,
+				isAtBottom = scrollTop + scrollerHeight + this._computedBarHeight * 0.7 >= scrollerScrollHeight,
+				isAtTop = scrollTop === 0;
+
+			this.active = isAtTop || isScrollingUp || isAtBottom;
+			this._lastScroll = scrollTop;
+		},
+
+		_computeScrollerContentStyle: function (barHeight, bottomBarVisible, fixed) {
+			// If bottom bar is visible, we need to reserve some space for it at the bottom of the scroller.
+			// When changing the scroller content padding bottom value, space available inside the scroller
+			// will change so we need to notify descendants of a resize
 			this.async(function () {
-				if (scrollerSizer.scrollHeight > scrollerSizer.offsetHeight) {
-					scrollerSizer.style.minHeight = scrollerSizer.scrollHeight + 'px';
-				}
-			});
+				// eslint-disable-next-line no-invalid-this
+				this.notifyResize();
+			}, 10);
+
+			if (bottomBarVisible) {
+				return 'padding-bottom: ' + barHeight  + 'px';
+			}
+
+			return 'padding-bottom: 0px';
 		},
 
-		_getHeightStyle: function (barHeight) {
-			return [
-				'max-height: ' + barHeight + 'px',
-				'min-height: ' + barHeight + 'px'
-			].join(';');
-		}
+		_computeFixed: function (fixed, desktop) {
+			if (fixed === null) {
+				return desktop;
+			}
+			return fixed;
+		},
 	});
 }());
