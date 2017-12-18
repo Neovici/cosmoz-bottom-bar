@@ -4,7 +4,7 @@
 
 	'use strict';
 
-	var
+	const
 		BOTTOM_BAR_TOOLBAR_SLOT = 'bottom-bar-toolbar',
 		BOTTOM_BAR_MENU_SLOT = 'bottom-bar-menu';
 
@@ -42,6 +42,14 @@
 			},
 
 			/**
+			 * paper-icon for the extra menu button
+			 */
+			extraMenuIcon: {
+				type: String,
+				value: 'file-download'
+			},
+
+			/**
 			 * Whether to match the height of parent
 			 */
 			matchParent: {
@@ -57,6 +65,14 @@
 				value: false,
 				readOnly: true,
 				notify: true
+			},
+
+			/**
+			 * Wheter the extra menu has items
+			 */
+			hasExtraMenuItems: {
+				type: Boolean,
+				value: false
 			},
 
 			/**
@@ -140,6 +156,7 @@
 		 * Non-Polymer properties
 		 */
 		_nodeObserver: undefined,
+		_nodeObserverExtraMenu: undefined,
 		_hiddenMutationObserver: undefined,
 
 		observers: [
@@ -154,10 +171,12 @@
 			}.bind(this));
 			this._nodeObserver = Polymer.dom(this.$.content).observeNodes(this._childrenUpdated.bind(this));
 			this._computedBarHeightKicker = 0;
+			this._nodeObserverExtraMenu = Polymer.dom(this.$.bottomBarExtraMenu).observeNodes(info => this.set('hasExtraMenuItems', info.addedNodes.length > 0));
 		},
 
 		detached: function () {
 			Polymer.dom(this).unobserveNodes(this._nodeObserver);
+			Polymer.dom(this).unobserveNodes(this._nodeObserverExtraMenu);
 			this._hiddenMutationObserver.disconnect();
 		},
 
@@ -169,7 +188,6 @@
 			if (matchParent) {
 				return this.parentElement;
 			}
-
 			return null;
 		},
 
@@ -198,7 +216,8 @@
 		_isActionNode: function (node) {
 			return node.nodeType === Node.ELEMENT_NODE &&
 				node.getAttribute('slot') !== 'info' &&
-				node.tagName !== 'TEMPLATE';
+				node.tagName !== 'TEMPLATE' &&
+				node.getAttribute('slot') !== 'bottom-bar-extra-menu';
 		},
 
 		_childrenUpdated: function (info) {

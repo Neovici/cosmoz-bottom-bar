@@ -62,7 +62,7 @@ See demo for example usage
 				padding-right: 3%;
 			}
 
-			#dropdownButton {
+			#dropdownButton, #dropdownExtraButton {
 				color: var(--cosmoz-bottom-bar-menubutton-color, --light-primary-color);
 				background-color: var(--cosmoz-bottom-bar-menubutton-background-color, --dark-primary-color);
 				@apply --cosmoz-bottom-bar-menubutton;
@@ -102,12 +102,12 @@ See demo for example usage
 				display: none !important;
 			}
 
-			#dropdown {
+			#dropdown, #dropdownExtra {
 				padding: 0;
 			}
 
 			/** Seems like a shady dom scoping/slotting issue */
-			#listboxSizer {
+			.listboxSizer {
 				max-height: 0;
 				padding: 0 !important;
 			}
@@ -136,7 +136,6 @@ See demo for example usage
 				vertical-offset="[[ barHeight ]]"
 				vertical-align="bottom"
 				horizontal-align="right">
-
 				<paper-icon-button id="dropdownButton"
 					class="dropdown-trigger"
 					slot="dropdown-trigger"
@@ -149,8 +148,30 @@ See demo for example usage
 					slot="dropdown-content"
 					selected-class="[[ selectedClass ]]"
 					on-iron-select="_onActionSelected">
-						<span id="listboxSizer"></span>
+						<span class="listboxSizer"></span>
 						<slot id="bottomBarMenu" name="bottom-bar-menu"></slot>
+				</paper-listbox>
+			</paper-menu-button>
+			<paper-menu-button
+				id="extraMenu"
+				hidden$="[[ !hasExtraMenuItems ]]"
+				no-animations
+				vertical-offset="[[ barHeight ]]"
+				vertical-align="bottom"
+				horizontal-align="right">
+				<paper-icon-button id="dropdownExtraButton"
+					class="dropdown-trigger"
+					slot="dropdown-trigger"
+					icon="[[ extraMenuIcon ]]"
+					toggles
+					raised>
+				</paper-icon-button>
+				<paper-listbox id="dropdownExtraButton"
+					class="dropdown-content"
+					slot="dropdown-content"
+					on-iron-select="_onActionSelected">
+						<span class="listboxSizer"></span>
+						<slot id="bottomBarExtraMenu" name="bottom-bar-extra-menu"></slot>
 				</paper-listbox>
 			</paper-menu-button>
 		</div>
