@@ -51,7 +51,7 @@
 				padding-right: 3%;
 			}
 
-			#dropdownButton {
+			#dropdownButton, #dropdownExtraButton {
 				color: var(--cosmoz-bottom-bar-menubutton-color, --light-primary-color);
 				background-color: var(--cosmoz-bottom-bar-menubutton-background-color, --dark-primary-color);
 				@apply --cosmoz-bottom-bar-menubutton;
@@ -91,17 +91,17 @@
 				display: none !important;
 			}
 
-			#dropdown {
+			#dropdown, #dropdownExtra {
 				padding: 0;
 			}
 
 			/** Seems like a shady dom scoping/slotting issue */
-			#listboxSizer {
+			.listboxSizer {
 				max-height: 0;
 				padding: 0 !important;
 			}
 
-			#dropdown ::slotted(*) {
+			#dropdown ::slotted(*), #dropdownExtra ::slotted(*) {
 				display: flex;
 				@apply --layout-center;
 				@apply --layout-horizontal;
