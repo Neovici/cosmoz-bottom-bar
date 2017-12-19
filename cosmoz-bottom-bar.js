@@ -59,6 +59,11 @@
 				notify: true
 			},
 
+			hasExtraItems: {
+				type: Boolean,
+				value: false
+			},
+
 			/**
 			 * Class applied the the selected item
 			 */
@@ -114,7 +119,7 @@
 				type: Boolean,
 				notify: true,
 				readOnly: true,
-				computed: '_computeVisible(hasActions, active)'
+				computed: '_computeVisible(hasActions, active, hasExtraItems)'
 			},
 
 			/**
@@ -140,6 +145,7 @@
 		 * Non-Polymer properties
 		 */
 		_nodeObserver: undefined,
+		_nodeObserverExtra: undefined,
 		_hiddenMutationObserver: undefined,
 
 		observers: [
@@ -153,16 +159,18 @@
 				this._debounceLayoutActions();
 			}.bind(this));
 			this._nodeObserver = Polymer.dom(this.$.content).observeNodes(this._childrenUpdated.bind(this));
+			this._nodeObserverExtra = Polymer.dom(this.$.extraSlot).observeNodes(info => this.set('hasExtraItems', info.addedNodes.length > 0));
 			this._computedBarHeightKicker = 0;
 		},
 
 		detached: function () {
 			Polymer.dom(this).unobserveNodes(this._nodeObserver);
+			Polymer.dom(this).unobserveNodes(this._nodeObserverExtra);
 			this._hiddenMutationObserver.disconnect();
 		},
 
-		_computeVisible: function (hasActions, active) {
-			return hasActions && active;
+		_computeVisible: function (hasActions, active, hasExtraItems) {
+			return (hasActions || hasExtraItems) && active;
 		},
 
 		_getHeightMatchingElement: function (matchParent) {
@@ -198,7 +206,8 @@
 		_isActionNode: function (node) {
 			return node.nodeType === Node.ELEMENT_NODE &&
 				node.getAttribute('slot') !== 'info' &&
-				node.tagName !== 'TEMPLATE';
+				node.tagName !== 'TEMPLATE' &&
+				node.getAttribute('slot') !== 'extra';
 		},
 
 		_childrenUpdated: function (info) {
@@ -280,7 +289,7 @@
 				newToolbarElement,
 				newMenuElement;
 
-			this._setHasActions(elements.length > 0);
+			this._setHasActions(elements.length > 0 || this.hasExtraItems);
 			if (!this.hasActions) {
 				// No need to render if we don't have any actions
 				return;

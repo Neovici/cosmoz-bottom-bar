@@ -153,6 +153,9 @@ See demo for example usage
 						<slot id="bottomBarMenu" name="bottom-bar-menu"></slot>
 				</paper-listbox>
 			</paper-menu-button>
+			<iron-selector on-iron-select="_onActionSelected">
+				<slot name="extra" id="extraSlot"></slot>
+			</iron-selector>
 		</div>
 
 		<div hidden style="display:none">
