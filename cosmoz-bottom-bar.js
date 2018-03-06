@@ -152,7 +152,7 @@
 			'_showHideBottomBar(visible, computedBarHeight)'
 		],
 
-		attached: function () {
+		attached() {
 			// eslint-disable-next-line no-unused-vars
 			this._hiddenMutationObserver = new MutationObserver(function (mutations) {
 				this._overflowWidth = undefined;
@@ -163,17 +163,17 @@
 			this._computedBarHeightKicker = 0;
 		},
 
-		detached: function () {
+		detached() {
 			Polymer.dom(this).unobserveNodes(this._nodeObserver);
 			Polymer.dom(this).unobserveNodes(this._nodeObserverExtra);
 			this._hiddenMutationObserver.disconnect();
 		},
 
-		_computeVisible: function (hasActions, active, hasExtraItems) {
+		_computeVisible(hasActions, active, hasExtraItems) {
 			return (hasActions || hasExtraItems) && active;
 		},
 
-		_getHeightMatchingElement: function (matchParent) {
+		_getHeightMatchingElement(matchParent) {
 			if (matchParent) {
 				return this.parentElement;
 			}
@@ -182,35 +182,35 @@
 		},
 
 		// eslint-disable-next-line no-unused-vars
-		_computeComputedBarHeight: function (matchElementHeight, barHeight, kicker) {
+		_computeComputedBarHeight(matchElementHeight, barHeight, kicker) {
 			if (matchElementHeight) {
 				return matchElementHeight.offsetHeight;
 			}
 			return barHeight;
 		},
 
-		_getHeightStyle: function (height) {
+		_getHeightStyle(height) {
 			return 'height: ' + height + 'px;';
 		},
 
-		_onResize: function () {
+		_onResize() {
 			this._computedBarHeightKicker += 1;
 			this._debounceLayoutActions();
 		},
 
-		_showHideBottomBar: function (visible, barHeight) {
+		_showHideBottomBar(visible, barHeight) {
 			var	translateY = visible ? 0 : barHeight;
 			this.translate3d('0px', translateY + 'px', '0px');
 		},
 
-		_isActionNode: function (node) {
+		_isActionNode(node) {
 			return node.nodeType === Node.ELEMENT_NODE &&
 				node.getAttribute('slot') !== 'info' &&
 				node.tagName !== 'TEMPLATE' &&
 				node.getAttribute('slot') !== 'extra';
 		},
 
-		_childrenUpdated: function (info) {
+		_childrenUpdated(info) {
 			var addedNodes = info.addedNodes.filter(this._isActionNode),
 				removedNodes = info.removedNodes.filter(this._isActionNode);
 
@@ -240,7 +240,7 @@
 			this._debounceLayoutActions();
 		},
 
-		_toolbarMoveToStart: function (node) {
+		_toolbarMoveToStart(node) {
 			var toolbar = this.$.toolbar;
 			if (toolbar.children.length === 0) {
 				toolbar.appendChild(node);
@@ -249,7 +249,7 @@
 			toolbar.insertBefore(node, toolbar.children[0]);
 		},
 
-		_dropdownClosed: function () {
+		_dropdownClosed() {
 			this.$.dropdownButton.active = false;
 		},
 
@@ -275,7 +275,7 @@
 		 *
 		 */
 
-		_layoutActions: function () {
+		_layoutActions() {
 			var elements = this.getEffectiveChildren()
 					.filter(this._isActionNode)
 					.filter(function (element) {
@@ -344,7 +344,7 @@
 			this._debounceLayoutActions();
 		},
 
-		_moveElement: function (element, toToolbar) {
+		_moveElement(element, toToolbar) {
 			var slot = toToolbar ? BOTTOM_BAR_TOOLBAR_SLOT : BOTTOM_BAR_MENU_SLOT,
 				tabindex = toToolbar ? '0' : '-1';
 
@@ -355,11 +355,11 @@
 			this.updateStyles();
 		},
 
-		_debounceLayoutActions: function () {
+		_debounceLayoutActions() {
 			this.debounce('layoutActions', this._layoutActions, 30);
 		},
 
-		_canAddMoreButtonToBar: function (width, bottomBarElements, menuElements) {
+		_canAddMoreButtonToBar(width, bottomBarElements, menuElements) {
 
 			var hasSpace = width > this._overflowWidth || this._overflowWidth === undefined,
 				hasPlace = bottomBarElements.length < this.maxToolbarItems,
@@ -368,12 +368,12 @@
 			return hasSpace && hasPlace && hasCandidates;
 		},
 
-		_onActionSelected: function (event, detail) {
+		_onActionSelected(event, detail) {
 			this._fireAction(detail.item);
 			event.currentTarget.selected = undefined;
 		},
 
-		_fireAction: function (item) {
+		_fireAction(item) {
 
 			if (!item || !item.dispatchEvent) {
 				return;
