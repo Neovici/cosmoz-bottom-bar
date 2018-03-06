@@ -90,7 +90,7 @@
 			}
 		},
 
-		_scrollManagement: function (e) {
+		_scrollManagement: function () {
 			var scrollTop = this._scroller.scrollTop,
 				isScrollingUp = this._lastScroll > scrollTop,
 				scrollerHeight = this._scroller.clientHeight,
@@ -102,7 +102,7 @@
 			this._lastScroll = scrollTop;
 		},
 
-		_computeScrollerContentStyle: function (barHeight, bottomBarVisible, fixed) {
+		_computeScrollerContentStyle: function (barHeight, bottomBarVisible) {
 			// If bottom bar is visible, we need to reserve some space for it at the bottom of the scroller.
 			// When changing the scroller content padding bottom value, space available inside the scroller
 			// will change so we need to notify descendants of a resize
