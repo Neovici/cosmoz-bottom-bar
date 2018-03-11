@@ -65,19 +65,19 @@
 			'_updateScrollManagenent(_computedFixed, _scroller)'
 		],
 
-		created: function () {
+		created() {
 			this._scrollHandler = this._scrollManagement.bind(this);
 		},
 
-		attached: function () {
+		attached() {
 			this._scroller = this.$.scroller;
 		},
 
-		detached: function () {
+		detached() {
 			this._scroller.removeEventListener('scroll', this._scrollHandler);
 		},
 
-		_updateScrollManagenent: function (fixed, scroller) {
+		_updateScrollManagenent(fixed, scroller) {
 			if (!scroller) {
 				return;
 			}
@@ -90,7 +90,7 @@
 			}
 		},
 
-		_scrollManagement: function (e) {
+		_scrollManagement() {
 			var scrollTop = this._scroller.scrollTop,
 				isScrollingUp = this._lastScroll > scrollTop,
 				scrollerHeight = this._scroller.clientHeight,
@@ -102,7 +102,7 @@
 			this._lastScroll = scrollTop;
 		},
 
-		_computeScrollerContentStyle: function (barHeight, bottomBarVisible, fixed) {
+		_computeScrollerContentStyle(barHeight, bottomBarVisible) {
 			// If bottom bar is visible, we need to reserve some space for it at the bottom of the scroller.
 			// When changing the scroller content padding bottom value, space available inside the scroller
 			// will change so we need to notify descendants of a resize
@@ -118,7 +118,7 @@
 			return 'padding-bottom: 0px';
 		},
 
-		_computeFixed: function (fixed, desktop) {
+		_computeFixed(fixed, desktop) {
 			if (fixed === null) {
 				return desktop;
 			}
