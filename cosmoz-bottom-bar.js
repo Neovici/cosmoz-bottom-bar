@@ -167,6 +167,7 @@
 			Polymer.dom(this).unobserveNodes(this._nodeObserver);
 			Polymer.dom(this).unobserveNodes(this._nodeObserverExtra);
 			this._hiddenMutationObserver.disconnect();
+			this.cancelDebouncer('layoutActions');
 		},
 
 		_computeVisible(hasActions, active, hasExtraItems) {
