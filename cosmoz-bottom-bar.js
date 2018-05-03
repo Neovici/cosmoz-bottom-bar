@@ -208,6 +208,7 @@
 			return node.nodeType === Node.ELEMENT_NODE &&
 				node.getAttribute('slot') !== 'info' &&
 				node.tagName !== 'TEMPLATE' &&
+				node.tagName !== 'DOM-REPEAT' &&
 				node.getAttribute('slot') !== 'extra';
 		},
 
