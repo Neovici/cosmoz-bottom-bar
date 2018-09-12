@@ -200,8 +200,22 @@
 		},
 
 		_showHideBottomBar(visible, barHeight) {
-			var	translateY = visible ? 0 : barHeight;
-			this.translate3d('0px', translateY + 'px', '0px');
+			this.style.display = '';
+			const	translateY = visible ? 0 : barHeight,
+				onEnd = ()=> {
+					if (this._hideTimeout) {
+						this.cancelAsync(this._hideTimeout);
+					}
+					this._hideTimeout = null;
+					this.style.display = this.visible ? '' : 'none';
+				};
+			if (this._hideTimeout) {
+				this.cancelAsync(this._hideTimeout);
+			}
+			requestAnimationFrame(()=>{
+				this.translate3d('0px', translateY + 'px', '0px');
+				this._hideTimeout = this.async(onEnd, 510);
+			});
 		},
 
 		_isActionNode(node) {
