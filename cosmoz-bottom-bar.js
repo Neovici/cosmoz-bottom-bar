@@ -200,8 +200,18 @@
 		},
 
 		_showHideBottomBar(visible, barHeight) {
-			var	translateY = visible ? 0 : barHeight;
-			this.translate3d('0px', translateY + 'px', '0px');
+			this.style.display = '';
+			const	translateY = visible ? 0 : barHeight,
+				onEnd = ()=> {
+					clearTimeout(this._hideTimeout);
+					this._hideTimeout = null;
+					this.style.display = this.visible ? '' : 'none';
+				};
+			clearTimeout(this._hideTimeout);
+			requestAnimationFrame(()=>{
+				this.translate3d('0px', translateY + 'px', '0px');
+				this._hideTimeout = setTimeout(onEnd, 510);
+			});
 		},
 
 		_isActionNode(node) {
