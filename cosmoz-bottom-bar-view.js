@@ -31,7 +31,7 @@
 					type: Number
 				},
 
-				/**
+			/**
 			 * When set to true, activate the bottom bar.
 			 */
 				active: {
@@ -40,7 +40,7 @@
 					notify: true
 				},
 
-				/**
+			/**
 			 * Set to true to have a fixed bottom that does not disappear upon scrolling.
 			 */
 				fixed: {
@@ -105,9 +105,13 @@
 				scroller.removeEventListener('scroll', this._scrollHandler);
 			} else {
 				scroller.addEventListener('scroll', this._scrollHandler);
+				this._scrollManagement();
 			}
 		}
-
+		/**
+		 * Active or deactivate bottom bar based on scroll values and active and fixed properties.
+		 * @returns {void}
+		 */
 		_scrollManagement() {
 			const scrollTop = this._scroller.scrollTop,
 				isScrollingUp = this._lastScroll > scrollTop,
@@ -116,9 +120,7 @@
 				isAtBottom = scrollTop + scrollerHeight + this._computedBarHeight * 0.7 >= scrollerScrollHeight,
 				isAtTop = scrollTop === 0;
 
-			this._bottomBarActive = this.active && (
-				this.fixed || isAtTop || isScrollingUp || isAtBottom
-			);
+			this.active = isAtTop || isScrollingUp || isAtBottom;
 
 			this._lastScroll = scrollTop;
 		}
