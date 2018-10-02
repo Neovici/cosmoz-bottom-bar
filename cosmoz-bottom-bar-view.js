@@ -105,7 +105,6 @@
 				scroller.removeEventListener('scroll', this._scrollHandler);
 			} else {
 				scroller.addEventListener('scroll', this._scrollHandler);
-				this._scrollManagement();
 			}
 		}
 
@@ -117,15 +116,28 @@
 				isAtBottom = scrollTop + scrollerHeight + this._computedBarHeight * 0.7 >= scrollerScrollHeight,
 				isAtTop = scrollTop === 0;
 
-			this.active = isAtTop || isScrollingUp || isAtBottom;
+			this._bottomBarActive = this.active && (
+				this.fixed || isAtTop || isScrollingUp || isAtBottom
+			);
+
 			this._lastScroll = scrollTop;
 		}
-
+		/**
+		 * Determine style of the scroller content.
+		 * @param {number} barHeight Height of the bar.
+		 * @param {boolean} bottomBarVisible Whether the bottom bar is visible or not.
+		 * @returns {string} Padding style property.
+		 */
 		_computeScrollerContentStyle(barHeight, bottomBarVisible) {
 			Async.microTask.run(() => this.notifyResize());
 			return `padding-bottom: ${bottomBarVisible ? barHeight : 0}px`;
 		}
-
+		/**
+		 * Determine if fixed is enabled, either through fixed property or through desktop mode.
+		 * @param {boolean} fixed Fixed property.
+		 * @param {boolean} desktop Desktop mode property.
+		 * @returns {boolean} Whether fixed is enabled or not.
+		 */
 		_computeFixed(fixed, desktop) {
 			return fixed == null ? desktop : fixed;
 		}

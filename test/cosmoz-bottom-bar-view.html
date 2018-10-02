@@ -34,7 +34,7 @@
 
 	<test-fixture id="scrollingBottomBarViewFixture">
 		<template>
-			<cosmoz-bottom-bar-view style="width: 300px; height: 300px";>
+			<cosmoz-bottom-bar-view style="width: 300px; height: 300px" id="bottomBar">
 				<div slot="scroller-content" style="display: block">
 					<div style="min-height:350px;">
 						Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -77,13 +77,51 @@
 				flush(done);
 			});
 
-			test('bottomBar is hidden when scrolling down', () => {
+			test('bottomBar is hidden when scrolling down and it is inactive and unfixed', done => {
 				bottomBar.flushDebouncer('layoutActions');
+				bottomBarView.active = false;
+				bottomBarView.fixed = false;
 				bottomBarView.$.scroller.scrollTop = 20;
 				bottomBarView.$.scroller.dispatchEvent(new CustomEvent('scroll'));
 
 				assert.isFalse(bottomBar.active);
 				assert.isFalse(bottomBar.visible);
+			});
+
+			test('bottomBar is hidden when scrolling down and it is inactive but fixed', done => {
+				bottomBar.flushDebouncer('layoutActions');
+				bottomBarView.active = false;
+				bottomBarView.fixed = true;
+				bottomBarView.$.scroller.scrollTop = 25;
+				// Mutation observer is async, so wait before testing.
+				Polymer.Base.async(() => {
+					assert.isFalse(bottomBar.visible);
+					done();
+				}, 50);
+			});
+
+			test('bottomBar is hidden when scrolling down and it is active but unfixed', done => {
+				bottomBar.flushDebouncer('layoutActions');
+				bottomBarView.active = true;
+				bottomBarView.fixed = false;
+				bottomBarView.$.scroller.scrollTop = 30;
+				// Mutation observer is async, so wait before testing.
+				Polymer.Base.async(() => {
+					assert.isFalse(bottomBar.visible);
+					done();
+				}, 50);
+			});
+
+			test('bottomBar is visible when scrolling down and it is active and fixed', done => {
+				bottomBar.flushDebouncer('layoutActions');
+				bottomBarView.active = true;
+				bottomBarView.fixed = true;
+				bottomBarView.$.scroller.scrollTop = 35;
+				// Mutation observer is async, so wait before testing.
+				Polymer.Base.async(() => {
+					assert.isTrue(bottomBar.visible);
+					done();
+				}, 50);
 			});
 
 			test('bottomBar is visible when scroll is at bottom', () => {
