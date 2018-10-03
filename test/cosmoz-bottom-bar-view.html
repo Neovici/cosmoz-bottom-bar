@@ -81,8 +81,9 @@
 				bottomBar.flushDebouncer('layoutActions');
 				bottomBarView.$.scroller.scrollTop = 20;
 				// Mutation observer is async, so wait before testing.
-				Polymer.Base.async(function () {
+				Polymer.Base.async(() => {
 					assert.isFalse(bottomBar.visible);
+					bottomBarView.$.scroller.scrollTop = 0;
 					done();
 				}, 50);
 			});
@@ -124,9 +125,9 @@
 				bottomBarView.active = true;
 				bottomBarView.fixed = true;
 				bottomBarView.$.scroller.scrollTop = 20;
-				// Mutation observer is async, so wait before testing.
-				Polymer.Base.async(function () {
+				Polymer.Base.async(() => {
 					assert.isTrue(bottomBar.visible);
+					bottomBarView.$.scroller.scrollTop = 0;
 					done();
 				}, 50);
 			});
