@@ -80,18 +80,22 @@ class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerEle
 				@apply --cosmoz-bottom-bar-menubutton;
 			}
 
+			#extraToolbarSlot ::slotted(*) {
+				@apply --cosmoz-bottom-bar-extra-toolbar-item;
+			}
+
 			#flex {
 				@apply --layout-flex;
 			}
 
-			#toolbar {
+			#toolbar, #extraToolbarSlot {
 				@apply --layout-center;
 				@apply --layout-horizontal;
 				overflow: hidden;
 			}
 
 			#menu {
-				padding-left: 3%;
+				padding-right: 3%;
 				@apply --layout-center;
 				@apply --layout-horizontal;
 			}
@@ -155,7 +159,7 @@ class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerEle
 						<slot id="bottomBarMenu" name="bottom-bar-menu"></slot>
 				</paper-listbox>
 			</paper-menu-button>
-			<iron-selector on-iron-select="_onActionSelected">
+			<iron-selector id="extraToolbarSlot" on-iron-select="_onActionSelected">
 				<slot name="extra" id="extraSlot"></slot>
 			</iron-selector>
 		</div>
