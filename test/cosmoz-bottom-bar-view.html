@@ -51,65 +51,59 @@
 	(function () {
 		'use strict';
 
-		var flushBottomBar = function (bottomBar, done){
-			var _observer = bottomBar._nodeObserver;
+		const flushBottomBar = function (bottomBar, done){
+			const _observer = bottomBar._nodeObserver;
 			if (_observer && _observer.flush === 'function') {
 				_observer.flush();
 			}
 			flush(done);
 		};
 
-		suite('<cosmoz-bottom-bar-view>', function () {
-			var
-				bottomBarView,
+		suite('<cosmoz-bottom-bar-view>', () => {
+			let bottomBarView,
 				bottomBar;
 
-			setup(function (done) {
+			setup(done => {
 				bottomBarView = fixture('bottomBarViewFixture');
 				bottomBar = bottomBarView.$.bottomBar;
-				flushBottomBar(bottomBar, function (){
-					Polymer.Base.async(done, 50);
-				});
+				flushBottomBar(bottomBar, () => window.setTimeout(done, 100));
 			});
 
-			test('bottomBar is visible', function (done) {
+			test('bottomBar is visible', done => {
 				assert.isTrue(bottomBar.visible);
 				done();
 			});
 		});
 
-		suite('scrolling bottom-bar-view', function () {
-			var
-				bottomBarView,
+		suite('scrolling bottom-bar-view', () => {
+			let bottomBarView,
 				bottomBar;
 
-			setup(function (done) {
+			setup(done => {
 				bottomBarView = fixture('scrollingBottomBarViewFixture');
 				bottomBar = bottomBarView.$.bottomBar;
-				flushBottomBar(bottomBar, function (){
-					Polymer.Base.async(done, 50);
+				flushBottomBar(bottomBar, () => {
+					window.setTimeout(done, 100);
 				});
 			});
 
-			test('bottomBar is hidden when scrolling down', function (done) {
+			test('bottomBar is hidden when scrolling down', done => {
 				bottomBarView.$.scroller.scrollTop = 20;
 				// Mutation observer is async, so wait before testing.
-				Polymer.Base.async(function () {
+				window.setTimeout(() => {
 					assert.isFalse(bottomBar.visible);
 					done();
 				}, 50);
-
 			});
 
-			test('bottomBar is visible when scroll is at bottom', function (done) {
+			test('bottomBar is visible when scroll is at bottom', done => {
 				bottomBarView.$.scroller.scrollTop = 350;
-				Polymer.Base.async(function () {
+				window.setTimeout(() => {
 					assert.isTrue(bottomBar.visible);
 					done();
 				}, 50);
 			});
 		});
-
 	}());
 
 	</script>
