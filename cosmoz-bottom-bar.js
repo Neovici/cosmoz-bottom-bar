@@ -224,7 +224,7 @@
 		},
 
 		_childrenUpdated(info) {
-			var addedNodes = info.addedNodes.filter(this._isActionNode),
+			const addedNodes = info.addedNodes.filter(this._isActionNode),
 				removedNodes = info.removedNodes.filter(this._isActionNode);
 
 			if (addedNodes.length === 0 && removedNodes.length === 0) {
@@ -232,10 +232,8 @@
 			}
 
 			addedNodes
-				.filter(function (node) {
-					// ignore nodes that are moved between slots
-					return removedNodes.indexOf(node) === -1;
-				})
+				// ignore nodes that are moved between slots
+				.filter(node => removedNodes.indexOf(node) === -1)
 				.forEach(function (node) {
 					this._hiddenMutationObserver.observe(node, {
 						attributes: true,
@@ -254,7 +252,7 @@
 		},
 
 		_toolbarMoveToStart(node) {
-			var toolbar = this.$.toolbar;
+			const toolbar = this.$.toolbar;
 			if (toolbar.children.length === 0) {
 				toolbar.appendChild(node);
 				return;
@@ -289,18 +287,16 @@
 		 */
 
 		_layoutActions() {
-			var elements = this.getEffectiveChildren()
+			const elements = this.getEffectiveChildren()
 					.filter(this._isActionNode)
-					.filter(function (element) {
-						return !element.hidden;
-					}),
-				toolbarElements,
-				menuElements,
-				toolbar = this.$.toolbar,
-				currentWidth,
+					.filter(element => !element.hidden),
+				toolbar = this.$.toolbar;
+			let currentWidth,
 				fits,
+				menuElements,
+				newMenuElement,
 				newToolbarElement,
-				newMenuElement;
+				toolbarElements;
 
 			this._setHasActions(elements.length > 0 || this.hasExtraItems);
 			if (!this.hasActions) {
@@ -311,7 +307,7 @@
 			currentWidth = toolbar.clientWidth;
 			fits = toolbar.scrollWidth <= currentWidth + 1;
 
-			toolbarElements = elements.filter(function (element) {
+			toolbarElements = elements.filter(element => {
 				if (element.getAttribute('slot') === BOTTOM_BAR_TOOLBAR_SLOT) {
 					// make sure we only read scrollWidth and clientWidth until
 					// know that we don't fit
@@ -320,9 +316,7 @@
 				}
 			});
 
-			menuElements = elements.filter(function (element) {
-				return element.getAttribute('slot') === BOTTOM_BAR_MENU_SLOT;
-			});
+			menuElements = elements.filter(element => element.getAttribute('slot') === BOTTOM_BAR_MENU_SLOT);
 
 			this._setHasMenuItems(menuElements.length > 0);
 
@@ -358,7 +352,7 @@
 		},
 
 		_moveElement(element, toToolbar) {
-			var slot = toToolbar ? BOTTOM_BAR_TOOLBAR_SLOT : BOTTOM_BAR_MENU_SLOT,
+			const slot = toToolbar ? BOTTOM_BAR_TOOLBAR_SLOT : BOTTOM_BAR_MENU_SLOT,
 				tabindex = toToolbar ? '0' : '-1';
 
 			element.setAttribute('slot', slot);
@@ -373,8 +367,7 @@
 		},
 
 		_canAddMoreButtonToBar(width, bottomBarElements, menuElements) {
-
-			var hasSpace = width > this._overflowWidth || this._overflowWidth === undefined,
+			const hasSpace = width > this._overflowWidth || this._overflowWidth === undefined,
 				hasPlace = bottomBarElements.length < this.maxToolbarItems,
 				hasCandidates = menuElements.length > 0;
 

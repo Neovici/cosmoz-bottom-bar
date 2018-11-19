@@ -91,7 +91,7 @@
 		},
 
 		_scrollManagement() {
-			var scrollTop = this._scroller.scrollTop,
+			const scrollTop = this._scroller.scrollTop,
 				isScrollingUp = this._lastScroll > scrollTop,
 				scrollerHeight = this._scroller.clientHeight,
 				scrollerScrollHeight = this._scroller.scrollHeight,
