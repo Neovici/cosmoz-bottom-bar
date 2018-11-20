@@ -66,7 +66,10 @@
 			setup(done => {
 				bottomBarView = fixture('bottomBarViewFixture');
 				bottomBar = bottomBarView.$.bottomBar;
-				flushBottomBar(bottomBar, () => window.setTimeout(done, 100));
+				flushBottomBar(bottomBar, () => {
+					Polymer.flush();
+					done();
+				});
 			});
 
 			test('bottomBar is visible', done => {
@@ -83,25 +86,24 @@
 				bottomBarView = fixture('scrollingBottomBarViewFixture');
 				bottomBar = bottomBarView.$.bottomBar;
 				flushBottomBar(bottomBar, () => {
-					window.setTimeout(done, 100);
+					Polymer.flush();
+					done();
 				});
 			});
 
 			test('bottomBar is hidden when scrolling down', done => {
 				bottomBarView.$.scroller.scrollTop = 20;
 				// Mutation observer is async, so wait before testing.
-				window.setTimeout(() => {
-					assert.isFalse(bottomBar.visible);
-					done();
-				}, 50);
+				Polymer.flush();
+				assert.isFalse(bottomBar.visible);
+				done();
 			});
 
 			test('bottomBar is visible when scroll is at bottom', done => {
 				bottomBarView.$.scroller.scrollTop = 350;
-				window.setTimeout(() => {
-					assert.isTrue(bottomBar.visible);
-					done();
-				}, 50);
+				Polymer.flush();
+				assert.isTrue(bottomBar.visible);
+				done();
 			});
 		});
 	}());
