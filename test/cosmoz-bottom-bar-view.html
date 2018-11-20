@@ -83,8 +83,7 @@
 				bottomBarView = fixture('scrollingBottomBarViewFixture');
 				bottomBar = bottomBarView.$.bottomBar;
 				flushBottomBar(bottomBar, () => {
-					Polymer.flush();
-					done();
+					window.setTimeout(done, 100);
 				});
 			});
 
@@ -94,7 +93,7 @@
 				window.setTimeout(() => {
 					assert.isFalse(bottomBar.visible);
 					done();
-				}, 100);
+				}, 50);
 			});
 
 			test('bottomBar is visible when scroll is at bottom', done => {
@@ -102,7 +101,7 @@
 				window.setTimeout(() => {
 					assert.isTrue(bottomBar.visible);
 					done();
-				}, 100);
+				}, 50);
 			});
 		});
 	}());
