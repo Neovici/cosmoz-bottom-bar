@@ -66,10 +66,7 @@
 			setup(done => {
 				bottomBarView = fixture('bottomBarViewFixture');
 				bottomBar = bottomBarView.$.bottomBar;
-				flushBottomBar(bottomBar, () => {
-					Polymer.flush();
-					done();
-				});
+				flushBottomBar(bottomBar, () => window.setTimeout(done, 100));
 			});
 
 			test('bottomBar is visible', done => {
