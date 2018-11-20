@@ -91,9 +91,10 @@
 			test('bottomBar is hidden when scrolling down', done => {
 				bottomBarView.$.scroller.scrollTop = 20;
 				// Mutation observer is async, so wait before testing.
-				Polymer.flush();
-				assert.isFalse(bottomBar.visible);
-				done();
+				window.setTimeout(() => {
+					assert.isFalse(bottomBar.visible);
+					done();
+				}, 100);
 			});
 
 			test('bottomBar is visible when scroll is at bottom', done => {
@@ -101,7 +102,7 @@
 				window.setTimeout(() => {
 					assert.isTrue(bottomBar.visible);
 					done();
-				}, 50);
+				}, 100);
 			});
 		});
 	}());
