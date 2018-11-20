@@ -98,9 +98,10 @@
 
 			test('bottomBar is visible when scroll is at bottom', done => {
 				bottomBarView.$.scroller.scrollTop = 350;
-				Polymer.flush();
-				assert.isTrue(bottomBar.visible);
-				done();
+				window.setTimeout(() => {
+					assert.isTrue(bottomBar.visible);
+					done();
+				}, 50);
 			});
 		});
 	}());
