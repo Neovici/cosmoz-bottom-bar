@@ -287,7 +287,7 @@
 		 */
 
 		_layoutActions() {
-			const elements = this.getEffectiveChildren()
+			const elements = Polymer.FlattenedNodesObserver.getFlattenedNodes(this).filter(n => n.nodeType === Node.ELEMENT_NODE)
 					.filter(this._isActionNode)
 					.filter(element => !element.hidden),
 				toolbar = this.$.toolbar;

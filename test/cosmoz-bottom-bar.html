@@ -94,8 +94,11 @@
 				flushBottomBar(bottomBar, done);
 			});
 
+
+
+
 			test('button should be placed in toolbar', function (done) {
-				var item = bottomBar.getEffectiveChildren()[0],
+				var item = Polymer.FlattenedNodesObserver.getFlattenedNodes(bottomBar).filter(n => n.nodeType === Node.ELEMENT_NODE)[0],
 					slot = item.getAttribute('slot');
 
 				assert.equal(item.id, 'bottomBarWithoutMenuItem');
@@ -122,7 +125,7 @@
 			});
 
 			test('First button should be placed in toolbar', function (done) {
-				var item = bottomBar.getEffectiveChildren()[0],
+				var item = Polymer.FlattenedNodesObserver.getFlattenedNodes(bottomBar).filter(n => n.nodeType === Node.ELEMENT_NODE)[0],
 					slot = item.getAttribute('slot');
 
 				assert.equal(slot, 'bottom-bar-toolbar');
@@ -133,7 +136,7 @@
 			});
 
 			test('Second button should be placed in menu', function (done) {
-				var item = bottomBar.getEffectiveChildren()[1],
+				var item = Polymer.FlattenedNodesObserver.getFlattenedNodes(bottomBar).filter(n => n.nodeType === Node.ELEMENT_NODE)[1],
 					slot = item.getAttribute('slot');
 
 				assert.equal(slot, 'bottom-bar-menu');
