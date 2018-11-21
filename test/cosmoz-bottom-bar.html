@@ -147,8 +147,10 @@
 			});
 
 			test('menu button should be visible', function (done) {
-				assert.isFalse(bottomBar.$.menu.hidden);
-				done();
+				window.setTimeout(() => {
+					assert.isFalse(bottomBar.$.menu.hidden);
+					done();
+				}, 100);
 			});
 
 		});
