@@ -31,7 +31,7 @@
 		"paper-icon-button": "PolymerElements/paper-icon-button#^2.2.0",
 		"paper-listbox": "PolymerElements/paper-listbox#^2.1.1",
 		"paper-menu-button": "PolymerElements/paper-menu-button#^2.1.1",
-		"cosmoz-viewinfo": "neovici/cosmoz-viewinfo#^1.0.2"
+		"cosmoz-viewinfo": "Neovici/cosmoz-viewinfo#^1.0.2"
 	},
 	"devDependencies": {
 		"paper-button": "PolymerElements/paper-button#^2.1.3",
