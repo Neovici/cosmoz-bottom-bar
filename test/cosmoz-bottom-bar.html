@@ -79,7 +79,7 @@
 		'use strict';
 
 
-		const isElement = ({nodeType: type})=> type == Node.ELEMENT_NODE;
+		const isElement = ({nodeType: type})=> type === Node.ELEMENT_NODE;
 
 		suite('bottomBarWithoutMenu',  ()=> {
 			let bottomBar;
