@@ -51,14 +51,6 @@
 	(function () {
 		'use strict';
 
-		const flushBottomBar = function (bottomBar, done){
-			const _observer = bottomBar._nodeObserver;
-			if (_observer && _observer.flush === 'function') {
-				_observer.flush();
-			}
-			flush(done);
-		};
-
 		suite('<cosmoz-bottom-bar-view>', () => {
 			let bottomBarView,
 				bottomBar;
@@ -85,30 +77,24 @@
 				flush(done);
 			});
 
-			test('bottomBar is hidden when scrolling down', done => {
+			test('bottomBar is hidden when scrolling down', ()=> {
 				bottomBar.flushDebouncer('layoutActions');
 				bottomBarView.$.scroller.scrollTop = 20;
-				flush(()=>{
-					bottomBar.flushDebouncer('layoutActions');
-					assert.isFalse(bottomBar.active);
-					assert.isFalse(bottomBar.visible);
-					done();
-				});
+				bottomBarView.$.scroller.dispatchEvent(new CustomEvent('scroll'));
+
+				assert.isFalse(bottomBar.active);
+				assert.isFalse(bottomBar.visible);
 			});
 
-			test('bottomBar is visible when scroll is at bottom', done => {
+			test('bottomBar is visible when scroll is at bottom', ()=> {
 				bottomBar.flushDebouncer('layoutActions');
 				bottomBarView.$.scroller.scrollTop = 350;
-				flush(()=>{
-					bottomBar.flushDebouncer('layoutActions');
-					assert.isTrue(bottomBar.active);
-					assert.isTrue(bottomBar.visible);
-					done();
-				});
+				bottomBarView.$.scroller.dispatchEvent(new CustomEvent('scroll'));
+				assert.isTrue(bottomBar.active);
+				assert.isTrue(bottomBar.visible);
 			});
 		});
 	}());
-
 	</script>
 </body>
 </html>
