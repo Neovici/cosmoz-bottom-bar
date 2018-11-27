@@ -4,7 +4,7 @@
 
 	'use strict';
 
-	var
+	const
 		BOTTOM_BAR_TOOLBAR_SLOT = 'bottom-bar-toolbar',
 		BOTTOM_BAR_MENU_SLOT = 'bottom-bar-menu';
 
@@ -154,10 +154,10 @@
 
 		attached() {
 			// eslint-disable-next-line no-unused-vars
-			this._hiddenMutationObserver = new MutationObserver(function (mutations) {
+			this._hiddenMutationObserver = new MutationObserver((mutations) =>{
 				this._overflowWidth = undefined;
 				this._debounceLayoutActions();
-			}.bind(this));
+			});
 			this._nodeObserver = Polymer.dom(this.$.content).observeNodes(this._childrenUpdated.bind(this));
 			this._nodeObserverExtra = Polymer.dom(this.$.extraSlot).observeNodes(info => this.set('hasExtraItems', info.addedNodes.length > 0));
 			this._computedBarHeightKicker = 0;
@@ -232,7 +232,7 @@
 			}
 
 			addedNodes
-				// ignore nodes that are moved between slots
+			// ignore nodes that are moved between slots
 				.filter(node => removedNodes.indexOf(node) === -1)
 				.forEach(function (node) {
 					this._hiddenMutationObserver.observe(node, {
@@ -245,7 +245,7 @@
 						Polymer.dom(this).appendChild(node);
 					}
 					this._moveElement(node, true);
-					//this._toolbarMoveToStart(node);
+				//this._toolbarMoveToStart(node);
 				}, this);
 
 			this._debounceLayoutActions();
@@ -354,7 +354,6 @@
 		_moveElement(element, toToolbar) {
 			const slot = toToolbar ? BOTTOM_BAR_TOOLBAR_SLOT : BOTTOM_BAR_MENU_SLOT,
 				tabindex = toToolbar ? '0' : '-1';
-
 			element.setAttribute('slot', slot);
 			element.setAttribute('tabindex', tabindex);
 			this.toggleClass(this.menuClass, !toToolbar, element);
