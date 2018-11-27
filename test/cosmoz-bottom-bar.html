@@ -78,8 +78,8 @@
 	(()=> {
 		'use strict';
 
-		const { FlattenedNodesObserver } = Polymer,
-			isElement = ({nodeType: type})=> type == Node.ELEMENT_NODE;
+
+		const isElement = ({nodeType: type})=> type == Node.ELEMENT_NODE;
 
 		suite('bottomBarWithoutMenu',  ()=> {
 			let bottomBar;
@@ -90,7 +90,7 @@
 			});
 
 			test('button should be placed in toolbar', () => {
-				var item = FlattenedNodesObserver.getFlattenedNodes(bottomBar).find(isElement),
+				var item = Polymer.FlattenedNodesObserver.getFlattenedNodes(bottomBar).find(isElement),
 					slot = item.getAttribute('slot');
 
 				assert.equal(item.id, 'bottomBarWithoutMenuItem');
@@ -115,7 +115,7 @@
 			});
 
 			test('First button should be placed in toolbar', ()=> {
-				const item = FlattenedNodesObserver.getFlattenedNodes(bottomBar).find(isElement),
+				const item = Polymer.FlattenedNodesObserver.getFlattenedNodes(bottomBar).find(isElement),
 					slot = item.getAttribute('slot');
 
 				assert.equal(slot, 'bottom-bar-toolbar');
@@ -125,7 +125,7 @@
 			});
 
 			test('Second button should be placed in menu', ()=> {
-				const item = FlattenedNodesObserver.getFlattenedNodes(bottomBar).filter(isElement)[1],
+				const item = Polymer.FlattenedNodesObserver.getFlattenedNodes(bottomBar).filter(isElement)[1],
 					slot = item.getAttribute('slot');
 				assert.equal(slot, 'bottom-bar-menu');
 				assert.equal(item.id, 'bottomBarWithOverflowingButtonItem2');
