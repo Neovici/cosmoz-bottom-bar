@@ -1,178 +1,188 @@
 /*global document, Polymer, window*/
 
-(function () {
+(()=> {
 
 	'use strict';
 
 	const
 		BOTTOM_BAR_TOOLBAR_SLOT = 'bottom-bar-toolbar',
-		BOTTOM_BAR_MENU_SLOT = 'bottom-bar-menu';
+		BOTTOM_BAR_MENU_SLOT = 'bottom-bar-menu',
+		{
+			IronResizableBehavior,
+			Element,
+			mixinBehaviors,
+			FlattenedNodesObserver
+		} = Polymer;
 
-	Polymer({
+	class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], Element) {
 
-		is: 'cosmoz-bottom-bar',
+		static get is() {
+			return 'cosmoz-bottom-bar';
+		}
 
-		behaviors: [
-			Polymer.IronResizableBehavior
-		],
+		static get properties() {
+			return {
+				/**
+				* Whether the bar is active (shown)
+				*/
+				active: {
+					type: Boolean,
+					value: false,
+					notify: true,
+					reflectToAttribute: true
+				},
 
-		listeners: {
-			'iron-resize': '_onResize',
-			'iron-overlay-closed': '_dropdownClosed',
-		},
+				/**
+				* Bar height (not used when `matchParent` or `matchElementHeight` is set)
+				*/
+				barHeight: {
+					type: Number,
+					value: 64
+				},
 
-		properties: {
+				/**
+				* Whether to match the height of parent
+				*/
+				matchParent: {
+					type: Boolean,
+					value: false
+				},
 
-			/**
-			 * Whether the bar is active (shown)
-			 */
-			active: {
-				type: Boolean,
-				value: false,
-				notify: true,
-				reflectToAttribute: true
-			},
+				/**
+				* Whether this bottom bar has items distributed to the menu
+				*/
+				hasMenuItems: {
+					type: Boolean,
+					value: false,
+					readOnly: true,
+					notify: true
+				},
 
-			/**
-			 * Bar height (not used when `matchParent` or `matchElementHeight` is set)
-			 */
-			barHeight: {
-				type: Number,
-				value: 64
-			},
+				hasExtraItems: {
+					type: Boolean,
+					value: false
+				},
 
-			/**
-			 * Whether to match the height of parent
-			 */
-			matchParent: {
-				type: Boolean,
-				value: false
-			},
+				/**
+				* Class applied the the selected item
+				*/
+				selectedClass: {
+					type: String,
+					value: 'cosmoz-bottom-bar-selected-item'
+				},
 
-			/**
-			 * Whether this bottom bar has items distributed to the menu
-			 */
-			hasMenuItems: {
-				type: Boolean,
-				value: false,
-				readOnly: true,
-				notify: true
-			},
+				/**
+				* Class applied to items distributed to the toolbar
+				*/
+				toolbarClass: {
+					type: String,
+					value: 'cosmoz-bottom-bar-toolbar'
+				},
 
-			hasExtraItems: {
-				type: Boolean,
-				value: false
-			},
+				/**
+				* Class applied to items distributed to the menu
+				*/
+				menuClass: {
+					type: String,
+					value: 'cosmoz-bottom-bar-menu'
+				},
 
-			/**
-			 * Class applied the the selected item
-			 */
-			selectedClass: {
-				type: String,
-				value: 'cosmoz-bottom-bar-selected-item'
-			},
+				/**
+				* Maximum number of items in toolbar, regardless of space
+				*/
+				maxToolbarItems: {
+					type: Number,
+					value: 3
+				},
 
-			/**
-			 * Class applied to items distributed to the toolbar
-			 */
-			toolbarClass: {
-				type: String,
-				value: 'cosmoz-bottom-bar-toolbar'
-			},
+				/**
+				* The actual bar height, depending on if we `matchParent` or set `barHeight`
+				*/
+				computedBarHeight: {
+					type: Number,
+					computed: '_computeComputedBarHeight(_matchHeightElement, barHeight, _computedBarHeightKicker)',
+					notify: true
+				},
 
-			/**
-			 * Class applied to items distributed to the menu
-			 */
-			menuClass: {
-				type: String,
-				value: 'cosmoz-bottom-bar-menu'
-			},
+				/**
+				* Kicker to make `computedBarHeight` recalculate
+				*/
+				_computedBarHeightKicker: {
+					type: Number
+				},
 
-			/**
-			 * Maximum number of items in toolbar, regardless of space
-			 */
-			maxToolbarItems: {
-				type: Number,
-				value: 3
-			},
+				/**
+				* Whether the bar is visible (has actions and is `active`)
+				*/
+				visible: {
+					type: Boolean,
+					notify: true,
+					readOnly: true,
+					computed: '_computeVisible(hasActions, active, hasExtraItems)'
+				},
 
-			/**
-			 * The actual bar height, depending on if we `matchParent` or set `barHeight`
-			 */
-			computedBarHeight: {
-				type: Number,
-				computed: '_computeComputedBarHeight(_matchHeightElement, barHeight, _computedBarHeightKicker)',
-				notify: true
-			},
+				/**
+				* Whether we have any visible actions
+				*/
+				hasActions: {
+					type: Boolean,
+					value: false,
+					readOnly: true,
+					notify: true
+				},
 
-			/**
-			 * Kicker to make `computedBarHeight` recalculate
-			 */
-			_computedBarHeightKicker: {
-				type: Number
-			},
+				/**
+				* Reference element from which to inherit height
+				*/
+				_matchHeightElement: {
+					type: Object,
+					computed: '_getHeightMatchingElement(matchParent)'
+				},
+			};
+		}
 
-			/**
-			 * Whether the bar is visible (has actions and is `active`)
-			 */
-			visible: {
-				type: Boolean,
-				notify: true,
-				readOnly: true,
-				computed: '_computeVisible(hasActions, active, hasExtraItems)'
-			},
+		static get observers() {
+			return [
+				'_showHideBottomBar(visible, computedBarHeight)'
+			];
+		}
 
-			/**
-			 * Whether we have any visible actions
-			 */
-			hasActions: {
-				type: Boolean,
-				value: false,
-				readOnly: true,
-				notify: true
-			},
+		constructor(){
+			super();
+			this._boundOnResize = this._onResize.bind(this);
+			this._boundDropdownClosed = this._dropdownClosed.bind(this);
+		}
 
-			/**
-			 * Reference element from which to inherit height
-			 */
-			_matchHeightElement: {
-				type: Object,
-				computed: '_getHeightMatchingElement(matchParent)'
-			},
-		},
+		connectedCallback() {
+			super.connectedCallback();
 
-		/**
-		 * Non-Polymer properties
-		 */
-		_nodeObserver: undefined,
-		_nodeObserverExtra: undefined,
-		_hiddenMutationObserver: undefined,
+			this.addEventListener('iron-resize', this._boundOnResize);
+			this.addEventListener('iron-closed-overlay', this._boundDropdownClosed);
 
-		observers: [
-			'_showHideBottomBar(visible, computedBarHeight)'
-		],
-
-		attached() {
-			// eslint-disable-next-line no-unused-vars
-			this._hiddenMutationObserver = new MutationObserver((mutations) =>{
+			this._hiddenMutationObserver = new MutationObserver(() => {
 				this._overflowWidth = undefined;
 				this._debounceLayoutActions();
 			});
-			this._nodeObserver = Polymer.dom(this.$.content).observeNodes(this._childrenUpdated.bind(this));
-			this._nodeObserverExtra = Polymer.dom(this.$.extraSlot).observeNodes(info => this.set('hasExtraItems', info.addedNodes.length > 0));
+			this._nodeObserver = new FlattenedNodesObserver(this.$.content, this._childrenUpdated.bind(this));
+			this._nodeObserverExtra = new FlattenedNodesObserver(this.$.extraSlot, info => this.set('hasExtraItems', info.addedNodes.length > 0));
 			this._computedBarHeightKicker = 0;
-		},
+		}
 
-		detached() {
-			Polymer.dom(this).unobserveNodes(this._nodeObserver);
-			Polymer.dom(this).unobserveNodes(this._nodeObserverExtra);
+		disconnectedCallback() {
+			super.disconnectedCallback();
+
+			this.removeEventListener('iron-resize', this._boundOnResize);
+			this.removeEventListener('iron-closed-overlay', this._boundDropdownClosed);
+
+			this._nodeObserver.disconnect();
+			this._nodeObserverExtra.disconnect();
 			this._hiddenMutationObserver.disconnect();
 			this.cancelDebouncer('layoutActions');
-		},
+		}
 
 		_computeVisible(hasActions, active, hasExtraItems) {
 			return (hasActions || hasExtraItems) && active;
-		},
+		}
 
 		_getHeightMatchingElement(matchParent) {
 			if (matchParent) {
@@ -180,7 +190,7 @@
 			}
 
 			return null;
-		},
+		}
 
 		// eslint-disable-next-line no-unused-vars
 		_computeComputedBarHeight(matchElementHeight, barHeight, kicker) {
@@ -188,16 +198,16 @@
 				return matchElementHeight.offsetHeight;
 			}
 			return barHeight;
-		},
+		}
 
 		_getHeightStyle(height) {
 			return 'height: ' + height + 'px;';
-		},
+		}
 
 		_onResize() {
 			this._computedBarHeightKicker += 1;
 			this._debounceLayoutActions();
-		},
+		}
 
 		_showHideBottomBar(visible, barHeight) {
 			this.style.display = '';
@@ -212,7 +222,7 @@
 				this.translate3d('0px', translateY + 'px', '0px');
 				this._hideTimeout = setTimeout(onEnd, 510);
 			});
-		},
+		}
 
 		_isActionNode(node) {
 			return node.nodeType === Node.ELEMENT_NODE &&
@@ -221,7 +231,7 @@
 				node.tagName !== 'DOM-REPEAT' &&
 				node.tagName !== 'DOM-IF' &&
 				node.getAttribute('slot') !== 'extra';
-		},
+		}
 
 		_childrenUpdated(info) {
 			const addedNodes = info.addedNodes.filter(this._isActionNode),
@@ -249,7 +259,7 @@
 				}, this);
 
 			this._debounceLayoutActions();
-		},
+		}
 
 		_toolbarMoveToStart(node) {
 			const toolbar = this.$.toolbar;
@@ -258,11 +268,11 @@
 				return;
 			}
 			toolbar.insertBefore(node, toolbar.children[0]);
-		},
+		}
 
 		_dropdownClosed() {
 			this.$.dropdownButton.active = false;
-		},
+		}
 
 		/**
 		 * Layout the actions available as buttons or menu items
@@ -287,7 +297,7 @@
 		 */
 
 		_layoutActions() {
-			const elements = Polymer.FlattenedNodesObserver.getFlattenedNodes(this).filter(n => n.nodeType === Node.ELEMENT_NODE)
+			const elements = FlattenedNodesObserver.getFlattenedNodes(this).filter(n => n.nodeType === Node.ELEMENT_NODE)
 					.filter(this._isActionNode)
 					.filter(element => !element.hidden),
 				toolbar = this.$.toolbar;
@@ -349,7 +359,7 @@
 			newMenuElement = toolbarElements[toolbarElements.length - 1];
 			this._moveElement(newMenuElement, false);
 			this._debounceLayoutActions();
-		},
+		}
 
 		_moveElement(element, toToolbar) {
 			const slot = toToolbar ? BOTTOM_BAR_TOOLBAR_SLOT : BOTTOM_BAR_MENU_SLOT,
@@ -359,11 +369,11 @@
 			this.toggleClass(this.menuClass, !toToolbar, element);
 			this.toggleClass(this.toolbarClass, toToolbar, element);
 			this.updateStyles();
-		},
+		}
 
 		_debounceLayoutActions() {
 			this.debounce('layoutActions', this._layoutActions, 30);
-		},
+		}
 
 		_canAddMoreButtonToBar(width, bottomBarElements, menuElements) {
 			const hasSpace = width > this._overflowWidth || this._overflowWidth === undefined,
@@ -371,12 +381,12 @@
 				hasCandidates = menuElements.length > 0;
 
 			return hasSpace && hasPlace && hasCandidates;
-		},
+		}
 
 		_onActionSelected(event, detail) {
 			this._fireAction(detail.item);
 			event.currentTarget.selected = undefined;
-		},
+		}
 
 		_fireAction(item) {
 
@@ -392,5 +402,7 @@
 				}
 			}));
 		}
-	});
-}());
+	}
+	customElements.define(CosmozBottomBar.is, CosmozBottomBar);
+
+})();
