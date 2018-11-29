@@ -93,9 +93,12 @@
 				bottomBarView.active = false;
 				bottomBarView.$.scroller.scrollTop = 10;
 				// Mutation observer is async, so wait before testing.
-				Polymer.Base.async(function () {
-					assert.isTrue(bottomBar.visible);
-					done();
+				window.setTimeout(() => {
+					bottomBarView.$.scroller.scrollTop = 0;
+					window.setTimeout(() => {
+						assert.isTrue(bottomBar.visible);
+						done();
+					}, 50);
 				}, 50);
 			});
 
@@ -114,9 +117,15 @@
 				bottomBarView.fixed = true;
 				bottomBarView.$.scroller.scrollTop = 10;
 				// Mutation observer is async, so wait before testing.
-				Polymer.Base.async(() => {
-					assert.isFalse(bottomBar.visible);
-					done();
+				window.setTimeout(() => {
+					bottomBarView.$.scroller.scrollTop = 0;
+					window.setTimeout(() => {
+						assert.isFalse(bottomBar.visible);
+						bottomBarView.active = true;
+						bottomBarView.fixed = false;
+						bottomBarView.$.scroller.scrollTop = 0;
+						done();
+					}, 50);
 				}, 50);
 			});
 
@@ -125,8 +134,10 @@
 				bottomBarView.active = true;
 				bottomBarView.fixed = true;
 				bottomBarView.$.scroller.scrollTop = 20;
-				Polymer.Base.async(() => {
+				window.setTimeout(() => {
 					assert.isTrue(bottomBar.visible);
+					bottomBarView.active = true;
+					bottomBarView.fixed = false;
 					bottomBarView.$.scroller.scrollTop = 0;
 					done();
 				}, 50);
@@ -138,9 +149,14 @@
 				bottomBarView.fixed = true;
 				bottomBarView.$.scroller.scrollTop = 10;
 				// Mutation observer is async, so wait before testing.
-				Polymer.Base.async(() => {
-					assert.isTrue(bottomBar.visible);
-					done();
+				window.setTimeout(() => {
+					bottomBarView.$.scroller.scrollTop = 0;
+					window.setTimeout(() => {
+						assert.isTrue(bottomBar.visible);
+						bottomBarView.active = true;
+						bottomBarView.fixed = false;
+						done();
+					}, 50);
 				}, 50);
 			});
 
