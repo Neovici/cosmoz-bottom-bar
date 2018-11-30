@@ -75,16 +75,16 @@
 	</test-fixture>
 
 	<script type="text/javascript">
-	(()=> {
+	(() => {
 		'use strict';
 
 
-		const isElement = ({nodeType: type})=> type === Node.ELEMENT_NODE;
+		const isElement = ({nodeType: type}) => type === Node.ELEMENT_NODE;
 
-		suite('bottomBarWithoutMenu',  ()=> {
+		suite('bottomBarWithoutMenu',  () => {
 			let bottomBar;
 
-			setup((done)=> {
+			setup(done => {
 				bottomBar = fixture('bottomBarWithoutMenu');
 				flush(done);
 			});
@@ -103,18 +103,18 @@
 			});
 		});
 
-		suite('bottomBarWithOverflowingButton', ()=> {
+		suite('bottomBarWithOverflowingButton', () => {
 			let bottomBar;
 
-			setup((done) => {
+			setup(done => {
 				bottomBar = fixture('bottomBarWithOverflowingButton');
-				flush(()=>{
+				flush(() => {
 					bottomBar.flushDebouncer('layoutActions');
 					done();
 				});
 			});
 
-			test('First button should be placed in toolbar', ()=> {
+			test('First button should be placed in toolbar', () => {
 				const item = Polymer.FlattenedNodesObserver.getFlattenedNodes(bottomBar).find(isElement),
 					slot = item.getAttribute('slot');
 
@@ -124,7 +124,7 @@
 
 			});
 
-			test('Second button should be placed in menu', ()=> {
+			test('Second button should be placed in menu', () => {
 				const item = Polymer.FlattenedNodesObserver.getFlattenedNodes(bottomBar).filter(isElement)[1],
 					slot = item.getAttribute('slot');
 				assert.equal(slot, 'bottom-bar-menu');
@@ -132,7 +132,7 @@
 				assert.equal(item, Polymer.dom(bottomBar.$.bottomBarMenu).getDistributedNodes()[0]);
 			});
 
-			test('menu button should be visible', ()=> {
+			test('menu button should be visible', () => {
 				bottomBar.flushDebouncer('layoutActions'); //flush again to update hidden
 				assert.isFalse(bottomBar.$.menu.hidden);
 			});
@@ -142,15 +142,15 @@
 		suite('bottomBarMaxToolbarItems', function () {
 			let bottomBar;
 
-			setup((done)=> {
+			setup(done => {
 				bottomBar = fixture('bottomBarMaxToolbarItems');
-				flush(()=>{
+				flush(() => {
 					bottomBar.flushDebouncer('layoutActions');
 					done();
 				});
 			});
 
-			test('Toolbar should not contains more than max-toolbar-items', ()=> {
+			test('Toolbar should not contains more than max-toolbar-items', () => {
 				const item1 = Polymer.dom(bottomBar.$.bottomBarToolbar).getDistributedNodes()[0],
 					item2 = Polymer.dom(bottomBar.$.bottomBarToolbar).getDistributedNodes()[1],
 					item3 = Polymer.dom(bottomBar.$.bottomBarToolbar).getDistributedNodes()[2],
@@ -177,13 +177,13 @@
 				bottomBar = fixture('bottomBarWithHiddenButton');
 				toolbar = bottomBar.$.bottomBarToolbar;
 				menu = bottomBar.$.bottomBarMenu;
-				flush(()=>{
+				flush(() => {
 					bottomBar.flushDebouncer('layoutActions');
 					done();
 				});
 			});
 
-			test('Hidden items should not affect layout', ()=> {
+			test('Hidden items should not affect layout', () => {
 				const toolbarItems = Polymer.dom(toolbar).getDistributedNodes(),
 					menuItems = Polymer.dom(menu).getDistributedNodes(),
 					item1 = toolbarItems[0],
@@ -202,7 +202,7 @@
 				assert.isTrue(bottomBar.$.menu.hidden);
 			});
 
-			test('Unhiding item', (done) => {
+			test('Unhiding item', done => {
 				const item1 = Polymer.dom(toolbar).getDistributedNodes()[0],
 					item2 =  Polymer.dom(toolbar).getDistributedNodes()[1],
 					item3 =  Polymer.dom(toolbar).getDistributedNodes()[2];
@@ -213,7 +213,7 @@
 
 				item2.removeAttribute('hidden');
 
-				flush(()=> {
+				flush(() => {
 					bottomBar.flushDebouncer('layoutActions');
 
 					const item1 =  Polymer.dom(toolbar).getDistributedNodes()[0],
@@ -235,22 +235,22 @@
 			});
 		});
 
-		suite('height management', ()=> {
+		suite('height management', () => {
 			let heightManagementParent,
 				bottomBar;
 
-			setup((done) => {
+			setup(done => {
 				heightManagementParent = fixture('heightManagement');
 				bottomBar = Polymer.dom(heightManagementParent).querySelector('cosmoz-bottom-bar');
 				flush(done);
 			});
 
-			test('setting matchParent to true should set bottom-bar height to the height of the parent', ()=> {
+			test('setting matchParent to true should set bottom-bar height to the height of the parent', () => {
 				bottomBar.matchParent = true;
 				assert.equal(bottomBar.offsetHeight, 100);
 			});
 
-			test('setting matchParent to false should set bottom-bar height to the height of the bar', ()=> {
+			test('setting matchParent to false should set bottom-bar height to the height of the bar', () => {
 				bottomBar.matchParent = false;
 				assert.equal(bottomBar.offsetHeight, bottomBar.barHeight);
 			});
@@ -259,18 +259,18 @@
 		suite('toggle bottom bar', () => {
 			let bottomBar;
 
-			setup(function (done){
+			setup(function (done) {
 				bottomBar = fixture('toggleBottomBar');
 				flush(done);
 			});
 
-			test('menu should not be visible on screen', ()=> {
+			test('menu should not be visible on screen', () => {
 				assert.isFalse(bottomBar.visible);
 			});
 
-			test('menu should be visible on screen', (done)=> {
+			test('menu should be visible on screen', done => {
 				bottomBar.active = true;
-				flush(()=>{
+				flush(() => {
 					bottomBar.flushDebouncer('layoutActions');
 					assert.isTrue(bottomBar.visible);
 					done();
