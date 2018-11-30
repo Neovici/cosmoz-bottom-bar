@@ -1,6 +1,4 @@
-/*global document, Polymer, window*/
-
-(()=> {
+(() => {
 
 	'use strict';
 
@@ -12,9 +10,10 @@
 			Element,
 			mixinBehaviors,
 			FlattenedNodesObserver
-		} = Polymer;
+		} = Polymer,
+		BaseElement = mixinBehaviors([IronResizableBehavior], Element);
 
-	class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], Element) {
+	class CosmozBottomBar extends BaseElement {
 
 		static get is() {
 			return 'cosmoz-bottom-bar';
@@ -147,7 +146,7 @@
 			];
 		}
 
-		constructor(){
+		constructor() {
 			super();
 			this._boundOnResize = this._onResize.bind(this);
 			this._boundDropdownClosed = this._dropdownClosed.bind(this);
@@ -212,13 +211,13 @@
 		_showHideBottomBar(visible, barHeight) {
 			this.style.display = '';
 			const	translateY = visible ? 0 : barHeight,
-				onEnd = ()=> {
+				onEnd = () => {
 					clearTimeout(this._hideTimeout);
 					this._hideTimeout = null;
 					this.style.display = this.visible ? '' : 'none';
 				};
 			clearTimeout(this._hideTimeout);
-			requestAnimationFrame(()=>{
+			requestAnimationFrame(() => {
 				this.translate3d('0px', translateY + 'px', '0px');
 				this._hideTimeout = setTimeout(onEnd, 510);
 			});

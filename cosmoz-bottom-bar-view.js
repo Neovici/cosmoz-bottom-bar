@@ -1,81 +1,100 @@
-/*global Polymer, Cosmoz*/
-
-(function () {
+(() => {
 
 	'use strict';
 
-	Polymer({
+	const  {
+			IronResizableBehavior,
+			Element,
+			mixinBehaviors,
+			Async
+		} = Polymer,
+		{
+			ViewInfoBehavior
+		} = Cosmoz,
+		BaseElement = mixinBehaviors([
+			IronResizableBehavior,
+			ViewInfoBehavior
+		], Element);
 
-		is: 'cosmoz-bottom-bar-view',
+	class CosmozBottomBarView extends BaseElement {
 
-		behaviors: [
-			Cosmoz.ViewInfoBehavior,
-			Polymer.IronResizableBehavior
-		],
+		static get is() {
+			return 'cosmoz-bottom-bar-view';
+		}
 
-		properties: {
-
+		static get properties() {
+			return {
 			/**
 			 * Height of the bar
 			 */
-			barHeight: {
-				type: Number
-			},
+				barHeight: {
+					type: Number
+				},
 
-			/**
+				/**
 			 * When set to true, activate the bottom bar.
 			 */
-			active: {
-				type: Boolean,
-				value: true,
-				notify: true
-			},
+				active: {
+					type: Boolean,
+					value: true,
+					notify: true
+				},
 
-			/**
+				/**
 			 * Set to true to have a fixed bottom that does not disappear upon scrolling.
 			 */
-			fixed: {
-				type: Boolean,
-				value: null,
-			},
+				fixed: {
+					type: Boolean,
+					value: null,
+				},
 
-			_bottomBarActive: {
-				type: Boolean
-			},
+				_bottomBarActive: {
+					type: Boolean
+				},
 
-			_bottomBarVisible: {
-				type: Boolean
-			},
+				_bottomBarVisible: {
+					type: Boolean
+				},
 
-			_computedBarHeight: {
-				type: Number
-			},
+				_computedBarHeight: {
+					type: Number
+				},
 
-			_computedFixed: {
-				type: Boolean,
-				computed: '_computeFixed(fixed, viewInfo.desktop)',
-			},
+				_computedFixed: {
+					type: Boolean,
+					computed: '_computeFixed(fixed, viewInfo.desktop)',
+				},
 
-			_scroller: {
-				type: Object
-			}
-		},
+				_scroller: {
+					type: Object
+				}
+			};
+		}
 
-		observers: [
-			'_updateScrollManagenent(_computedFixed, _scroller)'
-		],
+		static get observers() {
+			return [
+				'_updateScrollManagenent(_computedFixed, _scroller)'
+			];
+		}
 
-		created() {
+
+		constructor() {
+			super();
+
 			this._scrollHandler = this._scrollManagement.bind(this);
-		},
+		}
 
-		attached() {
+		connectedCallback() {
+			super.connectedCallback();
+
 			this._scroller = this.$.scroller;
-		},
+		}
 
-		detached() {
+		disconnectedCallback() {
+			super.disconnectedCallback();
+
 			this._scroller.removeEventListener('scroll', this._scrollHandler);
-		},
+		}
 
 		_updateScrollManagenent(fixed, scroller) {
 			if (!scroller) {
@@ -88,7 +107,7 @@
 				scroller.addEventListener('scroll', this._scrollHandler);
 				this._scrollManagement();
 			}
-		},
+		}
 
 		_scrollManagement() {
 			const scrollTop = this._scroller.scrollTop,
@@ -100,29 +119,18 @@
 
 			this.active = isAtTop || isScrollingUp || isAtBottom;
 			this._lastScroll = scrollTop;
-		},
+		}
 
 		_computeScrollerContentStyle(barHeight, bottomBarVisible) {
-			// If bottom bar is visible, we need to reserve some space for it at the bottom of the scroller.
-			// When changing the scroller content padding bottom value, space available inside the scroller
-			// will change so we need to notify descendants of a resize
-			this.async(function () {
-				// eslint-disable-next-line no-invalid-this
-				this.notifyResize();
-			}, 10);
-
-			if (bottomBarVisible) {
-				return 'padding-bottom: ' + barHeight  + 'px';
-			}
-
-			return 'padding-bottom: 0px';
-		},
+			Async.microTask.run(() => this.notifyResize());
+			return `padding-bottom: ${bottomBarVisible ? barHeight : 0}px`;
+		}
 
 		_computeFixed(fixed, desktop) {
-			if (fixed === null) {
-				return desktop;
-			}
-			return fixed;
-		},
-	});
-}());
+			return fixed == null ? desktop : fixed;
+		}
+	}
+
+	customElements.define(CosmozBottomBarView.is, CosmozBottomBarView);
+
+})();
