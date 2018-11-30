@@ -150,6 +150,7 @@
 			super();
 			this._boundOnResize = this._onResize.bind(this);
 			this._boundDropdownClosed = this._dropdownClosed.bind(this);
+			this._boundChildrenUpdated = this._childrenUpdated.bind(this);
 		}
 
 		connectedCallback() {
@@ -162,8 +163,10 @@
 				this._overflowWidth = undefined;
 				this._debounceLayoutActions();
 			});
-			this._nodeObserver = new FlattenedNodesObserver(this.$.content, this._childrenUpdated.bind(this));
-			this._nodeObserverExtra = new FlattenedNodesObserver(this.$.extraSlot, info => this.set('hasExtraItems', info.addedNodes.length > 0));
+			this._nodeObserver = new FlattenedNodesObserver(this.$.content, this._boundChildrenUpdated);
+			this._nodeObserverExtra = new FlattenedNodesObserver(this.$.extraSlot, info =>
+				this.set('hasExtraItems', info.addedNodes.length > 0)
+			);
 			this._computedBarHeightKicker = 0;
 		}
 
@@ -250,8 +253,8 @@
 							'hidden'
 						]
 					});
-					if (Polymer.dom(node).parentNode !== this) {
-						Polymer.dom(this).appendChild(node);
+					if (node.parentNode !== this) {
+						this.appendChild(node);
 					}
 					this._moveElement(node, true);
 				//this._toolbarMoveToStart(node);
@@ -402,6 +405,7 @@
 			}));
 		}
 	}
+
 	customElements.define(CosmozBottomBar.is, CosmozBottomBar);
 
 })();
