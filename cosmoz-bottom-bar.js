@@ -9,7 +9,9 @@
 			IronResizableBehavior,
 			Element,
 			mixinBehaviors,
-			FlattenedNodesObserver
+			FlattenedNodesObserver,
+			Async,
+			Debouncer
 		} = Polymer,
 		BaseElement = mixinBehaviors([IronResizableBehavior], Element);
 
@@ -151,6 +153,7 @@
 			this._boundOnResize = this._onResize.bind(this);
 			this._boundDropdownClosed = this._dropdownClosed.bind(this);
 			this._boundChildrenUpdated = this._childrenUpdated.bind(this);
+			this._boundLayoutActions = this._layoutActions.bind(this);
 		}
 
 		connectedCallback() {
@@ -179,7 +182,7 @@
 			this._nodeObserver.disconnect();
 			this._nodeObserverExtra.disconnect();
 			this._hiddenMutationObserver.disconnect();
-			this.cancelDebouncer('layoutActions');
+			this._layoutDebouncer.cancel();
 		}
 
 		_computeVisible(hasActions, active, hasExtraItems) {
@@ -374,7 +377,12 @@
 		}
 
 		_debounceLayoutActions() {
-			this.debounce('layoutActions', this._layoutActions, 30);
+			this._layoutDebouncer = Debouncer.debounce(
+				this._layoutDebouncer,
+				Async.timeOut.after(30),
+				this._boundLayoutActions
+			);
+			Polymer.enqueueDebouncer(this._layoutDebouncer);
 		}
 
 		_canAddMoreButtonToBar(width, bottomBarElements, menuElements) {

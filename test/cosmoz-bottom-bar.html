@@ -108,7 +108,7 @@
 			setup(done => {
 				bottomBar = fixture('bottomBarWithOverflowingButton');
 				flush(() => {
-					bottomBar.flushDebouncer('layoutActions');
+					bottomBar._layoutDebouncer.flush();
 					done();
 				});
 			});
@@ -132,7 +132,7 @@
 			});
 
 			test('menu button should be visible', () => {
-				bottomBar.flushDebouncer('layoutActions'); //flush again to update hidden
+				bottomBar._layoutDebouncer.flush(); //flush again to update hidden
 				assert.isFalse(bottomBar.$.menu.hidden);
 			});
 
@@ -144,7 +144,7 @@
 			setup(done => {
 				bottomBar = fixture('bottomBarMaxToolbarItems');
 				flush(() => {
-					bottomBar.flushDebouncer('layoutActions');
+					bottomBar._layoutDebouncer.flush();
 					done();
 				});
 			});
@@ -177,7 +177,7 @@
 				toolbar = bottomBar.$.bottomBarToolbar;
 				menu = bottomBar.$.bottomBarMenu;
 				flush(() => {
-					bottomBar.flushDebouncer('layoutActions');
+					bottomBar._layoutDebouncer.flush();
 					done();
 				});
 			});
@@ -214,7 +214,7 @@
 				item2.removeAttribute('hidden');
 
 				flush(() => {
-					bottomBar.flushDebouncer('layoutActions');
+					bottomBar._layoutDebouncer.flush();
 
 					const toolBarNodes = Polymer.FlattenedNodesObserver.getFlattenedNodes(toolbar),
 						item1 = toolBarNodes[0],
@@ -272,7 +272,7 @@
 			test('menu should be visible on screen', done => {
 				bottomBar.active = true;
 				flush(() => {
-					bottomBar.flushDebouncer('layoutActions');
+					bottomBar._layoutDebouncer.flush();
 					assert.isTrue(bottomBar.visible);
 					done();
 				});
