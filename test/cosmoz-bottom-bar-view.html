@@ -51,14 +51,6 @@
 	(function () {
 		'use strict';
 
-		const flushBottomBar = function (bottomBar, done){
-			const _observer = bottomBar._nodeObserver;
-			if (_observer && _observer.flush === 'function') {
-				_observer.flush();
-			}
-			flush(done);
-		};
-
 		suite('<cosmoz-bottom-bar-view>', () => {
 			let bottomBarView,
 				bottomBar;
@@ -66,12 +58,12 @@
 			setup(done => {
 				bottomBarView = fixture('bottomBarViewFixture');
 				bottomBar = bottomBarView.$.bottomBar;
-				flushBottomBar(bottomBar, () => window.setTimeout(done, 100));
+				flush(done);
 			});
 
-			test('bottomBar is visible', done => {
+			test('bottomBar is visible', () => {
+				bottomBar.flushDebouncer('layoutActions');
 				assert.isTrue(bottomBar.visible);
-				done();
 			});
 		});
 
@@ -82,30 +74,27 @@
 			setup(done => {
 				bottomBarView = fixture('scrollingBottomBarViewFixture');
 				bottomBar = bottomBarView.$.bottomBar;
-				flushBottomBar(bottomBar, () => {
-					window.setTimeout(done, 100);
-				});
+				flush(done);
 			});
 
-			test('bottomBar is hidden when scrolling down', done => {
+			test('bottomBar is hidden when scrolling down', () => {
+				bottomBar.flushDebouncer('layoutActions');
 				bottomBarView.$.scroller.scrollTop = 20;
-				// Mutation observer is async, so wait before testing.
-				window.setTimeout(() => {
-					assert.isFalse(bottomBar.visible);
-					done();
-				}, 50);
+				bottomBarView.$.scroller.dispatchEvent(new CustomEvent('scroll'));
+
+				assert.isFalse(bottomBar.active);
+				assert.isFalse(bottomBar.visible);
 			});
 
-			test('bottomBar is visible when scroll is at bottom', done => {
+			test('bottomBar is visible when scroll is at bottom', () => {
+				bottomBar.flushDebouncer('layoutActions');
 				bottomBarView.$.scroller.scrollTop = 350;
-				window.setTimeout(() => {
-					assert.isTrue(bottomBar.visible);
-					done();
-				}, 50);
+				bottomBarView.$.scroller.dispatchEvent(new CustomEvent('scroll'));
+				assert.isTrue(bottomBar.active);
+				assert.isTrue(bottomBar.visible);
 			});
 		});
 	}());
-
 	</script>
 </body>
 </html>

@@ -23,6 +23,14 @@
 			"error",
 			"never"
 		],
+		"arrow-parens": [
+			"error",
+			"as-needed"
+		],
+		"arrow-spacing": [
+			"error",
+			{ "before": true, "after": true }
+		],
 		"brace-style": "error",
 		"camelcase": "error",
 		"comma-spacing": [
@@ -39,7 +47,10 @@
 			"error",
 			"all"
 		],
-		"eqeqeq": "error",
+		"eqeqeq": [
+			"error",
+			"smart"
+		],
 		"guard-for-in": "error",
 		"indent": [
 			"error",
@@ -79,7 +90,13 @@
 		"no-use-before-define": "error",
 		"no-useless-call": "error",
 		"no-useless-concat": "error",
-		"one-var": "error",
+		"one-var": [
+			"error",
+			{
+				"var": "always",
+				"let": "always"
+			}
+		],
 		"one-var-declaration-per-line": [
 			"error",
 			"always"
@@ -90,6 +107,10 @@
 		],
 		"radix": "error",
 		"semi": [
+			"error",
+			"always"
+		],
+		"space-before-blocks": [
 			"error",
 			"always"
 		],
