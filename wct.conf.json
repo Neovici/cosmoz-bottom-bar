@@ -33,10 +33,6 @@
 			}, {
 				"browserName": "chrome",
 				"platform": "Windows 10",
-				"version": "dev"
-			}, {
-				"browserName": "chrome",
-				"platform": "Windows 10",
 				"version": "beta"
 			}, {
 				"browserName": "firefox",
