@@ -102,7 +102,7 @@
 				}, 50);
 			});
 
-			test('bottomBar is hidden when scrolling down and is inactive but fixed', done => {
+			test('bottomBar is hidden when scrolling down and is inactive but fixed', () => {
 				bottomBarView.active = false;
 				bottomBarView.fixed = true;
 				bottomBarView.$.scroller.scrollTop = 20;
@@ -160,7 +160,7 @@
 				}, 50);
 			});
 
-			test('bottomBar is visible when scroll is at bottom', done => {
+			test('bottomBar is visible when scroll is at bottom', () => {
 				bottomBar.flushDebouncer('layoutActions');
 				bottomBarView.active = false;
 				bottomBarView.fixed = false;

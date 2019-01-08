@@ -24,25 +24,25 @@
 
 		static get properties() {
 			return {
-			/**
-			 * Height of the bar
-			 */
+				/**
+				* Height of the bar
+				*/
 				barHeight: {
 					type: Number
 				},
 
-			/**
-			 * When set to true, activate the bottom bar.
-			 */
+				/**
+				* When set to true, activate the bottom bar.
+				*/
 				active: {
 					type: Boolean,
 					value: true,
 					notify: true
 				},
 
-			/**
-			 * Set to true to have a fixed bottom that does not disappear upon scrolling.
-			 */
+				/**
+				* Set to true to have a fixed bottom that does not disappear upon scrolling.
+				*/
 				fixed: {
 					type: Boolean,
 					value: null,
