@@ -102,6 +102,10 @@ See demo for example usage
 				@apply --cosmoz-bottom-bar-toolbar-item;
 			}
 
+			#toolbar ::slotted([disabled]) {
+				@apply --cosmoz-bottom-bar-toolbar-item-disabled;
+			}
+
 			#toolbar ::slotted([hidden]) {
 				display: none !important;
 			}
