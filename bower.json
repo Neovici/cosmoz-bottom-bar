@@ -8,7 +8,7 @@
 	"authors": [
 		"Neovici Development"
 	],
-	"description": "Polymer Bottom Bar component",
+	"description": "Cosmoz Bottom Bar component",
 	"keywords": [
 		"web-components",
 		"polymer",
@@ -41,8 +41,5 @@
 		"iron-test-helpers": "PolymerElements/iron-test-helpers#^2.0.1",
 		"web-component-tester": "^6.5.0",
 		"webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0"
-	},
-	"resolutions": {
-		"webcomponentsjs": "^1.0.0"
 	}
 }
