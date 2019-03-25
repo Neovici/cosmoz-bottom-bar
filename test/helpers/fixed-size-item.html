@@ -1,46 +1,48 @@
-<link rel="import" href="../../../polymer/polymer.html" />
+<link rel="import" href="../../../polymer/polymer-element.html" />
 
-<dom-module id="fixed-size-item">
-	<template>
-		<style>
-			:host {
-				display: block;
-			}
-			#item {
-				display: block;
-			}
-		</style>
+<script>
+customElements.define('fixed-size-item', class extends Polymer.Element {
 
-		<div id="item" style$="[[ _computeStyle(width, height, color) ]]"></div>
-	</template>
-	<script>
-		Polymer({
-			is: 'fixed-size-item',
-
-			properties: {
-				height: {
-					type: String,
-					value: '32px'
-				},
-				width: {
-					type: String,
-					value: '32px'
-				},
-				color: {
-					type: String,
-					value: 'red'
-				}
+	static get properties() {
+		return {
+			height: {
+				type: String,
+				value: '32px'
 			},
-
-			_computeStyle: function (width, height, color) {
-				return 'min-width: ' + width + ';'
-					+ 'max-width: ' + width + ';'
-					+ 'min-height: ' + height + ';'
-					+ 'max-height: ' + height + ';'
-					+ 'background-color: ' + color;
+			width: {
+				type: String,
+				value: '32px'
+			},
+			color: {
+				type: String,
+				value: 'red'
 			}
+		};
+	}
 
-		});
-	</script>
+	static get template() {
+		return Polymer.html/*html*/`
+			<style>
+				:host {
+					display: block;
+				}
+				#item {
+					display: block;
+				}
+			</style>
 
-</dom-module>
+			<div id="item" style$="[[ _computeStyle(width, height, color) ]]"></div>
+		`;
+	}
+
+	_computeStyle(width, height, color) {
+		return `
+			min-width: ${ width };
+			max-width: ${ width };
+			min-height: ${ height };
+			max-height: ${ height };
+			background-color: ${ color };
+		`;
+	}
+});
+</script>
