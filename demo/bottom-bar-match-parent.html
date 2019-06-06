@@ -6,20 +6,28 @@
 
 	<title>cosmoz-bottom-bar match parent demo</title>
 
-	<script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+	<script src="/components/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
 
-	<link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html" />
-	<link rel="import" href="../../iron-demo-helpers/demo-snippet.html" />
+	<script type="module" src="/components/@polymer/iron-demo-helpers/demo-pages-shared-styles.js"></script>
+	<script type="module" src="/components/@polymer/iron-demo-helpers/demo-snippet.js"></script>
 
-	<link rel="import" href="../../iron-flex-layout/iron-flex-layout-classes.html">
-	<link rel="import" href="../../iron-icon/iron-icon.html">
-	<link rel="import" href="../../iron-icons/iron-icons.html">
-	<link rel="import" href="../../paper-button/paper-button.html">
+	<script type="module" src="/components/@polymer/iron-flex-layout/iron-flex-layout-classes.js"></script>
+	<script type="module" src="/components/@polymer/iron-icon/iron-icon.js"></script>
+	<script type="module" src="/components/@polymer/iron-icons/iron-icons.js"></script>
+	<script type="module" src="/components/@polymer/paper-button/paper-button.js"></script>
 
-	<link rel="import" href="./helpers/x-view.html">
-	<custom-style>
-		<style is="custom-style" include="iron-flex iron-flex-alignment iron-positioning"></style>
-	</custom-style>
+	<script type="module" src="./helpers/x-view.js"></script>
+
+	<script type="module">
+		const $documentContainer = document.createElement('template');
+
+		$documentContainer.innerHTML = `<custom-style>
+			<style is="custom-style" include="iron-flex iron-flex-alignment iron-positioning"></style>
+		</custom-style>`;
+
+		document.head.appendChild($documentContainer.content);
+	</script>
+
 </head>
 <body unresolved class="fullbleed">
 	<x-view class="fit">

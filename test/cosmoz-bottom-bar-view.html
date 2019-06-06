@@ -5,15 +5,17 @@
 	<meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
 	<title>cosmoz-bottom-bar-view basic test</title>
 
-	<script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-	<script src="../../web-component-tester/browser.js"></script>
-	<script src="../../test-fixture/test-fixture-mocha.js"></script>
+	<script src="/components/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+	<script src="/components/mocha/mocha.js"></script>
+	<script src="/components/wct-mocha/wct-mocha.js"></script>
+	<script src="/components/chai/chai.js"></script>
+	<script src="/components/@polymer/test-fixture/test-fixture-mocha.js"></script>
 
-	<link rel="import" href="../../test-fixture/test-fixture.html">
-	<link rel="import" href="../../iron-test-helpers/iron-test-helpers.html">
+	<script type="module" src="/components/@polymer/test-fixture/test-fixture.js"></script>
+	<script type="module" src="/components/@polymer/iron-test-helpers/iron-test-helpers.js"></script>
 
-	<link rel="import" href="../../paper-button/paper-button.html">
-	<link rel="import" href="../cosmoz-bottom-bar-view.html">
+	<script type="module" src="/components/@polymer/paper-button/paper-button.js"></script>
+	<script type="module" src="../cosmoz-bottom-bar-view.js"></script>
 
 </head>
 <body>
@@ -47,10 +49,7 @@
 		</template>
 	</test-fixture>
 
-	<script>
-	(function () {
-		'use strict';
-
+	<script type="module">
 		suite('<cosmoz-bottom-bar-view>', () => {
 			let bottomBarView,
 				bottomBar;
@@ -62,7 +61,7 @@
 			});
 
 			test('bottomBar is visible', () => {
-				bottomBar.flushDebouncer('layoutActions');
+				bottomBar._layoutDebouncer.flush();
 				assert.isTrue(bottomBar.visible);
 			});
 		});
@@ -78,7 +77,7 @@
 			});
 
 			test('bottomBar is hidden when scrolling down', () => {
-				bottomBar.flushDebouncer('layoutActions');
+				bottomBar._layoutDebouncer.flush();
 				bottomBarView.$.scroller.scrollTop = 20;
 				bottomBarView.$.scroller.dispatchEvent(new CustomEvent('scroll'));
 
@@ -87,14 +86,13 @@
 			});
 
 			test('bottomBar is visible when scroll is at bottom', () => {
-				bottomBar.flushDebouncer('layoutActions');
+				bottomBar._layoutDebouncer.flush();
 				bottomBarView.$.scroller.scrollTop = 350;
 				bottomBarView.$.scroller.dispatchEvent(new CustomEvent('scroll'));
 				assert.isTrue(bottomBar.active);
 				assert.isTrue(bottomBar.visible);
 			});
 		});
-	}());
 	</script>
 </body>
 </html>

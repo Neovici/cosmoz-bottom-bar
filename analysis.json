@@ -2,722 +2,365 @@
   "schema_version": "1.0.0",
   "elements": [
     {
-      "description": "`<cosmoz-bottom-bar>` is a horizontal responsive bottom toolbar containing items that\ncan be used for actions.\n\nThe items placed inside the `cosmoz-bottom-bar` are distributed into the toolbar in a horizontal container.\nIf the items do not fit the available width, those that do not fit are placed in a dropdown\nmenu triggered by a button in the toolbar.\n\nThe class specified by the property `toolbarClass` (default `cosmoz-bottom-bar-toolbar`)\nis applied to items distributed to the toolbar.\n\nThe class specified in the property `menuClass` (default `cosmoz-bottom-bar-menu`)\nis applied to items distributed to the menu.\n\n### Usage\nSee demo for example usage",
+      "description": "`<cosmoz-bottom-bar>` is a horizontal responsive bottom toolbar containing items that\ncan be used for actions.\n\nThe items placed inside the `cosmoz-bottom-bar` are distributed into the toolbar in a horizontal container.\nIf the items do not fit the available width, those that do not fit are placed in a dropdown\nmenu triggered by a button in the toolbar.\nThe class specified by the property `toolbarClass` (default `cosmoz-bottom-bar-toolbar`)\nis applied to items distributed to the toolbar.\nThe class specified in the property `menuClass` (default `cosmoz-bottom-bar-menu`)\nis applied to items distributed to the menu.\n\n### Usage\n\nSee demo for example usage",
       "summary": "",
       "path": "cosmoz-bottom-bar.js",
       "properties": [
         {
-          "name": "_parentResizable",
-          "type": "Object",
-          "description": "The closest ancestor element that implements `IronResizableBehavior`.",
-          "privacy": "protected",
-          "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
-            "start": {
-              "line": 36,
-              "column": 6
-            },
-            "end": {
-              "line": 39,
-              "column": 7
-            }
-          },
-          "metadata": {
-            "polymer": {
-              "observer": "\"_parentResizableChanged\""
-            }
-          },
-          "inheritedFrom": "Polymer.IronResizableBehavior"
-        },
-        {
-          "name": "_notifyingDescendant",
-          "type": "boolean",
-          "description": "True if this element is currently notifying its descendant elements of\nresize.",
-          "privacy": "protected",
-          "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
-            "start": {
-              "line": 45,
-              "column": 6
-            },
-            "end": {
-              "line": 48,
-              "column": 7
-            }
-          },
-          "metadata": {
-            "polymer": {}
-          },
-          "defaultValue": "false",
-          "inheritedFrom": "Polymer.IronResizableBehavior"
-        },
-        {
           "name": "active",
-          "type": "boolean",
-          "description": "Whether the bar is active (shown)\nNOTE: This has no effect when `fixed` is `true`",
+          "type": "boolean | null | undefined",
+          "description": "Whether the bar is active (shown)",
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 30,
+              "line": 175,
               "column": 3
             },
             "end": {
-              "line": 35,
-              "column": 4
-            }
-          },
-          "metadata": {
-            "polymer": {
-              "notify": true
-            }
-          },
-          "defaultValue": "false"
-        },
-        {
-          "name": "fixed",
-          "type": "boolean",
-          "description": "Whether the bar is fixed (and take up space) or shows/hides from the bottom when needed\n(Usually fixed on desktop and not mobile.)",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 41,
-              "column": 3
-            },
-            "end": {
-              "line": 45,
-              "column": 4
-            }
-          },
-          "metadata": {
-            "polymer": {}
-          },
-          "defaultValue": "false"
-        },
-        {
-          "name": "barHeight",
-          "type": "number",
-          "description": "Bar height (not used when `matchParent` or `matchElementHeight` is set)",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 50,
-              "column": 3
-            },
-            "end": {
-              "line": 53,
-              "column": 4
-            }
-          },
-          "metadata": {
-            "polymer": {}
-          },
-          "defaultValue": "64"
-        },
-        {
-          "name": "matchParent",
-          "type": "boolean",
-          "description": "Whether to match the height of parent",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 58,
-              "column": 3
-            },
-            "end": {
-              "line": 61,
-              "column": 4
-            }
-          },
-          "metadata": {
-            "polymer": {}
-          },
-          "defaultValue": "false"
-        },
-        {
-          "name": "scroller",
-          "type": "Object",
-          "description": "Scroller element to listen to when deciding whether or not to show the bar.\nBar will be shown while scrolling up or when reaching bottom",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 67,
-              "column": 3
-            },
-            "end": {
-              "line": 70,
-              "column": 4
-            }
-          },
-          "metadata": {
-            "polymer": {
-              "observer": "\"_scrollerChanged\""
-            }
-          }
-        },
-        {
-          "name": "hasMenuItems",
-          "type": "boolean",
-          "description": "Whether this bottom bar has items distributed to the menu",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 75,
-              "column": 3
-            },
-            "end": {
-              "line": 80,
+              "line": 180,
               "column": 4
             }
           },
           "metadata": {
             "polymer": {
               "notify": true,
-              "readOnly": true
+              "attributeType": "Boolean"
+            }
+          },
+          "defaultValue": "false"
+        },
+        {
+          "name": "barHeight",
+          "type": "number | null | undefined",
+          "description": "Bar height (not used when `matchParent` or `matchElementHeight` is set)",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 185,
+              "column": 3
+            },
+            "end": {
+              "line": 188,
+              "column": 4
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "Number"
+            }
+          },
+          "defaultValue": "64"
+        },
+        {
+          "name": "matchParent",
+          "type": "boolean | null | undefined",
+          "description": "Whether to match the height of parent",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 193,
+              "column": 3
+            },
+            "end": {
+              "line": 196,
+              "column": 4
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "Boolean"
+            }
+          },
+          "defaultValue": "false"
+        },
+        {
+          "name": "hasMenuItems",
+          "type": "boolean | null | undefined",
+          "description": "Whether this bottom bar has items distributed to the menu",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 201,
+              "column": 3
+            },
+            "end": {
+              "line": 206,
+              "column": 4
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true,
+              "readOnly": true,
+              "attributeType": "Boolean"
+            }
+          },
+          "defaultValue": "false"
+        },
+        {
+          "name": "hasExtraItems",
+          "type": "boolean | null | undefined",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 208,
+              "column": 3
+            },
+            "end": {
+              "line": 211,
+              "column": 4
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "Boolean"
             }
           },
           "defaultValue": "false"
         },
         {
           "name": "selectedClass",
-          "type": "string",
+          "type": "string | null | undefined",
           "description": "Class applied the the selected item",
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 85,
+              "line": 216,
               "column": 3
             },
             "end": {
-              "line": 88,
+              "line": 219,
               "column": 4
             }
           },
           "metadata": {
-            "polymer": {}
+            "polymer": {
+              "attributeType": "String"
+            }
           },
           "defaultValue": "\"cosmoz-bottom-bar-selected-item\""
         },
         {
           "name": "toolbarClass",
-          "type": "string",
+          "type": "string | null | undefined",
           "description": "Class applied to items distributed to the toolbar",
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 93,
+              "line": 224,
               "column": 3
             },
             "end": {
-              "line": 96,
+              "line": 227,
               "column": 4
             }
           },
           "metadata": {
-            "polymer": {}
+            "polymer": {
+              "attributeType": "String"
+            }
           },
           "defaultValue": "\"cosmoz-bottom-bar-toolbar\""
         },
         {
           "name": "menuClass",
-          "type": "string",
+          "type": "string | null | undefined",
           "description": "Class applied to items distributed to the menu",
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 101,
+              "line": 232,
               "column": 3
             },
             "end": {
-              "line": 104,
+              "line": 235,
               "column": 4
             }
           },
           "metadata": {
-            "polymer": {}
+            "polymer": {
+              "attributeType": "String"
+            }
           },
           "defaultValue": "\"cosmoz-bottom-bar-menu\""
         },
         {
           "name": "maxToolbarItems",
-          "type": "number",
+          "type": "number | null | undefined",
           "description": "Maximum number of items in toolbar, regardless of space",
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 109,
+              "line": 240,
               "column": 3
             },
             "end": {
-              "line": 112,
+              "line": 243,
               "column": 4
             }
           },
           "metadata": {
-            "polymer": {}
+            "polymer": {
+              "attributeType": "Number"
+            }
           },
           "defaultValue": "3"
         },
         {
           "name": "computedBarHeight",
-          "type": "number",
+          "type": "number | null | undefined",
           "description": "The actual bar height, depending on if we `matchParent` or set `barHeight`",
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 117,
+              "line": 248,
               "column": 3
             },
             "end": {
-              "line": 122,
+              "line": 252,
               "column": 4
             }
           },
           "metadata": {
             "polymer": {
               "notify": true,
-              "readOnly": true
+              "readOnly": true,
+              "attributeType": "Number"
             }
           }
         },
         {
           "name": "_computedBarHeightKicker",
-          "type": "number",
+          "type": "number | null | undefined",
           "description": "Kicker to make `computedBarHeight` recalculate",
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 127,
+              "line": 257,
               "column": 3
             },
             "end": {
-              "line": 129,
+              "line": 259,
               "column": 4
             }
           },
           "metadata": {
-            "polymer": {}
+            "polymer": {
+              "attributeType": "Number"
+            }
           }
         },
         {
           "name": "visible",
-          "type": "boolean",
-          "description": "Whether the bar is visible (has actions and is `active` or `fixed`)",
+          "type": "boolean | null | undefined",
+          "description": "Whether the bar is visible (has actions and is `active`)",
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 134,
+              "line": 264,
               "column": 3
             },
             "end": {
-              "line": 139,
+              "line": 269,
               "column": 4
             }
           },
           "metadata": {
             "polymer": {
               "notify": true,
-              "readOnly": true
+              "readOnly": true,
+              "attributeType": "Boolean"
             }
           }
         },
         {
           "name": "hasActions",
-          "type": "boolean",
+          "type": "boolean | null | undefined",
           "description": "Whether we have any visible actions",
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 144,
+              "line": 274,
               "column": 3
             },
             "end": {
-              "line": 149,
+              "line": 279,
               "column": 4
             }
           },
           "metadata": {
             "polymer": {
               "notify": true,
-              "readOnly": true
+              "readOnly": true,
+              "attributeType": "Boolean"
             }
           },
           "defaultValue": "false"
         },
         {
           "name": "_matchHeightElement",
-          "type": "Object",
+          "type": "Object | null | undefined",
           "description": "Reference element from which to inherit height",
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 154,
+              "line": 284,
               "column": 3
             },
             "end": {
-              "line": 157,
+              "line": 287,
               "column": 4
             }
           },
           "metadata": {
             "polymer": {
-              "readOnly": true
+              "readOnly": true,
+              "attributeType": "Object"
             }
-          }
-        },
-        {
-          "name": "_nodeObserver",
-          "type": "undefined",
-          "description": "Non-Polymer properties",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 163,
-              "column": 2
-            },
-            "end": {
-              "line": 163,
-              "column": 26
-            }
-          },
-          "metadata": {
-            "polymer": {}
-          }
-        },
-        {
-          "name": "_hiddenMutationObserver",
-          "type": "undefined",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 164,
-              "column": 2
-            },
-            "end": {
-              "line": 164,
-              "column": 36
-            }
-          },
-          "metadata": {
-            "polymer": {}
-          }
-        },
-        {
-          "name": "_scrollHandler",
-          "type": "undefined",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 165,
-              "column": 2
-            },
-            "end": {
-              "line": 165,
-              "column": 27
-            }
-          },
-          "metadata": {
-            "polymer": {}
           }
         }
       ],
       "methods": [
         {
-          "name": "created",
+          "name": "connectedCallback",
           "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 188,
-              "column": 2
-            },
-            "end": {
-              "line": 190,
-              "column": 3
-            }
-          },
-          "metadata": {},
-          "params": []
-        },
-        {
-          "name": "attached",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 171,
-              "column": 2
-            },
-            "end": {
-              "line": 178,
-              "column": 3
-            }
-          },
-          "metadata": {},
-          "params": []
-        },
-        {
-          "name": "detached",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 180,
-              "column": 2
-            },
-            "end": {
-              "line": 186,
-              "column": 3
-            }
-          },
-          "metadata": {},
-          "params": []
-        },
-        {
-          "name": "notifyResize",
-          "description": "Can be called to manually notify a resizable and its descendant\nresizables of a resize change.",
           "privacy": "public",
           "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
             "start": {
-              "line": 80,
-              "column": 4
+              "line": 305,
+              "column": 1
             },
             "end": {
-              "line": 92,
-              "column": 5
+              "line": 320,
+              "column": 2
             }
           },
           "metadata": {},
           "params": [],
-          "inheritedFrom": "Polymer.IronResizableBehavior"
-        },
-        {
-          "name": "assignParentResizable",
-          "description": "Used to assign the closest resizable ancestor to this resizable\nif the ancestor detects a request for notifications.",
-          "privacy": "public",
-          "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
-            "start": {
-              "line": 98,
-              "column": 4
-            },
-            "end": {
-              "line": 100,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "parentResizable"
-            }
-          ],
-          "inheritedFrom": "Polymer.IronResizableBehavior"
-        },
-        {
-          "name": "stopResizeNotificationsFor",
-          "description": "Used to remove a resizable descendant from the list of descendants\nthat should be notified of a resize change.",
-          "privacy": "public",
-          "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
-            "start": {
-              "line": 106,
-              "column": 4
-            },
-            "end": {
-              "line": 113,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "target"
-            }
-          ],
-          "inheritedFrom": "Polymer.IronResizableBehavior"
-        },
-        {
-          "name": "resizerShouldNotify",
-          "description": "This method can be overridden to filter nested elements that should or\nshould not be notified by the current element. Return true if an element\nshould be notified, or false if it should not be notified.",
-          "privacy": "public",
-          "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
-            "start": {
-              "line": 124,
-              "column": 4
-            },
-            "end": {
-              "line": 124,
-              "column": 59
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "element",
-              "type": "HTMLElement",
-              "description": "A candidate descendant element that\nimplements `IronResizableBehavior`."
-            }
-          ],
           "return": {
-            "type": "boolean",
-            "desc": "True if the `element` should be notified of resize."
-          },
-          "inheritedFrom": "Polymer.IronResizableBehavior"
+            "type": "void"
+          }
         },
         {
-          "name": "_onDescendantIronResize",
+          "name": "disconnectedCallback",
           "description": "",
-          "privacy": "protected",
+          "privacy": "public",
           "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
             "start": {
-              "line": 126,
-              "column": 4
+              "line": 322,
+              "column": 1
             },
             "end": {
-              "line": 138,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "event"
-            }
-          ],
-          "inheritedFrom": "Polymer.IronResizableBehavior"
-        },
-        {
-          "name": "_fireResize",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
-            "start": {
-              "line": 140,
-              "column": 4
-            },
-            "end": {
-              "line": 145,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [],
-          "inheritedFrom": "Polymer.IronResizableBehavior"
-        },
-        {
-          "name": "_onIronRequestResizeNotifications",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
-            "start": {
-              "line": 147,
-              "column": 4
-            },
-            "end": {
-              "line": 162,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "event"
-            }
-          ],
-          "inheritedFrom": "Polymer.IronResizableBehavior"
-        },
-        {
-          "name": "_parentResizableChanged",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
-            "start": {
-              "line": 164,
-              "column": 4
-            },
-            "end": {
-              "line": 168,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "parentResizable"
-            }
-          ],
-          "inheritedFrom": "Polymer.IronResizableBehavior"
-        },
-        {
-          "name": "_notifyDescendant",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
-            "start": {
-              "line": 170,
-              "column": 4
-            },
-            "end": {
-              "line": 181,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "descendant"
-            }
-          ],
-          "inheritedFrom": "Polymer.IronResizableBehavior"
-        },
-        {
-          "name": "_requestResizeNotifications",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
-            "start": {
-              "line": 183,
-              "column": 4
-            },
-            "end": {
-              "line": 211,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [],
-          "inheritedFrom": "Polymer.IronResizableBehavior"
-        },
-        {
-          "name": "_getHeightMatchingElement",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 192,
+              "line": 332,
               "column": 2
-            },
-            "end": {
-              "line": 198,
-              "column": 3
             }
           },
           "metadata": {},
-          "params": [
-            {
-              "name": "matchParent"
-            }
-          ]
+          "params": [],
+          "return": {
+            "type": "void"
+          }
         },
         {
           "name": "_computeVisible",
@@ -725,12 +368,12 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 200,
-              "column": 2
+              "line": 334,
+              "column": 1
             },
             "end": {
-              "line": 202,
-              "column": 3
+              "line": 336,
+              "column": 2
             }
           },
           "metadata": {},
@@ -742,46 +385,43 @@
               "name": "active"
             },
             {
-              "name": "fixed"
+              "name": "hasExtraItems"
             }
           ]
         },
         {
-          "name": "_scrollerChanged",
+          "name": "_getHeightMatchingElement",
           "description": "",
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 204,
-              "column": 2
+              "line": 338,
+              "column": 1
             },
             "end": {
-              "line": 220,
-              "column": 3
+              "line": 344,
+              "column": 2
             }
           },
           "metadata": {},
           "params": [
             {
-              "name": "newScroller"
-            },
-            {
-              "name": "oldScroller"
+              "name": "matchParent"
             }
           ]
         },
         {
           "name": "_computeComputedBarHeight",
-          "description": "",
+          "description": "eslint-disable-next-line no-unused-vars",
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 222,
-              "column": 2
+              "line": 347,
+              "column": 1
             },
             "end": {
-              "line": 227,
-              "column": 3
+              "line": 352,
+              "column": 2
             }
           },
           "metadata": {},
@@ -803,12 +443,12 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 229,
-              "column": 2
+              "line": 354,
+              "column": 1
             },
             "end": {
-              "line": 231,
-              "column": 3
+              "line": 356,
+              "column": 2
             }
           },
           "metadata": {},
@@ -824,33 +464,19 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 233,
-              "column": 2
+              "line": 358,
+              "column": 1
             },
             "end": {
-              "line": 237,
-              "column": 3
+              "line": 361,
+              "column": 2
             }
           },
           "metadata": {},
-          "params": []
-        },
-        {
-          "name": "_scrollManagement",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 239,
-              "column": 2
-            },
-            "end": {
-              "line": 254,
-              "column": 3
-            }
-          },
-          "metadata": {},
-          "params": []
+          "params": [],
+          "return": {
+            "type": "void"
+          }
         },
         {
           "name": "_showHideBottomBar",
@@ -858,12 +484,12 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 256,
-              "column": 2
+              "line": 363,
+              "column": 1
             },
             "end": {
-              "line": 262,
-              "column": 3
+              "line": 376,
+              "column": 2
             }
           },
           "metadata": {},
@@ -874,28 +500,10 @@
             {
               "name": "barHeight"
             }
-          ]
-        },
-        {
-          "name": "_onTransitionEnd",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 264,
-              "column": 2
-            },
-            "end": {
-              "line": 269,
-              "column": 3
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "event"
-            }
-          ]
+          ],
+          "return": {
+            "type": "void"
+          }
         },
         {
           "name": "_isActionNode",
@@ -903,12 +511,12 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 271,
-              "column": 2
+              "line": 378,
+              "column": 1
             },
             "end": {
-              "line": 275,
-              "column": 3
+              "line": 385,
+              "column": 2
             }
           },
           "metadata": {},
@@ -924,12 +532,12 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 277,
-              "column": 2
+              "line": 387,
+              "column": 1
             },
             "end": {
-              "line": 305,
-              "column": 3
+              "line": 413,
+              "column": 2
             }
           },
           "metadata": {},
@@ -937,7 +545,10 @@
             {
               "name": "info"
             }
-          ]
+          ],
+          "return": {
+            "type": "void"
+          }
         },
         {
           "name": "_toolbarMoveToStart",
@@ -945,12 +556,12 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 307,
-              "column": 2
+              "line": 415,
+              "column": 1
             },
             "end": {
-              "line": 314,
-              "column": 3
+              "line": 422,
+              "column": 2
             }
           },
           "metadata": {},
@@ -958,7 +569,10 @@
             {
               "name": "node"
             }
-          ]
+          ],
+          "return": {
+            "type": "void"
+          }
         },
         {
           "name": "_dropdownClosed",
@@ -966,16 +580,19 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 316,
-              "column": 2
+              "line": 424,
+              "column": 1
             },
             "end": {
-              "line": 318,
-              "column": 3
+              "line": 426,
+              "column": 2
             }
           },
           "metadata": {},
-          "params": []
+          "params": [],
+          "return": {
+            "type": "void"
+          }
         },
         {
           "name": "_layoutActions",
@@ -983,16 +600,19 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 342,
-              "column": 2
+              "line": 450,
+              "column": 1
             },
             "end": {
-              "line": 409,
-              "column": 3
+              "line": 513,
+              "column": 2
             }
           },
           "metadata": {},
-          "params": []
+          "params": [],
+          "return": {
+            "type": "void"
+          }
         },
         {
           "name": "_moveElement",
@@ -1000,12 +620,12 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 411,
-              "column": 2
+              "line": 515,
+              "column": 1
             },
             "end": {
-              "line": 420,
-              "column": 3
+              "line": 523,
+              "column": 2
             }
           },
           "metadata": {},
@@ -1016,7 +636,10 @@
             {
               "name": "toToolbar"
             }
-          ]
+          ],
+          "return": {
+            "type": "void"
+          }
         },
         {
           "name": "_debounceLayoutActions",
@@ -1024,16 +647,19 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 422,
-              "column": 2
+              "line": 525,
+              "column": 1
             },
             "end": {
-              "line": 424,
-              "column": 3
+              "line": 532,
+              "column": 2
             }
           },
           "metadata": {},
-          "params": []
+          "params": [],
+          "return": {
+            "type": "void"
+          }
         },
         {
           "name": "_canAddMoreButtonToBar",
@@ -1041,12 +667,12 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 426,
-              "column": 2
+              "line": 534,
+              "column": 1
             },
             "end": {
-              "line": 433,
-              "column": 3
+              "line": 540,
+              "column": 2
             }
           },
           "metadata": {},
@@ -1068,12 +694,12 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 435,
-              "column": 2
+              "line": 542,
+              "column": 1
             },
             "end": {
-              "line": 438,
-              "column": 3
+              "line": 545,
+              "column": 2
             }
           },
           "metadata": {},
@@ -1084,7 +710,10 @@
             {
               "name": "detail"
             }
-          ]
+          ],
+          "return": {
+            "type": "void"
+          }
         },
         {
           "name": "_fireAction",
@@ -1092,12 +721,12 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 440,
-              "column": 2
+              "line": 547,
+              "column": 1
             },
             "end": {
-              "line": 453,
-              "column": 3
+              "line": 560,
+              "column": 2
             }
           },
           "metadata": {},
@@ -1105,7 +734,10 @@
             {
               "name": "item"
             }
-          ]
+          ],
+          "return": {
+            "type": "void"
+          }
         }
       ],
       "staticMethods": [],
@@ -1122,224 +754,209 @@
       "metadata": {},
       "sourceRange": {
         "start": {
-          "line": 10,
-          "column": 9
+          "line": 42,
+          "column": 0
         },
         "end": {
-          "line": 454,
-          "column": 2
+          "line": 561,
+          "column": 1
         }
       },
       "privacy": "public",
       "superclass": "HTMLElement",
+      "name": "CosmozBottomBar",
       "attributes": [
         {
           "name": "active",
-          "description": "Whether the bar is active (shown)\nNOTE: This has no effect when `fixed` is `true`",
+          "description": "Whether the bar is active (shown)",
           "sourceRange": {
             "start": {
-              "line": 30,
+              "line": 175,
               "column": 3
             },
             "end": {
-              "line": 35,
+              "line": 180,
               "column": 4
             }
           },
           "metadata": {},
-          "type": "boolean"
-        },
-        {
-          "name": "fixed",
-          "description": "Whether the bar is fixed (and take up space) or shows/hides from the bottom when needed\n(Usually fixed on desktop and not mobile.)",
-          "sourceRange": {
-            "start": {
-              "line": 41,
-              "column": 3
-            },
-            "end": {
-              "line": 45,
-              "column": 4
-            }
-          },
-          "metadata": {},
-          "type": "boolean"
+          "type": "boolean | null | undefined"
         },
         {
           "name": "bar-height",
           "description": "Bar height (not used when `matchParent` or `matchElementHeight` is set)",
           "sourceRange": {
             "start": {
-              "line": 50,
+              "line": 185,
               "column": 3
             },
             "end": {
-              "line": 53,
+              "line": 188,
               "column": 4
             }
           },
           "metadata": {},
-          "type": "number"
+          "type": "number | null | undefined"
         },
         {
           "name": "match-parent",
           "description": "Whether to match the height of parent",
           "sourceRange": {
             "start": {
-              "line": 58,
+              "line": 193,
               "column": 3
             },
             "end": {
-              "line": 61,
+              "line": 196,
               "column": 4
             }
           },
           "metadata": {},
-          "type": "boolean"
-        },
-        {
-          "name": "scroller",
-          "description": "Scroller element to listen to when deciding whether or not to show the bar.\nBar will be shown while scrolling up or when reaching bottom",
-          "sourceRange": {
-            "start": {
-              "line": 67,
-              "column": 3
-            },
-            "end": {
-              "line": 70,
-              "column": 4
-            }
-          },
-          "metadata": {},
-          "type": "Object"
+          "type": "boolean | null | undefined"
         },
         {
           "name": "has-menu-items",
           "description": "Whether this bottom bar has items distributed to the menu",
           "sourceRange": {
             "start": {
-              "line": 75,
+              "line": 201,
               "column": 3
             },
             "end": {
-              "line": 80,
+              "line": 206,
               "column": 4
             }
           },
           "metadata": {},
-          "type": "boolean"
+          "type": "boolean | null | undefined"
+        },
+        {
+          "name": "has-extra-items",
+          "description": "",
+          "sourceRange": {
+            "start": {
+              "line": 208,
+              "column": 3
+            },
+            "end": {
+              "line": 211,
+              "column": 4
+            }
+          },
+          "metadata": {},
+          "type": "boolean | null | undefined"
         },
         {
           "name": "selected-class",
           "description": "Class applied the the selected item",
           "sourceRange": {
             "start": {
-              "line": 85,
+              "line": 216,
               "column": 3
             },
             "end": {
-              "line": 88,
+              "line": 219,
               "column": 4
             }
           },
           "metadata": {},
-          "type": "string"
+          "type": "string | null | undefined"
         },
         {
           "name": "toolbar-class",
           "description": "Class applied to items distributed to the toolbar",
           "sourceRange": {
             "start": {
-              "line": 93,
+              "line": 224,
               "column": 3
             },
             "end": {
-              "line": 96,
+              "line": 227,
               "column": 4
             }
           },
           "metadata": {},
-          "type": "string"
+          "type": "string | null | undefined"
         },
         {
           "name": "menu-class",
           "description": "Class applied to items distributed to the menu",
           "sourceRange": {
             "start": {
-              "line": 101,
+              "line": 232,
               "column": 3
             },
             "end": {
-              "line": 104,
+              "line": 235,
               "column": 4
             }
           },
           "metadata": {},
-          "type": "string"
+          "type": "string | null | undefined"
         },
         {
           "name": "max-toolbar-items",
           "description": "Maximum number of items in toolbar, regardless of space",
           "sourceRange": {
             "start": {
-              "line": 109,
+              "line": 240,
               "column": 3
             },
             "end": {
-              "line": 112,
+              "line": 243,
               "column": 4
             }
           },
           "metadata": {},
-          "type": "number"
+          "type": "number | null | undefined"
         },
         {
           "name": "computed-bar-height",
           "description": "The actual bar height, depending on if we `matchParent` or set `barHeight`",
           "sourceRange": {
             "start": {
-              "line": 117,
+              "line": 248,
               "column": 3
             },
             "end": {
-              "line": 122,
+              "line": 252,
               "column": 4
             }
           },
           "metadata": {},
-          "type": "number"
+          "type": "number | null | undefined"
         },
         {
           "name": "visible",
-          "description": "Whether the bar is visible (has actions and is `active` or `fixed`)",
+          "description": "Whether the bar is visible (has actions and is `active`)",
           "sourceRange": {
             "start": {
-              "line": 134,
+              "line": 264,
               "column": 3
             },
             "end": {
-              "line": 139,
+              "line": 269,
               "column": 4
             }
           },
           "metadata": {},
-          "type": "boolean"
+          "type": "boolean | null | undefined"
         },
         {
           "name": "has-actions",
           "description": "Whether we have any visible actions",
           "sourceRange": {
             "start": {
-              "line": 144,
+              "line": 274,
               "column": 3
             },
             "end": {
-              "line": 149,
+              "line": 279,
               "column": 4
             }
           },
           "metadata": {},
-          "type": "boolean"
+          "type": "boolean | null | undefined"
         }
       ],
       "events": [
@@ -1378,68 +995,7 @@
         "cssVariables": [],
         "selectors": []
       },
-      "slots": [
-        {
-          "description": "",
-          "name": "info",
-          "range": {
-            "file": "cosmoz-bottom-bar.html",
-            "start": {
-              "line": 38,
-              "column": 5
-            },
-            "end": {
-              "line": 38,
-              "column": 30
-            }
-          }
-        },
-        {
-          "description": "",
-          "name": "bottom-bar-toolbar",
-          "range": {
-            "file": "cosmoz-bottom-bar.html",
-            "start": {
-              "line": 42,
-              "column": 5
-            },
-            "end": {
-              "line": 42,
-              "column": 66
-            }
-          }
-        },
-        {
-          "description": "",
-          "name": "bottom-bar-menu",
-          "range": {
-            "file": "cosmoz-bottom-bar.html",
-            "start": {
-              "line": 49,
-              "column": 6
-            },
-            "end": {
-              "line": 49,
-              "column": 61
-            }
-          }
-        },
-        {
-          "description": "",
-          "name": "",
-          "range": {
-            "file": "cosmoz-bottom-bar.html",
-            "start": {
-              "line": 55,
-              "column": 3
-            },
-            "end": {
-              "line": 55,
-              "column": 29
-            }
-          }
-        }
-      ],
+      "slots": [],
       "tagname": "cosmoz-bottom-bar"
     },
     {
@@ -1449,451 +1005,312 @@
       "properties": [
         {
           "name": "viewInfo",
-          "type": "Object",
+          "type": "Object | null | undefined",
           "description": "viewInfo object\n{\n\tdesktop: Boolean,\n\teffects: Number (1-10),\n\theight: Number,\n\tlandscape: Boolean,\n\tmobile: Boolean,\n\tportrait: Boolean,\n\ttablet: Boolean,\n\twidth: Number\n}",
           "privacy": "public",
           "sourceRange": {
-            "file": "bower_components/cosmoz-viewinfo/cosmoz-viewinfo.js",
+            "file": "../@neovici/cosmoz-viewinfo/cosmoz-viewinfo-mixin.js",
             "start": {
-              "line": 38,
-              "column": 3
+              "line": 37,
+              "column": 4
             },
             "end": {
-              "line": 41,
-              "column": 4
+              "line": 40,
+              "column": 5
             }
           },
           "metadata": {
             "polymer": {
-              "notify": true
+              "notify": true,
+              "attributeType": "Object"
             }
           },
-          "inheritedFrom": "Cosmoz.ViewInfoBehavior"
-        },
-        {
-          "name": "_parentResizable",
-          "type": "Object",
-          "description": "The closest ancestor element that implements `IronResizableBehavior`.",
-          "privacy": "protected",
-          "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
-            "start": {
-              "line": 36,
-              "column": 6
-            },
-            "end": {
-              "line": 39,
-              "column": 7
-            }
-          },
-          "metadata": {
-            "polymer": {
-              "observer": "\"_parentResizableChanged\""
-            }
-          },
-          "inheritedFrom": "Polymer.IronResizableBehavior"
-        },
-        {
-          "name": "_notifyingDescendant",
-          "type": "boolean",
-          "description": "True if this element is currently notifying its descendant elements of\nresize.",
-          "privacy": "protected",
-          "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
-            "start": {
-              "line": 45,
-              "column": 6
-            },
-            "end": {
-              "line": 48,
-              "column": 7
-            }
-          },
-          "metadata": {
-            "polymer": {}
-          },
-          "defaultValue": "false",
-          "inheritedFrom": "Polymer.IronResizableBehavior"
-        },
-        {
-          "name": "active",
-          "type": "boolean",
-          "description": "Bar-view and bar are active",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 20,
-              "column": 3
-            },
-            "end": {
-              "line": 23,
-              "column": 4
-            }
-          },
-          "metadata": {
-            "polymer": {}
-          },
-          "defaultValue": "true"
+          "inheritedFrom": "ViewInfoMixin"
         },
         {
           "name": "barHeight",
-          "type": "number",
+          "type": "number | null | undefined",
           "description": "Height of the bar",
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 28,
+              "line": 82,
               "column": 3
             },
             "end": {
-              "line": 30,
-              "column": 4
-            }
-          },
-          "metadata": {
-            "polymer": {}
-          }
-        },
-        {
-          "name": "fixed",
-          "type": "boolean",
-          "description": "Fixed bar",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 35,
-              "column": 3
-            },
-            "end": {
-              "line": 39,
+              "line": 84,
               "column": 4
             }
           },
           "metadata": {
             "polymer": {
-              "readOnly": true
+              "attributeType": "Number"
             }
           }
         },
         {
-          "name": "scroller",
-          "type": "Object",
-          "description": "The scroller for the scrolling part of the view",
+          "name": "active",
+          "type": "boolean | null | undefined",
+          "description": "When set to true, activate the bottom bar.",
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 44,
+              "line": 89,
               "column": 3
             },
             "end": {
-              "line": 46,
+              "line": 93,
               "column": 4
             }
           },
           "metadata": {
-            "polymer": {}
-          }
-        },
-        {
-          "name": "visible",
-          "type": "boolean",
-          "description": "Bar is visible",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 51,
-              "column": 3
-            },
-            "end": {
-              "line": 54,
-              "column": 4
+            "polymer": {
+              "notify": true,
+              "attributeType": "Boolean"
             }
-          },
-          "metadata": {
-            "polymer": {}
           },
           "defaultValue": "true"
+        },
+        {
+          "name": "fixed",
+          "type": "boolean | null | undefined",
+          "description": "Set to true to have a fixed bottom that does not disappear upon scrolling.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 98,
+              "column": 3
+            },
+            "end": {
+              "line": 101,
+              "column": 4
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "Boolean"
+            }
+          },
+          "defaultValue": "null"
+        },
+        {
+          "name": "_bottomBarActive",
+          "type": "boolean | null | undefined",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 103,
+              "column": 3
+            },
+            "end": {
+              "line": 105,
+              "column": 4
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "Boolean"
+            }
+          }
+        },
+        {
+          "name": "_bottomBarVisible",
+          "type": "boolean | null | undefined",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 107,
+              "column": 3
+            },
+            "end": {
+              "line": 109,
+              "column": 4
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "Boolean"
+            }
+          }
+        },
+        {
+          "name": "_computedBarHeight",
+          "type": "number | null | undefined",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 111,
+              "column": 3
+            },
+            "end": {
+              "line": 113,
+              "column": 4
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "Number"
+            }
+          }
+        },
+        {
+          "name": "_computedFixed",
+          "type": "boolean | null | undefined",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 115,
+              "column": 3
+            },
+            "end": {
+              "line": 118,
+              "column": 4
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "readOnly": true,
+              "attributeType": "Boolean"
+            }
+          }
+        },
+        {
+          "name": "_scroller",
+          "type": "Object | null | undefined",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 120,
+              "column": 3
+            },
+            "end": {
+              "line": 122,
+              "column": 4
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "Object"
+            }
+          }
         }
       ],
       "methods": [
         {
-          "name": "attached",
+          "name": "connectedCallback",
           "description": "",
-          "privacy": "protected",
+          "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 61,
+              "line": 138,
+              "column": 1
+            },
+            "end": {
+              "line": 142,
               "column": 2
-            },
-            "end": {
-              "line": 63,
-              "column": 3
             }
           },
           "metadata": {},
-          "params": []
+          "params": [],
+          "return": {
+            "type": "void"
+          }
         },
         {
-          "name": "detached",
+          "name": "disconnectedCallback",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 144,
+              "column": 1
+            },
+            "end": {
+              "line": 148,
+              "column": 2
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_updateScrollManagenent",
           "description": "",
           "privacy": "protected",
           "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
             "start": {
-              "line": 66,
-              "column": 4
+              "line": 150,
+              "column": 1
             },
             "end": {
-              "line": 74,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [],
-          "inheritedFrom": "Polymer.IronResizableBehavior"
-        },
-        {
-          "name": "created",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
-            "start": {
-              "line": 55,
-              "column": 4
-            },
-            "end": {
-              "line": 60,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [],
-          "inheritedFrom": "Polymer.IronResizableBehavior"
-        },
-        {
-          "name": "notifyResize",
-          "description": "Can be called to manually notify a resizable and its descendant\nresizables of a resize change.",
-          "privacy": "public",
-          "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
-            "start": {
-              "line": 80,
-              "column": 4
-            },
-            "end": {
-              "line": 92,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [],
-          "inheritedFrom": "Polymer.IronResizableBehavior"
-        },
-        {
-          "name": "assignParentResizable",
-          "description": "Used to assign the closest resizable ancestor to this resizable\nif the ancestor detects a request for notifications.",
-          "privacy": "public",
-          "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
-            "start": {
-              "line": 98,
-              "column": 4
-            },
-            "end": {
-              "line": 100,
-              "column": 5
+              "line": 161,
+              "column": 2
             }
           },
           "metadata": {},
           "params": [
             {
-              "name": "parentResizable"
-            }
-          ],
-          "inheritedFrom": "Polymer.IronResizableBehavior"
-        },
-        {
-          "name": "stopResizeNotificationsFor",
-          "description": "Used to remove a resizable descendant from the list of descendants\nthat should be notified of a resize change.",
-          "privacy": "public",
-          "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
-            "start": {
-              "line": 106,
-              "column": 4
+              "name": "fixed"
             },
-            "end": {
-              "line": 113,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
             {
-              "name": "target"
-            }
-          ],
-          "inheritedFrom": "Polymer.IronResizableBehavior"
-        },
-        {
-          "name": "resizerShouldNotify",
-          "description": "This method can be overridden to filter nested elements that should or\nshould not be notified by the current element. Return true if an element\nshould be notified, or false if it should not be notified.",
-          "privacy": "public",
-          "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
-            "start": {
-              "line": 124,
-              "column": 4
-            },
-            "end": {
-              "line": 124,
-              "column": 59
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "element",
-              "type": "HTMLElement",
-              "description": "A candidate descendant element that\nimplements `IronResizableBehavior`."
+              "name": "scroller"
             }
           ],
           "return": {
-            "type": "boolean",
-            "desc": "True if the `element` should be notified of resize."
-          },
-          "inheritedFrom": "Polymer.IronResizableBehavior"
+            "type": "void"
+          }
         },
         {
-          "name": "_onDescendantIronResize",
+          "name": "_scrollManagement",
           "description": "",
           "privacy": "protected",
           "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
             "start": {
-              "line": 126,
-              "column": 4
+              "line": 163,
+              "column": 1
             },
             "end": {
-              "line": 138,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "event"
-            }
-          ],
-          "inheritedFrom": "Polymer.IronResizableBehavior"
-        },
-        {
-          "name": "_fireResize",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
-            "start": {
-              "line": 140,
-              "column": 4
-            },
-            "end": {
-              "line": 145,
-              "column": 5
+              "line": 173,
+              "column": 2
             }
           },
           "metadata": {},
           "params": [],
-          "inheritedFrom": "Polymer.IronResizableBehavior"
+          "return": {
+            "type": "void"
+          }
         },
         {
-          "name": "_onIronRequestResizeNotifications",
+          "name": "_computeScrollerContentStyle",
           "description": "",
           "privacy": "protected",
           "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
             "start": {
-              "line": 147,
-              "column": 4
+              "line": 175,
+              "column": 1
             },
             "end": {
-              "line": 162,
-              "column": 5
+              "line": 178,
+              "column": 2
             }
           },
           "metadata": {},
           "params": [
             {
-              "name": "event"
-            }
-          ],
-          "inheritedFrom": "Polymer.IronResizableBehavior"
-        },
-        {
-          "name": "_parentResizableChanged",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
-            "start": {
-              "line": 164,
-              "column": 4
+              "name": "barHeight"
             },
-            "end": {
-              "line": 168,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
             {
-              "name": "parentResizable"
+              "name": "bottomBarVisible"
             }
-          ],
-          "inheritedFrom": "Polymer.IronResizableBehavior"
-        },
-        {
-          "name": "_notifyDescendant",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
-            "start": {
-              "line": 170,
-              "column": 4
-            },
-            "end": {
-              "line": 181,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "descendant"
-            }
-          ],
-          "inheritedFrom": "Polymer.IronResizableBehavior"
-        },
-        {
-          "name": "_requestResizeNotifications",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
-            "start": {
-              "line": 183,
-              "column": 4
-            },
-            "end": {
-              "line": 211,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [],
-          "inheritedFrom": "Polymer.IronResizableBehavior"
+          ]
         },
         {
           "name": "_computeFixed",
@@ -1901,59 +1318,21 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 65,
-              "column": 2
+              "line": 180,
+              "column": 1
             },
             "end": {
-              "line": 67,
-              "column": 3
+              "line": 182,
+              "column": 2
             }
           },
           "metadata": {},
           "params": [
+            {
+              "name": "fixed"
+            },
             {
               "name": "desktop"
-            },
-            {
-              "name": "active"
-            }
-          ]
-        },
-        {
-          "name": "_onResize",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 69,
-              "column": 2
-            },
-            "end": {
-              "line": 79,
-              "column": 3
-            }
-          },
-          "metadata": {},
-          "params": []
-        },
-        {
-          "name": "_getHeightStyle",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 81,
-              "column": 2
-            },
-            "end": {
-              "line": 86,
-              "column": 3
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "barHeight"
             }
           ]
         }
@@ -1972,162 +1351,102 @@
       "metadata": {},
       "sourceRange": {
         "start": {
-          "line": 6,
-          "column": 9
+          "line": 25,
+          "column": 0
         },
         "end": {
-          "line": 87,
-          "column": 2
+          "line": 183,
+          "column": 1
         }
       },
       "privacy": "public",
       "superclass": "HTMLElement",
+      "name": "CosmozBottomBarView",
       "attributes": [
         {
           "name": "view-info",
           "description": "viewInfo object\n{\n\tdesktop: Boolean,\n\teffects: Number (1-10),\n\theight: Number,\n\tlandscape: Boolean,\n\tmobile: Boolean,\n\tportrait: Boolean,\n\ttablet: Boolean,\n\twidth: Number\n}",
           "sourceRange": {
-            "file": "bower_components/cosmoz-viewinfo/cosmoz-viewinfo.js",
+            "file": "../@neovici/cosmoz-viewinfo/cosmoz-viewinfo-mixin.js",
             "start": {
-              "line": 38,
-              "column": 3
+              "line": 37,
+              "column": 4
             },
             "end": {
-              "line": 41,
-              "column": 4
+              "line": 40,
+              "column": 5
             }
           },
           "metadata": {},
-          "type": "Object",
-          "inheritedFrom": "Cosmoz.ViewInfoBehavior"
-        },
-        {
-          "name": "active",
-          "description": "Bar-view and bar are active",
-          "sourceRange": {
-            "start": {
-              "line": 20,
-              "column": 3
-            },
-            "end": {
-              "line": 23,
-              "column": 4
-            }
-          },
-          "metadata": {},
-          "type": "boolean"
+          "type": "Object | null | undefined",
+          "inheritedFrom": "ViewInfoMixin"
         },
         {
           "name": "bar-height",
           "description": "Height of the bar",
           "sourceRange": {
             "start": {
-              "line": 28,
+              "line": 82,
               "column": 3
             },
             "end": {
-              "line": 30,
+              "line": 84,
               "column": 4
             }
           },
           "metadata": {},
-          "type": "number"
+          "type": "number | null | undefined"
+        },
+        {
+          "name": "active",
+          "description": "When set to true, activate the bottom bar.",
+          "sourceRange": {
+            "start": {
+              "line": 89,
+              "column": 3
+            },
+            "end": {
+              "line": 93,
+              "column": 4
+            }
+          },
+          "metadata": {},
+          "type": "boolean | null | undefined"
         },
         {
           "name": "fixed",
-          "description": "Fixed bar",
+          "description": "Set to true to have a fixed bottom that does not disappear upon scrolling.",
           "sourceRange": {
             "start": {
-              "line": 35,
+              "line": 98,
               "column": 3
             },
             "end": {
-              "line": 39,
+              "line": 101,
               "column": 4
             }
           },
           "metadata": {},
-          "type": "boolean"
-        },
-        {
-          "name": "scroller",
-          "description": "The scroller for the scrolling part of the view",
-          "sourceRange": {
-            "start": {
-              "line": 44,
-              "column": 3
-            },
-            "end": {
-              "line": 46,
-              "column": 4
-            }
-          },
-          "metadata": {},
-          "type": "Object"
-        },
-        {
-          "name": "visible",
-          "description": "Bar is visible",
-          "sourceRange": {
-            "start": {
-              "line": 51,
-              "column": 3
-            },
-            "end": {
-              "line": 54,
-              "column": 4
-            }
-          },
-          "metadata": {},
-          "type": "boolean"
+          "type": "boolean | null | undefined"
         }
       ],
       "events": [
         {
           "type": "CustomEvent",
-          "name": "view-info-changed",
-          "description": "Fired when the `viewInfo` property changes.",
-          "metadata": {},
-          "inheritedFrom": "Cosmoz.ViewInfoBehavior"
+          "name": "active-changed",
+          "description": "Fired when the `active` property changes.",
+          "metadata": {}
         }
       ],
       "styling": {
         "cssVariables": [],
         "selectors": []
       },
-      "slots": [
-        {
-          "description": "",
-          "name": "scroller-content",
-          "range": {
-            "file": "cosmoz-bottom-bar-view.html",
-            "start": {
-              "line": 63,
-              "column": 4
-            },
-            "end": {
-              "line": 63,
-              "column": 41
-            }
-          }
-        },
-        {
-          "description": "",
-          "name": "",
-          "range": {
-            "file": "cosmoz-bottom-bar-view.html",
-            "start": {
-              "line": 69,
-              "column": 3
-            },
-            "end": {
-              "line": 69,
-              "column": 16
-            }
-          }
-        }
-      ],
-      "tagname": "cosmoz-bottom-bar-view"
+      "slots": [],
+      "tagname": "cosmoz-bottom-bar-view",
+      "mixins": [
+        "ViewInfoMixin"
+      ]
     }
   ]
 }

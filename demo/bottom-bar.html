@@ -6,29 +6,36 @@
 
 	<title>cosmoz-bottom-bar demo</title>
 
-	<script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+	<script src="/components/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
 
-	<link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html" />
-	<link rel="import" href="../../iron-demo-helpers/demo-snippet.html" />
+	<script type="module" src="/components/@polymer/iron-demo-helpers/demo-pages-shared-styles.js"></script>
+	<script type="module" src="/components/@polymer/iron-demo-helpers/demo-snippet.js"></script>
 
-	<link rel="import" href="../../iron-flex-layout/iron-flex-layout-classes.html">
-	<link rel="import" href="../../paper-button/paper-button.html">
-	<link rel="import" href="../../paper-toggle-button/paper-toggle-button.html">
-	<link rel="import" href="../../iron-icon/iron-icon.html">
-	<link rel="import" href="../../iron-icons/iron-icons.html">
+	<script type="module" src="/components/@polymer/iron-flex-layout/iron-flex-layout-classes.js"></script>
+	<script type="module" src="/components/@polymer/paper-button/paper-button.js"></script>
+	<script type="module" src="/components/@polymer/paper-toggle-button/paper-toggle-button.js"></script>
+	<script type="module" src="/components/@polymer/iron-icon/iron-icon.js"></script>
+	<script type="module" src="/components/@polymer/iron-icons/iron-icons.js"></script>
 
-	<link rel="import" href="../cosmoz-bottom-bar.html">
+	<script type="module" src="../cosmoz-bottom-bar.js"></script>
 
-	<custom-style>
-		<style is="custom-style" include="iron-flex iron-flex-alignment iron-positioning">
-			body {
-				font-family: sans-serif;
-			}
-			cosmoz-bottom-bar {
-				background-color: lightslategrey;
-			}
-		</style>
-	</custom-style>
+	<script type="module">
+		const $documentContainer = document.createElement('template');
+
+		$documentContainer.innerHTML = `
+			<custom-style>
+				<style is="custom-style" include="iron-flex iron-flex-alignment iron-positioning">
+					body {
+						font-family: sans-serif;
+					}
+					cosmoz-bottom-bar {
+						background-color: lightslategrey;
+					}
+				</style>
+			</custom-style>`;
+
+		document.head.appendChild($documentContainer.content);
+	</script>
 </head>
 <body unresolved>
 	<div id="container" class="vertical-section-container centered">

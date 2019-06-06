@@ -1,7 +1,7 @@
-<link rel="import" href="../../../polymer/polymer-element.html" />
+import { PolymerElement } from '@polymer/polymer/polymer-element';
+import { html } from '@polymer/polymer/lib/utils/html-tag';
 
-<script>
-customElements.define('fixed-size-item', class extends Polymer.Element {
+customElements.define('fixed-size-item', class extends PolymerElement {
 
 	static get properties() {
 		return {
@@ -21,7 +21,7 @@ customElements.define('fixed-size-item', class extends Polymer.Element {
 	}
 
 	static get template() {
-		return Polymer.html/*html*/`
+		return html/*html*/`
 			<style>
 				:host {
 					display: block;
@@ -45,4 +45,3 @@ customElements.define('fixed-size-item', class extends Polymer.Element {
 		`;
 	}
 });
-</script>

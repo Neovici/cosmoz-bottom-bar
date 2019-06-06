@@ -5,14 +5,16 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-	<script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-	<script src="../../web-component-tester/browser.js"></script>
-	<script src="../../test-fixture/test-fixture-mocha.js"></script>
+	<script src="/components/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+	<script src="/components/mocha/mocha.js"></script>
+	<script src="/components/wct-mocha/wct-mocha.js"></script>
+	<script src="/components/chai/chai.js"></script>
+	<script src="/components/@polymer/test-fixture/test-fixture-mocha.js"></script>
 
-	<link rel="import" href="../../test-fixture/test-fixture.html">
-	<link rel="import" href="../../iron-test-helpers/iron-test-helpers.html">
-	<link rel="import" href="../cosmoz-bottom-bar.html">
-	<link rel="import" href="helpers/fixed-size-item.html">
+	<script type="module" src="/components/@polymer/test-fixture/test-fixture.js"></script>
+	<script type="module" src="/components/@polymer/iron-test-helpers/iron-test-helpers.js"></script>
+	<script type="module" src="../cosmoz-bottom-bar.js"></script>
+	<script type="module" src="./helpers/fixed-size-item.js"></script>
 
 </head>
 <body>
@@ -74,13 +76,12 @@
 		</template>
 	</test-fixture>
 
-	<script type="text/javascript">
-	(() => {
-		'use strict';
+	<script type="module">
+		import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer';
 
 		const isElement = ({nodeType: type}) => type === Node.ELEMENT_NODE;
 
-		suite('bottomBarWithoutMenu',  () => {
+		suite('bottomBarWithoutMenu',	 () => {
 			let bottomBar;
 
 			setup(done => {
@@ -89,12 +90,12 @@
 			});
 
 			test('button should be placed in toolbar', () => {
-				var item = Polymer.FlattenedNodesObserver.getFlattenedNodes(bottomBar).find(isElement),
+				var item = FlattenedNodesObserver.getFlattenedNodes(bottomBar).find(isElement),
 					slot = item.getAttribute('slot');
 
 				assert.equal(item.id, 'bottomBarWithoutMenuItem');
 				assert.equal(slot, 'bottom-bar-toolbar');
-				assert.equal(item, Polymer.FlattenedNodesObserver.getFlattenedNodes(bottomBar.$.bottomBarToolbar)[0]);
+				assert.equal(item, FlattenedNodesObserver.getFlattenedNodes(bottomBar.$.bottomBarToolbar)[0]);
 			});
 
 			test('menu button should be hidden', () => {
@@ -114,21 +115,21 @@
 			});
 
 			test('First button should be placed in toolbar', () => {
-				const item = Polymer.FlattenedNodesObserver.getFlattenedNodes(bottomBar).find(isElement),
+				const item = FlattenedNodesObserver.getFlattenedNodes(bottomBar).find(isElement),
 					slot = item.getAttribute('slot');
 
 				assert.equal(slot, 'bottom-bar-toolbar');
 				assert.equal(item.id, 'bottomBarWithOverflowingButtonItem1');
-				assert.equal(item, Polymer.FlattenedNodesObserver.getFlattenedNodes(bottomBar.$.bottomBarToolbar)[0]);
+				assert.equal(item, FlattenedNodesObserver.getFlattenedNodes(bottomBar.$.bottomBarToolbar)[0]);
 
 			});
 
 			test('Second button should be placed in menu', () => {
-				const item = Polymer.FlattenedNodesObserver.getFlattenedNodes(bottomBar).filter(isElement)[1],
+				const item = FlattenedNodesObserver.getFlattenedNodes(bottomBar).filter(isElement)[1],
 					slot = item.getAttribute('slot');
 				assert.equal(slot, 'bottom-bar-menu');
 				assert.equal(item.id, 'bottomBarWithOverflowingButtonItem2');
-				assert.equal(item, Polymer.FlattenedNodesObserver.getFlattenedNodes(bottomBar.$.bottomBarMenu)[0]);
+				assert.equal(item, FlattenedNodesObserver.getFlattenedNodes(bottomBar.$.bottomBarMenu)[0]);
 			});
 
 			test('menu button should be visible', () => {
@@ -150,11 +151,11 @@
 			});
 
 			test('Toolbar should not contains more than max-toolbar-items', () => {
-				const toolBarNodes = Polymer.FlattenedNodesObserver.getFlattenedNodes(bottomBar.$.bottomBarToolbar),
+				const toolBarNodes = FlattenedNodesObserver.getFlattenedNodes(bottomBar.$.bottomBarToolbar),
 					item1 = toolBarNodes[0],
 					item2 = toolBarNodes[1],
 					item3 = toolBarNodes[2],
-					item4 = Polymer.FlattenedNodesObserver.getFlattenedNodes(bottomBar.$.bottomBarMenu)[0];
+					item4 = FlattenedNodesObserver.getFlattenedNodes(bottomBar.$.bottomBarMenu)[0];
 
 				assert.equal(toolBarNodes.length, 3);
 				assert.equal(item1.id, 'bottomBarMaxToolbarItemsItem1');
@@ -183,8 +184,8 @@
 			});
 
 			test('Hidden items should not affect layout', () => {
-				const toolbarItems = Polymer.FlattenedNodesObserver.getFlattenedNodes(toolbar),
-					menuItems = Polymer.FlattenedNodesObserver.getFlattenedNodes(menu),
+				const toolbarItems = FlattenedNodesObserver.getFlattenedNodes(toolbar),
+					menuItems = FlattenedNodesObserver.getFlattenedNodes(menu),
 					item1 = toolbarItems[0],
 					item2 = toolbarItems[1],
 					item3 = toolbarItems[2],
@@ -202,10 +203,10 @@
 			});
 
 			test('Unhiding item', done => {
-				const toolBarNodes = Polymer.FlattenedNodesObserver.getFlattenedNodes(toolbar),
+				const toolBarNodes = FlattenedNodesObserver.getFlattenedNodes(toolbar),
 					item1 = toolBarNodes[0],
-					item2 =  toolBarNodes[1],
-					item3 =  toolBarNodes[2];
+					item2 =	 toolBarNodes[1],
+					item3 =	 toolBarNodes[2];
 
 				assert.equal(item1.id, 'bottomBarWithHiddenButtonItem1');
 				assert.equal(item2.id, 'bottomBarWithHiddenButtonItem2');
@@ -216,10 +217,10 @@
 				flush(() => {
 					bottomBar._layoutDebouncer.flush();
 
-					const toolBarNodes = Polymer.FlattenedNodesObserver.getFlattenedNodes(toolbar),
+					const toolBarNodes = FlattenedNodesObserver.getFlattenedNodes(toolbar),
 						item1 = toolBarNodes[0],
 						item2 = toolBarNodes[1],
-						menuItems = Polymer.FlattenedNodesObserver.getFlattenedNodes(menu),
+						menuItems = FlattenedNodesObserver.getFlattenedNodes(menu),
 						item3 = menuItems[0],
 						nonHiddenMenuItems = menuItems.filter(function (item) {
 							return !item.hidden;
@@ -279,7 +280,6 @@
 			});
 
 		});
-	})();
 	</script>
 </body>
 </html>

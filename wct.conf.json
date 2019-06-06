@@ -22,10 +22,7 @@
 				"lcov"
 			],
 			"include": [
-				"cosmoz-bottom-bar-view.html",
-				"cosmoz-bottom-bar-view.js",
-				"cosmoz-bottom-bar.html",
-				"cosmoz-bottom-bar.js"
+				"**/cosmoz-*.js"
 			],
 			"exclude": []
 		},
@@ -37,7 +34,7 @@
 			}, {
 				"browserName": "chrome",
 				"platform": "Windows 10",
-				"version": "dev"
+				"version": "stable"
 			}, {
 				"browserName": "chrome",
 				"platform": "Windows 10",
