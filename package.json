@@ -2,37 +2,61 @@
 	"name": "cosmoz-bottom-bar",
 	"version": "1.0.0",
 	"description": "[![Build Status](https://travis-ci.org/Neovici/cosmoz-bottom-bar.svg?branch=master)](https://travis-ci.org/Neovici/cosmoz-bottom-bar)",
-	"main": "cosmoz-bottom-bar.html",
-	"directories": {
-		"test": "test"
-	},
-	"devDependencies": {
-		"eslint": "^5.9.0",
-		"eslint-plugin-html": "^5.0.0",
-		"eslint-plugin-mocha": "^5.2.0",
-		"polymer-cli": "^1.9.1",
-		"web-component-tester-istanbul": "Neovici/web-component-tester-istanbul"
-	},
-	"scripts": {
-		"analyze": "polymer analyze --input cosmoz-*.html  > analysis.json",
-		"lint": "eslint --cache --ext .js,.html . && polymer lint cosmoz-*.html",
-		"postinstall": "polymer install",
-		"pristine": "rm -rf bower_components/ node_modules/ && yarn install",
-		"start": "polymer serve -o",
-		"test": "polymer test"
+	"keywords": [
+		"polymer",
+		"web-components"
+	],
+	"homepage": "https://github.com/neovici/cosmoz-bottom-bar#readme",
+	"bugs": {
+		"url": "https://github.com/neovici/cosmoz-bottom-bar/issues"
 	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/neovici/cosmoz-bottom-bar.git"
 	},
-	"keywords": [
-		"polymer",
-		"web-components"
-	],
-	"author": "",
 	"license": "Apache-2.0",
-	"bugs": {
-		"url": "https://github.com/neovici/cosmoz-bottom-bar/issues"
+	"author": "Neovici Development",
+	"main": "cosmoz-bottom-bar.js",
+	"directories": {
+		"test": "test"
 	},
-	"homepage": "https://github.com/neovici/cosmoz-bottom-bar#readme"
+	"scripts": {
+		"analyze": "polymer analyze --input cosmoz-*.js  > analysis.json",
+		"lint": "eslint --cache --ext .js,.html . && polymer lint cosmoz-*.js",
+		"pristine": "rm -rf node_modules/ && yarn install",
+		"start": "polymer serve -o",
+		"test": "polymer test"
+	},
+	"dependencies": {
+		"@neovici/cosmoz-viewinfo": "neovici/cosmoz-viewinfo#semver:^3.0.0",
+		"@polymer/iron-flex-layout": "^3.0.0",
+		"@polymer/iron-icons": "^3.0.0",
+		"@polymer/iron-resizable-behavior": "^3.0.0",
+		"@polymer/iron-selector": "^3.0.0",
+		"@polymer/paper-icon-button": "^3.0.0",
+		"@polymer/paper-listbox": "^3.0.0",
+		"@polymer/paper-menu-button": "^3.0.0",
+		"@polymer/polymer": "^3.0.0",
+		"@webcomponents/shadycss": "^1.9.1"
+	},
+	"devDependencies": {
+		"@neovici/eslint-config": "neovici/eslint-config#semver:^1.0.0",
+		"@polymer/iron-component-page": "^4.0.0",
+		"@polymer/iron-demo-helpers": "^3.0.0",
+		"@polymer/iron-test-helpers": "^3.0.0",
+		"@polymer/paper-button": "^3.0.0",
+		"@polymer/paper-toggle-button": "^3.0.0",
+		"@polymer/test-fixture": "^4.0.2",
+		"@webcomponents/webcomponentsjs": "^2.0.0",
+		"babel-eslint": "^10.0.2",
+		"chai": "^4.2.0",
+		"eslint": "^5.0.0",
+		"eslint-plugin-html": "^5.0.0",
+		"eslint-plugin-import": "^2.17.3",
+		"eslint-plugin-mocha": "^5.0.0",
+		"mocha": "^5.0.0",
+		"polymer-cli": "^1.9.1",
+		"wct-istanbul": "^0.14.3",
+		"wct-mocha": "^1.0.1"
+	}
 }

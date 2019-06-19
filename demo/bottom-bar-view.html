@@ -6,38 +6,44 @@
 
 	<title>cosmoz-bottom-bar-view demo</title>
 
-	<script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+	<script src="/components/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
 
-	<link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html" />
-	<link rel="import" href="../../iron-demo-helpers/demo-snippet.html" />
+	<script type="module" src="/components/@polymer/iron-demo-helpers/demo-pages-shared-styles.js"></script>
+	<script type="module" src="/components/@polymer/iron-demo-helpers/demo-snippet.js"></script>
 
-	<link rel="import" href="../../paper-button/paper-button.html">
-	<link rel="import" href="../../paper-toggle-button/paper-toggle-button.html" />
-	<link rel="import" href="../../iron-flex-layout/iron-flex-layout-classes.html">
-	<link rel="import" href="../../cosmoz-viewinfo/cosmoz-viewinfo.html">
-	<link rel="import" href="../cosmoz-bottom-bar-view.html">
+	<script type="module" src="/components/@polymer/paper-button/paper-button.js"></script>
+	<script type="module" src="/components/@polymer/paper-toggle-button/paper-toggle-button.js"></script>
+	<script type="module" src="/components/@polymer/iron-flex-layout/iron-flex-layout.js"></script>
+	<script type="module" src="/components/@polymer/iron-flex-layout/iron-flex-layout-classes.js"></script>
+	<script type="module" src="/components/@neovici/cosmoz-viewinfo/cosmoz-viewinfo.js"></script>
+	<script type="module" src="../cosmoz-bottom-bar-view.js"></script>
+	<script type="module">
+		const $documentContainer = document.createElement('template');
 
+		$documentContainer.innerHTML = `
+			<custom-style>
+				<style is="custom-style" include="iron-flex iron-flex-alignment iron-positioning">
+					body {
+						font-family: sans-serif;
+					}
+					.item {
+						padding: 20px;
+						background-color: rgba(0, 0, 255, 0.5);
+						color: white;
+						font-size: 20px;
+					}
 
-	<custom-style>
-		<style is="custom-style" include="iron-flex iron-flex-alignment iron-positioning">
-			body {
-				font-family: sans-serif;
-			}
-			.item {
-				padding: 20px;
-				background-color: rgba(0, 0, 255, 0.5);
-				color: white;
-				font-size: 20px;
-			}
+					cosmoz-bottom-bar-view {
+						--cosmoz-bottom-bar-view-bar-color: lightgreen;
+					}
 
-			cosmoz-bottom-bar-view {
-				--cosmoz-bottom-bar-view-bar-color: lightgreen;
-			}
+				</style>
+			</custom-style>`;
 
-		</style>
-	</custom-style>
-
+		document.head.appendChild($documentContainer.content);
+	</script>
 </head>
+
 <body unresolved>
 	<div id="container" class="vertical-section-container centered">
 		<h3>cosmoz-bottom-bar-view demo</h3>
@@ -67,11 +73,13 @@
 							</cosmoz-bottom-bar-view>
 						</cosmoz-viewinfo>
 						<script>
-							window.addEventListener('WebComponentsReady', function () {
-								var t = document.querySelector('#basic');
+							window.addEventListener('WebComponentsReady', () => {
+								const t = document.querySelector('#basic');
 								t.content = [];
 								t.addContent = function () {
-									t.push('content', 'Pellentesque imperdiet iaculis fringilla. Nullam ullamcorper purus neque, eget convallis mi placerat at. Aenean quis diam quis est sagittis suscipit.');
+									t.push('content', 'Pellentesque imperdiet iaculis fringilla. \
+										Nullam ullamcorper purus neque, eget convallis mi placerat \
+										at. Aenean quis diam quis est sagittis suscipit.');
 								};
 							});
 						</script>
