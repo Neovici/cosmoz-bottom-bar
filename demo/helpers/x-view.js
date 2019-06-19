@@ -19,8 +19,9 @@ customElements.define('x-view', class extends PolymerElement {
 		};
 	}
 
+	// eslint-disable-next-line max-lines-per-function
 	static get template() {
-		return html/*html*/`
+		return html`
 			<style include="iron-flex iron-flex-alignment iron-positioning">
 				:host {
 					position: relative;

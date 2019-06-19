@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import '@webcomponents/shadycss/entrypoints/apply-shim';
 
 import '@polymer/iron-icons';
@@ -41,7 +42,7 @@ const
  * @demo demo/bottom-bar-match-parent.html match parent Demo
 	*/
 class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerElement) {
-	static get template() {
+	static get template() { // eslint-disable-line max-lines-per-function
 		return html`
 		<style>
 			:host {
@@ -144,9 +145,10 @@ class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerEle
 			<iron-selector id="toolbar" selected-class="[[ selectedClass ]]" on-iron-select="_onActionSelected">
 				<slot id="bottomBarToolbar" name="bottom-bar-toolbar"></slot>
 			</iron-selector>
-			<paper-menu-button id="menu" hidden\$="[[ !hasMenuItems ]]" no-animations="" vertical-offset="[[ barHeight ]]" vertical-align="bottom" horizontal-align="right">
+			<paper-menu-button id="menu" hidden\$="[[ !hasMenuItems ]]" no-animations
+				vertical-offset="[[ barHeight ]]" vertical-align="bottom" horizontal-align="right">
 
-				<paper-icon-button id="dropdownButton" class="dropdown-trigger" slot="dropdown-trigger" icon="menu" toggles="" raised="">
+				<paper-icon-button id="dropdownButton" class="dropdown-trigger" slot="dropdown-trigger" icon="menu" toggles raised>
 				</paper-icon-button>
 				<paper-listbox id="dropdown" class="dropdown-content" slot="dropdown-content" selected-class="[[ selectedClass ]]" on-iron-select="_onActionSelected">
 						<span id="listboxSizer"></span>
@@ -158,7 +160,7 @@ class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerEle
 			</iron-selector>
 		</div>
 
-		<div hidden="" style="display:none">
+		<div hidden style="display:none">
 			<slot id="content"></slot>
 		</div>
 `;
@@ -168,6 +170,7 @@ class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerEle
 		return 'cosmoz-bottom-bar';
 	}
 
+	// eslint-disable-next-line max-lines-per-function
 	static get properties() {
 		return {
 			/**
@@ -285,7 +288,7 @@ class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerEle
 			_matchHeightElement: {
 				type: Object,
 				computed: '_getHeightMatchingElement(matchParent)'
-			},
+			}
 		};
 	}
 
@@ -444,21 +447,16 @@ class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerEle
 	 * attribute from the action, which will cause it to match different content insertion
 	 * points.
 	 *
-	 * @param	 {Boolean} bigger If we're sizing up
-	 *
+	 * @returns {void}
 	 */
-
-	_layoutActions() {
+	_layoutActions() { // eslint-disable-line max-statements
 		const elements = FlattenedNodesObserver.getFlattenedNodes(this).filter(n => n.nodeType === Node.ELEMENT_NODE)
 				.filter(this._isActionNode)
 				.filter(element => !element.hidden),
 			toolbar = this.$.toolbar;
-		let currentWidth,
-			fits,
-			menuElements,
-			newMenuElement,
-			newToolbarElement,
-			toolbarElements;
+
+		let fits,
+			newToolbarElement;
 
 		this._setHasActions(elements.length > 0 || this.hasExtraItems);
 		if (!this.hasActions) {
@@ -466,19 +464,20 @@ class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerEle
 			return;
 		}
 
-		currentWidth = toolbar.clientWidth;
+		const currentWidth = toolbar.clientWidth;
 		fits = toolbar.scrollWidth <= currentWidth + 1;
 
-		toolbarElements = elements.filter(element => {
+		const toolbarElements = elements.filter(element => {
 			if (element.getAttribute('slot') === BOTTOM_BAR_TOOLBAR_SLOT) {
 				// make sure we only read scrollWidth and clientWidth until
 				// know that we don't fit
 				fits = fits && element.scrollWidth <= element.clientWidth;
 				return true;
 			}
+			return false;
 		});
 
-		menuElements = elements.filter(element => element.getAttribute('slot') === BOTTOM_BAR_MENU_SLOT);
+		const menuElements = elements.filter(element => element.getAttribute('slot') === BOTTOM_BAR_MENU_SLOT);
 
 		this._setHasMenuItems(menuElements.length > 0);
 
@@ -508,7 +507,7 @@ class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerEle
 			return;
 		}
 
-		newMenuElement = toolbarElements[toolbarElements.length - 1];
+		const newMenuElement = toolbarElements[toolbarElements.length - 1];
 		this._moveElement(newMenuElement, false);
 		this._debounceLayoutActions();
 	}
@@ -555,7 +554,7 @@ class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerEle
 			bubbles: true,
 			cancelable: true,
 			detail: {
-				item: item
+				item
 			}
 		}));
 	}

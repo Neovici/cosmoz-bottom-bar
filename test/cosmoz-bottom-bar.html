@@ -90,7 +90,7 @@
 			});
 
 			test('button should be placed in toolbar', () => {
-				var item = FlattenedNodesObserver.getFlattenedNodes(bottomBar).find(isElement),
+				const item = FlattenedNodesObserver.getFlattenedNodes(bottomBar).find(isElement),
 					slot = item.getAttribute('slot');
 
 				assert.equal(item.id, 'bottomBarWithoutMenuItem');
@@ -168,12 +168,12 @@
 		suite('bottomBarWithHiddenButton', () => {
 			let bottomBar,
 				toolbar,
-				menu,
-				visibleFilter = function (item) {
-					return item.offsetWidth > 0 && item.offsetHeight > 0;
-				};
+				menu;
+			const visibleFilter = function (item) {
+				return item.offsetWidth > 0 && item.offsetHeight > 0;
+			};
 
-			setup(function (done) {
+			setup(done => {
 				bottomBar = fixture('bottomBarWithHiddenButton');
 				toolbar = bottomBar.$.bottomBarToolbar;
 				menu = bottomBar.$.bottomBarMenu;
@@ -222,7 +222,7 @@
 						item2 = toolBarNodes[1],
 						menuItems = FlattenedNodesObserver.getFlattenedNodes(menu),
 						item3 = menuItems[0],
-						nonHiddenMenuItems = menuItems.filter(function (item) {
+						nonHiddenMenuItems = menuItems.filter(item => {
 							return !item.hidden;
 						}).length,
 						visibleToolbarCount = toolBarNodes.filter(visibleFilter).length;

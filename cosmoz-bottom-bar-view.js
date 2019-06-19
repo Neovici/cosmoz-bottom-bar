@@ -9,7 +9,7 @@ import { IronResizableBehavior } from '@polymer/iron-resizable-behavior/iron-res
 import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class';
 import { microTask } from '@polymer/polymer/lib/utils/async';
 
-import { ViewInfoMixin } from '@neovici/cosmoz-viewinfo';
+import { viewInfoAware } from '@neovici/cosmoz-viewinfo';
 import './cosmoz-bottom-bar';
 
 /**
@@ -20,10 +20,9 @@ import './cosmoz-bottom-bar';
  * or else is sized by other layout means (e.g. the flex or fit classes).
  *
  * @demo demo/bottom-bar-view.html Basic Demo
- * @demo demo/bottom-bar-view-small-content.html small content Demo
- * @appliesMixin ViewInfoMixin
+ * @appliesMixin viewInfoAware
 */
-class CosmozBottomBarView extends mixinBehaviors([IronResizableBehavior], ViewInfoMixin(PolymerElement)) {
+class CosmozBottomBarView extends mixinBehaviors([IronResizableBehavior], viewInfoAware(PolymerElement)) {
 	static get template() {
 		return html`
 		<style>
@@ -65,7 +64,8 @@ class CosmozBottomBarView extends mixinBehaviors([IronResizableBehavior], ViewIn
 				<slot name="scroller-content"></slot>
 			</div>
 		</div>
-		<cosmoz-bottom-bar id="bottomBar" active="[[ active ]]" visible="{{ _bottomBarVisible }}" bar-height="[[ barHeight ]]" computed-bar-height="{{ _computedBarHeight }}">
+		<cosmoz-bottom-bar id="bottomBar" active="[[ active ]]" visible="{{ _bottomBarVisible }}"
+			bar-height="[[ barHeight ]]" computed-bar-height="{{ _computedBarHeight }}">
 			<slot></slot>
 		</cosmoz-bottom-bar>
 `;
@@ -98,7 +98,7 @@ class CosmozBottomBarView extends mixinBehaviors([IronResizableBehavior], ViewIn
 		 */
 			fixed: {
 				type: Boolean,
-				value: null,
+				value: null
 			},
 
 			_bottomBarActive: {
@@ -115,7 +115,7 @@ class CosmozBottomBarView extends mixinBehaviors([IronResizableBehavior], ViewIn
 
 			_computedFixed: {
 				type: Boolean,
-				computed: '_computeFixed(fixed, viewInfo.desktop)',
+				computed: '_computeFixed(fixed, viewInfo.desktop)'
 			},
 
 			_scroller: {
