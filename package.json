@@ -1,6 +1,6 @@
 {
-	"name": "cosmoz-bottom-bar",
-	"version": "1.0.0",
+	"name": "@neovici/cosmoz-bottom-bar",
+	"version": "3.0.0",
 	"description": "[![Build Status](https://travis-ci.org/Neovici/cosmoz-bottom-bar.svg?branch=master)](https://travis-ci.org/Neovici/cosmoz-bottom-bar)",
 	"keywords": [
 		"polymer",
@@ -24,6 +24,8 @@
 		"analyze": "polymer analyze --input cosmoz-*.js  > analysis.json",
 		"lint": "eslint --cache --ext .js,.html . && polymer lint cosmoz-*.js",
 		"pristine": "rm -rf node_modules/ && yarn install",
+		"preversion": "npm run lint && npm run test -- --skip-plugin sauce",
+		"postversion": "git push && git push --tags",
 		"start": "polymer serve -o",
 		"test": "polymer test"
 	},
