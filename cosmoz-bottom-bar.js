@@ -137,7 +137,7 @@ class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerEle
 			}
 		</style>
 
-		<div id="bar" style\$="[[ _getHeightStyle(computedBarHeight) ]]">
+		<div id="bar" style$="[[ _getHeightStyle(computedBarHeight) ]]">
 			<div id="info">
 				<slot name="info"></slot>
 			</div>
@@ -145,7 +145,7 @@ class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerEle
 			<iron-selector id="toolbar" selected-class="[[ selectedClass ]]" on-iron-select="_onActionSelected">
 				<slot id="bottomBarToolbar" name="bottom-bar-toolbar"></slot>
 			</iron-selector>
-			<paper-menu-button id="menu" hidden\$="[[ !hasMenuItems ]]" no-animations
+			<paper-menu-button id="menu" hidden$="[[ !hasMenuItems ]]" no-animations
 				vertical-offset="[[ barHeight ]]" vertical-align="bottom" horizontal-align="right">
 
 				<paper-icon-button id="dropdownButton" class="dropdown-trigger" slot="dropdown-trigger" icon="menu" toggles raised>
