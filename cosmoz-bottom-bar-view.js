@@ -60,7 +60,7 @@ class CosmozBottomBarView extends mixinBehaviors([IronResizableBehavior], viewIn
 
 		</style>
 		<div id="scroller">
-			<div id="scrollerContent" style\$="[[ _computeScrollerContentStyle(_computedBarHeight, _bottomBarVisible, _computedFixed)]]">
+			<div id="scrollerContent" style$="[[ _computeScrollerContentStyle(_computedBarHeight, _bottomBarVisible, _computedFixed)]]">
 				<slot name="scroller-content"></slot>
 			</div>
 		</div>
