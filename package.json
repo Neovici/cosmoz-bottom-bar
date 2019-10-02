@@ -39,7 +39,7 @@
 		"@polymer/paper-listbox": "^3.0.0",
 		"@polymer/paper-menu-button": "^3.0.0",
 		"@polymer/polymer": "^3.0.0",
-		"@webcomponents/shadycss": "^1.9.1"
+		"@webcomponents/shadycss": "^1.9.2"
 	},
 	"devDependencies": {
 		"@neovici/eslint-config": "github:neovici/eslint-config#semver:^1.0.0",
