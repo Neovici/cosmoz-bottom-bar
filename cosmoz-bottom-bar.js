@@ -468,16 +468,16 @@ class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerEle
 		fits = toolbar.scrollWidth <= currentWidth + 1;
 
 		const toolbarElements = elements.filter(element => {
-			if (element.getAttribute('slot') === BOTTOM_BAR_TOOLBAR_SLOT) {
-				// make sure we only read scrollWidth and clientWidth until
-				// know that we don't fit
-				fits = fits && element.scrollWidth <= element.clientWidth;
-				return true;
-			}
-			return false;
-		});
+				if (element.getAttribute('slot') === BOTTOM_BAR_TOOLBAR_SLOT) {
+					// make sure we only read scrollWidth and clientWidth until
+					// know that we don't fit
+					fits = fits && element.scrollWidth <= element.clientWidth;
+					return true;
+				}
+				return false;
+			}),
 
-		const menuElements = elements.filter(element => element.getAttribute('slot') === BOTTOM_BAR_MENU_SLOT);
+			menuElements = elements.filter(element => element.getAttribute('slot') === BOTTOM_BAR_MENU_SLOT);
 
 		this._setHasMenuItems(menuElements.length > 0);
 
