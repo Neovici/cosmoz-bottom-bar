@@ -2,7 +2,8 @@
 	"plugins": {
 		"local": {
 			"browsers": [
-				"chrome"
+				"chrome",
+				"firefox"
 			],
 			"browserOptions": {
 				"chrome": [
