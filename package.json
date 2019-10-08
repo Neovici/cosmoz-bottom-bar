@@ -1,7 +1,7 @@
 {
 	"name": "@neovici/cosmoz-bottom-bar",
 	"version": "3.0.2",
-	"description": "[![Build Status](https://travis-ci.org/Neovici/cosmoz-bottom-bar.svg?branch=master)](https://travis-ci.org/Neovici/cosmoz-bottom-bar)",
+	"description": "A responsive bottom-bar that can house buttons/actions and a menu for the buttons that won't fit the available width.",
 	"keywords": [
 		"polymer",
 		"web-components"
