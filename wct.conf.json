@@ -35,7 +35,7 @@
 			}, {
 				"browserName": "chrome",
 				"platform": "Windows 10",
-				"version": "stable"
+				"version": "latest"
 			}, {
 				"browserName": "chrome",
 				"platform": "Windows 10",
