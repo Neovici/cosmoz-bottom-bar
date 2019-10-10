@@ -2,7 +2,9 @@ cosmoz-bottom-bar
 ==================
 
 [![Build Status](https://github.com/Neovici/cosmoz-bottom-bar/workflows/Github%20CI/badge.svg)](https://github.com/Neovici/cosmoz-bottom-bar/actions?workflow=Github+CI)
-[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/Neovici/cosmoz-bottom-bar)[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/Neovici/cosmoz-bottom-bar)
+[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
+[![Depfu](https://badges.depfu.com/badges/8b56008467d80932f1a2deecefa0728c/overview.svg)](https://depfu.com/github/Neovici/cosmoz-bottom-bar?project_id=9732)
 
 ## &lt;cosmoz-bottom-bar&gt;
 
