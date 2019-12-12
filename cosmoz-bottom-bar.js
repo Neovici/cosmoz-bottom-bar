@@ -80,7 +80,7 @@ class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerEle
 				@apply --cosmoz-bottom-bar-menubutton;
 			}
 
-			#extraToolbarSlot ::slotted(*) {
+			#extraToolbarSlot ::slotted(:not(slot)) {
 				@apply --cosmoz-bottom-bar-extra-toolbar-item;
 			}
 
