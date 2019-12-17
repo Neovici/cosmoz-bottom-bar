@@ -67,6 +67,7 @@ class CosmozBottomBarView extends mixinBehaviors([IronResizableBehavior], viewIn
 		<cosmoz-bottom-bar id="bottomBar" active="[[ active ]]" visible="{{ _bottomBarVisible }}"
 			bar-height="[[ barHeight ]]" computed-bar-height="{{ _computedBarHeight }}">
 			<slot></slot>
+			<slot name="extra" slot="extra"></slot>
 		</cosmoz-bottom-bar>
 `;
 	}
