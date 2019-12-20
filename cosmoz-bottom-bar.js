@@ -95,7 +95,6 @@ class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerEle
 			}
 
 			#menu {
-				padding-right: 3%;
 				@apply --layout-center;
 				@apply --layout-horizontal;
 			}
