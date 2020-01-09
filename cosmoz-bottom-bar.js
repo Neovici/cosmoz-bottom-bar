@@ -9,7 +9,6 @@ import '@polymer/iron-selector/iron-selector';
 
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag';
-
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { timeOut } from '@polymer/polymer/lib/utils/async';
@@ -177,8 +176,8 @@ class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerEle
 	static get properties() {
 		return {
 			/**
-			* Whether the bar is active (shown)
-			*/
+			 * Whether the bar is active (shown)
+			 */
 			active: {
 				type: Boolean,
 				value: false,
@@ -187,24 +186,24 @@ class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerEle
 			},
 
 			/**
-			* Bar height (not used when `matchParent` or `matchElementHeight` is set)
-			*/
+			 * Bar height (not used when `matchParent` or `matchElementHeight` is set)
+			 */
 			barHeight: {
 				type: Number,
 				value: 64
 			},
 
 			/**
-			* Whether to match the height of parent
-			*/
+			 * Whether to match the height of parent
+			 */
 			matchParent: {
 				type: Boolean,
 				value: false
 			},
 
 			/**
-			* Whether this bottom bar has items distributed to the menu
-			*/
+			 * Whether this bottom bar has items distributed to the menu
+			 */
 			hasMenuItems: {
 				type: Boolean,
 				value: false,
@@ -218,40 +217,40 @@ class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerEle
 			},
 
 			/**
-			* Class applied the the selected item
-			*/
+			 * Class applied the the selected item
+			 */
 			selectedClass: {
 				type: String,
 				value: 'cosmoz-bottom-bar-selected-item'
 			},
 
 			/**
-			* Class applied to items distributed to the toolbar
-			*/
+			 * Class applied to items distributed to the toolbar
+			 */
 			toolbarClass: {
 				type: String,
 				value: 'cosmoz-bottom-bar-toolbar'
 			},
 
 			/**
-			* Class applied to items distributed to the menu
-			*/
+			 * Class applied to items distributed to the menu
+			 */
 			menuClass: {
 				type: String,
 				value: 'cosmoz-bottom-bar-menu'
 			},
 
 			/**
-			* Maximum number of items in toolbar, regardless of space
-			*/
+			 * Maximum number of items in toolbar, regardless of space
+			 */
 			maxToolbarItems: {
 				type: Number,
 				value: 3
 			},
 
 			/**
-			* The actual bar height, depending on if we `matchParent` or set `barHeight`
-			*/
+			 * The actual bar height, depending on if we `matchParent` or set `barHeight`
+			 */
 			computedBarHeight: {
 				type: Number,
 				computed: '_computeComputedBarHeight(_matchHeightElement, barHeight, _computedBarHeightKicker)',
@@ -259,15 +258,15 @@ class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerEle
 			},
 
 			/**
-			* Kicker to make `computedBarHeight` recalculate
-			*/
+			 * Kicker to make `computedBarHeight` recalculate
+			 */
 			_computedBarHeightKicker: {
 				type: Number
 			},
 
 			/**
-			* Whether the bar is visible (has actions and is `active`)
-			*/
+			 * Whether the bar is visible (has actions and is `active`)
+			 */
 			visible: {
 				type: Boolean,
 				notify: true,
@@ -276,8 +275,8 @@ class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerEle
 			},
 
 			/**
-			* Whether we have any visible actions
-			*/
+			 * Whether we have any visible actions
+			 */
 			hasActions: {
 				type: Boolean,
 				value: false,
@@ -286,8 +285,8 @@ class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerEle
 			},
 
 			/**
-			* Reference element from which to inherit height
-			*/
+			 * Reference element from which to inherit height
+			 */
 			_matchHeightElement: {
 				type: Object,
 				computed: '_getHeightMatchingElement(matchParent)'
@@ -338,57 +337,12 @@ class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerEle
 		this._layoutDebouncer.cancel();
 	}
 
-	_computeVisible(hasActions, active, hasExtraItems) {
-		return (hasActions || hasExtraItems) && active;
-	}
+	_canAddMoreButtonToBar(width, bottomBarElements, menuElements) {
+		const hasSpace = width > this._overflowWidth || this._overflowWidth === undefined,
+			hasPlace = bottomBarElements.length < this.maxToolbarItems,
+			hasCandidates = menuElements.length > 0;
 
-	_getHeightMatchingElement(matchParent) {
-		if (matchParent) {
-			return this.parentElement;
-		}
-
-		return null;
-	}
-
-	// eslint-disable-next-line no-unused-vars
-	_computeComputedBarHeight(matchElementHeight, barHeight, kicker) {
-		if (matchElementHeight) {
-			return matchElementHeight.offsetHeight;
-		}
-		return barHeight;
-	}
-
-	_getHeightStyle(height) {
-		return 'height: ' + height + 'px;';
-	}
-
-	_onResize() {
-		this._computedBarHeightKicker += 1;
-		this._debounceLayoutActions();
-	}
-
-	_showHideBottomBar(visible, barHeight) {
-		this.style.display = '';
-		const translateY = visible ? 0 : barHeight,
-			onEnd = () => {
-				clearTimeout(this._hideTimeout);
-				this._hideTimeout = null;
-				this.style.display = this.visible ? '' : 'none';
-			};
-		clearTimeout(this._hideTimeout);
-		requestAnimationFrame(() => {
-			this.translate3d('0px', translateY + 'px', '0px');
-			this._hideTimeout = setTimeout(onEnd, 510);
-		});
-	}
-
-	_isActionNode(node) {
-		return node.nodeType === Node.ELEMENT_NODE &&
-			node.getAttribute('slot') !== 'info' &&
-			node.tagName !== 'TEMPLATE' &&
-			node.tagName !== 'DOM-REPEAT' &&
-			node.tagName !== 'DOM-IF' &&
-			node.getAttribute('slot') !== 'extra';
+		return hasSpace && hasPlace && hasCandidates;
 	}
 
 	_childrenUpdated(info) {
@@ -419,17 +373,65 @@ class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerEle
 		this._debounceLayoutActions();
 	}
 
-	_toolbarMoveToStart(node) {
-		const toolbar = this.$.toolbar;
-		if (toolbar.children.length === 0) {
-			toolbar.appendChild(node);
-			return;
+	// eslint-disable-next-line no-unused-vars
+	_computeComputedBarHeight(matchElementHeight, barHeight, kicker) {
+		if (matchElementHeight) {
+			return matchElementHeight.offsetHeight;
 		}
-		toolbar.insertBefore(node, toolbar.children[0]);
+		return barHeight;
+	}
+
+	_computeVisible(hasActions, active, hasExtraItems) {
+		return (hasActions || hasExtraItems) && active;
+	}
+
+	_debounceLayoutActions() {
+		this._layoutDebouncer = Debouncer.debounce(
+			this._layoutDebouncer,
+			timeOut.after(30),
+			this._boundLayoutActions
+		);
+		enqueueDebouncer(this._layoutDebouncer);
 	}
 
 	_dropdownClosed() {
 		this.$.dropdownButton.active = false;
+	}
+
+	_fireAction(item) {
+
+		if (!item || !item.dispatchEvent) {
+			return;
+		}
+
+		item.dispatchEvent(new window.CustomEvent('action', {
+			bubbles: true,
+			cancelable: true,
+			detail: {
+				item
+			}
+		}));
+	}
+
+	_getHeightMatchingElement(matchParent) {
+		if (matchParent) {
+			return this.parentElement;
+		}
+
+		return null;
+	}
+
+	_getHeightStyle(height) {
+		return 'height: ' + height + 'px;';
+	}
+
+	_isActionNode(node) {
+		return node.nodeType === Node.ELEMENT_NODE &&
+			node.getAttribute('slot') !== 'info' &&
+			node.tagName !== 'TEMPLATE' &&
+			node.tagName !== 'DOM-REPEAT' &&
+			node.tagName !== 'DOM-IF' &&
+			node.getAttribute('slot') !== 'extra';
 	}
 
 	/**
@@ -525,41 +527,38 @@ class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerEle
 		this.updateStyles();
 	}
 
-	_debounceLayoutActions() {
-		this._layoutDebouncer = Debouncer.debounce(
-			this._layoutDebouncer,
-			timeOut.after(30),
-			this._boundLayoutActions
-		);
-		enqueueDebouncer(this._layoutDebouncer);
-	}
-
-	_canAddMoreButtonToBar(width, bottomBarElements, menuElements) {
-		const hasSpace = width > this._overflowWidth || this._overflowWidth === undefined,
-			hasPlace = bottomBarElements.length < this.maxToolbarItems,
-			hasCandidates = menuElements.length > 0;
-
-		return hasSpace && hasPlace && hasCandidates;
-	}
-
 	_onActionSelected(event, detail) {
 		this._fireAction(detail.item);
 		event.currentTarget.selected = undefined;
 	}
 
-	_fireAction(item) {
+	_onResize() {
+		this._computedBarHeightKicker += 1;
+		this._debounceLayoutActions();
+	}
 
-		if (!item || !item.dispatchEvent) {
+	_showHideBottomBar(visible, barHeight) {
+		this.style.display = '';
+		const translateY = visible ? 0 : barHeight,
+			onEnd = () => {
+				clearTimeout(this._hideTimeout);
+				this._hideTimeout = null;
+				this.style.display = this.visible ? '' : 'none';
+			};
+		clearTimeout(this._hideTimeout);
+		requestAnimationFrame(() => {
+			this.translate3d('0px', translateY + 'px', '0px');
+			this._hideTimeout = setTimeout(onEnd, 510);
+		});
+	}
+
+	_toolbarMoveToStart(node) {
+		const toolbar = this.$.toolbar;
+		if (toolbar.children.length === 0) {
+			toolbar.appendChild(node);
 			return;
 		}
-
-		item.dispatchEvent(new window.CustomEvent('action', {
-			bubbles: true,
-			cancelable: true,
-			detail: {
-				item
-			}
-		}));
+		toolbar.insertBefore(node, toolbar.children[0]);
 	}
 }
 
