@@ -4,12 +4,11 @@ import '@polymer/iron-flex-layout/iron-flex-layout';
 
 import { PolymerElement } from '@polymer/polymer/polymer-element';
 import { html } from '@polymer/polymer/lib/utils/html-tag';
-
 import { IronResizableBehavior } from '@polymer/iron-resizable-behavior/iron-resizable-behavior';
 import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class';
 import { microTask } from '@polymer/polymer/lib/utils/async';
-
 import { viewInfoAware } from '@neovici/cosmoz-viewinfo';
+
 import './cosmoz-bottom-bar';
 
 /**
@@ -78,16 +77,9 @@ class CosmozBottomBarView extends mixinBehaviors([IronResizableBehavior], viewIn
 
 	static get properties() {
 		return {
-		/**
-		 * Height of the bar
-		 */
-			barHeight: {
-				type: Number
-			},
-
 			/**
-		 * When set to true, activate the bottom bar.
-		 */
+			 * When set to true, activate the bottom bar.
+			 */
 			active: {
 				type: Boolean,
 				value: true,
@@ -95,8 +87,15 @@ class CosmozBottomBarView extends mixinBehaviors([IronResizableBehavior], viewIn
 			},
 
 			/**
-		 * Set to true to have a fixed bottom that does not disappear upon scrolling.
-		 */
+			 * Height of the bar
+			 */
+			barHeight: {
+				type: Number
+			},
+
+			/**
+			 * Set to true to have a fixed bottom that does not disappear upon scrolling.
+			 */
 			fixed: {
 				type: Boolean,
 				value: null
@@ -162,6 +161,15 @@ class CosmozBottomBarView extends mixinBehaviors([IronResizableBehavior], viewIn
 		}
 	}
 
+	_computeFixed(fixed, desktop) {
+		return fixed == null ? desktop : fixed;
+	}
+
+	_computeScrollerContentStyle(barHeight, bottomBarVisible) {
+		microTask.run(() => this.notifyResize());
+		return `padding-bottom: ${bottomBarVisible ? barHeight : 0}px`;
+	}
+
 	_scrollManagement() {
 		const scrollTop = this._scroller.scrollTop,
 			isScrollingUp = this._lastScroll > scrollTop,
@@ -172,15 +180,6 @@ class CosmozBottomBarView extends mixinBehaviors([IronResizableBehavior], viewIn
 
 		this.active = isAtTop || isScrollingUp || isAtBottom;
 		this._lastScroll = scrollTop;
-	}
-
-	_computeScrollerContentStyle(barHeight, bottomBarVisible) {
-		microTask.run(() => this.notifyResize());
-		return `padding-bottom: ${bottomBarVisible ? barHeight : 0}px`;
-	}
-
-	_computeFixed(fixed, desktop) {
-		return fixed == null ? desktop : fixed;
 	}
 }
 
