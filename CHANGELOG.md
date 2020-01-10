@@ -1,3 +1,10 @@
+## [3.0.9](https://github.com/neovici/cosmoz-bottom-bar/compare/v3.0.8...v3.0.9) (2020-01-10)
+
+
+### Bug Fixes
+
+* correct package version ([9132345](https://github.com/neovici/cosmoz-bottom-bar/commit/9132345))
+
 ## [3.0.5](https://github.com/neovici/cosmoz-bottom-bar/compare/v3.0.4...v3.0.5) (2019-10-10)
 
 
