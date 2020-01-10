@@ -245,7 +245,7 @@ class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerEle
 			 */
 			maxToolbarItems: {
 				type: Number,
-				value: 3
+				value: 1
 			},
 
 			/**
