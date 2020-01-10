@@ -197,7 +197,7 @@
 				assert.equal(item2.id, 'bottomBarWithHiddenButtonItem2');
 				assert.equal(item3.id, 'bottomBarWithHiddenButtonItem3');
 
-				assert.equal(visibleToolbarCount, 2);
+				assert.equal(visibleToolbarCount, 1);
 				assert.equal(visibleMenuItems, 0);
 				assert.isTrue(bottomBar.$.menu.hidden);
 			});
@@ -230,8 +230,8 @@
 					assert.equal(item1.id, 'bottomBarWithHiddenButtonItem1');
 					assert.equal(item2.id, 'bottomBarWithHiddenButtonItem2');
 					assert.equal(item3.id, 'bottomBarWithHiddenButtonItem3');
-					assert.equal(visibleToolbarCount, 2);
-					assert.equal(nonHiddenMenuItems, 1);
+					assert.equal(visibleToolbarCount, 1);
+					assert.equal(nonHiddenMenuItems, 2);
 					done();
 				});
 			});
