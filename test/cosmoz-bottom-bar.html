@@ -188,13 +188,13 @@
 					menuItems = FlattenedNodesObserver.getFlattenedNodes(menu),
 					item1 = toolbarItems[0],
 					item2 = toolbarItems[1],
-					item3 = toolbarItems[2],
+					item4 = toolbarItems[2],
 					visibleMenuItems = menuItems.filter(visibleFilter).length,
 					visibleToolbarCount = toolbarItems.filter(visibleFilter).length;
 
 				assert.equal(item1.id, 'bottomBarWithHiddenButtonItem1');
 				assert.equal(item2.id, 'bottomBarWithHiddenButtonItem2');
-				assert.equal(item3.id, 'bottomBarWithHiddenButtonItem4');
+				assert.equal(item4.id, 'bottomBarWithHiddenButtonItem4');
 
 				assert.equal(visibleToolbarCount, 1);
 				assert.equal(visibleMenuItems, 0);
@@ -205,11 +205,11 @@
 				const toolBarNodes = FlattenedNodesObserver.getFlattenedNodes(toolbar),
 					item1 = toolBarNodes[0],
 					item2 =	 toolBarNodes[1],
-					item3 =	 toolBarNodes[2];
+					item4 =	 toolBarNodes[2];
 
 				assert.equal(item1.id, 'bottomBarWithHiddenButtonItem1');
 				assert.equal(item2.id, 'bottomBarWithHiddenButtonItem2');
-				assert.equal(item3.id, 'bottomBarWithHiddenButtonItem4');
+				assert.equal(item4.id, 'bottomBarWithHiddenButtonItem4');
 
 				item2.removeAttribute('hidden');
 
@@ -218,17 +218,17 @@
 
 					const toolBarNodes = FlattenedNodesObserver.getFlattenedNodes(toolbar),
 						item1 = toolBarNodes[0],
-						item2 = toolBarNodes[1],
+						item4 = toolBarNodes[1],
 						menuItems = FlattenedNodesObserver.getFlattenedNodes(menu),
-						item3 = menuItems[0],
+						item2 = menuItems[0],
 						nonHiddenMenuItems = menuItems.filter(item => {
 							return !item.hidden;
 						}).length,
 						visibleToolbarCount = toolBarNodes.filter(visibleFilter).length;
 
 					assert.equal(item1.id, 'bottomBarWithHiddenButtonItem1');
-					assert.equal(item2.id, 'bottomBarWithHiddenButtonItem4');
-					assert.equal(item3.id, 'bottomBarWithHiddenButtonItem2');
+					assert.equal(item2.id, 'bottomBarWithHiddenButtonItem2');
+					assert.equal(item4.id, 'bottomBarWithHiddenButtonItem4');
 					assert.equal(visibleToolbarCount, 1);
 					assert.equal(nonHiddenMenuItems, 2);
 					done();
