@@ -157,7 +157,7 @@
 					item3 = toolBarNodes[2],
 					item4 = FlattenedNodesObserver.getFlattenedNodes(bottomBar.$.bottomBarMenu)[0];
 
-				assert.equal(toolBarNodes.length, 1);
+				assert.equal(toolBarNodes.length, 3);
 				assert.equal(item1.id, 'bottomBarMaxToolbarItemsItem1');
 				assert.equal(item2.id, 'bottomBarMaxToolbarItemsItem2');
 				assert.equal(item3.id, 'bottomBarMaxToolbarItemsItem3');
@@ -192,10 +192,9 @@
 					visibleMenuItems = menuItems.filter(visibleFilter).length,
 					visibleToolbarCount = toolbarItems.filter(visibleFilter).length;
 
-
 				assert.equal(item1.id, 'bottomBarWithHiddenButtonItem1');
 				assert.equal(item2.id, 'bottomBarWithHiddenButtonItem2');
-				assert.equal(item3.id, 'bottomBarWithHiddenButtonItem3');
+				assert.equal(item3.id, 'bottomBarWithHiddenButtonItem4');
 
 				assert.equal(visibleToolbarCount, 1);
 				assert.equal(visibleMenuItems, 0);
@@ -210,7 +209,7 @@
 
 				assert.equal(item1.id, 'bottomBarWithHiddenButtonItem1');
 				assert.equal(item2.id, 'bottomBarWithHiddenButtonItem2');
-				assert.equal(item3.id, 'bottomBarWithHiddenButtonItem3');
+				assert.equal(item3.id, 'bottomBarWithHiddenButtonItem4');
 
 				item2.removeAttribute('hidden');
 
@@ -228,8 +227,8 @@
 						visibleToolbarCount = toolBarNodes.filter(visibleFilter).length;
 
 					assert.equal(item1.id, 'bottomBarWithHiddenButtonItem1');
-					assert.equal(item2.id, 'bottomBarWithHiddenButtonItem2');
-					assert.equal(item3.id, 'bottomBarWithHiddenButtonItem3');
+					assert.equal(item2.id, 'bottomBarWithHiddenButtonItem4');
+					assert.equal(item3.id, 'bottomBarWithHiddenButtonItem2');
 					assert.equal(visibleToolbarCount, 1);
 					assert.equal(nonHiddenMenuItems, 2);
 					done();
