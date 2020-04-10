@@ -21,7 +21,7 @@ customElements.define('fixed-size-item', class extends PolymerElement {
 	}
 
 	static get template() {
-		return html/*html*/`
+		return html`
 			<style>
 				:host {
 					display: block;

@@ -24,55 +24,51 @@ import './cosmoz-bottom-bar';
 class CosmozBottomBarView extends mixinBehaviors([IronResizableBehavior], viewInfoAware(PolymerElement)) {
 	static get template() {
 		return html`
-		<style>
-			:host {
-				position: relative;
-				overflow: hidden;
-				display: block;
-				/* TODO(plequang): Remove this, as it was added for convenience when the component was not public. */
-				@apply --layout-flex;
-			}
+			<style>
+				:host {
+					position: relative;
+					overflow: hidden;
+					display: block;
+					/* TODO(plequang): Remove this, as it was added for convenience when the component was not public. */
+					@apply --layout-flex;
+				}
 
-			#scroller {
-				@apply --layout-fit;
-				-webkit-overflow-scrolling: touch;
-				overflow-x: hidden;
-				overflow-y: auto;
-			}
+				#scroller {
+					@apply --layout-fit;
+					-webkit-overflow-scrolling: touch;
+					overflow-x: hidden;
+					overflow-y: auto;
+				}
 
-			#scrollerContent {
-				box-sizing: border-box;
-				min-height: 100%;
-				@apply --layout-vertical;
-			}
+				#scrollerContent {
+					box-sizing: border-box;
+					min-height: 100%;
+					@apply --layout-vertical;
+				}
 
-			#scrollerContent ::slotted(*) {
-				position: relative;
-				/* Default to vertical flex layout, but can be overriden locally */
-				@apply --layout-vertical;
-			}
+				#scrollerContent ::slotted(*) {
+					position: relative;
+					/* Default to vertical flex layout, but can be overriden locally */
+					@apply --layout-vertical;
+				}
 
-			cosmoz-bottom-bar {
-				background-color: var(--cosmoz-bottom-bar-view-bar-color, rgba(230, 230, 230, 0.8));
-				@apply --cosmoz-bottom-bar-view-bar;
-			}
+				cosmoz-bottom-bar {
+					background-color: var(--cosmoz-bottom-bar-view-bar-color, rgba(230, 230, 230, 0.8));
+					@apply --cosmoz-bottom-bar-view-bar;
+				}
 
-		</style>
-		<div id="scroller">
-			<div id="scrollerContent" style$="[[ _computeScrollerContentStyle(_computedBarHeight, _bottomBarVisible, _computedFixed)]]">
-				<slot name="scroller-content"></slot>
+			</style>
+			<div id="scroller">
+				<div id="scrollerContent" style$="[[ _computeScrollerContentStyle(_computedBarHeight, _bottomBarVisible, _computedFixed)]]">
+					<slot name="scroller-content"></slot>
+				</div>
 			</div>
-		</div>
-		<cosmoz-bottom-bar id="bottomBar" active="[[ active ]]" visible="{{ _bottomBarVisible }}"
-			bar-height="[[ barHeight ]]" computed-bar-height="{{ _computedBarHeight }}">
-			<slot></slot>
-			<slot name="extra" slot="extra"></slot>
-		</cosmoz-bottom-bar>
-`;
-	}
-
-	static get is() {
-		return 'cosmoz-bottom-bar-view';
+			<cosmoz-bottom-bar id="bottomBar" active="[[ active ]]" visible="{{ _bottomBarVisible }}"
+				bar-height="[[ barHeight ]]" computed-bar-height="{{ _computedBarHeight }}">
+				<slot></slot>
+				<slot name="extra" slot="extra"></slot>
+			</cosmoz-bottom-bar>
+		`;
 	}
 
 	static get properties() {
@@ -183,4 +179,4 @@ class CosmozBottomBarView extends mixinBehaviors([IronResizableBehavior], viewIn
 	}
 }
 
-customElements.define(CosmozBottomBarView.is, CosmozBottomBarView);
+customElements.define('cosmoz-bottom-bar-view', CosmozBottomBarView);
