@@ -6,7 +6,6 @@ import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nod
 
 import '../cosmoz-bottom-bar.js';
 import './helpers/fixed-size-item.js';
-import { Polymer } from '@polymer/polymer/polymer-legacy';
 
 const isElement = ({ nodeType: type }) => type === Node.ELEMENT_NODE;
 

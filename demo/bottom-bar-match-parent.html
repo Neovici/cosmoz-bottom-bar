@@ -6,19 +6,15 @@
 
 	<title>cosmoz-bottom-bar match parent demo</title>
 
-	<script src="/components/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
-
-	<script type="module" src="/components/@polymer/iron-demo-helpers/demo-pages-shared-styles.js"></script>
-	<script type="module" src="/components/@polymer/iron-demo-helpers/demo-snippet.js"></script>
-
-	<script type="module" src="/components/@polymer/iron-flex-layout/iron-flex-layout-classes.js"></script>
-	<script type="module" src="/components/@polymer/iron-icon/iron-icon.js"></script>
-	<script type="module" src="/components/@polymer/iron-icons/iron-icons.js"></script>
-	<script type="module" src="/components/@polymer/paper-button/paper-button.js"></script>
-
-	<script type="module" src="./helpers/x-view.js"></script>
+	<script src="/node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
 
 	<script type="module">
+		import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
+		import '@polymer/iron-icon/iron-icon.js';
+		import '@polymer/iron-icons/iron-icons.js';
+		import '@polymer/paper-button/paper-button.js';
+
+		import './helpers/x-view.js';
 		const $documentContainer = document.createElement('template');
 
 		$documentContainer.innerHTML = `<custom-style>
