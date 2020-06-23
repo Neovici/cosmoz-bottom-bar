@@ -1,11 +1,10 @@
 import {
-	assert, fixture, html
+	assert, fixture, html, aTimeout
 } from '@open-wc/testing';
 
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer';
 
 import '../cosmoz-bottom-bar.js';
-import './helpers/fixed-size-item.js';
 
 const isElement = ({ nodeType: type }) => type === Node.ELEMENT_NODE;
 
@@ -14,8 +13,8 @@ suite('bottomBarWithoutMenu',	 () => {
 
 	setup(async () => {
 		bottomBar = await fixture(html`
-			<cosmoz-bottom-bar style="min-width:200px; max-width: 200px;">
-				<fixed-size-item width="50px" height="32px" id="bottomBarWithoutMenuItem"></fixed-size-item>
+			<cosmoz-bottom-bar style="min-width: 200px; max-width: 200px">
+				<div style="width: 50px; height: 32px; background: red" id="bottomBarWithoutMenuItem" ></div>
 			</cosmoz-bottom-bar>
 		`);
 	});
@@ -39,9 +38,9 @@ suite('bottomBarWithOverflowingButton', () => {
 
 	setup(async () => {
 		bottomBar = await fixture(html`
-			<cosmoz-bottom-bar style="min-width:300px; max-width: 300px;">
-				<fixed-size-item width="200px" id="bottomBarWithOverflowingButtonItem1"></fixed-size-item>
-				<fixed-size-item width="200px" id="bottomBarWithOverflowingButtonItem2"></fixed-size-item>
+			<cosmoz-bottom-bar style="min-width: 300px; max-width: 300px">
+				<div style="width: 200px; height: 32px; background: red" id="bottomBarWithOverflowingButtonItem1"></div>
+				<div style="width: 200px; height:32px; background: blue" id="bottomBarWithOverflowingButtonItem2"></div>
 			</cosmoz-bottom-bar>
 		`);
 		bottomBar._layoutDebouncer.flush();
@@ -77,11 +76,11 @@ suite('bottomBarMaxToolbarItems', () => {
 
 	setup(async () => {
 		bottomBar = await fixture(html`
-			<cosmoz-bottom-bar max-toolbar-items="3" style="min-width:400px; max-width: 400px;">
-				<fixed-size-item id="bottomBarMaxToolbarItemsItem1" width="50px"></fixed-size-item>
-				<fixed-size-item id="bottomBarMaxToolbarItemsItem2" width="50px"></fixed-size-item>
-				<fixed-size-item id="bottomBarMaxToolbarItemsItem3" width="50px"></fixed-size-item>
-				<fixed-size-item id="bottomBarMaxToolbarItemsItem4" width="50px"></fixed-size-item>
+			<cosmoz-bottom-bar max-toolbar-items="3" style="min-width:400px; max-width: 400px">
+				<div id="bottomBarMaxToolbarItemsItem1" style="width: 50px; height: 32px; background: red"></div>
+				<div id="bottomBarMaxToolbarItemsItem2" style="width: 50px; height: 32px; background: blue"></div>
+				<div id="bottomBarMaxToolbarItemsItem3" style="width: 50px; height: 32px; background: green"></div>
+				<div id="bottomBarMaxToolbarItemsItem4" style="width: 50px; height: 32px; background: black"></div>
 			</cosmoz-bottom-bar>
 		`);
 		bottomBar._layoutDebouncer.flush();
@@ -111,11 +110,11 @@ suite('bottomBarWithHiddenButton', () => {
 
 	setup(async () => {
 		bottomBar = await fixture(html`
-			<cosmoz-bottom-bar active style="min-width:400px; max-width: 410px;">
-				<fixed-size-item id="bottomBarWithHiddenButtonItem1" width="150px"></fixed-size-item>
-				<fixed-size-item id="bottomBarWithHiddenButtonItem2" hidden width="150px"></fixed-size-item>
-				<fixed-size-item id="bottomBarWithHiddenButtonItem3" width="150px"></fixed-size-item>
-				<fixed-size-item id="bottomBarWithHiddenButtonItem4" hidden width="150px"></fixed-size-item>
+			<cosmoz-bottom-bar active style="min-width:400px; max-width: 410px" max-toolbar-items="3">
+				<div id="bottomBarWithHiddenButtonItem1" style="width: 150px; height: 32px; background: red"></div>
+				<div id="bottomBarWithHiddenButtonItem2" hidden style="width: 150px; height: 32px; background: blue"></div>
+				<div id="bottomBarWithHiddenButtonItem3" style="width: 150px; height: 32px; background: green"></div>
+				<div id="bottomBarWithHiddenButtonItem4" hidden style="width: 150px; height: 32px; background: purple"></div>
 			</cosmoz-bottom-bar>
 		`);
 		toolbar = bottomBar.$.bottomBarToolbar;
@@ -127,45 +126,38 @@ suite('bottomBarWithHiddenButton', () => {
 		const toolbarItems = FlattenedNodesObserver.getFlattenedNodes(toolbar),
 			menuItems = FlattenedNodesObserver.getFlattenedNodes(menu),
 			item1 = toolbarItems[0],
-			item2 = toolbarItems[1],
-			item4 = toolbarItems[2],
+			item3 = toolbarItems[1],
 			visibleMenuItems = menuItems.filter(visibleFilter).length,
 			visibleToolbarCount = toolbarItems.filter(visibleFilter).length;
 
 		assert.equal(item1.id, 'bottomBarWithHiddenButtonItem1');
-		assert.equal(item2.id, 'bottomBarWithHiddenButtonItem2');
-		assert.equal(item4.id, 'bottomBarWithHiddenButtonItem4');
+		assert.equal(item3.id, 'bottomBarWithHiddenButtonItem3');
 
-		assert.equal(visibleToolbarCount, 1);
+		assert.equal(visibleToolbarCount, 2);
 		assert.equal(visibleMenuItems, 0);
 		assert.isTrue(bottomBar.$.menu.hidden);
 	});
 
-	test('Unhiding item', () => {
+	test('Unhiding item', async () => {
 		const toolBarNodes = FlattenedNodesObserver.getFlattenedNodes(toolbar),
 			item1 = toolBarNodes[0],
-			item2 =	toolBarNodes[1],
-			item4 =	toolBarNodes[2];
+			menuItems = FlattenedNodesObserver.getFlattenedNodes(menu),
+			item2 = menuItems[0],
+			item3 =	toolBarNodes[1];
 
 		assert.equal(item1.id, 'bottomBarWithHiddenButtonItem1');
 		assert.equal(item2.id, 'bottomBarWithHiddenButtonItem2');
-		assert.equal(item4.id, 'bottomBarWithHiddenButtonItem4');
+		assert.equal(item3.id, 'bottomBarWithHiddenButtonItem3');
 
+		item2.hidden  = false;
 		item2.removeAttribute('hidden');
-
+		bottomBar._debounceLayoutActions();
 		bottomBar._layoutDebouncer.flush();
 
-		const item5 = toolBarNodes[1],
-			menuItems = FlattenedNodesObserver.getFlattenedNodes(menu),
-			// item6 = menuItems[0],
-			nonHiddenMenuItems = menuItems.filter(item => !item.hidden).length,
-			visibleToolbarCount = toolBarNodes.filter(visibleFilter).length;
+		const newToolBarNodes = FlattenedNodesObserver.getFlattenedNodes(toolbar);
+		console.warn(newToolBarNodes.map(({id})=>id).join(','))
 
-		assert.equal(item1.id, 'bottomBarWithHiddenButtonItem1');
-		assert.equal(item5.id, 'bottomBarWithHiddenButtonItem2');
-		// assert.equal(item5.id, 'bottomBarWithHiddenButtonItem4'); why fail?
-		assert.equal(visibleToolbarCount, 1);
-		assert.equal(nonHiddenMenuItems, 2);
+		assert.include(newToolBarNodes, item2);
 	});
 });
 
@@ -177,7 +169,7 @@ suite('height management', () => {
 		heightManagementParent = await fixture(html`
 			<div id="heightManagementParent" style="min-height: 100px; max-height: 100px">
 				<cosmoz-bottom-bar>
-					<fixed-size-item width="50px" height="32px"></fixed-size-item>
+					<div style="width: 50px; height: 32px; background: red"></div>
 				</cosmoz-bottom-bar>
 			</div>
 		`);
@@ -201,7 +193,7 @@ suite('toggle bottom bar', () => {
 	setup(async () => {
 		bottomBar = await fixture(html`
 			<cosmoz-bottom-bar style="min-height: 100px; max-height: 100px">
-				<fixed-size-item width="50px" height="32px"></fixed-size-item>
+				<div style="width: 50px; height: 32px; background: red"></div>
 			</cosmoz-bottom-bar>
 		`);
 	});
