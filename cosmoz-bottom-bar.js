@@ -225,10 +225,12 @@ class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerEle
 			return;
 		}
 
-		const toolbarElements = this._getElements().filter(slotEq(BOTTOM_BAR_TOOLBAR_SLOT)),
-			allowedToolbarCount = this.maxToolbarItems - toolbarElements.length;
+		const toolbarElements = this._getElements().
+			filter(slotEq(BOTTOM_BAR_TOOLBAR_SLOT)),
+			toolbarCount = this.maxToolbarItems - toolbarElements.length;
 
-		newNodes.forEach((node, i) => {
+
+		newNodes.forEach(node => {
 			this._hiddenMutationObserver.observe(node, {
 				attributes: true,
 				attributeFilter: [
@@ -238,8 +240,12 @@ class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerEle
 			if (node.parentNode !== this) {
 				this.appendChild(node);
 			}
-			this._moveElement(node, i < allowedToolbarCount);
+			this._moveElement(node, false);
 		});
+		if (toolbarCount > 0) {
+			newNodes.filter(node => !node.hidden).slice(0, toolbarCount).
+				forEach(node => this._moveElement(node, true));
+		}
 		this._debounceLayoutActions();
 	}
 
@@ -305,7 +311,7 @@ class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerEle
 	}
 
 	_getElements() {
-		return FlattenedNodesObserver.getFlattenedNodes(this).filter(n => n.nodeType === Node.ELEMENT_NODE)
+		return FlattenedNodesObserver.getFlattenedNodes(this)
 			.filter(this._isActionNode)
 			.filter(element => !element.hidden);
 	}
@@ -371,6 +377,7 @@ class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerEle
 			}
 			return;
 		}
+		console.warn('doesnt fit')
 
 		this._overflowWidth = currentWidth;
 
