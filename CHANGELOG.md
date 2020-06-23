@@ -1,3 +1,11 @@
+## [3.0.11](https://github.com/neovici/cosmoz-bottom-bar/compare/v3.0.10...v3.0.11) (2020-06-23)
+
+
+### Bug Fixes
+
+* better hidden element handling ([3184992](https://github.com/neovici/cosmoz-bottom-bar/commit/3184992dad82951881eab58ec60c1019cdeec9a6))
+* improve initial distribution of toolbar elements ([f195cfb](https://github.com/neovici/cosmoz-bottom-bar/commit/f195cfb6c33d5d8110e8dc3362350767e932600c))
+
 ## [3.0.10](https://github.com/neovici/cosmoz-bottom-bar/compare/v3.0.9...v3.0.10) (2020-01-13)
 
 
