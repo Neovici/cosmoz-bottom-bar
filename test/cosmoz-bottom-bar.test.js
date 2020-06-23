@@ -1,5 +1,5 @@
 import {
-	assert, fixture, html, aTimeout
+	assert, fixture, html
 } from '@open-wc/testing';
 
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer';
@@ -149,13 +149,12 @@ suite('bottomBarWithHiddenButton', () => {
 		assert.equal(item2.id, 'bottomBarWithHiddenButtonItem2');
 		assert.equal(item3.id, 'bottomBarWithHiddenButtonItem3');
 
-		item2.hidden  = false;
+		item2.hidden = false;
 		item2.removeAttribute('hidden');
 		bottomBar._debounceLayoutActions();
 		bottomBar._layoutDebouncer.flush();
 
 		const newToolBarNodes = FlattenedNodesObserver.getFlattenedNodes(toolbar);
-		console.warn(newToolBarNodes.map(({id})=>id).join(','))
 
 		assert.include(newToolBarNodes, item2);
 	});

@@ -226,7 +226,7 @@ class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerEle
 		}
 
 		const toolbarElements = this._getElements().
-			filter(slotEq(BOTTOM_BAR_TOOLBAR_SLOT)),
+				filter(slotEq(BOTTOM_BAR_TOOLBAR_SLOT)),
 			toolbarCount = this.maxToolbarItems - toolbarElements.length;
 
 
@@ -377,7 +377,6 @@ class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerEle
 			}
 			return;
 		}
-		console.warn('doesnt fit')
 
 		this._overflowWidth = currentWidth;
 
