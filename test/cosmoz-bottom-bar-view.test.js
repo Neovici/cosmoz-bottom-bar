@@ -1,5 +1,8 @@
 import {
-	assert, fixture, html
+	assert,
+	fixture,
+	html,
+	nextFrame
 } from '@open-wc/testing';
 
 import '@polymer/paper-button/paper-button.js';
@@ -22,11 +25,13 @@ suite('<cosmoz-bottom-bar-view>', () => {
 				<paper-button>b</paper-button>
 			</cosmoz-bottom-bar-view>
 		`);
-		bottomBar = bottomBarView.$.bottomBar;
+		bottomBar = bottomBarView.shadowRoot.querySelector('cosmoz-bottom-bar');
 	});
 
-	test('bottomBar is visible', () => {
+	test('bottomBar is visible', async () => {
 		bottomBar._layoutDebouncer.flush();
+		await nextFrame();
+		await nextFrame();
 		assert.isTrue(bottomBar.visible);
 	});
 });
@@ -48,22 +53,28 @@ suite('scrolling bottom-bar-view', () => {
 				<paper-button>b</paper-button>
 			</cosmoz-bottom-bar-view>
 		`);
-		bottomBar = bottomBarView.$.bottomBar;
+		bottomBar = bottomBarView.shadowRoot.querySelector('cosmoz-bottom-bar');
 	});
 
-	test('bottomBar is hidden when scrolling down', () => {
+	test('bottomBar is hidden when scrolling down', async () => {
 		bottomBar._layoutDebouncer.flush();
-		bottomBarView.$.scroller.scrollTop = 20;
-		bottomBarView.$.scroller.dispatchEvent(new CustomEvent('scroll'));
+		bottomBarView.scroll(0, 20);
+
+		await nextFrame();
+		await nextFrame();
 
 		assert.isFalse(bottomBar.active);
 		assert.isFalse(bottomBar.visible);
 	});
 
-	test('bottomBar is visible when scroll is at bottom', () => {
+	test('bottomBar is visible when scroll is at bottom', async () => {
 		bottomBar._layoutDebouncer.flush();
-		bottomBarView.$.scroller.scrollTop = 350;
-		bottomBarView.$.scroller.dispatchEvent(new CustomEvent('scroll'));
+		bottomBarView.scroll(0, 350);
+
+		await nextFrame();
+		await nextFrame();
+		await nextFrame();
+
 		assert.isTrue(bottomBar.active);
 		assert.isTrue(bottomBar.visible);
 	});
