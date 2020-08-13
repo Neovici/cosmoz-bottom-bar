@@ -14,9 +14,9 @@ suite('<cosmoz-bottom-bar-view>', () => {
 
 	setup(async () => {
 		bottomBarView = await fixture(html`
-			<cosmoz-bottom-bar-view style="width: 300px; height: 400px;">
-				<div slot="scroller-content">
-					<div>
+			<cosmoz-bottom-bar-view style="width: 300px; height: 300px";>
+				<div slot="scroller-content" style="display: block">
+					<div style="min-height:350px;">
 						Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 						Donec tristique diam nisl, at dapibus tortor pulvinar malesuada.
 						Nulla tempus congue sem, at auctor tellus.
@@ -33,27 +33,6 @@ suite('<cosmoz-bottom-bar-view>', () => {
 		await nextFrame();
 		await nextFrame();
 		assert.isTrue(bottomBar.visible);
-	});
-});
-
-suite('scrolling bottom-bar-view', () => {
-	let bottomBarView,
-		bottomBar;
-
-	setup(async () => {
-		bottomBarView = await fixture(html`
-			<cosmoz-bottom-bar-view style="width: 300px; height: 300px";>
-				<div slot="scroller-content" style="display: block">
-					<div style="min-height:350px;">
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-						Donec tristique diam nisl, at dapibus tortor pulvinar malesuada.
-						Nulla tempus congue sem, at auctor tellus.
-					</div>
-				</div>
-				<paper-button>b</paper-button>
-			</cosmoz-bottom-bar-view>
-		`);
-		bottomBar = bottomBarView.shadowRoot.querySelector('cosmoz-bottom-bar');
 	});
 
 	test('bottomBar is hidden when scrolling down', async () => {
