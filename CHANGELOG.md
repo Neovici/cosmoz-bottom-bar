@@ -1,3 +1,10 @@
+# [3.1.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v3.0.11...v3.1.0) (2020-08-14)
+
+
+### Features
+
+* convert cosmoz-bottom-bar-view to haunted ([6b4c674](https://github.com/neovici/cosmoz-bottom-bar/commit/6b4c6743c209a6fb81ce573638d40c075a925c41)), closes [#74](https://github.com/neovici/cosmoz-bottom-bar/issues/74)
+
 ## [3.0.11](https://github.com/neovici/cosmoz-bottom-bar/compare/v3.0.10...v3.0.11) (2020-06-23)
 
 
