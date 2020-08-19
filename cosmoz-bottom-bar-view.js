@@ -29,23 +29,24 @@ const CosmozBottomBarView = ({
 			<style>
 				:host {
 					position: relative;
-					overflow: hidden;
 					display: flex;
 					flex-direction: column;
+					flex: var(--cosmoz-bottom-bar-view-flex, auto);
 					-webkit-overflow-scrolling: touch;
-					overflow-x: hidden;
 					overflow-y: auto;
 				}
 
 				#content {
-					flex: 1;
+					display: flex;
+					flex-direction: column;
+					flex: auto;
 				}
 
 				#bar {
 					background-color: var(--cosmoz-bottom-bar-view-bar-color, rgba(230, 230, 230, 0.8));
+					box-shadow: var(--cosmoz-bottom-bar-view-bar-shadow, none);
 					position: sticky;
 					flex: none;
-					@apply --cosmoz-bottom-bar-view-bar;
 				}
 			</style>
 			<div id="content" part="content">

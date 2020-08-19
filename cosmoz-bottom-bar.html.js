@@ -25,15 +25,16 @@ export default html`
             display: none !important;
         }
 
+        #bar, #info, #toolbar, #extraToolbarSlot, #menu, #dropdown ::slotted(*) {
+            display: flex;
+            align-items: center;
+        }
+
         #bar {
-            @apply --layout-horizontal;
-            @apply --layout-center;
             padding: 0 3%;
         }
 
         #info {
-            @apply --layout-center;
-            @apply --layout-horizontal;
             min-width: 5px;
             padding-right: 3%;
         }
@@ -49,20 +50,12 @@ export default html`
         }
 
         #flex {
-            @apply --layout-flex;
+            flex: 1 0.000000000001px;
         }
 
         #toolbar, #extraToolbarSlot {
-            @apply --layout-center;
-            @apply --layout-horizontal;
             overflow: hidden;
         }
-
-        #menu {
-            @apply --layout-center;
-            @apply --layout-horizontal;
-        }
-
         #info,
         #menu > div {
             white-space: nowrap;
@@ -96,9 +89,6 @@ export default html`
         }
 
         #dropdown ::slotted(*) {
-            display: flex;
-            @apply --layout-center;
-            @apply --layout-horizontal;
             position: relative;
             @apply --cosmoz-bottom-bar-menu-item;
         }
