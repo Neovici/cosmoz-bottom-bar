@@ -1,3 +1,10 @@
+## [3.1.1](https://github.com/neovici/cosmoz-bottom-bar/compare/v3.1.0...v3.1.1) (2020-08-19)
+
+
+### Bug Fixes
+
+* remove iron-flex-layout ([2664d51](https://github.com/neovici/cosmoz-bottom-bar/commit/2664d5115eaacc966b4e9cfa7882b86ed196e0cd))
+
 # [3.1.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v3.0.11...v3.1.0) (2020-08-14)
 
 
