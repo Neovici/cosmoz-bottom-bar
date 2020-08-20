@@ -16,7 +16,7 @@ suite('<cosmoz-bottom-bar-view>', () => {
 		bottomBarView = await fixture(html`
 			<cosmoz-bottom-bar-view style="width: 300px; height: 300px";>
 				<div slot="scroller-content" style="display: block">
-					<div style="min-height:350px;">
+					<div style="min-height:400px;">
 						Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 						Donec tristique diam nisl, at dapibus tortor pulvinar malesuada.
 						Nulla tempus congue sem, at auctor tellus.
@@ -39,6 +39,7 @@ suite('<cosmoz-bottom-bar-view>', () => {
 		bottomBar._layoutDebouncer.flush();
 		bottomBarView.scroll(0, 20);
 
+		await nextFrame();
 		await nextFrame();
 		await nextFrame();
 
