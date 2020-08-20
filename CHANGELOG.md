@@ -1,3 +1,10 @@
+## [3.1.2](https://github.com/neovici/cosmoz-bottom-bar/compare/v3.1.1...v3.1.2) (2020-08-20)
+
+
+### Bug Fixes
+
+* on desktop bb remains inactive, if not explicitly made active ([956b9b2](https://github.com/neovici/cosmoz-bottom-bar/commit/956b9b2d7f44c927aa06a07a7e375e4afff0a514))
+
 ## [3.1.1](https://github.com/neovici/cosmoz-bottom-bar/compare/v3.1.0...v3.1.1) (2020-08-19)
 
 
