@@ -1,3 +1,10 @@
+## [3.1.3](https://github.com/neovici/cosmoz-bottom-bar/compare/v3.1.2...v3.1.3) (2020-08-24)
+
+
+### Bug Fixes
+
+* undefined layoutDebouncer ([46a46e0](https://github.com/neovici/cosmoz-bottom-bar/commit/46a46e062f772b1312ddf7e3ef44686d1feee35d))
+
 ## [3.1.2](https://github.com/neovici/cosmoz-bottom-bar/compare/v3.1.1...v3.1.2) (2020-08-20)
 
 
