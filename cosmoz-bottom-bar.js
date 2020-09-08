@@ -202,7 +202,7 @@ class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerEle
 		this._nodeObserver.disconnect();
 		this._nodeObserverExtra.disconnect();
 		this._hiddenMutationObserver.disconnect();
-		this._layoutDebouncer?.cancel(); /* eslint-disable-line no-unused-expressions */
+		this?._layoutDebouncer?.cancel(); /* eslint-disable-line no-unused-expressions */
 	}
 
 	_canAddMoreButtonToBar(width, bottomBarElements, menuElements) {
