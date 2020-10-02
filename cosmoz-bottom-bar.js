@@ -3,10 +3,6 @@ import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { timeOut } from '@polymer/polymer/lib/utils/async';
-import { enqueueDebouncer } from '@polymer/polymer/lib/utils/flush';
-import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
-import { IronResizableBehavior } from '@polymer/iron-resizable-behavior';
-
 import template from './cosmoz-bottom-bar.html.js';
 
 const
@@ -35,7 +31,7 @@ const
  * @demo demo/bottom-bar.html Basic Demo
  * @demo demo/bottom-bar-match-parent.html match parent Demo
 	*/
-class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerElement) {
+class CosmozBottomBar extends PolymerElement {
 	static get template() { // eslint-disable-line max-lines-per-function
 		return template;
 	}
@@ -164,7 +160,7 @@ class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerEle
 
 	static get observers() {
 		return [
-			'_showHideBottomBar(visible, computedBarHeight)'
+			'_showHideBottomBar(visible)'
 		];
 	}
 
@@ -174,12 +170,12 @@ class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerEle
 		this._boundDropdownClosed = this._dropdownClosed.bind(this);
 		this._boundChildrenUpdated = this._childrenUpdated.bind(this);
 		this._boundLayoutActions = this._layoutActions.bind(this);
+		this._resizeObserver = new ResizeObserver(this._boundOnResize);
 	}
 
 	connectedCallback() {
 		super.connectedCallback();
 
-		this.addEventListener('iron-resize', this._boundOnResize);
 		this.addEventListener('iron-closed-overlay', this._boundDropdownClosed);
 
 		this._hiddenMutationObserver = new MutationObserver(() => {
@@ -190,6 +186,7 @@ class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerEle
 		this._nodeObserverExtra = new FlattenedNodesObserver(this.$.extraSlot, info =>
 			this.set('hasExtraItems', info.addedNodes.length > 0)
 		);
+		this._resizeObserver.observe(this);
 		this._computedBarHeightKicker = 0;
 	}
 
@@ -203,6 +200,7 @@ class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerEle
 		this._nodeObserverExtra.disconnect();
 		this._hiddenMutationObserver.disconnect();
 		this._layoutDebouncer?.cancel(); /* eslint-disable-line no-unused-expressions */
+		this._resizeObserver.unobserve(this);
 	}
 
 	_canAddMoreButtonToBar(width, bottomBarElements, menuElements) {
@@ -267,7 +265,6 @@ class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerEle
 			timeOut.after(30),
 			this._boundLayoutActions
 		);
-		enqueueDebouncer(this._layoutDebouncer);
 	}
 
 	_dropdownClosed() {
@@ -394,8 +391,8 @@ class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerEle
 			tabindex = toToolbar ? '0' : '-1';
 		element.setAttribute('slot', slot);
 		element.setAttribute('tabindex', tabindex);
-		this.toggleClass(this.menuClass, !toToolbar, element);
-		this.toggleClass(this.toolbarClass, toToolbar, element);
+		element.classList.toggle(this.menuClass, !toToolbar);
+		element.classList.toggle(this.toolbarClass, toToolbar);
 		this.updateStyles();
 	}
 
@@ -404,14 +401,17 @@ class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerEle
 		event.currentTarget.selected = undefined;
 	}
 
-	_onResize() {
+	_onResize([entry]) {
+		if (entry.borderBoxSize?.[0]?.blockSize === 0 || entry.contentRect?.height === 0) {
+			return;
+		}
 		this._computedBarHeightKicker += 1;
 		this._debounceLayoutActions();
 	}
 
-	_showHideBottomBar(visible, barHeight) {
+	_showHideBottomBar(visible) {
 		this.style.display = '';
-		const translateY = visible ? 0 : barHeight,
+		const translateY = visible ? 0 : '100%',
 			onEnd = () => {
 				clearTimeout(this._hideTimeout);
 				this._hideTimeout = null;
@@ -419,7 +419,7 @@ class CosmozBottomBar extends mixinBehaviors([IronResizableBehavior], PolymerEle
 			};
 		clearTimeout(this._hideTimeout);
 		requestAnimationFrame(() => {
-			this.translate3d('0px', translateY + 'px', '0px');
+			this.style.transform = `translate3d(0px, ${translateY}, 0px)`;
 			this._hideTimeout = setTimeout(onEnd, 510);
 		});
 	}
