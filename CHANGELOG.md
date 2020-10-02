@@ -1,3 +1,11 @@
+## [3.1.4](https://github.com/neovici/cosmoz-bottom-bar/compare/v3.1.3...v3.1.4) (2020-10-02)
+
+
+### Bug Fixes
+
+* remove iron-flex-layout from demos ([44faf8d](https://github.com/neovici/cosmoz-bottom-bar/commit/44faf8d5345a536d6de93437242881946a56002f))
+* replace iron-resizable-behavior with a ResizeObserver ([69b0c60](https://github.com/neovici/cosmoz-bottom-bar/commit/69b0c60c1fcbce542f3eb515f1fe34716d1df310)), closes [#83](https://github.com/neovici/cosmoz-bottom-bar/issues/83)
+
 ## [3.1.3](https://github.com/neovici/cosmoz-bottom-bar/compare/v3.1.2...v3.1.3) (2020-08-24)
 
 
