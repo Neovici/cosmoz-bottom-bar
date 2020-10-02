@@ -1,5 +1,5 @@
 import {
-	assert, fixture, html
+	assert, fixture, html, aTimeout
 } from '@open-wc/testing';
 
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer';
@@ -201,10 +201,12 @@ suite('toggle bottom bar', () => {
 		assert.isFalse(bottomBar.visible);
 	});
 
-	test('menu should be visible on screen', () => {
+	test('menu should be visible on screen', async () => {
 		bottomBar.active = true;
 		bottomBar._layoutDebouncer.flush();
 		assert.isTrue(bottomBar.visible);
+		await aTimeout(530);
+		assert.equal(bottomBar.style.display, '');
 	});
 
 });

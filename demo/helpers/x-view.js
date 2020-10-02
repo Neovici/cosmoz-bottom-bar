@@ -1,5 +1,3 @@
-import '@polymer/iron-flex-layout/iron-flex-layout';
-import '@polymer/iron-flex-layout/iron-flex-layout-classes';
 import '@polymer/paper-button';
 
 import { PolymerElement } from '@polymer/polymer/polymer-element';
@@ -22,7 +20,7 @@ customElements.define('x-view', class extends PolymerElement {
 	// eslint-disable-next-line max-lines-per-function
 	static get template() {
 		return html`
-			<style include="iron-flex iron-flex-alignment iron-positioning">
+			<style>
 				:host {
 					position: relative;
 					display: block;
@@ -40,17 +38,25 @@ customElements.define('x-view', class extends PolymerElement {
 
 				cosmoz-viewinfo {
 					overflow: hidden;
+					position: absolute;
+					top: 0;
+					right: 0;
+					bottom: 0;
+					left: 0;
+					display: flex;
+					flex-direction: column;
 				}
 
 				#lipsum {
 					overflow: auto;
+					flex: auto;
 				}
 			</style>
-			<cosmoz-viewinfo class="layout vertical fit">
+			<cosmoz-viewinfo>
 				<h3>Cosmoz bottom bar with match-parent demo</h3>
-				<div class="flex" id="lipsum">
+				<div id="lipsum">
 					<paper-button on-tap="showHideBottomBar">Show/hide bottom bar</paper-button>
-					Bottom bar active: <span>[[active]]</span>
+					Bottom bar active: <span>[[ active ]]</span>
 					<p>
 						Lorem ipsum dolor sit amet, consectetur adipiscing
 						elit. Quisque pretium erat et nulla euismod congue.

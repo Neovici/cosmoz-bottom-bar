@@ -50,12 +50,12 @@ const CosmozBottomBarView = ({
 				}
 			</style>
 			<div id="content" part="content">
-				${ref(info)}
+				${ ref(info) }
 				<slot name="content"></slot>
 				<slot name="scroller-content"></slot>
 			</div>
 			<cosmoz-bottom-bar id="bar" ?active=${ active } bar-height=${ ifDefined(barHeight) } part="bar"
-				@computed-bar-height-changed=${e => info.computedBarHeight = e.target.computedBarHeight} >
+				@computed-bar-height-changed=${ e => info.computedBarHeight = e.target.computedBarHeight } >
 				<slot></slot>
 				<slot name="extra" slot="extra"></slot>
 			</cosmoz-bottom-bar>
