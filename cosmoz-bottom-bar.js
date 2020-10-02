@@ -419,7 +419,7 @@ class CosmozBottomBar extends PolymerElement {
 			};
 		clearTimeout(this._hideTimeout);
 		requestAnimationFrame(() => {
-			this.style.transform = `translate3d(0px, ${translateY}, 0px)`;
+			this.style.transform = `translate3d(0px, ${ translateY }, 0px)`;
 			this._hideTimeout = setTimeout(onEnd, 510);
 		});
 	}
