@@ -58,4 +58,17 @@ suite('<cosmoz-bottom-bar-view>', () => {
 		assert.isTrue(bottomBar.active);
 		assert.isTrue(bottomBar.visible);
 	});
+
+	test('fixed bottomBar is still visible when scrolling down', async () => {
+		bottomBarView.fixed = true;
+		bottomBar._layoutDebouncer.flush();
+		bottomBarView.scroll(0, 20);
+
+		await nextFrame();
+		await nextFrame();
+		await nextFrame();
+
+		assert.isTrue(bottomBar.active);
+		assert.isTrue(bottomBar.visible);
+	});
 });
