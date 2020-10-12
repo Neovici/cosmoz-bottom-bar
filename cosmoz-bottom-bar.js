@@ -401,10 +401,7 @@ class CosmozBottomBar extends PolymerElement {
 		event.currentTarget.selected = undefined;
 	}
 
-	_onResize([entry]) {
-		if (entry.borderBoxSize?.[0]?.blockSize === 0 || entry.contentRect?.height === 0) {
-			return;
-		}
+	_onResize() {
 		this._computedBarHeightKicker += 1;
 		this._debounceLayoutActions();
 	}
