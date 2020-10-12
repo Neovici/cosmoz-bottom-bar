@@ -1,3 +1,10 @@
+## [3.1.5](https://github.com/neovici/cosmoz-bottom-bar/compare/v3.1.4...v3.1.5) (2020-10-12)
+
+
+### Bug Fixes
+
+* always run layout actions on resize ([f95925c](https://github.com/neovici/cosmoz-bottom-bar/commit/f95925ccf27c73765cb13a6f22fc1e6c84c0818e))
+
 ## [3.1.4](https://github.com/neovici/cosmoz-bottom-bar/compare/v3.1.3...v3.1.4) (2020-10-02)
 
 
