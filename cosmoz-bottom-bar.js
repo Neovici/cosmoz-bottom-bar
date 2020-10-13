@@ -401,23 +401,35 @@ class CosmozBottomBar extends PolymerElement {
 		event.currentTarget.selected = undefined;
 	}
 
-	_onResize() {
+	_onResize([entry]) {
+		const hidden = entry.borderBoxSize?.[0]?.inlineSize === 0 || entry.contentRect?.width === 0;
+		if (hidden) {
+			return;
+		}
 		this._computedBarHeightKicker += 1;
 		this._debounceLayoutActions();
 	}
 
 	_showHideBottomBar(visible) {
+		this.style.transitionDuration = 0;
 		this.style.display = '';
-		const translateY = visible ? 0 : '100%',
-			onEnd = () => {
-				clearTimeout(this._hideTimeout);
-				this._hideTimeout = null;
-				this.style.display = this.visible ? '' : 'none';
-			};
-		clearTimeout(this._hideTimeout);
+		this.style.maxHeight = '';
+
+		const height = this.getBoundingClientRect().height,
+			from = visible ? '0px' : height + 'px',
+			to = !visible ? '0px' : height + 'px';
+
+		this.style.maxHeight = from;
+
+		const onEnd = () => {
+			this.removeEventListener('transitionend', onEnd);
+			this.style.maxHeight = '';
+			this.style.display = this.visible ? '' : 'none';
+		};
 		requestAnimationFrame(() => {
-			this.style.transform = `translate3d(0px, ${ translateY }, 0px)`;
-			this._hideTimeout = setTimeout(onEnd, 510);
+			this.addEventListener('transitionend', onEnd);
+			this.style.transitionDuration = '';
+			this.style.maxHeight = to;
 		});
 	}
 }

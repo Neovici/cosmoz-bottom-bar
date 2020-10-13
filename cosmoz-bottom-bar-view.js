@@ -33,20 +33,21 @@ const CosmozBottomBarView = ({
 					display: flex;
 					flex-direction: column;
 					flex: var(--cosmoz-bottom-bar-view-flex, auto);
-					-webkit-overflow-scrolling: touch;
-					overflow-y: auto;
+					overflow: hidden;
 				}
 
 				#content {
 					display: flex;
 					flex-direction: column;
 					flex: auto;
+					-webkit-overflow-scrolling: touch;
+					overflow-y: auto;
 				}
 
 				#bar {
 					background-color: var(--cosmoz-bottom-bar-view-bar-color, rgba(230, 230, 230, 0.8));
 					box-shadow: var(--cosmoz-bottom-bar-view-bar-shadow, none);
-					position: sticky;
+					position: static;
 					flex: none;
 				}
 			</style>
@@ -55,8 +56,7 @@ const CosmozBottomBarView = ({
 				<slot name="content"></slot>
 				<slot name="scroller-content"></slot>
 			</div>
-			<cosmoz-bottom-bar id="bar" ?active=${ active } bar-height=${ ifDefined(barHeight) } part="bar"
-				@computed-bar-height-changed=${ e => info.computedBarHeight = e.target.computedBarHeight } >
+			<cosmoz-bottom-bar id="bar" ?active=${ active } bar-height=${ ifDefined(barHeight) } part="bar">
 				<slot></slot>
 				${ bottomBarSlots }
 			</cosmoz-bottom-bar>
