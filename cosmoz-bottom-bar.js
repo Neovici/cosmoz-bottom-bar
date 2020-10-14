@@ -1,9 +1,12 @@
 /* eslint-disable max-lines */
-import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import {
+	PolymerElement, html as polymerHtml
+} from '@polymer/polymer/polymer-element.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { timeOut } from '@polymer/polymer/lib/utils/async';
 import template from './cosmoz-bottom-bar.html.js';
+import { html } from 'haunted';
 
 const
 	BOTTOM_BAR_TOOLBAR_SLOT = 'bottom-bar-toolbar',
@@ -213,37 +216,33 @@ class CosmozBottomBar extends PolymerElement {
 
 	_childrenUpdated(info) {
 		const addedNodes = info.addedNodes.filter(this._isActionNode),
-			removedNodes = info.removedNodes.filter(this._isActionNode);
+			removedNodes = info.removedNodes.filter(this._isActionNode),
+			newNodes = addedNodes.filter(node => !removedNodes.includes(node));
 
 		if (addedNodes.length === 0 && removedNodes.length === 0) {
 			return;
 		}
-		const newNodes = addedNodes.filter(node => removedNodes.indexOf(node) === -1);
 		if (newNodes.length === 0) {
 			return;
 		}
 
-		const toolbarElements = this._getElements().
-				filter(slotEq(BOTTOM_BAR_TOOLBAR_SLOT)),
-			toolbarCount = this.maxToolbarItems - toolbarElements.length;
-
-
 		newNodes.forEach(node => {
 			this._hiddenMutationObserver.observe(node, {
 				attributes: true,
-				attributeFilter: [
-					'hidden'
-				]
+				attributeFilter: ['hidden']
 			});
-			if (node.parentNode !== this) {
-				this.appendChild(node);
-			}
 			this._moveElement(node, false);
 		});
+
+		const toolbarElements = this._getElements().filter(slotEq(BOTTOM_BAR_TOOLBAR_SLOT)),
+			toolbarCount = this.maxToolbarItems - toolbarElements.length;
+
 		if (toolbarCount > 0) {
-			newNodes.filter(node => !node.hidden).slice(0, toolbarCount).
-				forEach(node => this._moveElement(node, true));
+			newNodes
+				.filter(node => !node.hidden).slice(0, toolbarCount)
+				.forEach(node => this._moveElement(node, true));
 		}
+
 		this._debounceLayoutActions();
 	}
 
@@ -423,3 +422,13 @@ class CosmozBottomBar extends PolymerElement {
 }
 
 customElements.define('cosmoz-bottom-bar', CosmozBottomBar);
+
+const tmplt = `
+	<slot name="extra" slot="extra"></slot>
+	<slot name="bottom-bar-toolbar" slot="bottom-bar-toolbar"></slot>
+	<slot name="bottom-bar-menu" slot="bottom-bar-menu"></slot>
+`;
+
+export const
+	bottomBarSlots = html([tmplt]),
+	bottomBarSlotsPolymer = polymerHtml([tmplt]);

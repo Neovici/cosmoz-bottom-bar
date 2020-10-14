@@ -74,7 +74,8 @@ export default html`
             @apply --cosmoz-bottom-bar-toolbar-item-disabled;
         }
 
-        #toolbar ::slotted([hidden]) {
+        #toolbar ::slotted([hidden]),
+        #dropdown ::slotted([hidden]) {
             display: none !important;
         }
 

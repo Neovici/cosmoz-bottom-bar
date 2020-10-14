@@ -3,7 +3,8 @@ import { html } from 'lit-html';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import { ref } from '@neovici/cosmoz-utils/lib/directives/ref';
 import { useBottomBarView } from './lib/use-bottom-bar-view';
-import './cosmoz-bottom-bar';
+import { bottomBarSlots } from './cosmoz-bottom-bar';
+
 
 
 /**
@@ -57,7 +58,7 @@ const CosmozBottomBarView = ({
 			<cosmoz-bottom-bar id="bar" ?active=${ active } bar-height=${ ifDefined(barHeight) } part="bar"
 				@computed-bar-height-changed=${ e => info.computedBarHeight = e.target.computedBarHeight } >
 				<slot></slot>
-				<slot name="extra" slot="extra"></slot>
+				${ bottomBarSlots }
 			</cosmoz-bottom-bar>
 		`;
 };
