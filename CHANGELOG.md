@@ -1,3 +1,17 @@
+# [4.0.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v3.1.5...v4.0.0) (2020-10-15)
+
+
+### Features
+
+* distribute via slots ([ea66679](https://github.com/neovici/cosmoz-bottom-bar/commit/ea66679776135abef30f06b7917a5a131717aa7c)), closes [#24802](https://github.com/neovici/cosmoz-bottom-bar/issues/24802)
+
+
+### BREAKING CHANGES
+
+* If your component allows adding content to the bottom bar via slots, then you have
+to also make sure you also export `bottom-bar-toolbar` and `bottom-bar-menu`, otherwise the actions
+will not show up.
+
 ## [3.1.5](https://github.com/neovici/cosmoz-bottom-bar/compare/v3.1.4...v3.1.5) (2020-10-12)
 
 
