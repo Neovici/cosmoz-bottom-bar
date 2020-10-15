@@ -1,3 +1,10 @@
+## [4.0.2](https://github.com/neovici/cosmoz-bottom-bar/compare/v4.0.1...v4.0.2) (2020-10-15)
+
+
+### Bug Fixes
+
+* disabled buttons in the menu are not styled ([3a0cf4a](https://github.com/neovici/cosmoz-bottom-bar/commit/3a0cf4a23a57c28152b30ae0ac8afead1a0da82b))
+
 ## [4.0.1](https://github.com/neovici/cosmoz-bottom-bar/compare/v4.0.0...v4.0.1) (2020-10-15)
 
 
