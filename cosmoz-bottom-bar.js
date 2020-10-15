@@ -415,7 +415,7 @@ class CosmozBottomBar extends PolymerElement {
 		this.style.display = '';
 		this.style.maxHeight = '';
 
-		const height = this.getBoundingClientRect().height,
+		const height = this.computedBarHeight,
 			from = visible ? '0px' : height + 'px',
 			to = !visible ? '0px' : height + 'px';
 
