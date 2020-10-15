@@ -169,11 +169,13 @@ class CosmozBottomBar extends PolymerElement {
 
 	constructor() {
 		super();
-		this._boundOnResize = this._onResize.bind(this);
 		this._boundDropdownClosed = this._dropdownClosed.bind(this);
 		this._boundChildrenUpdated = this._childrenUpdated.bind(this);
 		this._boundLayoutActions = this._layoutActions.bind(this);
-		this._resizeObserver = new ResizeObserver(this._boundOnResize);
+		this._resizeObserver = new ResizeObserver((...args) => {
+			cancelAnimationFrame(this._resizeId);
+			this._resizeId = requestAnimationFrame(() => this._onResize(...args));
+		});
 	}
 
 	connectedCallback() {
@@ -196,7 +198,6 @@ class CosmozBottomBar extends PolymerElement {
 	disconnectedCallback() {
 		super.disconnectedCallback();
 
-		this.removeEventListener('iron-resize', this._boundOnResize);
 		this.removeEventListener('iron-closed-overlay', this._boundDropdownClosed);
 
 		this._nodeObserver.disconnect();
