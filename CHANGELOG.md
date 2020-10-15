@@ -1,3 +1,11 @@
+## [4.0.3](https://github.com/neovici/cosmoz-bottom-bar/compare/v4.0.2...v4.0.3) (2020-10-15)
+
+
+### Bug Fixes
+
+* don't recompute height ([7b52e06](https://github.com/neovici/cosmoz-bottom-bar/commit/7b52e068ed4e17cd3ac5259da5f09fce11237033))
+* restore cosmoz-bottom-bar-view animation behavior ([cf04651](https://github.com/neovici/cosmoz-bottom-bar/commit/cf04651f70a188bf99e80181402dd751684880f2))
+
 ## [4.0.2](https://github.com/neovici/cosmoz-bottom-bar/compare/v4.0.1...v4.0.2) (2020-10-15)
 
 
