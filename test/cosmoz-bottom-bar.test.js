@@ -177,12 +177,12 @@ suite('height management', () => {
 
 	test('setting matchParent to true should set bottom-bar height to the height of the parent', () => {
 		bottomBar.matchParent = true;
-		assert.equal(bottomBar.offsetHeight, 100);
+		assert.equal(bottomBar.computedBarHeight, 100);
 	});
 
 	test('setting matchParent to false should set bottom-bar height to the height of the bar', () => {
 		bottomBar.matchParent = false;
-		assert.equal(bottomBar.offsetHeight, bottomBar.barHeight);
+		assert.equal(bottomBar.computedBarHeight, bottomBar.barHeight);
 	});
 });
 
@@ -205,7 +205,7 @@ suite('toggle bottom bar', () => {
 		bottomBar.active = true;
 		bottomBar._layoutDebouncer.flush();
 		assert.isTrue(bottomBar.visible);
-		await aTimeout(530);
+		await aTimeout(330);
 		assert.equal(bottomBar.style.display, '');
 	});
 

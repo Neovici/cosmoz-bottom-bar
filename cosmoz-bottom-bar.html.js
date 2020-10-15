@@ -17,7 +17,7 @@ export default html`
             width: 100%;
             max-width: 100%; /* Firefox fix */
             background-color: inherit;
-            transition: transform 0.5s ease;
+            transition: max-height 0.3s ease;
             z-index: 10;
         }
 
