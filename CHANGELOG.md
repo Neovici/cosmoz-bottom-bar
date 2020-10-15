@@ -1,3 +1,10 @@
+## [4.0.1](https://github.com/neovici/cosmoz-bottom-bar/compare/v4.0.0...v4.0.1) (2020-10-15)
+
+
+### Bug Fixes
+
+* prevent resize observer loops ([7994a7f](https://github.com/neovici/cosmoz-bottom-bar/commit/7994a7f827e601e6ffbb18c7096e03af224dc098))
+
 # [4.0.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v3.1.5...v4.0.0) (2020-10-15)
 
 
