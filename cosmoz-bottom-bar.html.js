@@ -70,7 +70,8 @@ export default html`
             @apply --cosmoz-bottom-bar-toolbar-item;
         }
 
-        #toolbar ::slotted([disabled]) {
+        #toolbar ::slotted([disabled]),
+        #dropdown ::slotted([disabled]) {
             @apply --cosmoz-bottom-bar-toolbar-item-disabled;
         }
 
