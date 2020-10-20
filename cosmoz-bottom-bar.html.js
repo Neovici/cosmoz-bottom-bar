@@ -25,7 +25,7 @@ export default html`
             display: none !important;
         }
 
-        #bar, #info, #toolbar, #extraToolbarSlot, #menu, #dropdown ::slotted(*) {
+        #bar, #info, #toolbar, #extraToolbarSlot, #menu, #dropdown ::slotted(:not(slot)) {
             display: flex;
             align-items: center;
         }
@@ -61,7 +61,7 @@ export default html`
             white-space: nowrap;
         }
 
-        #toolbar ::slotted(*) {
+        #toolbar ::slotted(:not(slot)) {
             margin: 0 0.29em;
             min-width: 40px;
             min-height: 40px;
@@ -90,7 +90,7 @@ export default html`
             padding: 0 !important;
         }
 
-        #dropdown ::slotted(*) {
+        #dropdown ::slotted(:not(slot)) {
             position: relative;
             @apply --cosmoz-bottom-bar-menu-item;
         }
