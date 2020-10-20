@@ -1,3 +1,10 @@
+## [4.0.4](https://github.com/neovici/cosmoz-bottom-bar/compare/v4.0.3...v4.0.4) (2020-10-20)
+
+
+### Bug Fixes
+
+* do not style slotted slots on Safari/iOS ([ee653c8](https://github.com/neovici/cosmoz-bottom-bar/commit/ee653c878a41ac400906262bb5a6e7e26e24027e))
+
 ## [4.0.3](https://github.com/neovici/cosmoz-bottom-bar/compare/v4.0.2...v4.0.3) (2020-10-15)
 
 
