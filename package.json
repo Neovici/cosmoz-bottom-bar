@@ -67,14 +67,14 @@
 		"@polymer/paper-menu-button": "^3.0.0",
 		"@polymer/polymer": "^3.3.1",
 		"@webcomponents/shadycss": "^1.10.2",
-		"haunted": "^4.7.0",
+		"haunted": "^4.7.1",
 		"lit-html": "^1.2.1"
 	},
 	"devDependencies": {
 		"@commitlint/cli": "^11.0.0",
 		"@commitlint/config-conventional": "^11.0.0",
 		"@neovici/eslint-config": "^1.3.0",
-		"@open-wc/testing": "^2.5.29",
+		"@open-wc/testing": "^2.5.32",
 		"@open-wc/testing-karma": "^3.3.12",
 		"@polymer/iron-icon": "^3.0.1",
 		"@polymer/paper-button": "^3.0.0",
@@ -88,8 +88,8 @@
 		"husky": "^4.2.5",
 		"karma": "^5.0.1",
 		"karma-firefox-launcher": "^1.3.0",
-		"karma-sauce-launcher": "^4.1.6",
-		"semantic-release": "^17.2.1",
-		"sinon": "^9.2.0"
+		"karma-sauce-launcher": "^4.3.3",
+		"semantic-release": "^17.2.2",
+		"sinon": "^9.2.1"
 	}
 }
