@@ -302,6 +302,7 @@ class CosmozBottomBar extends PolymerElement {
 		return node.nodeType === Node.ELEMENT_NODE &&
 			node.getAttribute('slot') !== 'info' &&
 			node.tagName !== 'TEMPLATE' &&
+			node.tagName !== 'STYLE' &&
 			node.tagName !== 'DOM-REPEAT' &&
 			node.tagName !== 'DOM-IF' &&
 			node.getAttribute('slot') !== 'extra';
