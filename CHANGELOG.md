@@ -1,3 +1,10 @@
+## [4.0.5](https://github.com/neovici/cosmoz-bottom-bar/compare/v4.0.4...v4.0.5) (2021-01-15)
+
+
+### Bug Fixes
+
+* **cosmoz-bottom-bar:** ignore style elements ([b5330e9](https://github.com/neovici/cosmoz-bottom-bar/commit/b5330e9583eb9a2b6044e47a46d20615b8829d4c))
+
 ## [4.0.4](https://github.com/neovici/cosmoz-bottom-bar/compare/v4.0.3...v4.0.4) (2020-10-20)
 
 
