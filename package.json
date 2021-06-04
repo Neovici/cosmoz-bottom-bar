@@ -58,23 +58,23 @@
 		}
 	},
 	"dependencies": {
-		"@neovici/cosmoz-utils": "^3.12.0",
+		"@neovici/cosmoz-utils": "^3.19.0",
 		"@neovici/cosmoz-viewinfo": "^3.1.3",
 		"@polymer/iron-icons": "^3.0.1",
 		"@polymer/iron-selector": "^3.0.0",
 		"@polymer/paper-icon-button": "^3.0.0",
 		"@polymer/paper-listbox": "^3.0.0",
-		"@polymer/paper-menu-button": "^3.0.0",
+		"@polymer/paper-menu-button": "^3.1.0",
 		"@polymer/polymer": "^3.3.1",
 		"@webcomponents/shadycss": "^1.10.2",
-		"haunted": "^4.7.0",
-		"lit-html": "^1.2.1"
+		"haunted": "^4.8.0",
+		"lit-html": "^1.4.1"
 	},
 	"devDependencies": {
 		"@commitlint/cli": "^11.0.0",
 		"@commitlint/config-conventional": "^11.0.0",
-		"@neovici/eslint-config": "^1.3.0",
-		"@open-wc/testing": "^2.5.29",
+		"@neovici/eslint-config": "^1.3.2",
+		"@open-wc/testing": "^2.5.33",
 		"@open-wc/testing-karma": "^3.3.12",
 		"@polymer/iron-icon": "^3.0.1",
 		"@polymer/paper-button": "^3.0.0",
@@ -83,13 +83,13 @@
 		"@semantic-release/git": "^9.0.0",
 		"@webcomponents/webcomponentsjs": "^2.5.0",
 		"deepmerge": "^4.2.2",
-		"es-dev-server": "^1.57.8",
+		"es-dev-server": "^1.60.2",
 		"eslint": "^6.8.0",
-		"husky": "^4.2.5",
+		"husky": "^4.3.8",
 		"karma": "^5.0.1",
 		"karma-firefox-launcher": "^1.3.0",
-		"karma-sauce-launcher": "^4.1.6",
-		"semantic-release": "^17.2.3",
-		"sinon": "^9.2.0"
+		"karma-sauce-launcher": "^4.3.6",
+		"semantic-release": "^17.4.3",
+		"sinon": "^9.2.4"
 	}
 }
