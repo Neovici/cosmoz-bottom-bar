@@ -1,3 +1,10 @@
+## [4.0.6](https://github.com/neovici/cosmoz-bottom-bar/compare/v4.0.5...v4.0.6) (2021-06-07)
+
+
+### Bug Fixes
+
+* upgrade repo ([d88520c](https://github.com/neovici/cosmoz-bottom-bar/commit/d88520c6b3c159865af408ba37ed4596de6e3d49))
+
 ## [4.0.5](https://github.com/neovici/cosmoz-bottom-bar/compare/v4.0.4...v4.0.5) (2021-01-15)
 
 
