@@ -1,3 +1,10 @@
+## [4.1.1](https://github.com/neovici/cosmoz-bottom-bar/compare/v4.1.0...v4.1.1) (2021-06-08)
+
+
+### Bug Fixes
+
+* **cosmoz-bottom-bar:** resize dropdown on layout ([8d95fdb](https://github.com/neovici/cosmoz-bottom-bar/commit/8d95fdb692c04aa85acf454f8685237d27f439bb))
+
 # [4.1.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v4.0.6...v4.1.0) (2021-06-08)
 
 
