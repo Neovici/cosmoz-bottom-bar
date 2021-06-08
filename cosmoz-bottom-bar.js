@@ -317,6 +317,7 @@ class CosmozBottomBar extends PolymerElement {
 		toolbarElements.forEach(el => this._moveElement(el, true));
 		menuElements.forEach(el => this._moveElement(el));
 		this._setHasMenuItems(menuElements.length > 0);
+		this.$.menu.$.dropdown.notifyResize();
 	}
 
 	_moveElement(element, toToolbar) {
