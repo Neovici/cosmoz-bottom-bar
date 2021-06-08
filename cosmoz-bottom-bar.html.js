@@ -82,6 +82,9 @@ export default html`
 
         #dropdown {
             padding: 0;
+            --paper-menu-button-content: {
+               max-width: 300px !important;
+            };
         }
 
         /** Seems like a shady dom scoping/slotting issue */
@@ -92,7 +95,11 @@ export default html`
 
         #dropdown ::slotted(:not(slot)) {
             position: relative;
+            cursor: pointer;
             @apply --cosmoz-bottom-bar-menu-item;
+        }
+        #dropdown ::slotted(:not(slot):hover) {
+           background: #eee;
         }
     </style>
 

@@ -17,6 +17,7 @@ suite('bottomBarWithoutMenu',	 () => {
 				<div style="width: 50px; height: 32px; background: red" id="bottomBarWithoutMenuItem" ></div>
 			</cosmoz-bottom-bar>
 		`);
+		bottomBar._layoutDebouncer.flush();
 	});
 
 	test('button should be placed in toolbar', () => {
