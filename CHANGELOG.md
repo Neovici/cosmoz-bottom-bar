@@ -1,3 +1,15 @@
+# [4.1.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v4.0.6...v4.1.0) (2021-06-08)
+
+
+### Bug Fixes
+
+* **cosmoz-bottom-bar:** autosize on focus (bold) or if it doesn't fit ([d44a906](https://github.com/neovici/cosmoz-bottom-bar/commit/d44a9068265a42c77d06de33541ef09d93388268))
+
+
+### Features
+
+* **cosmoz-bottom-bar:** slot items without computing sizes ([95384ca](https://github.com/neovici/cosmoz-bottom-bar/commit/95384ca92349722a671bdd7e6b3dd3027753390c))
+
 ## [4.0.6](https://github.com/neovici/cosmoz-bottom-bar/compare/v4.0.5...v4.0.6) (2021-06-07)
 
 
