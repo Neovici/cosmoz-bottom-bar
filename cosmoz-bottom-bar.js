@@ -10,9 +10,7 @@ import { html } from 'haunted';
 
 const
 	BOTTOM_BAR_TOOLBAR_SLOT = 'bottom-bar-toolbar',
-	BOTTOM_BAR_MENU_SLOT = 'bottom-bar-menu',
-
-	slotEq = slot => element => element.getAttribute('slot') === slot;
+	BOTTOM_BAR_MENU_SLOT = 'bottom-bar-menu';
 
 /**
  * `<cosmoz-bottom-bar>` is a horizontal responsive bottom toolbar containing items that
@@ -183,14 +181,14 @@ class CosmozBottomBar extends PolymerElement {
 
 		this.addEventListener('iron-closed-overlay', this._boundDropdownClosed);
 
-		this._hiddenMutationObserver = new MutationObserver(() => {
-			this._overflowWidth = undefined;
-			this._debounceLayoutActions();
-		});
-		this._nodeObserver = new FlattenedNodesObserver(this.$.content, this._boundChildrenUpdated);
-		this._nodeObserverExtra = new FlattenedNodesObserver(this.$.extraSlot, info =>
-			this.set('hasExtraItems', info.addedNodes.length > 0)
-		);
+		const layoutOnRemove = info => info.removedNodes.filter(this._isActionNode) && this._debounceLayoutActions();
+		this._nodeObservers = [
+			new FlattenedNodesObserver(this.$.content, this._boundChildrenUpdated),
+			new FlattenedNodesObserver(this.$.extraSlot, info => this.set('hasExtraItems', info.addedNodes.length > 0)),
+			new FlattenedNodesObserver(this.$.bottomBarToolbar, layoutOnRemove),
+			new FlattenedNodesObserver(this.$.bottomBarMenu, layoutOnRemove)
+		];
+		this._hiddenMutationObserver = new MutationObserver(() => this._debounceLayoutActions());
 		this._resizeObserver.observe(this);
 		this._computedBarHeightKicker = 0;
 	}
@@ -199,20 +197,9 @@ class CosmozBottomBar extends PolymerElement {
 		super.disconnectedCallback();
 
 		this.removeEventListener('iron-closed-overlay', this._boundDropdownClosed);
-
-		this._nodeObserver.disconnect();
-		this._nodeObserverExtra.disconnect();
-		this._hiddenMutationObserver.disconnect();
+		[...this._nodeObservers, this._hiddenMutationObserver].forEach(e => e.disconnect(e));
 		this._layoutDebouncer?.cancel(); /* eslint-disable-line no-unused-expressions */
 		this._resizeObserver.unobserve(this);
-	}
-
-	_canAddMoreButtonToBar(width, bottomBarElements, menuElements) {
-		const hasSpace = width > this._overflowWidth || this._overflowWidth === undefined,
-			hasPlace = bottomBarElements.length < this.maxToolbarItems,
-			hasCandidates = menuElements.length > 0;
-
-		return hasSpace && hasPlace && hasCandidates;
 	}
 
 	_childrenUpdated(info) {
@@ -220,13 +207,9 @@ class CosmozBottomBar extends PolymerElement {
 			removedNodes = info.removedNodes.filter(this._isActionNode),
 			newNodes = addedNodes.filter(node => !removedNodes.includes(node));
 
-		if (addedNodes.length === 0 && removedNodes.length === 0) {
+		if (addedNodes.length === 0 && removedNodes.length === 0 || newNodes.length === 0) {
 			return;
 		}
-		if (newNodes.length === 0) {
-			return;
-		}
-
 		newNodes.forEach(node => {
 			this._hiddenMutationObserver.observe(node, {
 				attributes: true,
@@ -235,20 +218,10 @@ class CosmozBottomBar extends PolymerElement {
 			this._moveElement(node, false);
 		});
 
-		const toolbarElements = this._getElements().filter(slotEq(BOTTOM_BAR_TOOLBAR_SLOT)),
-			toolbarCount = this.maxToolbarItems - toolbarElements.length;
-
-		if (toolbarCount > 0) {
-			newNodes
-				.filter(node => !node.hidden).slice(0, toolbarCount)
-				.forEach(node => this._moveElement(node, true));
-		}
-
 		this._debounceLayoutActions();
 	}
 
-	// eslint-disable-next-line no-unused-vars
-	_computeComputedBarHeight(matchElementHeight, barHeight, kicker) {
+	_computeComputedBarHeight(matchElementHeight, barHeight) {
 		if (matchElementHeight) {
 			return matchElementHeight.offsetHeight;
 		}
@@ -272,12 +245,7 @@ class CosmozBottomBar extends PolymerElement {
 	}
 
 	_fireAction(item) {
-
-		if (!item || !item.dispatchEvent) {
-			return;
-		}
-
-		item.dispatchEvent(new window.CustomEvent('action', {
+		item?.dispatchEvent?.(new window.CustomEvent('action', {
 			bubbles: true,
 			cancelable: true,
 			detail: {
@@ -311,7 +279,8 @@ class CosmozBottomBar extends PolymerElement {
 	_getElements() {
 		return FlattenedNodesObserver.getFlattenedNodes(this)
 			.filter(this._isActionNode)
-			.filter(element => !element.hidden);
+			.filter(element => !element.hidden)
+			.sort((a, b) => a.dataset.index - b.dataset.index);
 	}
 	/**
 	 * Layout the actions available as buttons or menu items
@@ -335,56 +304,19 @@ class CosmozBottomBar extends PolymerElement {
 	 */
 	_layoutActions() { // eslint-disable-line max-statements
 		const elements = this._getElements(),
-			toolbar = this.$.toolbar;
+			hasActions = elements.length > 0 || this.hasExtraItems;
+		this._setHasActions(hasActions);
 
-		let fits,
-			newToolbarElement;
-
-		this._setHasActions(elements.length > 0 || this.hasExtraItems);
-		if (!this.hasActions) {
+		if (!hasActions) {
 			// No need to render if we don't have any actions
-			return;
+			return this._setHasMenuItems(false);
 		}
 
-		const currentWidth = toolbar.clientWidth;
-		fits = toolbar.scrollWidth <= currentWidth + 1;
-
-		const toolbarElements = elements.filter(slotEq(BOTTOM_BAR_TOOLBAR_SLOT)),
-			menuElements = elements.filter(slotEq(BOTTOM_BAR_MENU_SLOT));
-
+		const toolbarElements = elements.slice(0, this.maxToolbarItems),
+			menuElements = elements.slice(toolbarElements.length);
+		toolbarElements.forEach(el => this._moveElement(el, true));
+		menuElements.forEach(el => this._moveElement(el));
 		this._setHasMenuItems(menuElements.length > 0);
-
-		fits = fits && toolbarElements.length <= this.maxToolbarItems;
-		fits = fits && toolbarElements.every(element => element.scrollWidth <= element.clientWidth);
-
-
-		if (fits) {
-			if (this._canAddMoreButtonToBar(currentWidth, toolbarElements, menuElements)) {
-				newToolbarElement = menuElements[0];
-				this._moveElement(newToolbarElement, true);
-				// (pasleq) If we are moving the focused element from the menu to the toolbar
-				// while the toolbar is open, this will cause an error in iron-control-state
-				// that tries to handle lost of focus on an element that has been removed.
-				if (toolbarElements.length > 0) {
-					toolbarElements[0].focus();
-				} else {
-					newToolbarElement.focus();
-				}
-				this.$.menu.close();
-				this._debounceLayoutActions();
-			}
-			return;
-		}
-
-		this._overflowWidth = currentWidth;
-
-		if (toolbarElements.length < 1) {
-			return;
-		}
-
-		const newMenuElement = toolbarElements[toolbarElements.length - 1];
-		this._moveElement(newMenuElement, false);
-		this._debounceLayoutActions();
 	}
 
 	_moveElement(element, toToolbar) {
@@ -408,7 +340,6 @@ class CosmozBottomBar extends PolymerElement {
 			return;
 		}
 		this._computedBarHeightKicker += 1;
-		this._debounceLayoutActions();
 	}
 
 	_showHideBottomBar(visible) {
