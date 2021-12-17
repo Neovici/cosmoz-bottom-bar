@@ -12,7 +12,6 @@
 	<script type="module">
 		import '@polymer/polymer/lib/elements/dom-bind.js';
 
-		import '@neovici/cosmoz-viewinfo/cosmoz-viewinfo.js';
 		import '@polymer/paper-button/paper-button.js';
 		import '@polymer/paper-toggle-button/paper-toggle-button.js';
 
@@ -26,7 +25,7 @@
 					body {
 						font-family: sans-serif;
 					}
-					cosmoz-viewinfo {
+					#view {
 						display: flex;
 						flex-direction: column;
 					}
@@ -52,7 +51,7 @@
 	<h3>cosmoz-bottom-bar-view demo</h3>
 	<dom-bind id="basic">
 		<template is="dom-bind">
-			<cosmoz-viewinfo style="height: 400px; border: 1px solid black;">
+			<div id="view" style="height: 400px; border: 1px solid black;">
 				<div style="padding: 5px; display: flex">
 					<paper-toggle-button checked="{{ active }}"><code>Bottom bar active</code></paper-toggle-button>
 					<paper-toggle-button checked="{{ fixed }}"><code>Force fixed bottom bar</code></paper-toggle-button>
@@ -72,7 +71,7 @@
 					<paper-button>Button 4</paper-button>
 					<paper-button>Button 5</paper-button>
 				</cosmoz-bottom-bar-view>
-			</cosmoz-viewinfo>
+			</div>
 			<script>
 				window.addEventListener('WebComponentsReady', () => {
 					const t = document.querySelector('#basic');

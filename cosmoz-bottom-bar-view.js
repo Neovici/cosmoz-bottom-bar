@@ -1,11 +1,7 @@
 import { component } from 'haunted';
 import { html } from 'lit-html';
 import { ifDefined } from 'lit-html/directives/if-defined';
-import { ref } from '@neovici/cosmoz-utils/lib/directives/ref';
-import { useBottomBarView } from './lib/use-bottom-bar-view';
 import { bottomBarSlots } from './cosmoz-bottom-bar';
-
-
 
 /**
  * `cosmoz-bottom-bar-view` contains a content section and a bottom bar with actions.
@@ -18,49 +14,41 @@ import { bottomBarSlots } from './cosmoz-bottom-bar';
 */
 
 const CosmozBottomBarView = ({
-	barHeight,
-	...pass
-}) => { /*eslint-disable no-return-assign */
-	const {
-		active,
-		info
-	} = useBottomBarView(pass);
+	active = true,
+	barHeight
+}) => html`
+	<style>
+		:host {
+			position: relative;
+			display: flex;
+			flex-direction: column;
+			flex: var(--cosmoz-bottom-bar-view-flex, auto);
+			overflow: hidden;
+		}
 
-	return html`
-			<style>
-				:host {
-					position: relative;
-					display: flex;
-					flex-direction: column;
-					flex: var(--cosmoz-bottom-bar-view-flex, auto);
-					overflow: hidden;
-				}
+		#content {
+			display: flex;
+			flex-direction: column;
+			flex: auto;
+			-webkit-overflow-scrolling: touch;
+			overflow-y: auto;
+		}
 
-				#content {
-					display: flex;
-					flex-direction: column;
-					flex: auto;
-					-webkit-overflow-scrolling: touch;
-					overflow-y: auto;
-				}
-
-				#bar {
-					background-color: var(--cosmoz-bottom-bar-view-bar-color, rgba(230, 230, 230, 0.8));
-					box-shadow: var(--cosmoz-bottom-bar-view-bar-shadow, none);
-					position: static;
-					flex: none;
-				}
-			</style>
-			<div id="content" part="content">
-				${ ref(info) }
-				<slot name="content"></slot>
-				<slot name="scroller-content"></slot>
-			</div>
-			<cosmoz-bottom-bar id="bar" ?active=${ active } bar-height=${ ifDefined(barHeight) } part="bar">
-				<slot></slot>
-				${ bottomBarSlots }
-			</cosmoz-bottom-bar>
-		`;
-};
+		#bar {
+			background-color: var(--cosmoz-bottom-bar-view-bar-color, rgba(230, 230, 230, 0.8));
+			box-shadow: var(--cosmoz-bottom-bar-view-bar-shadow, none);
+			position: static;
+			flex: none;
+		}
+	</style>
+	<div id="content" part="content">
+		<slot name="content"></slot>
+		<slot name="scroller-content"></slot>
+	</div>
+	<cosmoz-bottom-bar id="bar" ?active=${ active } bar-height=${ ifDefined(barHeight) } part="bar">
+		<slot></slot>
+		${ bottomBarSlots }
+	</cosmoz-bottom-bar>
+`;
 customElements.define('cosmoz-bottom-bar-view', component(CosmozBottomBarView));
 

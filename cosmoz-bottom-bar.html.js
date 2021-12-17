@@ -103,7 +103,7 @@ export default html`
         }
     </style>
 
-    <div id="bar" style$="[[ _getHeightStyle(computedBarHeight) ]]">
+    <div id="bar" style$="[[ _getHeightStyle(computedBarHeight) ]]" part="bar">
         <div id="info">
             <slot name="info"></slot>
         </div>
