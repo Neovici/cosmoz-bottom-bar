@@ -51,14 +51,8 @@
 		]
 	},
 	"dependencies": {
-		"@neovici/cosmoz-utils": "^3.21.0",
-		"@polymer/iron-icons": "^3.0.1",
-		"@polymer/iron-selector": "^3.0.0",
-		"@polymer/paper-icon-button": "^3.0.0",
-		"@polymer/paper-listbox": "^3.0.0",
-		"@polymer/paper-menu-button": "^3.0.0",
+		"@neovici/cosmoz-dropdown": "^1.1.0",
 		"@polymer/polymer": "^3.3.1",
-		"@webcomponents/shadycss": "^1.10.2",
 		"haunted": "^4.8.0",
 		"lit-html": "^1.4.0"
 	},
@@ -68,6 +62,7 @@
 		"@neovici/eslint-config": "^1.3.0",
 		"@open-wc/testing": "^2.5.0",
 		"@polymer/iron-icon": "^3.0.1",
+		"@polymer/iron-icons": "^3.0.1",
 		"@polymer/paper-button": "^3.0.0",
 		"@polymer/paper-toggle-button": "^3.0.0",
 		"@semantic-release/changelog": "^6.0.0",
