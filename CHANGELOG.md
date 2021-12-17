@@ -1,3 +1,10 @@
+# [4.3.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v4.2.0...v4.3.0) (2021-12-17)
+
+
+### Features
+
+* **bottom-bar:** replace paper elements with cosmoz-dropdown ([bca41ed](https://github.com/neovici/cosmoz-bottom-bar/commit/bca41ede21922e44b13e3e3316ac6c8bb2b899a8))
+
 # [4.2.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v4.1.1...v4.2.0) (2021-12-17)
 
 
