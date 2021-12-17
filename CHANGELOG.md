@@ -1,3 +1,15 @@
+# [4.2.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v4.1.1...v4.2.0) (2021-12-17)
+
+
+### Bug Fixes
+
+* **cosmoz-bottom-bar:** add bar slot ([0c564fa](https://github.com/neovici/cosmoz-bottom-bar/commit/0c564fa12fae29da457daaab453eca99320b7416))
+
+
+### Features
+
+* **cosmoz-bottom-bar-view:** remove auto hide on scroll ([5741e0e](https://github.com/neovici/cosmoz-bottom-bar/commit/5741e0e1a35db15dc5818931b1c54c38666d8d23))
+
 ## [4.1.1](https://github.com/neovici/cosmoz-bottom-bar/compare/v4.1.0...v4.1.1) (2021-06-08)
 
 
