@@ -7,6 +7,7 @@ import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { timeOut } from '@polymer/polymer/lib/utils/async';
 import template from './cosmoz-bottom-bar.html.js';
 import { html } from 'haunted';
+import { defaultPlacement } from '@neovici/cosmoz-dropdown';
 
 const
 	BOTTOM_BAR_TOOLBAR_SLOT = 'bottom-bar-toolbar',
@@ -155,6 +156,10 @@ class CosmozBottomBar extends PolymerElement {
 			_matchHeightElement: {
 				type: Object,
 				computed: '_getHeightMatchingElement(matchParent)'
+			},
+
+			topPlacement: {
+				value: ['top-right', ...defaultPlacement]
 			}
 		};
 	}
@@ -167,7 +172,6 @@ class CosmozBottomBar extends PolymerElement {
 
 	constructor() {
 		super();
-		this._boundDropdownClosed = this._dropdownClosed.bind(this);
 		this._boundChildrenUpdated = this._childrenUpdated.bind(this);
 		this._boundLayoutActions = this._layoutActions.bind(this);
 		this._resizeObserver = new ResizeObserver((...args) => {
@@ -179,7 +183,6 @@ class CosmozBottomBar extends PolymerElement {
 	connectedCallback() {
 		super.connectedCallback();
 
-		this.addEventListener('iron-closed-overlay', this._boundDropdownClosed);
 
 		const layoutOnRemove = info => info.removedNodes.filter(this._isActionNode) && this._debounceLayoutActions();
 		this._nodeObservers = [
@@ -196,7 +199,6 @@ class CosmozBottomBar extends PolymerElement {
 	disconnectedCallback() {
 		super.disconnectedCallback();
 
-		this.removeEventListener('iron-closed-overlay', this._boundDropdownClosed);
 		[...this._nodeObservers, this._hiddenMutationObserver].forEach(e => e.disconnect(e));
 		this._layoutDebouncer?.cancel(); /* eslint-disable-line no-unused-expressions */
 		this._resizeObserver.unobserve(this);
@@ -238,10 +240,6 @@ class CosmozBottomBar extends PolymerElement {
 			timeOut.after(30),
 			this._boundLayoutActions
 		);
-	}
-
-	_dropdownClosed() {
-		this.$.dropdownButton.active = false;
 	}
 
 	_fireAction(item) {
@@ -317,7 +315,6 @@ class CosmozBottomBar extends PolymerElement {
 		toolbarElements.forEach(el => this._moveElement(el, true));
 		menuElements.forEach(el => this._moveElement(el));
 		this._setHasMenuItems(menuElements.length > 0);
-		this.$.menu.$.dropdown.notifyResize();
 	}
 
 	_moveElement(element, toToolbar) {
