@@ -30,7 +30,7 @@ suite('bottomBarWithoutMenu',	 () => {
 	});
 
 	test('menu button should be hidden', () => {
-		assert.isTrue(bottomBar.$.menu.hidden);
+		assert.isTrue(bottomBar.$.dropdown.hidden);
 	});
 });
 
@@ -67,7 +67,7 @@ suite('bottomBarWithOverflowingButton', () => {
 
 	test('menu button should be visible', () => {
 		bottomBar._layoutDebouncer.flush(); //flush again to update hidden
-		assert.isFalse(bottomBar.$.menu.hidden);
+		assert.isFalse(bottomBar.$.dropdown.hidden);
 	});
 
 });
@@ -136,7 +136,7 @@ suite('bottomBarWithHiddenButton', () => {
 
 		assert.equal(visibleToolbarCount, 2);
 		assert.equal(visibleMenuItems, 0);
-		assert.isTrue(bottomBar.$.menu.hidden);
+		assert.isTrue(bottomBar.$.dropdown.hidden);
 	});
 
 	test('Unhiding item', async () => {
