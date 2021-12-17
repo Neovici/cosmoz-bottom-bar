@@ -35,7 +35,7 @@ suite('<cosmoz-bottom-bar-view>', () => {
 		assert.isTrue(bottomBar.visible);
 	});
 
-	test('bottomBar is hidden when scrolling down', async () => {
+	test('bottomBar is not hidden when scrolling down', async () => {
 		bottomBar._layoutDebouncer.flush();
 		bottomBarView.shadowRoot.querySelector('#content').scroll(0, 20);
 
@@ -43,8 +43,8 @@ suite('<cosmoz-bottom-bar-view>', () => {
 		await nextFrame();
 		await nextFrame();
 
-		assert.isFalse(bottomBar.active);
-		assert.isFalse(bottomBar.visible);
+		assert.isTrue(bottomBar.active);
+		assert.isTrue(bottomBar.visible);
 	});
 
 	test('bottomBar is visible when scroll is at bottom', async () => {
