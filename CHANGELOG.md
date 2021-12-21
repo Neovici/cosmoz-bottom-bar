@@ -1,3 +1,10 @@
+# [4.4.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v4.3.0...v4.4.0) (2021-12-21)
+
+
+### Features
+
+* refactor dropdown ([2f0d724](https://github.com/neovici/cosmoz-bottom-bar/commit/2f0d7244f30a82f0723dd987e1ab64cf04e242d9))
+
 # [4.3.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v4.2.0...v4.3.0) (2021-12-17)
 
 
