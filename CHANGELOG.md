@@ -1,3 +1,10 @@
+# [4.5.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v4.4.0...v4.5.0) (2021-12-29)
+
+
+### Features
+
+* remove action event ([ffc361a](https://github.com/neovici/cosmoz-bottom-bar/commit/ffc361a5c59cad9ead9db6085c93e776741320c8))
+
 # [4.4.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v4.3.0...v4.4.0) (2021-12-21)
 
 
