@@ -242,16 +242,6 @@ class CosmozBottomBar extends PolymerElement {
 		);
 	}
 
-	_fireAction(item) {
-		item?.dispatchEvent?.(new window.CustomEvent('action', {
-			bubbles: true,
-			cancelable: true,
-			detail: {
-				item
-			}
-		}));
-	}
-
 	_getHeightMatchingElement(matchParent) {
 		if (matchParent) {
 			return this.parentElement;
@@ -325,11 +315,6 @@ class CosmozBottomBar extends PolymerElement {
 		element.classList.toggle(this.menuClass, !toToolbar);
 		element.classList.toggle(this.toolbarClass, toToolbar);
 		this.updateStyles();
-	}
-
-	_onActionSelected(event, detail) {
-		this._fireAction(detail.item);
-		event.currentTarget.selected = undefined;
 	}
 
 	_onResize([entry]) {
