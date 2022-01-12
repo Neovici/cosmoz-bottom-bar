@@ -54,6 +54,11 @@ export default html`
 			font-weight: 500;
 			line-height: 40px;
 		}
+
+		#bottomBarToolbar::slotted(:not(slot)[disabled]) {
+			opacity: var(--cosmoz-button-disabled-opacity, 0.15);
+			pointer-events: none;
+		}
 		#bottomBarToolbar::slotted(:not(slot):hover) {
 			background: var(--cosmoz-bottom-bar-button-hover-bg-color, var(--cosmoz-button-hover-bg-color, #3A3F44));
 		}
