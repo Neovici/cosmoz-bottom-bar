@@ -1,3 +1,10 @@
+## [4.5.1](https://github.com/neovici/cosmoz-bottom-bar/compare/v4.5.0...v4.5.1) (2022-01-12)
+
+
+### Bug Fixes
+
+* disabled toolbar item ([353cc7e](https://github.com/neovici/cosmoz-bottom-bar/commit/353cc7ef44a1b83a51cc5c3edef165efc0869fd1))
+
 # [4.5.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v4.4.0...v4.5.0) (2021-12-29)
 
 
