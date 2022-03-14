@@ -1,3 +1,10 @@
+## [4.5.2](https://github.com/neovici/cosmoz-bottom-bar/compare/v4.5.1...v4.5.2) (2022-03-14)
+
+
+### Bug Fixes
+
+* **cosmoz-bottom-bar:** add bg and shadow styles ([8f023f6](https://github.com/neovici/cosmoz-bottom-bar/commit/8f023f61b7ab9bbb61e96173ffff71884e119e67))
+
 ## [4.5.1](https://github.com/neovici/cosmoz-bottom-bar/compare/v4.5.0...v4.5.1) (2022-01-12)
 
 
