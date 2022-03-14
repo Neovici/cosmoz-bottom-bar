@@ -1,3 +1,4 @@
 {
-	"extends": "@neovici"
+	"extends": "./node_modules/@neovici/cfg/eslint"
 }
+
