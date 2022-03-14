@@ -5,14 +5,13 @@ export default html`
 	<style>
 		:host {
 			display: block;
-			position: absolute;
 			bottom: 0;
 			left: 0;
 			width: 100%;
 			max-width: 100%; /* Firefox fix */
 			background-color: inherit;
 			transition: max-height 0.3s ease;
-			z-index: 10;
+			flex: none;
 			background-color: var(--cosmoz-bottom-bar-bg-color, rgba(230, 230, 230, 0.8));
 			box-shadow: var(--cosmoz-bottom-bar-shadow, none);
 
