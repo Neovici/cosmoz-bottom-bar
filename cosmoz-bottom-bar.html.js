@@ -13,6 +13,9 @@ export default html`
 			background-color: inherit;
 			transition: max-height 0.3s ease;
 			z-index: 10;
+			background-color: var(--cosmoz-bottom-bar-bg-color, rgba(230, 230, 230, 0.8));
+			box-shadow: var(--cosmoz-bottom-bar-shadow, none);
+
 			--cosmoz-dropdown-anchor-spacing: 12px 6px;
 			--paper-button: {
 				background-color: inherit;
