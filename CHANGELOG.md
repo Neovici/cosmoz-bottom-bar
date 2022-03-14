@@ -1,3 +1,15 @@
+# [5.0.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v4.5.2...v5.0.0) (2022-03-14)
+
+
+### Features
+
+* **cosmoz-bottom-bar-view:** remove cosmoz-bottom-bar-view ([768a70a](https://github.com/neovici/cosmoz-bottom-bar/commit/768a70ae83c1a97122bf5cdbf5f4b7279ac02720))
+
+
+### BREAKING CHANGES
+
+* **cosmoz-bottom-bar-view:** remove cosmoz-bottom-bar-view
+
 ## [4.5.2](https://github.com/neovici/cosmoz-bottom-bar/compare/v4.5.1...v4.5.2) (2022-03-14)
 
 
