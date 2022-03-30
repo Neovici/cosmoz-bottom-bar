@@ -1,3 +1,10 @@
+# [5.1.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v5.0.0...v5.1.0) (2022-03-30)
+
+
+### Features
+
+* **force-open:** force the bar to stay open and render without any animation ([6e72567](https://github.com/neovici/cosmoz-bottom-bar/commit/6e725675fa6b37f69e4ea4f0a72d9017f00095da))
+
 # [5.0.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v4.5.2...v5.0.0) (2022-03-14)
 
 
