@@ -28,6 +28,9 @@ export default html`
 				padding: 0;
 			};
 		}
+		:host([force-open]) {
+			transition: none;
+		}
 		[hidden], ::slotted([hidden]) {
 			display: none !important;
 		}

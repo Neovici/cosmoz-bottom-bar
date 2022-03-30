@@ -130,6 +130,11 @@ class CosmozBottomBar extends PolymerElement {
 				type: Number
 			},
 
+			forceOpen: {
+				type: Boolean,
+				value: false
+			},
+
 			/**
 			 * Whether the bar is visible (has actions and is `active`)
 			 */
@@ -137,7 +142,7 @@ class CosmozBottomBar extends PolymerElement {
 				type: Boolean,
 				notify: true,
 				readOnly: true,
-				computed: '_computeVisible(hasActions, active, hasExtraItems)'
+				computed: '_computeVisible(hasActions, active, hasExtraItems, forceOpen)'
 			},
 
 			/**
@@ -230,8 +235,8 @@ class CosmozBottomBar extends PolymerElement {
 		return barHeight;
 	}
 
-	_computeVisible(hasActions, active, hasExtraItems) {
-		return (hasActions || hasExtraItems) && active;
+	_computeVisible(hasActions, active, hasExtraItems, forceOpen) {
+		return forceOpen || ((hasActions || hasExtraItems) && active);
 	}
 
 	_debounceLayoutActions() {
