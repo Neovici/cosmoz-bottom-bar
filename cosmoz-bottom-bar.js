@@ -273,7 +273,7 @@ class CosmozBottomBar extends PolymerElement {
 		return FlattenedNodesObserver.getFlattenedNodes(this)
 			.filter(this._isActionNode)
 			.filter(element => !element.hidden)
-			.sort((a, b) => a.dataset.index - b.dataset.index);
+			.sort((a, b) => (a.dataset.index ?? 0) - (b.dataset.index ?? 0 ));
 	}
 	/**
 	 * Layout the actions available as buttons or menu items
