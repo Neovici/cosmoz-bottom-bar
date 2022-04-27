@@ -1,3 +1,10 @@
+## [5.1.1](https://github.com/neovici/cosmoz-bottom-bar/compare/v5.1.0...v5.1.1) (2022-04-27)
+
+
+### Bug Fixes
+
+* **cosmoz-bottom-bar:** correctly sort items with missing data index ([41e4154](https://github.com/neovici/cosmoz-bottom-bar/commit/41e41542441a985eed111bcad3253d1c4a85a022))
+
 # [5.1.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v5.0.0...v5.1.0) (2022-03-30)
 
 
