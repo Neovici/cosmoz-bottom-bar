@@ -1,3 +1,10 @@
+# [5.2.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v5.1.1...v5.2.0) (2022-06-11)
+
+
+### Features
+
+* **render-open:** skip the animation the first time the bar becomes visible ([bae74f9](https://github.com/neovici/cosmoz-bottom-bar/commit/bae74f9c9cbb82c243dc7d35c44fb26fe01a9f74)), closes [AB#7563](https://github.com/AB/issues/7563)
+
 ## [5.1.1](https://github.com/neovici/cosmoz-bottom-bar/compare/v5.1.0...v5.1.1) (2022-04-27)
 
 
