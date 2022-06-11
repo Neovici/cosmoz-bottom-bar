@@ -1,6 +1,7 @@
 /* eslint-disable max-lines */
 import {
-	PolymerElement, html as polymerHtml
+	PolymerElement,
+	html as polymerHtml,
 } from '@polymer/polymer/polymer-element.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
@@ -9,8 +10,7 @@ import { html } from 'lit-html';
 import { defaultPlacement } from '@neovici/cosmoz-dropdown';
 import template from './cosmoz-bottom-bar.html.js';
 
-const
-	BOTTOM_BAR_TOOLBAR_SLOT = 'bottom-bar-toolbar',
+const BOTTOM_BAR_TOOLBAR_SLOT = 'bottom-bar-toolbar',
 	BOTTOM_BAR_MENU_SLOT = 'bottom-bar-menu',
 	rendered = Symbol('rendered');
 
@@ -33,9 +33,10 @@ const
  * @element cosmoz-bottom-bar
  * @demo demo/bottom-bar.html Basic Demo
  * @demo demo/bottom-bar-match-parent.html match parent Demo
-	*/
+ */
 class CosmozBottomBar extends PolymerElement {
-	static get template() { // eslint-disable-line max-lines-per-function
+	static get template() {
+		// eslint-disable-line max-lines-per-function
 		return template;
 	}
 
@@ -49,7 +50,7 @@ class CosmozBottomBar extends PolymerElement {
 				type: Boolean,
 				value: false,
 				notify: true,
-				reflectToAttribute: true
+				reflectToAttribute: true,
 			},
 
 			/**
@@ -57,7 +58,7 @@ class CosmozBottomBar extends PolymerElement {
 			 */
 			barHeight: {
 				type: Number,
-				value: 64
+				value: 64,
 			},
 
 			/**
@@ -65,7 +66,7 @@ class CosmozBottomBar extends PolymerElement {
 			 */
 			matchParent: {
 				type: Boolean,
-				value: false
+				value: false,
 			},
 
 			/**
@@ -75,12 +76,12 @@ class CosmozBottomBar extends PolymerElement {
 				type: Boolean,
 				value: false,
 				readOnly: true,
-				notify: true
+				notify: true,
 			},
 
 			hasExtraItems: {
 				type: Boolean,
-				value: false
+				value: false,
 			},
 
 			/**
@@ -88,7 +89,7 @@ class CosmozBottomBar extends PolymerElement {
 			 */
 			selectedClass: {
 				type: String,
-				value: 'cosmoz-bottom-bar-selected-item'
+				value: 'cosmoz-bottom-bar-selected-item',
 			},
 
 			/**
@@ -96,7 +97,7 @@ class CosmozBottomBar extends PolymerElement {
 			 */
 			toolbarClass: {
 				type: String,
-				value: 'cosmoz-bottom-bar-toolbar'
+				value: 'cosmoz-bottom-bar-toolbar',
 			},
 
 			/**
@@ -104,7 +105,7 @@ class CosmozBottomBar extends PolymerElement {
 			 */
 			menuClass: {
 				type: String,
-				value: 'cosmoz-bottom-bar-menu'
+				value: 'cosmoz-bottom-bar-menu',
 			},
 
 			/**
@@ -112,7 +113,7 @@ class CosmozBottomBar extends PolymerElement {
 			 */
 			maxToolbarItems: {
 				type: Number,
-				value: 1
+				value: 1,
 			},
 
 			/**
@@ -120,25 +121,26 @@ class CosmozBottomBar extends PolymerElement {
 			 */
 			computedBarHeight: {
 				type: Number,
-				computed: '_computeComputedBarHeight(_matchHeightElement, barHeight, _computedBarHeightKicker)',
-				notify: true
+				computed:
+					'_computeComputedBarHeight(_matchHeightElement, barHeight, _computedBarHeightKicker)',
+				notify: true,
 			},
 
 			/**
 			 * Kicker to make `computedBarHeight` recalculate
 			 */
 			_computedBarHeightKicker: {
-				type: Number
+				type: Number,
 			},
 
 			renderOpen: {
 				type: Boolean,
-				value: false
+				value: false,
 			},
 
 			forceOpen: {
 				type: Boolean,
-				value: false
+				value: false,
 			},
 
 			/**
@@ -148,7 +150,8 @@ class CosmozBottomBar extends PolymerElement {
 				type: Boolean,
 				notify: true,
 				readOnly: true,
-				computed: '_computeVisible(hasActions, active, hasExtraItems, forceOpen)'
+				computed:
+					'_computeVisible(hasActions, active, hasExtraItems, forceOpen)',
 			},
 
 			/**
@@ -158,7 +161,7 @@ class CosmozBottomBar extends PolymerElement {
 				type: Boolean,
 				value: false,
 				readOnly: true,
-				notify: true
+				notify: true,
 			},
 
 			/**
@@ -166,19 +169,17 @@ class CosmozBottomBar extends PolymerElement {
 			 */
 			_matchHeightElement: {
 				type: Object,
-				computed: '_getHeightMatchingElement(matchParent)'
+				computed: '_getHeightMatchingElement(matchParent)',
 			},
 
 			topPlacement: {
-				value: ['top-right', ...defaultPlacement]
-			}
+				value: ['top-right', ...defaultPlacement],
+			},
 		};
 	}
 
 	static get observers() {
-		return [
-			'_showHideBottomBar(visible, renderOpen)'
-		];
+		return ['_showHideBottomBar(visible, renderOpen)'];
 	}
 
 	constructor() {
@@ -194,15 +195,20 @@ class CosmozBottomBar extends PolymerElement {
 	connectedCallback() {
 		super.connectedCallback();
 
-
-		const layoutOnRemove = info => info.removedNodes.filter(this._isActionNode) && this._debounceLayoutActions();
+		const layoutOnRemove = (info) =>
+			info.removedNodes.filter(this._isActionNode) &&
+			this._debounceLayoutActions();
 		this._nodeObservers = [
 			new FlattenedNodesObserver(this.$.content, this._boundChildrenUpdated),
-			new FlattenedNodesObserver(this.$.extraSlot, info => this.set('hasExtraItems', info.addedNodes.length > 0)),
+			new FlattenedNodesObserver(this.$.extraSlot, (info) =>
+				this.set('hasExtraItems', info.addedNodes.length > 0)
+			),
 			new FlattenedNodesObserver(this.$.bottomBarToolbar, layoutOnRemove),
-			new FlattenedNodesObserver(this.$.bottomBarMenu, layoutOnRemove)
+			new FlattenedNodesObserver(this.$.bottomBarMenu, layoutOnRemove),
 		];
-		this._hiddenMutationObserver = new MutationObserver(() => this._debounceLayoutActions());
+		this._hiddenMutationObserver = new MutationObserver(() =>
+			this._debounceLayoutActions()
+		);
 		this._resizeObserver.observe(this);
 		this._computedBarHeightKicker = 0;
 	}
@@ -211,7 +217,9 @@ class CosmozBottomBar extends PolymerElement {
 		super.disconnectedCallback();
 		this[rendered] = false;
 
-		[...this._nodeObservers, this._hiddenMutationObserver].forEach(e => e.disconnect(e));
+		[...this._nodeObservers, this._hiddenMutationObserver].forEach((e) =>
+			e.disconnect(e)
+		);
 		this._layoutDebouncer?.cancel(); /* eslint-disable-line no-unused-expressions */
 		this._resizeObserver.unobserve(this);
 	}
@@ -219,15 +227,18 @@ class CosmozBottomBar extends PolymerElement {
 	_childrenUpdated(info) {
 		const addedNodes = info.addedNodes.filter(this._isActionNode),
 			removedNodes = info.removedNodes.filter(this._isActionNode),
-			newNodes = addedNodes.filter(node => !removedNodes.includes(node));
+			newNodes = addedNodes.filter((node) => !removedNodes.includes(node));
 
-		if (addedNodes.length === 0 && removedNodes.length === 0 || newNodes.length === 0) {
+		if (
+			(addedNodes.length === 0 && removedNodes.length === 0) ||
+			newNodes.length === 0
+		) {
 			return;
 		}
-		newNodes.forEach(node => {
+		newNodes.forEach((node) => {
 			this._hiddenMutationObserver.observe(node, {
 				attributes: true,
-				attributeFilter: ['hidden']
+				attributeFilter: ['hidden'],
 			});
 			this._moveElement(node, false);
 		});
@@ -267,20 +278,22 @@ class CosmozBottomBar extends PolymerElement {
 	}
 
 	_isActionNode(node) {
-		return node.nodeType === Node.ELEMENT_NODE &&
+		return (
+			node.nodeType === Node.ELEMENT_NODE &&
 			node.getAttribute('slot') !== 'info' &&
 			node.tagName !== 'TEMPLATE' &&
 			node.tagName !== 'STYLE' &&
 			node.tagName !== 'DOM-REPEAT' &&
 			node.tagName !== 'DOM-IF' &&
-			node.getAttribute('slot') !== 'extra';
+			node.getAttribute('slot') !== 'extra'
+		);
 	}
 
 	_getElements() {
 		return FlattenedNodesObserver.getFlattenedNodes(this)
 			.filter(this._isActionNode)
-			.filter(element => !element.hidden)
-			.sort((a, b) => (a.dataset.index ?? 0) - (b.dataset.index ?? 0 ));
+			.filter((element) => !element.hidden)
+			.sort((a, b) => (a.dataset.index ?? 0) - (b.dataset.index ?? 0));
 	}
 	/**
 	 * Layout the actions available as buttons or menu items
@@ -302,7 +315,8 @@ class CosmozBottomBar extends PolymerElement {
 	 *
 	 * @returns {void}
 	 */
-	_layoutActions() { // eslint-disable-line max-statements
+	_layoutActions() {
+		// eslint-disable-line max-statements
 		const elements = this._getElements(),
 			hasActions = elements.length > 0 || this.hasExtraItems;
 		this._setHasActions(hasActions);
@@ -314,8 +328,8 @@ class CosmozBottomBar extends PolymerElement {
 
 		const toolbarElements = elements.slice(0, this.maxToolbarItems),
 			menuElements = elements.slice(toolbarElements.length);
-		toolbarElements.forEach(el => this._moveElement(el, true));
-		menuElements.forEach(el => this._moveElement(el));
+		toolbarElements.forEach((el) => this._moveElement(el, true));
+		menuElements.forEach((el) => this._moveElement(el));
 		this._setHasMenuItems(menuElements.length > 0);
 	}
 
@@ -330,7 +344,9 @@ class CosmozBottomBar extends PolymerElement {
 	}
 
 	_onResize([entry]) {
-		const hidden = entry.borderBoxSize?.[0]?.inlineSize === 0 || entry.contentRect?.width === 0;
+		const hidden =
+			entry.borderBoxSize?.[0]?.inlineSize === 0 ||
+			entry.contentRect?.width === 0;
 		if (hidden) {
 			return;
 		}
@@ -347,7 +363,7 @@ class CosmozBottomBar extends PolymerElement {
 
 		let from = visible ? '0px' : height + 'px';
 
-		if(visible && renderOpen && !this[rendered]) {
+		if (visible && renderOpen && !this[rendered]) {
 			from = to;
 			this[rendered] = true;
 		}
@@ -375,6 +391,5 @@ const tmplt = `
 	<slot name="bottom-bar-menu" slot="bottom-bar-menu"></slot>
 `;
 
-export const
-	bottomBarSlots = html([tmplt]),
-	bottomBarSlotsPolymer = polymerHtml([tmplt]);
+export const bottomBarSlots = html(Object.assign([tmplt], { raw: [tmplt] })),
+	bottomBarSlotsPolymer = polymerHtml(Object.assign([tmplt], { raw: [tmplt] }));
