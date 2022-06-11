@@ -5,9 +5,9 @@ import {
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { timeOut } from '@polymer/polymer/lib/utils/async';
-import template from './cosmoz-bottom-bar.html.js';
-import { html } from 'haunted';
+import { html } from 'lit-html';
 import { defaultPlacement } from '@neovici/cosmoz-dropdown';
+import template from './cosmoz-bottom-bar.html.js';
 
 const
 	BOTTOM_BAR_TOOLBAR_SLOT = 'bottom-bar-toolbar',
@@ -346,7 +346,7 @@ class CosmozBottomBar extends PolymerElement {
 			to = !visible ? '0px' : height + 'px';
 
 		let from = visible ? '0px' : height + 'px';
-		
+
 		if(visible && renderOpen && !this[rendered]) {
 			from = to;
 			this[rendered] = true;
