@@ -11,7 +11,8 @@ import { defaultPlacement } from '@neovici/cosmoz-dropdown';
 
 const
 	BOTTOM_BAR_TOOLBAR_SLOT = 'bottom-bar-toolbar',
-	BOTTOM_BAR_MENU_SLOT = 'bottom-bar-menu';
+	BOTTOM_BAR_MENU_SLOT = 'bottom-bar-menu',
+	rendered = Symbol('rendered');
 
 /**
  * `<cosmoz-bottom-bar>` is a horizontal responsive bottom toolbar containing items that
@@ -130,6 +131,11 @@ class CosmozBottomBar extends PolymerElement {
 				type: Number
 			},
 
+			renderOpen: {
+				type: Boolean,
+				value: false
+			},
+
 			forceOpen: {
 				type: Boolean,
 				value: false
@@ -171,7 +177,7 @@ class CosmozBottomBar extends PolymerElement {
 
 	static get observers() {
 		return [
-			'_showHideBottomBar(visible)'
+			'_showHideBottomBar(visible, renderOpen)'
 		];
 	}
 
@@ -203,6 +209,7 @@ class CosmozBottomBar extends PolymerElement {
 
 	disconnectedCallback() {
 		super.disconnectedCallback();
+		this[rendered] = false;
 
 		[...this._nodeObservers, this._hiddenMutationObserver].forEach(e => e.disconnect(e));
 		this._layoutDebouncer?.cancel(); /* eslint-disable-line no-unused-expressions */
@@ -330,14 +337,20 @@ class CosmozBottomBar extends PolymerElement {
 		this._computedBarHeightKicker += 1;
 	}
 
-	_showHideBottomBar(visible) {
+	_showHideBottomBar(visible, renderOpen) {
 		this.style.transitionDuration = 0;
 		this.style.display = '';
 		this.style.maxHeight = '';
 
 		const height = this.computedBarHeight,
-			from = visible ? '0px' : height + 'px',
 			to = !visible ? '0px' : height + 'px';
+
+		let from = visible ? '0px' : height + 'px';
+		
+		if(visible && renderOpen && !this[rendered]) {
+			from = to;
+			this[rendered] = true;
+		}
 
 		this.style.maxHeight = from;
 
