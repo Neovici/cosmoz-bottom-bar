@@ -4,9 +4,11 @@ on:
   pull_request:
     branches:
       - master
+      - beta
   push:
     branches:
       - master
+      - beta
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -16,10 +18,11 @@ jobs:
       with:
           fetch-depth: 0
 
-    - name: Use Node.js 14.x
+    - name: Use Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: 14.x
+        node-version: 16.x
+        cache: 'npm'
 
     - name: Install
       run: npm ci
@@ -32,14 +35,12 @@ jobs:
 
     - name: Test and report
       env:
-        GIT_BRANCH: ${{ github.ref == 'refs/heads/master' && 'master' || github.ref }}
-        GIT_COMMIT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
         SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
       run: |
-        echo "::add-matcher::.github/karma-problem-matcher.json"
+        echo "::add-matcher::.github/problem-matcher.json"
         npm test
-        
+
     - name: Semantic release
       run: npx semantic-release
       if: success()

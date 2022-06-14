@@ -53,12 +53,11 @@
 	"dependencies": {
 		"@neovici/cosmoz-dropdown": "^1.1.0",
 		"@polymer/polymer": "^3.3.1",
-		"haunted": "^4.8.0",
 		"lit-html": "^1.4.0"
 	},
 	"devDependencies": {
-		"@commitlint/cli": "^16.0.0",
-		"@commitlint/config-conventional": "^16.0.0",
+		"@commitlint/cli": "^17.0.0",
+		"@commitlint/config-conventional": "^17.0.0",
 		"@neovici/cfg": "^1.13.0",
 		"@open-wc/testing": "^2.5.0",
 		"@polymer/iron-icon": "^3.0.1",
@@ -70,8 +69,8 @@
 		"@web/dev-server": "^0.1.0",
 		"@web/test-runner": "^0.13.0",
 		"@webcomponents/webcomponentsjs": "^2.5.0",
-		"husky": "^7.0.0",
+		"husky": "^8.0.0",
 		"semantic-release": "^19.0.0",
-		"sinon": "^13.0.0"
+		"sinon": "^14.0.0"
 	}
 }
