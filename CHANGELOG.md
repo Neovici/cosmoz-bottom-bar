@@ -1,3 +1,10 @@
+## [5.2.1](https://github.com/neovici/cosmoz-bottom-bar/compare/v5.2.0...v5.2.1) (2022-06-14)
+
+
+### Bug Fixes
+
+* **cosmoz-bottom-bar:** fix template raw support ([d6013be](https://github.com/neovici/cosmoz-bottom-bar/commit/d6013be39341bcc3bb9c3442388a33060c1e01f3))
+
 # [5.2.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v5.1.1...v5.2.0) (2022-06-11)
 
 
