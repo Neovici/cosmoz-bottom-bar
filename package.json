@@ -51,15 +51,15 @@
 		]
 	},
 	"dependencies": {
-		"@neovici/cosmoz-dropdown": "^1.1.0",
-		"@polymer/polymer": "^3.3.1",
-		"lit-html": "^1.4.0"
+		"@neovici/cosmoz-dropdown": "^2.0.0-beta.1",
+		"@polymer/polymer": "^3.3.0",
+		"lit-html": "^2.0.0"
 	},
 	"devDependencies": {
 		"@commitlint/cli": "^17.0.0",
 		"@commitlint/config-conventional": "^17.0.0",
 		"@neovici/cfg": "^1.13.0",
-		"@open-wc/testing": "^2.5.0",
+		"@open-wc/testing": "^3.0.0",
 		"@polymer/iron-icon": "^3.0.1",
 		"@polymer/iron-icons": "^3.0.1",
 		"@polymer/paper-button": "^3.0.0",
