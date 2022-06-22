@@ -1,3 +1,15 @@
+# [6.0.0-beta.1](https://github.com/neovici/cosmoz-bottom-bar/compare/v5.2.1...v6.0.0-beta.1) (2022-06-16)
+
+
+### Features
+
+* uprade to lit-html@^2 ([c581096](https://github.com/neovici/cosmoz-bottom-bar/commit/c581096830e3da4f191bd159cf89d9b2cc77217f))
+
+
+### BREAKING CHANGES
+
+* Upgrade to lit-html@^2
+
 ## [5.2.1](https://github.com/neovici/cosmoz-bottom-bar/compare/v5.2.0...v5.2.1) (2022-06-14)
 
 
