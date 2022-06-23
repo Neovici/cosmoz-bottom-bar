@@ -67,8 +67,8 @@ export default html`
 		#bottomBarToolbar::slotted(:not(slot):hover) {
 			background: var(--cosmoz-bottom-bar-button-hover-bg-color, var(--cosmoz-button-hover-bg-color, #3A3F44));
 		}
-		#dropdown::part(dropdown) {
-				max-width: 300px;
+		#dropdown::part(content) {
+			max-width: 300px;
 		}
 	</style>
 	<div id="bar" style$="[[ _getHeightStyle(computedBarHeight) ]]" part="bar">
