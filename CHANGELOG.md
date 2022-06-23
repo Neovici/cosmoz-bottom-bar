@@ -1,3 +1,10 @@
+# [6.1.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v6.0.0...v6.1.0) (2022-06-23)
+
+
+### Features
+
+* **dropdown:** adjust max width on correct part ([72a6d7a](https://github.com/neovici/cosmoz-bottom-bar/commit/72a6d7afde391201df1dbcbe8a605060ed25049c))
+
 # [6.0.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v5.2.1...v6.0.0) (2022-06-22)
 
 
