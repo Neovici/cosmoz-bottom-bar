@@ -1,3 +1,10 @@
+# [6.2.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v6.1.0...v6.2.0) (2022-07-19)
+
+
+### Features
+
+* upgrade cosmoz-dropdown ([4bdcb6a](https://github.com/neovici/cosmoz-bottom-bar/commit/4bdcb6ac989469835e0019949ac90097ff0e42cb))
+
 # [6.1.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v6.0.0...v6.1.0) (2022-06-23)
 
 
