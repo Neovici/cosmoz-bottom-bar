@@ -1,3 +1,10 @@
+# [6.3.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v6.2.0...v6.3.0) (2022-09-08)
+
+
+### Features
+
+* support for data-priority ([900ac41](https://github.com/neovici/cosmoz-bottom-bar/commit/900ac415cffc597c9acc35115f6f46af48539c93))
+
 # [6.2.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v6.1.0...v6.2.0) (2022-07-19)
 
 
