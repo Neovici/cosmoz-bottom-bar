@@ -80,9 +80,10 @@
 					<cosmoz-bottom-bar id="bottomBar" active="[[ active ]]" bar-height="64" visible="{{ visible }}">
 						<span slot="info">Bottom bar demo</span>
 						<paper-button hidden$="[[ hideButton1 ]]">Button 1</paper-button>
-						<paper-button hidden$="[[ hideButton2 ]]">Button 2</paper-button>
+						<paper-button hidden$="[[ hideButton2 ]]" data-priority="10">Button 2</paper-button>
 						<paper-button hidden$="[[ hideButton3 ]]">Button 3</paper-button>
-						<paper-button hidden$="[[ hideButton4 ]]">Button 4</paper-button>
+						<paper-button hidden$="[[ hideButton4 ]]" data-priority="20">Button 4</paper-button>
+						<paper-button hidden$="[[ hideButton5 ]]">Button 5</paper-button>
 					</cosmoz-bottom-bar>
 				</div>
 			</div>
