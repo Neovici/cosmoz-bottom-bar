@@ -291,19 +291,24 @@ class CosmozBottomBar extends PolymerElement {
 
 	_getElements() {
 		const elements = FlattenedNodesObserver.getFlattenedNodes(this)
-				.filter(this._isActionNode)
-				.filter((element) => !element.hidden)
-				.sort((a, b) => (a.dataset.index ?? 0) - (b.dataset.index ?? 0)),
-			topPriorityAction = elements.reduce(
-				(top, element) => {
-					return parseInt(top.dataset.priority ?? 0, 10) >=
-						parseInt(element.dataset.priority ?? 0, 10)
-						? top
-						: element;
-				},
-				{ dataset: { priority: '-1000' } },
-				[]
-			);
+			.filter(this._isActionNode)
+			.filter((element) => !element.hidden)
+			.sort((a, b) => (a.dataset.index ?? 0) - (b.dataset.index ?? 0));
+
+		if (elements.length === 0) {
+			return elements;
+		}
+		
+		const topPriorityAction = elements.reduce(
+			(top, element) => {
+				return parseInt(top.dataset.priority ?? 0, 10) >=
+					parseInt(element.dataset.priority ?? 0, 10)
+					? top
+					: element;
+			},
+			{ dataset: { priority: '-1000' } },
+			[]
+		);
 
 		return [
 			topPriorityAction,
