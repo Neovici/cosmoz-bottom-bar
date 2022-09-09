@@ -1,3 +1,10 @@
+## [6.3.1](https://github.com/neovici/cosmoz-bottom-bar/compare/v6.3.0...v6.3.1) (2022-09-09)
+
+
+### Bug Fixes
+
+* **data-priority:** error if there are no elements ([c4cae7c](https://github.com/neovici/cosmoz-bottom-bar/commit/c4cae7c12a6d5b61fff50579e5ee6f1d0b812f9a))
+
 # [6.3.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v6.2.0...v6.3.0) (2022-09-08)
 
 
