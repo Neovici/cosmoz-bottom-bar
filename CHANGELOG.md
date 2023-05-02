@@ -1,3 +1,12 @@
+# [6.4.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v6.3.1...v6.4.0) (2023-05-02)
+
+
+### Features
+
+* **bottom-bar:** implement hide-actions ([3295a5c](https://github.com/neovici/cosmoz-bottom-bar/commit/3295a5c7765e7f1b8900641e27b4cda65ffcb844))
+* update ci ([982a257](https://github.com/neovici/cosmoz-bottom-bar/commit/982a2575f0fc6d8d28dd7dc1da4a221d8e7a6776))
+* updates ([a49d99e](https://github.com/neovici/cosmoz-bottom-bar/commit/a49d99edaa4fd53cb8061846ec6e3d7d3cb93c1b))
+
 ## [6.3.1](https://github.com/neovici/cosmoz-bottom-bar/compare/v6.3.0...v6.3.1) (2022-09-09)
 
 
