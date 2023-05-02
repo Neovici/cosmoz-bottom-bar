@@ -53,6 +53,12 @@ class CosmozBottomBar extends PolymerElement {
 				reflectToAttribute: true,
 			},
 
+			hideActions: {
+				type: Boolean,
+				value: false,
+				reflectToAttribute: true,
+			},
+
 			/**
 			 * Bar height (not used when `matchParent` or `matchElementHeight` is set)
 			 */
@@ -298,7 +304,7 @@ class CosmozBottomBar extends PolymerElement {
 		if (elements.length === 0) {
 			return elements;
 		}
-		
+
 		const topPriorityAction = elements.reduce(
 			(top, element) => {
 				return parseInt(top.dataset.priority ?? 0, 10) >=
