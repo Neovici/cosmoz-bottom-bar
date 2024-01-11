@@ -1,3 +1,15 @@
+# [7.0.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v6.4.0...v7.0.0) (2024-01-11)
+
+
+### Features
+
+* update to pion ([4f989f6](https://github.com/neovici/cosmoz-bottom-bar/commit/4f989f65eaec22ff0f31098ccd5243c2087ac48e))
+
+
+### BREAKING CHANGES
+
+* Update to lastest cosmoz-dropdown with @pionjs/pion.
+
 # [6.4.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v6.3.1...v6.4.0) (2023-05-02)
 
 
