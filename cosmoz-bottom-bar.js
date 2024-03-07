@@ -139,11 +139,6 @@ class CosmozBottomBar extends PolymerElement {
 				type: Number,
 			},
 
-			renderOpen: {
-				type: Boolean,
-				value: false,
-			},
-
 			forceOpen: {
 				type: Boolean,
 				value: false,
@@ -185,7 +180,7 @@ class CosmozBottomBar extends PolymerElement {
 	}
 
 	static get observers() {
-		return ['_showHideBottomBar(visible, renderOpen)'];
+		return ['_showHideBottomBar(visible)'];
 	}
 
 	constructor() {
@@ -207,13 +202,13 @@ class CosmozBottomBar extends PolymerElement {
 		this._nodeObservers = [
 			new FlattenedNodesObserver(this.$.content, this._boundChildrenUpdated),
 			new FlattenedNodesObserver(this.$.extraSlot, (info) =>
-				this.set('hasExtraItems', info.addedNodes.length > 0)
+				this.set('hasExtraItems', info.addedNodes.length > 0),
 			),
 			new FlattenedNodesObserver(this.$.bottomBarToolbar, layoutOnRemove),
 			new FlattenedNodesObserver(this.$.bottomBarMenu, layoutOnRemove),
 		];
 		this._hiddenMutationObserver = new MutationObserver(() =>
-			this._debounceLayoutActions()
+			this._debounceLayoutActions(),
 		);
 		this._resizeObserver.observe(this);
 		this._computedBarHeightKicker = 0;
@@ -224,7 +219,7 @@ class CosmozBottomBar extends PolymerElement {
 		this[rendered] = false;
 
 		[...this._nodeObservers, this._hiddenMutationObserver].forEach((e) =>
-			e.disconnect(e)
+			e.disconnect(e),
 		);
 		this._layoutDebouncer?.cancel(); /* eslint-disable-line no-unused-expressions */
 		this._resizeObserver.unobserve(this);
@@ -267,7 +262,7 @@ class CosmozBottomBar extends PolymerElement {
 		this._layoutDebouncer = Debouncer.debounce(
 			this._layoutDebouncer,
 			timeOut.after(30),
-			this._boundLayoutActions
+			this._boundLayoutActions,
 		);
 	}
 
@@ -313,7 +308,7 @@ class CosmozBottomBar extends PolymerElement {
 					: element;
 			},
 			{ dataset: { priority: '-1000' } },
-			[]
+			[],
 		);
 
 		return [
@@ -379,7 +374,7 @@ class CosmozBottomBar extends PolymerElement {
 		this._computedBarHeightKicker += 1;
 	}
 
-	_showHideBottomBar(visible, renderOpen) {
+	_showHideBottomBar(visible) {
 		this.style.transitionDuration = 0;
 		this.style.display = '';
 		this.style.maxHeight = '';
@@ -389,7 +384,7 @@ class CosmozBottomBar extends PolymerElement {
 
 		let from = visible ? '0px' : height + 'px';
 
-		if (visible && renderOpen && !this[rendered]) {
+		if (!this[rendered]) {
 			from = to;
 			this[rendered] = true;
 		}
