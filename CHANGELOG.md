@@ -1,3 +1,10 @@
+# [7.1.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v7.0.0...v7.1.0) (2024-03-07)
+
+
+### Features
+
+* **cosmoz-bottom-bar:** init without transition ([b724778](https://github.com/neovici/cosmoz-bottom-bar/commit/b72477875ded3cec0f5b51c888b28837b1aad753))
+
 # [7.0.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v6.4.0...v7.0.0) (2024-01-11)
 
 
