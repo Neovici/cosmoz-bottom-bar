@@ -1,3 +1,10 @@
+## [7.1.1](https://github.com/neovici/cosmoz-bottom-bar/compare/v7.1.0...v7.1.1) (2024-03-11)
+
+
+### Bug Fixes
+
+* **vscode-settings:** change eslint settings ([b16edbc](https://github.com/neovici/cosmoz-bottom-bar/commit/b16edbcfc881ee11660a84d8859004b535ea0938))
+
 # [7.1.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v7.0.0...v7.1.0) (2024-03-07)
 
 
