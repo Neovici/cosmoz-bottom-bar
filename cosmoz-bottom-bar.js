@@ -356,7 +356,7 @@ class CosmozBottomBar extends PolymerElement {
 
 	_moveElement(element, toToolbar) {
 		const slot = toToolbar ? BOTTOM_BAR_TOOLBAR_SLOT : BOTTOM_BAR_MENU_SLOT,
-			tabindex = toToolbar ? '0' : '-1';
+			tabindex = '0';
 		element.setAttribute('slot', slot);
 		element.setAttribute('tabindex', tabindex);
 		element.classList.toggle(this.menuClass, !toToolbar);
