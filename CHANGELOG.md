@@ -1,3 +1,10 @@
+## [7.1.2](https://github.com/neovici/cosmoz-bottom-bar/compare/v7.1.1...v7.1.2) (2024-03-14)
+
+
+### Bug Fixes
+
+* change tabindex for action menu buttons + vscode settings ([1ab667b](https://github.com/neovici/cosmoz-bottom-bar/commit/1ab667bc2ccb7b44e164d04d2d6f6f2b2142dd40))
+
 ## [7.1.1](https://github.com/neovici/cosmoz-bottom-bar/compare/v7.1.0...v7.1.1) (2024-03-11)
 
 
