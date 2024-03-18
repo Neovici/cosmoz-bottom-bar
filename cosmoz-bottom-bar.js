@@ -127,18 +127,8 @@ class CosmozBottomBar extends PolymerElement {
 			 */
 			computedBarHeight: {
 				type: Number,
-				computed:
-					'_computeComputedBarHeight(_matchHeightElement, barHeight, _computedBarHeightKicker)',
 				notify: true,
 			},
-
-			/**
-			 * Kicker to make `computedBarHeight` recalculate
-			 */
-			_computedBarHeightKicker: {
-				type: Number,
-			},
-
 			forceOpen: {
 				type: Boolean,
 				value: false,
@@ -211,7 +201,10 @@ class CosmozBottomBar extends PolymerElement {
 			this._debounceLayoutActions(),
 		);
 		this._resizeObserver.observe(this);
-		this._computedBarHeightKicker = 0;
+		this.computedBarHeight = this._computeComputedBarHeight(
+			this._matchHeightElement,
+			this.barHeight,
+		);
 	}
 
 	disconnectedCallback() {
@@ -371,7 +364,10 @@ class CosmozBottomBar extends PolymerElement {
 		if (hidden) {
 			return;
 		}
-		this._computedBarHeightKicker += 1;
+		this.computedBarHeight = this._computeComputedBarHeight(
+			this._matchHeightElement,
+			this.barHeight,
+		);
 	}
 
 	_showHideBottomBar(visible) {
