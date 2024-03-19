@@ -1,3 +1,10 @@
+## [7.1.3](https://github.com/neovici/cosmoz-bottom-bar/compare/v7.1.2...v7.1.3) (2024-03-19)
+
+
+### Bug Fixes
+
+* bar height is calculated outside of the resize handler ([ce02cf7](https://github.com/neovici/cosmoz-bottom-bar/commit/ce02cf7d48d636f0c78f0f427d401de6c529f127))
+
 ## [7.1.2](https://github.com/neovici/cosmoz-bottom-bar/compare/v7.1.1...v7.1.2) (2024-03-14)
 
 
