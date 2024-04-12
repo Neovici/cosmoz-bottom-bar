@@ -4,7 +4,9 @@ import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { timeOut } from '@polymer/polymer/lib/utils/async';
 import { defaultPlacement } from '@neovici/cosmoz-dropdown';
 
-import { component } from '@pionjs/pion';
+import { component, useEffect } from '@pionjs/pion';
+import { useHost } from '@neovici/cosmoz-utils/hooks/use-host';
+import { notifyProperty } from '@neovici/cosmoz-utils/hooks/use-notify-property';
 import template from './cosmoz-bottom-bar.html.js';
 
 const BOTTOM_BAR_TOOLBAR_SLOT = 'bottom-bar-toolbar';
@@ -49,6 +51,23 @@ const CosmozBottomBar = ({
 	_matchHeightElement,
 	topPlacement = ['top-right', ...defaultPlacement],
 }) => {
+	const host = useHost();
+
+	useEffect(() => {
+		notifyProperty(host, 'active', active);
+	}, [active]);
+
+	useEffect(() => {
+		notifyProperty(host, 'hideActions', hideActions);
+	}, [hideActions]);
+
+	this._boundChildrenUpdated = this._childrenUpdated.bind(this);
+	this._boundLayoutActions = this._layoutActions.bind(this);
+	this._resizeObserver = new ResizeObserver((...args) => {
+		cancelAnimationFrame(this._resizeId);
+		this._resizeId = requestAnimationFrame(() => this._onResize(...args));
+	});
+
 	const connectedCallback = () => {
 		const layoutOnRemove = (info) =>
 			info.removedNodes.filter(this._isActionNode) &&
@@ -69,7 +88,7 @@ const CosmozBottomBar = ({
 			this._matchHeightElement,
 			this.barHeight,
 		);
-	}
+	};
 
 	const disconnectedCallback = () => {
 		super.disconnectedCallback();
@@ -80,7 +99,7 @@ const CosmozBottomBar = ({
 		);
 		this._layoutDebouncer?.cancel(); /* eslint-disable-line no-unused-expressions */
 		this._resizeObserver.unobserve(this);
-	}
+	};
 
 	const _childrenUpdated = (info) => {
 		const addedNodes = info.addedNodes.filter(this._isActionNode),
@@ -102,18 +121,18 @@ const CosmozBottomBar = ({
 		});
 
 		this._debounceLayoutActions();
-	}
+	};
 
 	const _computeComputedBarHeight = (matchElementHeight, barHeight) => {
 		if (matchElementHeight) {
 			return matchElementHeight.offsetHeight;
 		}
 		return barHeight;
-	}
+	};
 
-	const _computeVisible(hasActions, active, hasExtraItems, forceOpen) => {
+	const _computeVisible = (hasActions, active, hasExtraItems, forceOpen) => {
 		return forceOpen || ((hasActions || hasExtraItems) && active);
-	}
+	};
 
 	const _debounceLayoutActions = () => {
 		this._layoutDebouncer = Debouncer.debounce(
@@ -121,7 +140,7 @@ const CosmozBottomBar = ({
 			timeOut.after(30),
 			this._boundLayoutActions,
 		);
-	}
+	};
 
 	const _getHeightMatchingElement = (matchParent) => {
 		if (matchParent) {
@@ -129,11 +148,11 @@ const CosmozBottomBar = ({
 		}
 
 		return null;
-	}
+	};
 
 	const _getHeightStyle = (height) => {
 		return 'height: ' + height + 'px;';
-	}
+	};
 
 	const _isActionNode = (node) => {
 		return (
@@ -145,7 +164,7 @@ const CosmozBottomBar = ({
 			node.tagName !== 'DOM-IF' &&
 			node.getAttribute('slot') !== 'extra'
 		);
-	}
+	};
 
 	const _getElements = () => {
 		const elements = FlattenedNodesObserver.getFlattenedNodes(this)
@@ -172,7 +191,7 @@ const CosmozBottomBar = ({
 			topPriorityAction,
 			...elements.filter((e) => e !== topPriorityAction),
 		];
-	}
+	};
 	/**
 	 * Layout the actions available as buttons or menu items
 	 *
@@ -209,7 +228,7 @@ const CosmozBottomBar = ({
 		toolbarElements.forEach((el) => this._moveElement(el, true));
 		menuElements.forEach((el) => this._moveElement(el));
 		this._setHasMenuItems(menuElements.length > 0);
-	}
+	};
 
 	const _moveElement = (element, toToolbar) => {
 		const slot = toToolbar ? BOTTOM_BAR_TOOLBAR_SLOT : BOTTOM_BAR_MENU_SLOT,
@@ -219,7 +238,7 @@ const CosmozBottomBar = ({
 		element.classList.toggle(this.menuClass, !toToolbar);
 		element.classList.toggle(this.toolbarClass, toToolbar);
 		this.updateStyles();
-	}
+	};
 
 	const _onResize = ([entry]) => {
 		const hidden =
@@ -232,7 +251,7 @@ const CosmozBottomBar = ({
 			this._matchHeightElement,
 			this.barHeight,
 		);
-	}
+	};
 
 	const _showHideBottomBar = (visible) => {
 		this.style.transitionDuration = 0;
@@ -261,7 +280,7 @@ const CosmozBottomBar = ({
 			this.style.transitionDuration = '';
 			this.style.maxHeight = to;
 		});
-	}
+	};
 
 	return template;
 };
