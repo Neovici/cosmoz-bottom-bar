@@ -61,6 +61,18 @@ const CosmozBottomBar = ({
 		notifyProperty(host, 'hideActions', hideActions);
 	}, [hideActions]);
 
+	useEffect(() => {
+		notifyProperty(host, 'hasMenuItems', hasMenuItems);
+	}, [hasMenuItems]);
+
+	useEffect(() => {
+		notifyProperty(host, 'visible', visible);
+	}, [visible]);
+
+	useEffect(() => {
+		notifyProperty(host, 'hasActions', hasActions);
+	}, [hasActions]);
+
 	this._boundChildrenUpdated = this._childrenUpdated.bind(this);
 	this._boundLayoutActions = this._layoutActions.bind(this);
 	this._resizeObserver = new ResizeObserver((...args) => {
