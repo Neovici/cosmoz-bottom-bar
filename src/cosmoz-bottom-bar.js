@@ -117,6 +117,8 @@ const CosmozBottomBar = ({
 
 	let _resizeId;
 	let _hiddenMutationObserver;
+
+	// TODO: Ask about the 2 following lines (_childrenUpdated, _layoutActions)
 	const _boundChildrenUpdated = _childrenUpdated.bind(this);
 	const _boundLayoutActions = this._layoutActions.bind(this);
 	const _resizeObserver = new ResizeObserver((...args) => {
@@ -124,6 +126,7 @@ const CosmozBottomBar = ({
 		_resizeId = requestAnimationFrame(() => _onResize(...args));
 	});
 
+	// TODO: connectedCallback should be put inside a useEffect?
 	const connectedCallback = () => {
 		const layoutOnRemove = (info) =>
 			info.removedNodes.filter(this._isActionNode) &&
@@ -146,6 +149,7 @@ const CosmozBottomBar = ({
 		);
 	};
 
+	// TODO: disconnectedCallback should be put inside the return of a useEffect?
 	const disconnectedCallback = () => {
 		this[rendered] = false;
 
