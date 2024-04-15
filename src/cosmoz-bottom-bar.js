@@ -33,6 +33,7 @@ const rendered = Symbol('rendered');
  * @demo demo/bottom-bar.html Basic Demo
  * @demo demo/bottom-bar-match-parent.html match parent Demo
  */
+// eslint-disable-next-line max-statements
 const CosmozBottomBar = ({
 	active = false,
 	hideActions = false,
@@ -51,7 +52,48 @@ const CosmozBottomBar = ({
 	_matchHeightElement,
 	topPlacement = ['top-right', ...defaultPlacement],
 }) => {
+	let _layoutDebouncer;
 	const host = useHost();
+
+	const _moveElement = (element, toToolbar) => {
+		const slot = toToolbar ? BOTTOM_BAR_TOOLBAR_SLOT : BOTTOM_BAR_MENU_SLOT,
+			tabindex = '0';
+		element.setAttribute('slot', slot);
+		element.setAttribute('tabindex', tabindex);
+		element.classList.toggle(menuClass, !toToolbar);
+		element.classList.toggle(toolbarClass, toToolbar);
+		//this.updateStyles(); // TODO: Check if we need this function call
+	};
+
+	const _debounceLayoutActions = () => {
+		_layoutDebouncer = Debouncer.debounce(
+			_layoutDebouncer,
+			timeOut.after(30),
+			_boundLayoutActions,
+		);
+	};
+
+	const _childrenUpdated = (info) => {
+		const addedNodes = info.addedNodes.filter(_isActionNode),
+			removedNodes = info.removedNodes.filter(_isActionNode),
+			newNodes = addedNodes.filter((node) => !removedNodes.includes(node));
+
+		if (
+			(addedNodes.length === 0 && removedNodes.length === 0) ||
+			newNodes.length === 0
+		) {
+			return;
+		}
+		newNodes.forEach((node) => {
+			_hiddenMutationObserver.observe(node, {
+				attributes: true,
+				attributeFilter: ['hidden'],
+			});
+			_moveElement(node, false);
+		});
+
+		_debounceLayoutActions();
+	};
 
 	useEffect(() => {
 		notifyProperty(host, 'active', active);
@@ -73,11 +115,13 @@ const CosmozBottomBar = ({
 		notifyProperty(host, 'hasActions', hasActions);
 	}, [hasActions]);
 
-	this._boundChildrenUpdated = this._childrenUpdated.bind(this);
-	this._boundLayoutActions = this._layoutActions.bind(this);
-	this._resizeObserver = new ResizeObserver((...args) => {
-		cancelAnimationFrame(this._resizeId);
-		this._resizeId = requestAnimationFrame(() => this._onResize(...args));
+	let _resizeId;
+	let _hiddenMutationObserver;
+	const _boundChildrenUpdated = _childrenUpdated.bind(this);
+	const _boundLayoutActions = this._layoutActions.bind(this);
+	const _resizeObserver = new ResizeObserver((...args) => {
+		cancelAnimationFrame(_resizeId);
+		_resizeId = requestAnimationFrame(() => _onResize(...args));
 	});
 
 	const connectedCallback = () => {
@@ -96,14 +140,13 @@ const CosmozBottomBar = ({
 			this._debounceLayoutActions(),
 		);
 		this._resizeObserver.observe(this);
-		this.computedBarHeight = this._computeComputedBarHeight(
-			this._matchHeightElement,
-			this.barHeight,
+		computedBarHeight = _computeComputedBarHeight(
+			_matchHeightElement,
+			barHeight,
 		);
 	};
 
 	const disconnectedCallback = () => {
-		super.disconnectedCallback();
 		this[rendered] = false;
 
 		[...this._nodeObservers, this._hiddenMutationObserver].forEach((e) =>
@@ -111,28 +154,6 @@ const CosmozBottomBar = ({
 		);
 		this._layoutDebouncer?.cancel(); /* eslint-disable-line no-unused-expressions */
 		this._resizeObserver.unobserve(this);
-	};
-
-	const _childrenUpdated = (info) => {
-		const addedNodes = info.addedNodes.filter(this._isActionNode),
-			removedNodes = info.removedNodes.filter(this._isActionNode),
-			newNodes = addedNodes.filter((node) => !removedNodes.includes(node));
-
-		if (
-			(addedNodes.length === 0 && removedNodes.length === 0) ||
-			newNodes.length === 0
-		) {
-			return;
-		}
-		newNodes.forEach((node) => {
-			this._hiddenMutationObserver.observe(node, {
-				attributes: true,
-				attributeFilter: ['hidden'],
-			});
-			this._moveElement(node, false);
-		});
-
-		this._debounceLayoutActions();
 	};
 
 	const _computeComputedBarHeight = (matchElementHeight, barHeight) => {
@@ -144,14 +165,6 @@ const CosmozBottomBar = ({
 
 	const _computeVisible = (hasActions, active, hasExtraItems, forceOpen) => {
 		return forceOpen || ((hasActions || hasExtraItems) && active);
-	};
-
-	const _debounceLayoutActions = () => {
-		this._layoutDebouncer = Debouncer.debounce(
-			this._layoutDebouncer,
-			timeOut.after(30),
-			this._boundLayoutActions,
-		);
 	};
 
 	const _getHeightMatchingElement = (matchParent) => {
@@ -179,8 +192,8 @@ const CosmozBottomBar = ({
 	};
 
 	const _getElements = () => {
-		const elements = FlattenedNodesObserver.getFlattenedNodes(this)
-			.filter(this._isActionNode)
+		const elements = FlattenedNodesObserver.getFlattenedNodes(this) // TODO: Ask about this line here
+			.filter(_isActionNode)
 			.filter((element) => !element.hidden)
 			.sort((a, b) => (a.dataset.index ?? 0) - (b.dataset.index ?? 0));
 
@@ -226,42 +239,35 @@ const CosmozBottomBar = ({
 	 */
 	const _layoutActions = () => {
 		// eslint-disable-line max-statements
-		const elements = this._getElements(),
-			hasActions = elements.length > 0 || this.hasExtraItems;
-		this._setHasActions(hasActions);
+		const elements = _getElements();
+		const hasActions = elements.length > 0 || hasExtraItems;
+		this._setHasActions(hasActions); // TODO: Ask about this line
 
 		if (!hasActions) {
 			// No need to render if we don't have any actions
-			return this._setHasMenuItems(false);
+			return this._setHasMenuItems(false); // TODO: Ask about this line
 		}
 
-		const toolbarElements = elements.slice(0, this.maxToolbarItems),
-			menuElements = elements.slice(toolbarElements.length);
-		toolbarElements.forEach((el) => this._moveElement(el, true));
-		menuElements.forEach((el) => this._moveElement(el));
-		this._setHasMenuItems(menuElements.length > 0);
-	};
+		const toolbarElements = elements.slice(0, this.maxToolbarItems);
+		const menuElements = elements.slice(toolbarElements.length);
 
-	const _moveElement = (element, toToolbar) => {
-		const slot = toToolbar ? BOTTOM_BAR_TOOLBAR_SLOT : BOTTOM_BAR_MENU_SLOT,
-			tabindex = '0';
-		element.setAttribute('slot', slot);
-		element.setAttribute('tabindex', tabindex);
-		element.classList.toggle(this.menuClass, !toToolbar);
-		element.classList.toggle(this.toolbarClass, toToolbar);
-		this.updateStyles();
+		toolbarElements.forEach((el) => _moveElement(el, true));
+		menuElements.forEach((el) => _moveElement(el));
+		this._setHasMenuItems(menuElements.length > 0); // TODO: Ask about this line
 	};
 
 	const _onResize = ([entry]) => {
 		const hidden =
 			entry.borderBoxSize?.[0]?.inlineSize === 0 ||
 			entry.contentRect?.width === 0;
+
 		if (hidden) {
 			return;
 		}
-		this.computedBarHeight = this._computeComputedBarHeight(
-			this._matchHeightElement,
-			this.barHeight,
+
+		computedBarHeight = _computeComputedBarHeight(
+			_matchHeightElement,
+			barHeight,
 		);
 	};
 
