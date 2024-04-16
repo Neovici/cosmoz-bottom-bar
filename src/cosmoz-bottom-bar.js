@@ -182,28 +182,6 @@ const CosmozBottomBar = ({
 		);
 	};
 
-	const _childrenUpdated = (info) => {
-		const addedNodes = info.addedNodes.filter(_isActionNode),
-			removedNodes = info.removedNodes.filter(_isActionNode),
-			newNodes = addedNodes.filter((node) => !removedNodes.includes(node));
-
-		if (
-			(addedNodes.length === 0 && removedNodes.length === 0) ||
-			newNodes.length === 0
-		) {
-			return;
-		}
-		newNodes.forEach((node) => {
-			_hiddenMutationObserver.observe(node, {
-				attributes: true,
-				attributeFilter: ['hidden'],
-			});
-			_moveElement(node, false);
-		});
-
-		_debounceLayoutActions();
-	};
-
 	const _computeComputedBarHeight = (matchElementHeight, barHeight) => {
 		if (matchElementHeight) {
 			return matchElementHeight.offsetHeight;
@@ -211,67 +189,7 @@ const CosmozBottomBar = ({
 		return barHeight;
 	};
 
-	const _computeVisible = (hasActions, active, hasExtraItems, forceOpen) => {
-		return forceOpen || ((hasActions || hasExtraItems) && active);
-	};
-
-	const _getHeightMatchingElement = (matchParent) => {
-		if (matchParent) {
-			return this.parentElement;
-		}
-
-		return null;
-	};
-
-	const _getHeightStyle = (height) => {
-		return 'height: ' + height + 'px;';
-	};
-
-	const _onResize = ([entry]) => {
-		const hidden =
-			entry.borderBoxSize?.[0]?.inlineSize === 0 ||
-			entry.contentRect?.width === 0;
-
-		if (hidden) {
-			return;
-		}
-
-		computedBarHeight = _computeComputedBarHeight(
-			_matchHeightElement,
-			barHeight,
-		);
-	};
-
-	const _showHideBottomBar = (visible) => {
-		this.style.transitionDuration = 0;
-		this.style.display = '';
-		this.style.maxHeight = '';
-
-		const height = this.computedBarHeight,
-			to = !visible ? '0px' : height + 'px';
-
-		let from = visible ? '0px' : height + 'px';
-
-		if (!this[rendered]) {
-			from = to;
-			this[rendered] = true;
-		}
-
-		this.style.maxHeight = from;
-
-		const onEnd = () => {
-			this.removeEventListener('transitionend', onEnd);
-			this.style.maxHeight = '';
-			this.style.display = this.visible ? '' : 'none';
-		};
-		requestAnimationFrame(() => {
-			this.addEventListener('transitionend', onEnd);
-			this.style.transitionDuration = '';
-			this.style.maxHeight = to;
-		});
-	};
-
 	return template;
 };
 
-customElements.define('cosmoz-dropdown-list', component(CosmozBottomBar));
+customElements.define('cosmoz-bottom-bar-new', component(CosmozBottomBar));
