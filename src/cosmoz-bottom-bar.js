@@ -54,6 +54,7 @@ const CosmozBottomBar = ({
 		notifyProperty(host, 'hasMenuItems', hasMenuItems);
 	}, [hasMenuItems]);
 
+	/*
 	useEffect(() => {
 		const layoutOnRemove = (info) =>
 			info.removedNodes.filter(this._isActionNode) &&
@@ -81,10 +82,11 @@ const CosmozBottomBar = ({
 			[...this._nodeObservers, this._hiddenMutationObserver].forEach((e) =>
 				e.disconnect(e),
 			);
-			this._layoutDebouncer?.cancel(); /* eslint-disable-line no-unused-expressions */
+			this._layoutDebouncer?.cancel(); // eslint-disable-line no-unused-expressions
 			this._resizeObserver.unobserve(this);
 		};
 	}, []);
+	*/
 
 	const _moveElement = (element, toToolbar) => {
 		const slot = toToolbar ? BOTTOM_BAR_TOOLBAR_SLOT : BOTTOM_BAR_MENU_SLOT,
@@ -192,4 +194,4 @@ const CosmozBottomBar = ({
 	return template;
 };
 
-customElements.define('cosmoz-bottom-bar-new', component(CosmozBottomBar));
+customElements.define('cosmoz-bottom-bar', component(CosmozBottomBar));
