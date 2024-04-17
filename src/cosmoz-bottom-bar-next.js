@@ -9,7 +9,7 @@ import { html } from 'lit-html';
 import { component, useEffect } from '@pionjs/pion';
 import { useHost } from '@neovici/cosmoz-utils/hooks/use-host';
 import { notifyProperty } from '@neovici/cosmoz-utils/hooks/use-notify-property';
-import style from './cosmoz-bottom-bar.style.js';
+import style from './cosmoz-bottom-bar-next.style.js';
 
 const BOTTOM_BAR_TOOLBAR_SLOT = 'bottom-bar-toolbar';
 const BOTTOM_BAR_MENU_SLOT = 'bottom-bar-menu';
