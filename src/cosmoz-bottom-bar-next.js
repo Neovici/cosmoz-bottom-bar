@@ -15,7 +15,6 @@ const BOTTOM_BAR_TOOLBAR_SLOT = 'bottom-bar-toolbar';
 const BOTTOM_BAR_MENU_SLOT = 'bottom-bar-menu';
 const rendered = Symbol('rendered');
 
-// we move the functions outside
 const _moveElement = (element, toToolbar) => {
 	const slot = toToolbar ? BOTTOM_BAR_TOOLBAR_SLOT : BOTTOM_BAR_MENU_SLOT;
 	const tabindex = '0';
