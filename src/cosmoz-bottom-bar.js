@@ -1,13 +1,15 @@
+/* eslint-disable max-len */
 /* eslint-disable max-lines */
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { timeOut } from '@polymer/polymer/lib/utils/async';
 import { defaultPlacement } from '@neovici/cosmoz-dropdown';
 
+import { html } from 'lit-html';
 import { component, useEffect } from '@pionjs/pion';
 import { useHost } from '@neovici/cosmoz-utils/hooks/use-host';
 import { notifyProperty } from '@neovici/cosmoz-utils/hooks/use-notify-property';
-import template from './cosmoz-bottom-bar.html.js';
+import style from './cosmoz-bottom-bar.style.js';
 
 const BOTTOM_BAR_TOOLBAR_SLOT = 'bottom-bar-toolbar';
 const BOTTOM_BAR_MENU_SLOT = 'bottom-bar-menu';
@@ -38,6 +40,8 @@ const CosmozBottomBar = ({
 	active = false,
 	hideActions = false,
 	hasMenuItems = false,
+	maxToolbarItems = 1,
+	visible = active,
 }) => {
 	let _layoutDebouncer;
 	const host = useHost();
@@ -89,12 +93,13 @@ const CosmozBottomBar = ({
 	*/
 
 	const _moveElement = (element, toToolbar) => {
-		const slot = toToolbar ? BOTTOM_BAR_TOOLBAR_SLOT : BOTTOM_BAR_MENU_SLOT,
-			tabindex = '0';
+		const slot = toToolbar ? BOTTOM_BAR_TOOLBAR_SLOT : BOTTOM_BAR_MENU_SLOT;
+		const tabindex = '0';
+
 		element.setAttribute('slot', slot);
 		element.setAttribute('tabindex', tabindex);
-		element.classList.toggle(menuClass, !toToolbar);
-		element.classList.toggle(toolbarClass, toToolbar);
+		element.classList.toggle('cosmoz-bottom-bar-menu', !toToolbar); // TODO: Do I replace the menuClass with the default value or do I remove the line entirely?
+		element.classList.toggle('cosmoz-bottom-bar-toolbar', toToolbar);
 		//this.updateStyles(); // TODO: Check if we need this function call
 	};
 
@@ -111,7 +116,12 @@ const CosmozBottomBar = ({
 	};
 
 	const _getElements = () => {
-		const elements = FlattenedNodesObserver.getFlattenedNodes(this) // TODO: Ask about this line here
+		// TODO: How do I retrieve the elements?
+		const wrapperOfFlattenedNodes = document.querySelector('#bottomBar');
+
+		const elements = FlattenedNodesObserver.getFlattenedNodes(
+			wrapperOfFlattenedNodes,
+		) // TODO: Ask about this line here
 			.filter(_isActionNode)
 			.filter((element) => !element.hidden)
 			.sort((a, b) => (a.dataset.index ?? 0) - (b.dataset.index ?? 0));
@@ -161,19 +171,20 @@ const CosmozBottomBar = ({
 		// eslint-disable-line max-statements
 		const elements = _getElements();
 		const hasActions = elements.length > 0 || hasExtraItems;
-		this._setHasActions(hasActions); // TODO: Ask about this line
+		//this._setHasActions(hasActions); // TODO: Ask about this line
 
 		if (!hasActions) {
 			// No need to render if we don't have any actions
-			return this._setHasMenuItems(false); // TODO: Ask about this line
+			// return this._setHasMenuItems(false); // TODO: Ask about this line
 		}
 
-		const toolbarElements = elements.slice(0, this.maxToolbarItems);
+		const toolbarElements = elements.slice(0, maxToolbarItems);
 		const menuElements = elements.slice(toolbarElements.length);
 
 		toolbarElements.forEach((el) => _moveElement(el, true));
 		menuElements.forEach((el) => _moveElement(el));
-		this._setHasMenuItems(menuElements.length > 0); // TODO: Ask about this line
+		// TODO: how do I update the hasMenuItems prop ?
+		//this._setHasMenuItems(menuElements.length > 0); // TODO: Ask about this line
 	};
 
 	const _debounceLayoutActions = () => {
@@ -191,7 +202,47 @@ const CosmozBottomBar = ({
 		return barHeight;
 	};
 
-	return template;
+	_layoutActions();
+
+	return html`${style}
+		<div id="bar" style$="[[ _getHeightStyle(computedBarHeight) ]]" part="bar">
+			<div id="info"><slot name="info"></slot></div>
+			<slot id="bottomBarToolbar" name="bottom-bar-toolbar"></slot>
+			<cosmoz-dropdown-menu id="dropdown" hidden=${!hasMenuItems}>
+				<svg
+					slot="button"
+					width="4"
+					height="16"
+					viewBox="0 0 4 16"
+					fill="none"
+					xmlns="http://www.w3.org/2000/svg"
+				>
+					<path
+						fill-rule="evenodd"
+						clip-rule="evenodd"
+						d="M1.50996e-07 2C1.02714e-07 3.10457 0.89543 4 2 4C3.10457 4 4 3.10457 4 2C4 0.89543 3.10457 -3.91405e-08 2 -8.74228e-08C0.895431 -1.35705e-07 1.99278e-07 0.89543 1.50996e-07 2Z"
+						fill="white"
+					/>
+					<path
+						fill-rule="evenodd"
+						clip-rule="evenodd"
+						d="M1.50996e-07 8C1.02714e-07 9.10457 0.89543 10 2 10C3.10457 10 4 9.10457 4 8C4 6.89543 3.10457 6 2 6C0.895431 6 1.99278e-07 6.89543 1.50996e-07 8Z"
+						fill="white"
+					/>
+					<path
+						fill-rule="evenodd"
+						clip-rule="evenodd"
+						d="M1.50996e-07 14C1.02714e-07 15.1046 0.89543 16 2 16C3.10457 16 4 15.1046 4 14C4 12.8954 3.10457 12 2 12C0.895431 12 1.99278e-07 12.8954 1.50996e-07 14Z"
+						fill="white"
+					/>
+				</svg>
+				<slot id="bottomBarMenu" name="bottom-bar-menu"></slot>
+			</cosmoz-dropdown-menu>
+			<slot name="extra" id="extraSlot"></slot>
+		</div>
+		<div hidden style="display:none">
+			<slot id="content"></slot>
+		</div>`;
 };
 
 customElements.define('cosmoz-bottom-bar', component(CosmozBottomBar));
