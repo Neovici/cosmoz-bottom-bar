@@ -35,6 +35,19 @@ const _isActionNode = (node) => {
 	);
 };
 
+const getFlattenedNodes = (element) => {
+	const childNodes = element.childNodes;
+
+	for (let i = 0; i < childNodes.length; i++) {
+		const node = childNodes[i];
+		if (node.tagName === 'SLOT') {
+			childNodes[i] = node.assignedElements({ flatten: true });
+		}
+	}
+
+	return [...childNodes];
+};
+
 /**
  * `<cosmoz-bottom-bar>` is a horizontal responsive bottom toolbar containing items that
  * can be used for actions.
@@ -103,12 +116,7 @@ const CosmozBottomBar = ({
 	*/
 
 	const _getElements = () => {
-		// TODO: How do I retrieve the elements?
-		const wrapperOfFlattenedNodes = document.querySelector('#bottomBar');
-
-		const elements = FlattenedNodesObserver.getFlattenedNodes(
-			wrapperOfFlattenedNodes,
-		) // TODO: Ask about this line here
+		const elements = getFlattenedNodes(host)
 			.filter(_isActionNode)
 			.filter((element) => !element.hidden)
 			.sort((a, b) => (a.dataset.index ?? 0) - (b.dataset.index ?? 0));
@@ -181,11 +189,7 @@ const CosmozBottomBar = ({
 	return html`${style}
 		<div id="bar" part="bar">
 			<div id="info"><slot name="info"></slot></div>
-			<slot
-				id="bottomBarToolbar"
-				@slotchange=${slotChangeHandler}
-				name="bottom-bar-toolbar"
-			></slot>
+			<slot id="bottomBarToolbar" name="bottom-bar-toolbar"></slot>
 			<cosmoz-dropdown-menu id="dropdown" hidden=${!hasMenuItems}>
 				<svg
 					slot="button"
@@ -216,10 +220,10 @@ const CosmozBottomBar = ({
 				</svg>
 				<slot id="bottomBarMenu" name="bottom-bar-menu"></slot>
 			</cosmoz-dropdown-menu>
-			<slot name="extra" id="extraSlot"></slot>
+			<slot name="extra" id="extraSlot" @slotchange=${slotChangeHandler}></slot>
 		</div>
 		<div hidden style="display:none">
-			<slot id="content"></slot>
+			<slot id="content" @slotchange=${slotChangeHandler}></slot>
 		</div>`;
 };
 
