@@ -15,6 +15,27 @@ const BOTTOM_BAR_TOOLBAR_SLOT = 'bottom-bar-toolbar';
 const BOTTOM_BAR_MENU_SLOT = 'bottom-bar-menu';
 const rendered = Symbol('rendered');
 
+// we move the functions outside
+const _moveElement = (element, toToolbar) => {
+	const slot = toToolbar ? BOTTOM_BAR_TOOLBAR_SLOT : BOTTOM_BAR_MENU_SLOT;
+	const tabindex = '0';
+
+	element.setAttribute('slot', slot);
+	element.setAttribute('tabindex', tabindex);
+};
+
+const _isActionNode = (node) => {
+	return (
+		node.nodeType === Node.ELEMENT_NODE &&
+		node.getAttribute('slot') !== 'info' &&
+		node.tagName !== 'TEMPLATE' &&
+		node.tagName !== 'STYLE' &&
+		node.tagName !== 'DOM-REPEAT' &&
+		node.tagName !== 'DOM-IF' &&
+		node.getAttribute('slot') !== 'extra'
+	);
+};
+
 /**
  * `<cosmoz-bottom-bar>` is a horizontal responsive bottom toolbar containing items that
  * can be used for actions.
@@ -41,18 +62,8 @@ const CosmozBottomBar = ({
 	hideActions = false,
 	hasMenuItems = false,
 	maxToolbarItems = 1,
-	visible = active,
 }) => {
-	let _layoutDebouncer;
 	const host = useHost();
-
-	useEffect(() => {
-		notifyProperty(host, 'active', active);
-	}, [active]);
-
-	useEffect(() => {
-		notifyProperty(host, 'hideActions', hideActions);
-	}, [hideActions]);
 
 	useEffect(() => {
 		notifyProperty(host, 'hasMenuItems', hasMenuItems);
@@ -91,29 +102,6 @@ const CosmozBottomBar = ({
 		};
 	}, []);
 	*/
-
-	const _moveElement = (element, toToolbar) => {
-		const slot = toToolbar ? BOTTOM_BAR_TOOLBAR_SLOT : BOTTOM_BAR_MENU_SLOT;
-		const tabindex = '0';
-
-		element.setAttribute('slot', slot);
-		element.setAttribute('tabindex', tabindex);
-		element.classList.toggle('cosmoz-bottom-bar-menu', !toToolbar); // TODO: Do I replace the menuClass with the default value or do I remove the line entirely?
-		element.classList.toggle('cosmoz-bottom-bar-toolbar', toToolbar);
-		//this.updateStyles(); // TODO: Check if we need this function call
-	};
-
-	const _isActionNode = (node) => {
-		return (
-			node.nodeType === Node.ELEMENT_NODE &&
-			node.getAttribute('slot') !== 'info' &&
-			node.tagName !== 'TEMPLATE' &&
-			node.tagName !== 'STYLE' &&
-			node.tagName !== 'DOM-REPEAT' &&
-			node.tagName !== 'DOM-IF' &&
-			node.getAttribute('slot') !== 'extra'
-		);
-	};
 
 	const _getElements = () => {
 		// TODO: How do I retrieve the elements?
@@ -187,25 +175,10 @@ const CosmozBottomBar = ({
 		//this._setHasMenuItems(menuElements.length > 0); // TODO: Ask about this line
 	};
 
-	const _debounceLayoutActions = () => {
-		_layoutDebouncer = Debouncer.debounce(
-			_layoutDebouncer,
-			timeOut.after(30),
-			_layoutActions,
-		);
-	};
-
-	const _computeComputedBarHeight = (matchElementHeight, barHeight) => {
-		if (matchElementHeight) {
-			return matchElementHeight.offsetHeight;
-		}
-		return barHeight;
-	};
-
 	_layoutActions();
 
 	return html`${style}
-		<div id="bar" style$="[[ _getHeightStyle(computedBarHeight) ]]" part="bar">
+		<div id="bar" part="bar">
 			<div id="info"><slot name="info"></slot></div>
 			<slot id="bottomBarToolbar" name="bottom-bar-toolbar"></slot>
 			<cosmoz-dropdown-menu id="dropdown" hidden=${!hasMenuItems}>
