@@ -175,12 +175,18 @@ const CosmozBottomBar = ({
 		//this._setHasMenuItems(menuElements.length > 0); // TODO: Ask about this line
 	};
 
-	_layoutActions();
+	const slotChangeHandler = () => {
+		_layoutActions();
+	};
 
 	return html`${style}
 		<div id="bar" part="bar">
 			<div id="info"><slot name="info"></slot></div>
-			<slot id="bottomBarToolbar" name="bottom-bar-toolbar"></slot>
+			<slot
+				id="bottomBarToolbar"
+				@slotchange=${slotChangeHandler}
+				name="bottom-bar-toolbar"
+			></slot>
 			<cosmoz-dropdown-menu id="dropdown" hidden=${!hasMenuItems}>
 				<svg
 					slot="button"
