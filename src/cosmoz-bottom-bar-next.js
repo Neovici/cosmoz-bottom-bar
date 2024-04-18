@@ -90,40 +90,6 @@ const CosmozBottomBar = ({
 		notifyProperty(host, 'hasMenuItems', hasMenuItems);
 	}, [hasMenuItems]);
 
-	/*
-	useEffect(() => {
-		const layoutOnRemove = (info) =>
-			info.removedNodes.filter(this._isActionNode) &&
-			this._debounceLayoutActions();
-		this._nodeObservers = [
-			new FlattenedNodesObserver(this.$.content, this._boundChildrenUpdated),
-			new FlattenedNodesObserver(this.$.extraSlot, (info) =>
-				this.set('hasExtraItems', info.addedNodes.length > 0),
-			),
-			new FlattenedNodesObserver(this.$.bottomBarToolbar, layoutOnRemove),
-			new FlattenedNodesObserver(this.$.bottomBarMenu, layoutOnRemove),
-		];
-		this._hiddenMutationObserver = new MutationObserver(() =>
-			this._debounceLayoutActions(),
-		);
-		this._resizeObserver.observe(this);
-		computedBarHeight = _computeComputedBarHeight(
-			_matchHeightElement,
-			barHeight,
-		);
-
-		return () => {
-			this[rendered] = false;
-
-			[...this._nodeObservers, this._hiddenMutationObserver].forEach((e) =>
-				e.disconnect(e),
-			);
-			this._layoutDebouncer?.cancel(); // eslint-disable-line no-unused-expressions
-			this._resizeObserver.unobserve(this);
-		};
-	}, []);
-	*/
-
 	const _getElements = () => {
 		const elements = getFlattenedNodes(host)
 			.filter(_isActionNode)
