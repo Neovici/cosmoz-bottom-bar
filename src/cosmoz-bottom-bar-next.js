@@ -36,16 +36,25 @@ const _isActionNode = (node) => {
 };
 
 const getFlattenedNodes = (element) => {
-	const childNodes = element.childNodes;
+	const childNodes = [...element.childNodes];
 
-	for (let i = 0; i < childNodes.length; i++) {
-		const node = childNodes[i];
+	for (let i = 0; i < element.childNodes.length; i++) {
+		const node = element.childNodes[i];
 		if (node.tagName === 'SLOT') {
-			childNodes[i] = node.assignedElements({ flatten: true });
+			// remove current slot element
+			childNodes.splice(i, 1);
+
+			// append slot elements to the current index
+			const slotElements = node.assignedElements({ flatten: true });
+			for (let j = 0; j < slotElements.length; j++) {
+				const slotElement = slotElements[j];
+
+				childNodes.splice(i + j, 0, slotElement);
+			}
 		}
 	}
 
-	return [...childNodes];
+	return childNodes;
 };
 
 /**
