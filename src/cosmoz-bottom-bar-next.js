@@ -104,7 +104,7 @@ const _getElements = (host) => {
 const _layoutActions = (host, maxToolbarItems) => {
 	// eslint-disable-line max-statements
 	const elements = _getElements(host);
-	const hasActions = elements.length > 0 || hasExtraItems;
+	const hasActions = elements.length > 0;
 	//this._setHasActions(hasActions); // TODO: Ask about this line
 
 	if (!hasActions) {
@@ -141,9 +141,9 @@ const _layoutActions = (host, maxToolbarItems) => {
  * @demo demo/bottom-bar-next.html Basic Demo
  */
 // eslint-disable-next-line max-statements
-const CosmozBottomBar = ({
+export const CosmozBottomBar = ({
 	active = false,
-	hideActions = false,
+	// hideActions = false,
 	hasMenuItems = false,
 	maxToolbarItems = 1,
 }) => {
