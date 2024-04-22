@@ -26,10 +26,14 @@
 	],
 	"scripts": {
 		"lint": "eslint --cache --ext .js .",
-		"start": "wds",
+		"start": "npm run storybook:start",
 		"test": "wtr --coverage",
 		"test:watch": "wtr --watch",
-		"prepare": "husky install"
+		"prepare": "husky install",
+		"storybook:start": "storybook dev -p 8000",
+		"storybook:build": "storybook build",
+		"storybook:deploy": "storybook-to-ghpages",
+		"storybook:preview": "npm run storybook:build && http-server -d ./storybook-static/"
 	},
 	"release": {
 		"plugins": [
@@ -69,6 +73,19 @@
 		"@polymer/paper-toggle-button": "^3.0.0",
 		"@semantic-release/changelog": "^6.0.0",
 		"@semantic-release/git": "^10.0.0",
+		"@storybook/addon-essentials": "^7.0.0",
+		"@storybook/addon-links": "^7.0.0",
+		"@storybook/builder-vite": "7.6.17",
+		"@storybook/storybook-deployer": "^2.8.5",
+		"@storybook/web-components": "7.6.17",
+		"@types/mocha": "^10.0.6",
+		"@web/storybook-builder": "^0.1.9",
+		"@web/storybook-framework-web-components": "^0.1.1",
+		"esbuild": "^0.20.2",
+		"http-server": "^14.1.1",
+		"rollup-plugin-esbuild": "^6.1.1",
+		"storybook": "^7.6.17",
+		"typescript": "^5.0.0",
 		"@webcomponents/webcomponentsjs": "^2.5.0",
 		"husky": "^8.0.0",
 		"semantic-release": "^23.0.0",
