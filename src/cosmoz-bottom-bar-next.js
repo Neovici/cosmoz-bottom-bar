@@ -1,10 +1,5 @@
 /* eslint-disable max-len */
 /* eslint-disable max-lines */
-import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer';
-import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
-import { timeOut } from '@polymer/polymer/lib/utils/async';
-import { defaultPlacement } from '@neovici/cosmoz-dropdown';
-
 import { html } from 'lit-html';
 import { component, useEffect } from '@pionjs/pion';
 import { useHost } from '@neovici/cosmoz-utils/hooks/use-host';
@@ -13,7 +8,6 @@ import style from './cosmoz-bottom-bar-next.style.js';
 
 const BOTTOM_BAR_TOOLBAR_SLOT = 'bottom-bar-toolbar';
 const BOTTOM_BAR_MENU_SLOT = 'bottom-bar-menu';
-const rendered = Symbol('rendered');
 
 const _moveElement = (element, toToolbar) => {
 	const slot = toToolbar ? BOTTOM_BAR_TOOLBAR_SLOT : BOTTOM_BAR_MENU_SLOT;
@@ -57,6 +51,75 @@ const getFlattenedNodes = (element) => {
 	return childNodes;
 };
 
+const _getElements = (host) => {
+	const elements = getFlattenedNodes(host)
+		.filter(_isActionNode)
+		.filter((element) => !element.hidden)
+		.sort((a, b) => (a.dataset.index ?? 0) - (b.dataset.index ?? 0));
+
+	if (elements.length === 0) {
+		return elements;
+	}
+
+	const topPriorityAction = elements.reduce(
+		(top, element) => {
+			return parseInt(top.dataset.priority ?? 0, 10) >=
+				parseInt(element.dataset.priority ?? 0, 10)
+				? top
+				: element;
+		},
+		{ dataset: { priority: '-1000' } },
+		[],
+	);
+
+	return [
+		topPriorityAction,
+		...elements.filter((e) => e !== topPriorityAction),
+	];
+};
+
+/**
+ * Layout the actions available as buttons or menu items
+ *
+ * If the window is resizing down, just make sure that all buttons fits, and if not,
+ * move one to menu and call itself async (to allow re-rendering) and see if we fit.
+ * Repeat until the button fits or no buttons are left.
+ *
+ * If the window is sizing up, try to place a menu item out as a button, call itself
+ * async (to allow re-rendering) and see if we fit - if we don't, remove the button again.
+ *
+ * We also need to keep track of `_scalingUp` between calls since the resize might fire
+ * a lot of events, and we don't want to be starting multiple "calculation processes"
+ * since this will result in an infinite loop.
+ *
+ * The actual layouting of actions will be performed by adding or removing the 'button'
+ * attribute from the action, which will cause it to match different content insertion
+ * points.
+ *
+ * @param {*} host The current element
+ * @param {*} maxToolbarItems Maximum items for the toolbar
+ * @returns {void}
+ */
+const _layoutActions = (host, maxToolbarItems) => {
+	// eslint-disable-line max-statements
+	const elements = _getElements(host);
+	const hasActions = elements.length > 0 || hasExtraItems;
+	//this._setHasActions(hasActions); // TODO: Ask about this line
+
+	if (!hasActions) {
+		// No need to render if we don't have any actions
+		// return this._setHasMenuItems(false); // TODO: Ask about this line
+	}
+
+	const toolbarElements = elements.slice(0, maxToolbarItems);
+	const menuElements = elements.slice(toolbarElements.length);
+
+	toolbarElements.forEach((el) => _moveElement(el, true));
+	menuElements.forEach((el) => _moveElement(el));
+	// TODO: how do I update the hasMenuItems prop ?
+	// this._setHasMenuItems(menuElements.length > 0); // TODO: Ask about this line
+};
+
 /**
  * `<cosmoz-bottom-bar>` is a horizontal responsive bottom toolbar containing items that
  * can be used for actions.
@@ -90,81 +153,18 @@ const CosmozBottomBar = ({
 		notifyProperty(host, 'hasMenuItems', hasMenuItems);
 	}, [hasMenuItems]);
 
-	const _getElements = () => {
-		const elements = getFlattenedNodes(host)
-			.filter(_isActionNode)
-			.filter((element) => !element.hidden)
-			.sort((a, b) => (a.dataset.index ?? 0) - (b.dataset.index ?? 0));
-
-		if (elements.length === 0) {
-			return elements;
-		}
-
-		const topPriorityAction = elements.reduce(
-			(top, element) => {
-				return parseInt(top.dataset.priority ?? 0, 10) >=
-					parseInt(element.dataset.priority ?? 0, 10)
-					? top
-					: element;
-			},
-			{ dataset: { priority: '-1000' } },
-			[],
-		);
-
-		return [
-			topPriorityAction,
-			...elements.filter((e) => e !== topPriorityAction),
-		];
-	};
-
-	/**
-	 * Layout the actions available as buttons or menu items
-	 *
-	 * If the window is resizing down, just make sure that all buttons fits, and if not,
-	 * move one to menu and call itself async (to allow re-rendering) and see if we fit.
-	 * Repeat until the button fits or no buttons are left.
-	 *
-	 * If the window is sizing up, try to place a menu item out as a button, call itself
-	 * async (to allow re-rendering) and see if we fit - if we don't, remove the button again.
-	 *
-	 * We also need to keep track of `_scalingUp` between calls since the resize might fire
-	 * a lot of events, and we don't want to be starting multiple "calculation processes"
-	 * since this will result in an infinite loop.
-	 *
-	 * The actual layouting of actions will be performed by adding or removing the 'button'
-	 * attribute from the action, which will cause it to match different content insertion
-	 * points.
-	 *
-	 * @returns {void}
-	 */
-	const _layoutActions = () => {
-		// eslint-disable-line max-statements
-		const elements = _getElements();
-		const hasActions = elements.length > 0 || hasExtraItems;
-		//this._setHasActions(hasActions); // TODO: Ask about this line
-
-		if (!hasActions) {
-			// No need to render if we don't have any actions
-			// return this._setHasMenuItems(false); // TODO: Ask about this line
-		}
-
-		const toolbarElements = elements.slice(0, maxToolbarItems);
-		const menuElements = elements.slice(toolbarElements.length);
-
-		toolbarElements.forEach((el) => _moveElement(el, true));
-		menuElements.forEach((el) => _moveElement(el));
-		// TODO: how do I update the hasMenuItems prop ?
-		//this._setHasMenuItems(menuElements.length > 0); // TODO: Ask about this line
-	};
-
 	const slotChangeHandler = () => {
-		_layoutActions();
+		_layoutActions(host, maxToolbarItems);
 	};
 
 	return html`${style}
 		<div id="bar" part="bar">
 			<div id="info"><slot name="info"></slot></div>
-			<slot id="bottomBarToolbar" name="bottom-bar-toolbar"></slot>
+			<slot
+				id="bottomBarToolbar"
+				name="bottom-bar-toolbar"
+				@slotchange=${slotChangeHandler}
+			></slot>
 			<cosmoz-dropdown-menu id="dropdown" hidden=${!hasMenuItems}>
 				<svg
 					slot="button"
@@ -195,7 +195,7 @@ const CosmozBottomBar = ({
 				</svg>
 				<slot id="bottomBarMenu" name="bottom-bar-menu"></slot>
 			</cosmoz-dropdown-menu>
-			<slot name="extra" id="extraSlot" @slotchange=${slotChangeHandler}></slot>
+			<slot name="extra" id="extraSlot"></slot>
 		</div>
 		<div hidden style="display:none">
 			<slot id="content" @slotchange=${slotChangeHandler}></slot>
