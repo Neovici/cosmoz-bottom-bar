@@ -38,6 +38,22 @@ const CosmozBottomBarTemplate = ({
 	</cosmoz-bottom-bar>`;
 };
 
+const CosmozBottomBarEmptyTemplate = ({
+	active,
+	maxToolbarItems,
+}: {
+	active?: boolean;
+	maxToolbarItems?: number;
+}) => {
+	return html`<cosmoz-bottom-bar
+		id="bottomBar"
+		?active=${active}
+		.maxToolbarItems=${maxToolbarItems}
+	>
+		<span slot="info">Bottom bar demo</span>
+	</cosmoz-bottom-bar>`;
+};
+
 const meta: Meta = {
 	title: 'Cosmoz Bottom Bar',
 	render: CosmozBottomBarTemplate,
@@ -76,14 +92,10 @@ export const Basic: StoryObj = {
 };
 
 export const Empty: StoryObj = {
+	render: CosmozBottomBarEmptyTemplate,
 	args: {
 		active: true,
 		maxToolbarItems: 2,
-		hideButton1: true,
-		hideButton2: true,
-		hideButton3: true,
-		hideButton4: true,
-		hideButton5: true,
 	},
 	parameters: {
 		docs: {
