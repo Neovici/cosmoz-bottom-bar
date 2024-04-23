@@ -1,10 +1,10 @@
 /* eslint-disable max-len */
-import '@neovici/cosmoz-dropdown';
 import { html } from 'lit-html';
 
 export default html`<style>
 	:host {
 		display: block;
+		overflow: hidden;
 		bottom: 0;
 		left: 0;
 		width: 100%;
@@ -87,6 +87,10 @@ export default html`<style>
 	:host([hide-actions]) #bottomBarToolbar,
 	:host([hide-actions]) #bottomBarMenu,
 	:host([hide-actions]) #dropdown {
+		display: none;
+	}
+
+	:host(:not([has-menu-items])) cosmoz-dropdown-menu {
 		display: none;
 	}
 </style> `;

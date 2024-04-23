@@ -117,8 +117,7 @@ const _layoutActions = (host, maxToolbarItems) => {
 
 	toolbarElements.forEach((el) => _moveElement(el, true));
 	menuElements.forEach((el) => _moveElement(el));
-	// TODO: how do I update the hasMenuItems prop ?
-	// this._setHasMenuItems(menuElements.length > 0); // TODO: Ask about this line
+	host.toggleAttribute('has-menu-items', menuElements.length > 0);
 };
 
 /**
