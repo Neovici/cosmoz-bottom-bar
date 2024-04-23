@@ -3,8 +3,9 @@ import { html } from 'lit-html';
 import '../src/cosmoz-bottom-bar-next';
 import '@polymer/paper-button/paper-button.js';
 
-const CosmozBottomBar = ({
+const CosmozBottomBarTemplate = ({
 	active,
+	maxToolbarItems,
 	hideButton1,
 	hideButton2,
 	hideButton3,
@@ -12,13 +13,18 @@ const CosmozBottomBar = ({
 	hideButton5,
 }: {
 	active?: boolean;
+	maxToolbarItems?: number;
 	hideButton1?: boolean;
 	hideButton2?: boolean;
 	hideButton3?: boolean;
 	hideButton4?: boolean;
 	hideButton5?: boolean;
 }) => {
-	return html`<cosmoz-bottom-bar id="bottomBar" ?active=${active}>
+	return html`<cosmoz-bottom-bar
+		id="bottomBar"
+		?active=${active}
+		.maxToolbarItems=${maxToolbarItems}
+	>
 		<span slot="info">Bottom bar demo</span>
 		<paper-button ?hidden=${hideButton1}>Button 1</paper-button>
 		<paper-button ?hidden=${hideButton2} data-priority="10"
@@ -34,10 +40,9 @@ const CosmozBottomBar = ({
 
 const meta: Meta = {
 	title: 'Cosmoz Bottom Bar',
-	render: CosmozBottomBar,
+	render: CosmozBottomBarTemplate,
 	argTypes: {
 		active: { control: 'boolean' },
-		hasMenuItems: { control: 'boolean' },
 		maxToolbarItems: { control: 'number' },
 		hideButton1: { control: 'boolean' },
 		hideButton2: { control: 'boolean' },
@@ -59,11 +64,31 @@ export default meta;
 export const Basic: StoryObj = {
 	args: {
 		active: true,
+		maxToolbarItems: 2,
 	},
 	parameters: {
 		docs: {
 			description: {
 				story: 'The basic version',
+			},
+		},
+	},
+};
+
+export const Empty: StoryObj = {
+	args: {
+		active: true,
+		maxToolbarItems: 2,
+		hideButton1: true,
+		hideButton2: true,
+		hideButton3: true,
+		hideButton4: true,
+		hideButton5: true,
+	},
+	parameters: {
+		docs: {
+			description: {
+				story: 'The empty cosmoz-bottom-bar',
 			},
 		},
 	},
