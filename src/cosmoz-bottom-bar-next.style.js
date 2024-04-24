@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
-import { html } from 'lit-html';
+import { css } from '@neovici/cosmoz-utils';
 
-export default html`<style>
+export const style = css`
 	:host {
 		display: block;
 		overflow: hidden;
@@ -93,4 +93,4 @@ export default html`<style>
 	:host(:not([has-menu-items])) cosmoz-dropdown-menu {
 		display: none;
 	}
-</style> `;
+`;

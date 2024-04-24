@@ -3,8 +3,9 @@
 import { html } from 'lit-html';
 import { component, useLayoutEffect } from '@pionjs/pion';
 import { useHost } from '@neovici/cosmoz-utils/hooks/use-host';
-import style from './cosmoz-bottom-bar-next.style.js';
+import { style } from './cosmoz-bottom-bar-next.style.js';
 import { toggleSize } from '@neovici/cosmoz-collapse/toggle';
+import { sheet } from '@neovici/cosmoz-utils';
 import '@neovici/cosmoz-dropdown';
 
 const BOTTOM_BAR_TOOLBAR_SLOT = 'bottom-bar-toolbar';
@@ -105,11 +106,10 @@ const _layoutActions = (host, maxToolbarItems) => {
 	// eslint-disable-line max-statements
 	const elements = _getElements(host);
 	const hasActions = elements.length > 0;
-	//this._setHasActions(hasActions); // TODO: Ask about this line
 
 	if (!hasActions) {
 		// No need to render if we don't have any actions
-		// return this._setHasMenuItems(false); // TODO: Ask about this line
+		return host.toggleAttribute('has-menu-items', false);
 	}
 
 	const toolbarElements = elements.slice(0, maxToolbarItems);
@@ -153,8 +153,7 @@ const CosmozBottomBar = ({ active = false, maxToolbarItems = 1 }) => {
 		_layoutActions(host, maxToolbarItems);
 	};
 
-	return html`${style}
-		<div id="bar" part="bar">
+	return html`<div id="bar" part="bar">
 			<div id="info"><slot name="info"></slot></div>
 			<slot
 				id="bottomBarToolbar"
@@ -202,5 +201,8 @@ export default CosmozBottomBar;
 
 customElements.define(
 	'cosmoz-bottom-bar',
-	component(CosmozBottomBar, { observedAttributes: ['active'] }),
+	component(CosmozBottomBar, {
+		observedAttributes: ['active'],
+		styleSheets: [sheet(style)],
+	}),
 );
