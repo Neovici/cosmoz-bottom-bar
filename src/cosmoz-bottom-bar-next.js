@@ -200,7 +200,7 @@ const CosmozBottomBar = ({ active = false, maxToolbarItems = 1 }) => {
 export default CosmozBottomBar;
 
 customElements.define(
-	'cosmoz-bottom-bar',
+	'cosmoz-bottom-bar-next',
 	component(CosmozBottomBar, {
 		observedAttributes: ['active'],
 		styleSheets: [sheet(style)],

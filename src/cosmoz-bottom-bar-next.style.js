@@ -39,6 +39,7 @@ export const style = css`
 		display: none !important;
 	}
 	#bar {
+		height: 64px;
 		padding: 0 3%;
 		display: flex;
 		align-items: center;
