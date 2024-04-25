@@ -8,3 +8,6 @@ yarn-error.log
 # Idea
 .idea
 idea/
+
+# Storybook
+storybook-static/
