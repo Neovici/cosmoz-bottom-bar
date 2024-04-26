@@ -1,3 +1,10 @@
+## [7.2.1](https://github.com/neovici/cosmoz-bottom-bar/compare/v7.2.0...v7.2.1) (2024-04-26)
+
+
+### Bug Fixes
+
+* next is not included in package ([0892c30](https://github.com/neovici/cosmoz-bottom-bar/commit/0892c301da8aafec124f52995fb2c0dd699f337d))
+
 # [7.2.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v7.1.3...v7.2.0) (2024-04-25)
 
 

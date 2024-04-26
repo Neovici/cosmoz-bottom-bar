@@ -1,6 +1,6 @@
 {
 	"name": "@neovici/cosmoz-bottom-bar",
-	"version": "7.2.0",
+	"version": "7.2.1",
 	"description": "A responsive bottom-bar that can house buttons/actions and a menu for the buttons that won't fit the available width.",
 	"keywords": [
 		"polymer",
