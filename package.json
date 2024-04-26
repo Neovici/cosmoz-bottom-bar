@@ -26,7 +26,7 @@
 	},
 	"files": [
 		"cosmoz-*.js",
-		"lib/**/*.js"
+		"src/**/*.js"
 	],
 	"scripts": {
 		"lint": "eslint --cache --ext .js .",
