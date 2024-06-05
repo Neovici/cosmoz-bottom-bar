@@ -17,6 +17,7 @@ export default html`
 				rgba(230, 230, 230, 0.8)
 			);
 			box-shadow: var(--cosmoz-bottom-bar-shadow, none);
+			z-index: 1;
 
 			--cosmoz-dropdown-anchor-spacing: 12px 6px;
 			--paper-button: {
@@ -29,7 +30,7 @@ export default html`
 				font-weight: inherit;
 				margin: 0;
 				padding: 0;
-			}
+			};
 		}
 		:host([force-open]) {
 			transition: none;
