@@ -1,3 +1,10 @@
+## [7.2.2](https://github.com/neovici/cosmoz-bottom-bar/compare/v7.2.1...v7.2.2) (2024-06-05)
+
+
+### Bug Fixes
+
+* add z-index to make sure bottom-bar is above views content ([28fcc3e](https://github.com/neovici/cosmoz-bottom-bar/commit/28fcc3ecd77ade149f0a703c66bbf0aee33aab6e))
+
 ## [7.2.1](https://github.com/neovici/cosmoz-bottom-bar/compare/v7.2.0...v7.2.1) (2024-04-26)
 
 
