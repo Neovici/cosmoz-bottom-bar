@@ -1,3 +1,11 @@
+# [7.3.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v7.2.2...v7.3.0) (2024-07-23)
+
+
+### Features
+
+* **cosmoz-bottom-bar:** support unstyled attribute ([6dea770](https://github.com/neovici/cosmoz-bottom-bar/commit/6dea770e0e1c4c46ef6922affcb1a0be401587ea))
+* **deps:** upgrade ([661f79b](https://github.com/neovici/cosmoz-bottom-bar/commit/661f79bc471840d66b0eec4029091f6925b5750f))
+
 ## [7.2.2](https://github.com/neovici/cosmoz-bottom-bar/compare/v7.2.1...v7.2.2) (2024-06-05)
 
 
