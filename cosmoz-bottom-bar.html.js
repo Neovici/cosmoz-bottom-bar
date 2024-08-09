@@ -10,7 +10,6 @@ export default html`
 			width: 100%;
 			max-width: 100%; /* Firefox fix */
 			background-color: inherit;
-			transition: max-height 0.3s ease;
 			flex: none;
 			background-color: var(
 				--cosmoz-bottom-bar-bg-color,
@@ -32,9 +31,6 @@ export default html`
 				padding: 0;
 			};
 		}
-		:host([force-open]) {
-			transition: none;
-		}
 		[hidden],
 		::slotted([hidden]) {
 			display: none !important;
@@ -43,6 +39,7 @@ export default html`
 			padding: 0 3%;
 			display: flex;
 			align-items: center;
+			transition: opacity 0.5s ease;
 		}
 		#info {
 			min-width: 5px;

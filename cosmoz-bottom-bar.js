@@ -371,31 +371,40 @@ class CosmozBottomBar extends PolymerElement {
 	}
 
 	_showHideBottomBar(visible) {
+		let bar = this.shadowRoot.querySelector('#bar');
+		bar.style.opacity = '';
 		this.style.transitionDuration = 0;
 		this.style.display = '';
 		this.style.maxHeight = '';
 
 		const height = this.computedBarHeight,
-			to = !visible ? '0px' : height + 'px';
+			to = !visible ? '0px' : height + 'px',
+			opacityTo = !visible ? '0' : '1';
 
 		let from = visible ? '0px' : height + 'px';
+		let opacityFrom = visible ? '0' : '1';
 
 		if (!this[rendered]) {
 			from = to;
+			opacityFrom = opacityTo;
+
 			this[rendered] = true;
 		}
 
 		this.style.maxHeight = from;
+		bar.style.opacity = opacityFrom;
 
 		const onEnd = () => {
 			this.removeEventListener('transitionend', onEnd);
 			this.style.maxHeight = '';
+			bar.style.opacity = '';
 			this.style.display = this.visible ? '' : 'none';
 		};
 		requestAnimationFrame(() => {
 			this.addEventListener('transitionend', onEnd);
 			this.style.transitionDuration = '';
 			this.style.maxHeight = to;
+			bar.style.opacity = opacityTo;
 		});
 	}
 }
