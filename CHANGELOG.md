@@ -1,3 +1,10 @@
+# [7.4.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v7.3.0...v7.4.0) (2024-08-28)
+
+
+### Features
+
+* add a info part ([b24bdde](https://github.com/neovici/cosmoz-bottom-bar/commit/b24bddef8a4761b4e2d9fb1ef0a34ad111203e2e))
+
 # [7.3.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v7.2.2...v7.3.0) (2024-07-23)
 
 
