@@ -382,9 +382,6 @@ class CosmozBottomBar extends PolymerElement {
 			return;
 		}
 
-		this.style.maxHeight = '';
-		info.style.visibility = '';
-
 		const height = this.computedBarHeight,
 			to = !visible ? '0px' : height + 'px',
 			from = visible ? '0px' : height + 'px';
@@ -399,10 +396,38 @@ class CosmozBottomBar extends PolymerElement {
 			return;
 		}
 
-		document.startViewTransition(() => {
-			this.style.maxHeight = to;
-			info.style.visibility = 'visible';
-		});
+		if (!this.id) {
+			if (visible) {
+				document.startViewTransition(() => {
+					this.style.maxHeight = to;
+					this.style.transition = 'max-height 0.3s ease-in-out';
+					this.style.animationDelay = '300ms';
+					info.style.visibility = 'visible';
+				});
+			} else {
+				document.startViewTransition(() => {
+					this.style.maxHeight = to;
+					this.style.transition = 'max-height  0s ease-in-out';
+					this.style.animationDirection = 'reverse';
+					info.style.visibility = 'hidden';
+				});
+			}
+		} else if (this.id === 'bottomBar') {
+			if (visible) {
+				document.startViewTransition(() => {
+					this.style.maxHeight = to;
+					this.style.transition = 'max-height 0.3s ease-in-out';
+					info.style.visibility = 'visible';
+				});
+			} else {
+				document.startViewTransition(() => {
+					this.style.maxHeight = to;
+					this.style.transition = 'max-height 0.3s ease-in-out';
+					this.style.animationDirection = 'reverse';
+					info.style.visibility = 'visible';
+				});
+			}
+		}
 	}
 }
 
