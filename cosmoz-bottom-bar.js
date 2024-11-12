@@ -1,5 +1,4 @@
 /* eslint-disable max-statements */
-/* eslint-disable max-lines */
 import {
 	PolymerElement,
 	html as polymerHtml,
@@ -144,6 +143,7 @@ class CosmozBottomBar extends PolymerElement {
 				readOnly: true,
 				computed:
 					'_computeVisible(hasActions, active, hasExtraItems, forceOpen)',
+				observer: '_showHideBottomBar',
 			},
 
 			/**
@@ -168,10 +168,6 @@ class CosmozBottomBar extends PolymerElement {
 				value: ['top-right', ...defaultPlacement],
 			},
 		};
-	}
-
-	static get observers() {
-		return ['_showHideBottomBar(visible)'];
 	}
 
 	constructor() {
@@ -407,26 +403,16 @@ class CosmozBottomBar extends PolymerElement {
 			} else {
 				document.startViewTransition(() => {
 					this.style.maxHeight = to;
-					this.style.transition = 'max-height  0s ease-in-out';
-					this.style.animationDirection = 'reverse';
+					this.style.transition = 'max-height 0s ease-in-out';
 					info.style.visibility = 'hidden';
 				});
 			}
 		} else if (this.id === 'bottomBar') {
-			if (visible) {
-				document.startViewTransition(() => {
-					this.style.maxHeight = to;
-					this.style.transition = 'max-height 0.3s ease-in-out';
-					info.style.visibility = 'visible';
-				});
-			} else {
-				document.startViewTransition(() => {
-					this.style.maxHeight = to;
-					this.style.transition = 'max-height 0.3s ease-in-out';
-					this.style.animationDirection = 'reverse';
-					info.style.visibility = 'visible';
-				});
-			}
+			document.startViewTransition(() => {
+				this.style.maxHeight = to;
+				this.style.transition = 'max-height 0.3s ease-in-out';
+				info.style.visibility = 'visible';
+			});
 		}
 	}
 }
