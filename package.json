@@ -19,7 +19,8 @@
 	"main": "cosmoz-bottom-bar.js",
 	"exports": {
 		".": "./cosmoz-bottom-bar.js",
-		"./next": "./src/cosmoz-bottom-bar-next.js"
+		"./next": "./src/cosmoz-bottom-bar-next.js",
+		"./context": "./src/cosmoz-bottom-bar-focused-context.js"
 	},
 	"directories": {
 		"test": "test"

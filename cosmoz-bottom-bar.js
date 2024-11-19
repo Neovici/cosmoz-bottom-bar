@@ -7,12 +7,26 @@ import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nod
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { timeOut } from '@polymer/polymer/lib/utils/async';
 import { html } from 'lit-html';
+import { useEffect } from '@pionjs/pion';
+import { hauntedPolymer } from '@neovici/cosmoz-utils';
 import { defaultPlacement } from '@neovici/cosmoz-dropdown';
+import { useBottomBarFocusedCtx } from './src/cosmoz-bottom-bar-focused-context.js';
 import template from './cosmoz-bottom-bar.html.js';
 
 const BOTTOM_BAR_TOOLBAR_SLOT = 'bottom-bar-toolbar',
 	BOTTOM_BAR_MENU_SLOT = 'bottom-bar-menu',
 	rendered = Symbol('rendered');
+
+const useBottomBar = (host) => {
+	const bottomBarFocusedCtx = useBottomBarFocusedCtx();
+
+	useEffect(() => {
+		if (!host.active) return;
+
+		const cleanup = bottomBarFocusedCtx.add?.(host);
+		return cleanup;
+	}, [host.active]);
+};
 
 /**
  * `<cosmoz-bottom-bar>` is a horizontal responsive bottom toolbar containing items that
@@ -34,7 +48,7 @@ const BOTTOM_BAR_TOOLBAR_SLOT = 'bottom-bar-toolbar',
  * @demo demo/bottom-bar.html Basic Demo
  * @demo demo/bottom-bar-match-parent.html match parent Demo
  */
-class CosmozBottomBar extends PolymerElement {
+class CosmozBottomBar extends hauntedPolymer(useBottomBar)(PolymerElement) {
 	static get template() {
 		// eslint-disable-line max-lines-per-function
 		return template;
@@ -216,6 +230,24 @@ class CosmozBottomBar extends PolymerElement {
 		);
 		this._layoutDebouncer?.cancel(); /* eslint-disable-line no-unused-expressions */
 		this._resizeObserver.unobserve(this);
+	}
+
+	openActionsDropdown() {
+		if (!this.active) {
+			return;
+		}
+
+		const dropdown = this.$.dropdown;
+
+		if (dropdown.hasAttribute('hidden')) {
+			return;
+		}
+
+		//TODO: Clean up when open function is implemented for cosmoz-dropdown-menu
+		dropdown.shadowRoot
+			.querySelector('cosmoz-dropdown')
+			.shadowRoot.getElementById('dropdownButton')
+			.click();
 	}
 
 	_childrenUpdated(info) {
