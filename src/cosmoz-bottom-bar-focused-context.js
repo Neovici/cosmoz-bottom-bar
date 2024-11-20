@@ -1,16 +1,16 @@
 import { createContext, useContext, useState, useMemo } from '@pionjs/pion';
 import { noop } from '@neovici/cosmoz-utils/function';
 
-export const bottomBarFocused = createContext({
+export const focus = createContext({
 	bars: [],
 	add: noop,
 	remove: noop,
 });
-customElements.define('bottom-bar-focused-provider', bottomBarFocused.Provider);
+customElements.define('bottom-bar-focus-provider', focus.Provider);
 
-export const useBottomBarFocusedCtx = () => useContext(bottomBarFocused) ?? {};
+export const focusCtx = () => useContext(focus) ?? {};
 
-export const useBottomBarFocusedCtxHandler = () => {
+export const useFocusHandler = () => {
 	const [bars, setBars] = useState([]),
 		remove = (el) =>
 			setBars((prevBars) => prevBars.filter((bar) => bar !== el)),
@@ -18,9 +18,7 @@ export const useBottomBarFocusedCtxHandler = () => {
 			setBars((prevBars) => [el, ...prevBars]);
 			return () => remove(el);
 		},
-		focusHandler = useMemo(() => {
-			return { bars, add, remove };
-		}, [bars]);
+		focusHandler = useMemo(() => ({ bars, add, remove }), [bars]);
 
 	return focusHandler;
 };

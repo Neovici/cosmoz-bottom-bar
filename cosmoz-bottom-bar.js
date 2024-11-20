@@ -10,7 +10,7 @@ import { html } from 'lit-html';
 import { useEffect } from '@pionjs/pion';
 import { hauntedPolymer } from '@neovici/cosmoz-utils';
 import { defaultPlacement } from '@neovici/cosmoz-dropdown';
-import { useBottomBarFocusedCtx } from './src/cosmoz-bottom-bar-focused-context.js';
+import { focusCtx } from './src/cosmoz-bottom-bar-focused-context.js';
 import template from './cosmoz-bottom-bar.html.js';
 
 const BOTTOM_BAR_TOOLBAR_SLOT = 'bottom-bar-toolbar',
@@ -18,12 +18,12 @@ const BOTTOM_BAR_TOOLBAR_SLOT = 'bottom-bar-toolbar',
 	rendered = Symbol('rendered');
 
 const useBottomBar = (host) => {
-	const bottomBarFocusedCtx = useBottomBarFocusedCtx();
+	const focusContext = focusCtx();
 
 	useEffect(() => {
 		if (!host.active) return;
 
-		const cleanup = bottomBarFocusedCtx.add?.(host);
+		const cleanup = focusContext.add?.(host);
 		return cleanup;
 	}, [host.active]);
 };

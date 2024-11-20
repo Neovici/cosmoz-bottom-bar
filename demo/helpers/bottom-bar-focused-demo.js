@@ -1,9 +1,9 @@
 import { html, component, useState, useEffect } from '@pionjs/pion';
-import { useBottomBarFocusedCtxHandler } from '../../src/cosmoz-bottom-bar-focused-context.js';
+import { useFocusHandler } from '../../src/cosmoz-bottom-bar-focused-context.js';
 import '../../cosmoz-bottom-bar.js';
 
 export const BottomBarFocusedDemo = () => {
-	const focusCtxHandler = useBottomBarFocusedCtxHandler(),
+	const focusCtxHandler = useFocusHandler(),
 		[firstBarActive, setFirstBarActive] = useState(false),
 		[secondBarActive, setSecondBarActive] = useState(false);
 
@@ -21,7 +21,7 @@ export const BottomBarFocusedDemo = () => {
 		return () => document.removeEventListener('keydown', handleEvent);
 	}, [focusCtxHandler.bars]);
 
-	return html`<bottom-bar-focused-provider .value=${focusCtxHandler}>
+	return html`<bottom-bar-focus-provider .value=${focusCtxHandler}>
 		<div style="display: flex; flex-direction: column; margin: 0 8px 8px;">
 			<h3>Bottom bar focused demo</h3>
 			<div>
@@ -55,7 +55,7 @@ export const BottomBarFocusedDemo = () => {
 				<button>Button 3</button>
 			</cosmoz-bottom-bar>
 		</div>
-	</bottom-bar-focused-provider>`;
+	</bottom-bar-focus-provider>`;
 };
 
 customElements.define(
