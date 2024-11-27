@@ -1,3 +1,10 @@
+# [7.5.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v7.4.0...v7.5.0) (2024-11-27)
+
+
+### Features
+
+* open actions dropdown on useActivity callback ([#165](https://github.com/neovici/cosmoz-bottom-bar/issues/165)) ([082f919](https://github.com/neovici/cosmoz-bottom-bar/commit/082f9193d59c3585fee988d2324825e3fef98758))
+
 # [7.4.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v7.3.0...v7.4.0) (2024-08-28)
 
 
