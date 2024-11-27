@@ -7,12 +7,39 @@ import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nod
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { timeOut } from '@polymer/polymer/lib/utils/async';
 import { html } from 'lit-html';
+import { useActivity } from '@neovici/cosmoz-utils/keybindings/use-activity';
 import { defaultPlacement } from '@neovici/cosmoz-dropdown';
 import template from './cosmoz-bottom-bar.html.js';
+import { hauntedPolymer } from '@neovici/cosmoz-utils';
 
 const BOTTOM_BAR_TOOLBAR_SLOT = 'bottom-bar-toolbar',
 	BOTTOM_BAR_MENU_SLOT = 'bottom-bar-menu',
 	rendered = Symbol('rendered');
+
+export const openMenu = Symbol('openMenu');
+
+const openActionsMenu = (host) => {
+		const dropdown = host.$.dropdown;
+
+		if (dropdown.hasAttribute('hidden')) return;
+
+		//TODO: Clean up when open function is implemented for cosmoz-dropdown-menu
+		dropdown.shadowRoot
+			.querySelector('cosmoz-dropdown')
+			.shadowRoot.getElementById('dropdownButton')
+			.click();
+	},
+	useBottomBar = (host) => {
+		useActivity(
+			{
+				activity: openMenu,
+				callback: () => openActionsMenu(host),
+				check: () => host.active && !host.hasAttribute('hide-actions'),
+				element: () => host.$.dropdown,
+			},
+			[host.active],
+		);
+	};
 
 /**
  * `<cosmoz-bottom-bar>` is a horizontal responsive bottom toolbar containing items that
@@ -34,7 +61,7 @@ const BOTTOM_BAR_TOOLBAR_SLOT = 'bottom-bar-toolbar',
  * @demo demo/bottom-bar.html Basic Demo
  * @demo demo/bottom-bar-match-parent.html match parent Demo
  */
-class CosmozBottomBar extends PolymerElement {
+class CosmozBottomBar extends hauntedPolymer(useBottomBar)(PolymerElement) {
 	static get template() {
 		// eslint-disable-line max-lines-per-function
 		return template;
