@@ -1,4 +1,4 @@
-/* eslint-disable max-lines */
+/* eslint-disable max-statements */
 import {
 	PolymerElement,
 	html as polymerHtml,
@@ -170,6 +170,7 @@ class CosmozBottomBar extends hauntedPolymer(useBottomBar)(PolymerElement) {
 				readOnly: true,
 				computed:
 					'_computeVisible(hasActions, active, hasExtraItems, forceOpen)',
+				observer: '_showHideBottomBar',
 			},
 
 			/**
@@ -194,10 +195,6 @@ class CosmozBottomBar extends hauntedPolymer(useBottomBar)(PolymerElement) {
 				value: ['top-right', ...defaultPlacement],
 			},
 		};
-	}
-
-	static get observers() {
-		return ['_showHideBottomBar(visible)'];
 	}
 
 	constructor() {
@@ -398,32 +395,52 @@ class CosmozBottomBar extends hauntedPolymer(useBottomBar)(PolymerElement) {
 	}
 
 	_showHideBottomBar(visible) {
-		this.style.transitionDuration = 0;
-		this.style.display = '';
-		this.style.maxHeight = '';
+		const info = this.shadowRoot.querySelector('#bar #info');
 
-		const height = this.computedBarHeight,
-			to = !visible ? '0px' : height + 'px';
-
-		let from = visible ? '0px' : height + 'px';
-
-		if (!this[rendered]) {
-			from = to;
-			this[rendered] = true;
+		if (!this.id) {
+			this.style.viewTransitionName = 'bottom-bar-no-row-selected';
+		} else if (this.id === 'bottomBar') {
+			this.style.viewTransitionName = 'bottom-bar-rows-selected';
+		} else {
+			return;
 		}
 
-		this.style.maxHeight = from;
+		const height = this.computedBarHeight,
+			to = !visible ? '0px' : height + 'px',
+			from = visible ? '0px' : height + 'px';
 
-		const onEnd = () => {
-			this.removeEventListener('transitionend', onEnd);
-			this.style.maxHeight = '';
-			this.style.display = this.visible ? '' : 'none';
-		};
-		requestAnimationFrame(() => {
-			this.addEventListener('transitionend', onEnd);
-			this.style.transitionDuration = '';
+		this.style.maxHeight = from;
+		info.style.visibility = 'hidden';
+
+		if (!document.startViewTransition) {
+			this.style.transition = 'max-height 0.3s ease-in-out';
 			this.style.maxHeight = to;
-		});
+			info.style.visibility = 'visible';
+			return;
+		}
+
+		if (!this.id) {
+			if (visible) {
+				document.startViewTransition(() => {
+					this.style.maxHeight = to;
+					this.style.transition = 'max-height 0.3s ease-in-out';
+					this.style.animationDelay = '300ms';
+					info.style.visibility = 'visible';
+				});
+			} else {
+				document.startViewTransition(() => {
+					this.style.maxHeight = to;
+					this.style.transition = 'max-height 0s ease-in-out';
+					info.style.visibility = 'hidden';
+				});
+			}
+		} else if (this.id === 'bottomBar') {
+			document.startViewTransition(() => {
+				this.style.maxHeight = to;
+				this.style.transition = 'max-height 0.3s ease-in-out';
+				info.style.visibility = 'visible';
+			});
+		}
 	}
 }
 
