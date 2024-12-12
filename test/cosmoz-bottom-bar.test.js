@@ -11,7 +11,7 @@ suite('bottomBarWithoutMenu', () => {
 
 	setup(async () => {
 		bottomBar = await fixture(html`
-			<cosmoz-bottom-bar style="min-width: 200px; max-width: 200px">
+			<cosmoz-bottom-bar style="min-width: 500px; max-width: 500px">
 				<div
 					style="width: 50px; height: 32px; background: red"
 					id="bottomBarWithoutMenuItem"
@@ -44,7 +44,7 @@ suite('bottomBarWithOverflowingButton', () => {
 
 	setup(async () => {
 		bottomBar = await fixture(html`
-			<cosmoz-bottom-bar style="min-width: 300px; max-width: 300px">
+			<cosmoz-bottom-bar style="min-width: 500px; max-width: 500px">
 				<div
 					style="width: 200px; height: 32px; background: red"
 					id="bottomBarWithOverflowingButtonItem1"
@@ -98,7 +98,7 @@ suite('bottomBarMaxToolbarItems', () => {
 		bottomBar = await fixture(html`
 			<cosmoz-bottom-bar
 				max-toolbar-items="3"
-				style="min-width:400px; max-width: 400px"
+				style="min-width: 500px; max-width: 500px"
 			>
 				<div
 					id="bottomBarMaxToolbarItemsItem1"
@@ -149,7 +149,7 @@ suite('bottomBarWithHiddenButton', () => {
 		bottomBar = await fixture(html`
 			<cosmoz-bottom-bar
 				active
-				style="min-width:400px; max-width: 410px"
+				style="min-width: 500px; max-width: 510px"
 				max-toolbar-items="3"
 			>
 				<div
