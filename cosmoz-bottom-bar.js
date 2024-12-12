@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import {
 	PolymerElement,
 	html as polymerHtml,
@@ -7,10 +6,10 @@ import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nod
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { timeOut } from '@polymer/polymer/lib/utils/async';
 import { html } from 'lit-html';
+import { hauntedPolymer } from '@neovici/cosmoz-utils';
 import { useActivity } from '@neovici/cosmoz-utils/keybindings/use-activity';
 import { defaultPlacement } from '@neovici/cosmoz-dropdown';
 import template from './cosmoz-bottom-bar.html.js';
-import { hauntedPolymer } from '@neovici/cosmoz-utils';
 
 const BOTTOM_BAR_TOOLBAR_SLOT = 'bottom-bar-toolbar',
 	BOTTOM_BAR_MENU_SLOT = 'bottom-bar-menu',
@@ -63,11 +62,9 @@ const openActionsMenu = (host) => {
  */
 class CosmozBottomBar extends hauntedPolymer(useBottomBar)(PolymerElement) {
 	static get template() {
-		// eslint-disable-line max-lines-per-function
 		return template;
 	}
 
-	// eslint-disable-next-line max-lines-per-function
 	static get properties() {
 		return {
 			/**
@@ -241,7 +238,7 @@ class CosmozBottomBar extends hauntedPolymer(useBottomBar)(PolymerElement) {
 		[...this._nodeObservers, this._hiddenMutationObserver].forEach((e) =>
 			e.disconnect(e),
 		);
-		this._layoutDebouncer?.cancel(); /* eslint-disable-line no-unused-expressions */
+		this._layoutDebouncer?.cancel();
 		this._resizeObserver.unobserve(this);
 	}
 
@@ -336,6 +333,18 @@ class CosmozBottomBar extends hauntedPolymer(useBottomBar)(PolymerElement) {
 			...elements.filter((e) => e !== topPriorityAction),
 		];
 	}
+
+	_distribute(hostWidth) {
+		const elements = this._getElements();
+
+		const tooNarrow = hostWidth <= 480,
+			toolbarElements = elements.slice(0, tooNarrow ? 0 : this.maxToolbarItems),
+			menuElements = elements.slice(toolbarElements.length);
+		toolbarElements.forEach((el) => this._moveElement(el, true));
+		menuElements.forEach((el) => this._moveElement(el));
+		this._setHasMenuItems(menuElements.length > 0);
+	}
+
 	/**
 	 * Layout the actions available as buttons or menu items
 	 *
@@ -357,7 +366,6 @@ class CosmozBottomBar extends hauntedPolymer(useBottomBar)(PolymerElement) {
 	 * @returns {void}
 	 */
 	_layoutActions() {
-		// eslint-disable-line max-statements
 		const elements = this._getElements(),
 			hasActions = elements.length > 0 || this.hasExtraItems;
 		this._setHasActions(hasActions);
@@ -367,11 +375,7 @@ class CosmozBottomBar extends hauntedPolymer(useBottomBar)(PolymerElement) {
 			return this._setHasMenuItems(false);
 		}
 
-		const toolbarElements = elements.slice(0, this.maxToolbarItems),
-			menuElements = elements.slice(toolbarElements.length);
-		toolbarElements.forEach((el) => this._moveElement(el, true));
-		menuElements.forEach((el) => this._moveElement(el));
-		this._setHasMenuItems(menuElements.length > 0);
+		this._distribute(this.getBoundingClientRect().width);
 	}
 
 	_moveElement(element, toToolbar) {
@@ -395,6 +399,7 @@ class CosmozBottomBar extends hauntedPolymer(useBottomBar)(PolymerElement) {
 			this._matchHeightElement,
 			this.barHeight,
 		);
+		this._distribute(entry.contentRect?.width);
 	}
 
 	_showHideBottomBar(visible) {
