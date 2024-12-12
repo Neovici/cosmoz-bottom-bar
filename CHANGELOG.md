@@ -1,3 +1,10 @@
+## [7.5.1](https://github.com/neovici/cosmoz-bottom-bar/compare/v7.5.0...v7.5.1) (2024-12-12)
+
+
+### Bug Fixes
+
+* collect all actions in dropdown when too narrow ([#166](https://github.com/neovici/cosmoz-bottom-bar/issues/166)) ([a23e441](https://github.com/neovici/cosmoz-bottom-bar/commit/a23e441ff682e875dc65c3e4e0aeadd7d8e71b69)), closes [AB#17737](https://github.com/AB/issues/17737)
+
 # [7.5.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v7.4.0...v7.5.0) (2024-11-27)
 
 
