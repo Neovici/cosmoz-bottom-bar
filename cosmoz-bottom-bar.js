@@ -8,7 +8,6 @@ import { timeOut } from '@polymer/polymer/lib/utils/async';
 import { html } from 'lit-html';
 import { hauntedPolymer } from '@neovici/cosmoz-utils';
 import { useActivity } from '@neovici/cosmoz-utils/keybindings/use-activity';
-import { defaultPlacement } from '@neovici/cosmoz-dropdown';
 import template from './cosmoz-bottom-bar.html.js';
 
 const BOTTOM_BAR_TOOLBAR_SLOT = 'bottom-bar-toolbar',
@@ -188,7 +187,8 @@ class CosmozBottomBar extends hauntedPolymer(useBottomBar)(PolymerElement) {
 			},
 
 			topPlacement: {
-				value: ['top-right', ...defaultPlacement],
+				value: 'top-end',
+				type: String,
 			},
 		};
 	}
