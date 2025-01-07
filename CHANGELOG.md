@@ -1,3 +1,15 @@
+# [8.0.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v7.5.1...v8.0.0) (2025-01-07)
+
+
+### Features
+
+* update cosmoz-dropdown ([87c5c78](https://github.com/neovici/cosmoz-bottom-bar/commit/87c5c78e8f8b86c7b5bc7cf8781137e6618de93f))
+
+
+### BREAKING CHANGES
+
+* Upgrade to cosmoz-dropdown@5 with floating-ui.
+
 ## [7.5.1](https://github.com/neovici/cosmoz-bottom-bar/compare/v7.5.0...v7.5.1) (2024-12-12)
 
 
