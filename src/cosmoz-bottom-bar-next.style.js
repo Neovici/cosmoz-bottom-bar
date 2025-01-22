@@ -17,6 +17,7 @@ export const style = css`
 			rgba(230, 230, 230, 0.8)
 		);
 		box-shadow: var(--cosmoz-bottom-bar-shadow, none);
+		z-index: 1;
 
 		--cosmoz-dropdown-anchor-spacing: 12px 6px;
 		--paper-button: {
