@@ -154,7 +154,7 @@ const CosmozBottomBar = ({ active = false, maxToolbarItems = 1 }) => {
 	};
 
 	return html`<div id="bar" part="bar">
-			<div id="info"><slot name="info"></slot></div>
+			<div id="info" part="info"><slot name="info"></slot></div>
 			<slot
 				id="bottomBarToolbar"
 				name="bottom-bar-toolbar"
