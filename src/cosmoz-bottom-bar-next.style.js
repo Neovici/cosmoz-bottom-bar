@@ -51,7 +51,7 @@ export const style = css`
 		margin-right: auto;
 		white-space: nowrap;
 	}
-	#bottomBarToolbar::slotted(:not(slot)) {
+	#bottomBarToolbar::slotted(:not(slot):not([unstyled])) {
 		margin: 0 0.29em;
 		min-width: 40px;
 		min-height: 40px;
