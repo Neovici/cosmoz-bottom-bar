@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import '@neovici/cosmoz-dropdown';
 import { html } from '@polymer/polymer/lib/utils/html-tag';
 
