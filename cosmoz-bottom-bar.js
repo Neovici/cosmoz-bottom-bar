@@ -238,7 +238,6 @@ class CosmozBottomBar extends hauntedPolymer(useBottomBar)(PolymerElement) {
 		[...this._nodeObservers, this._hiddenMutationObserver].forEach((e) =>
 			e.disconnect(e),
 		);
-		this._layoutDebouncer?.cancel();
 		this._resizeObserver.unobserve(this);
 	}
 
@@ -334,17 +333,6 @@ class CosmozBottomBar extends hauntedPolymer(useBottomBar)(PolymerElement) {
 		];
 	}
 
-	_distribute(hostWidth) {
-		const elements = this._getElements();
-
-		const tooNarrow = hostWidth <= 480,
-			toolbarElements = elements.slice(0, tooNarrow ? 0 : this.maxToolbarItems),
-			menuElements = elements.slice(toolbarElements.length);
-		toolbarElements.forEach((el) => this._moveElement(el, true));
-		menuElements.forEach((el) => this._moveElement(el));
-		this._setHasMenuItems(menuElements.length > 0);
-	}
-
 	/**
 	 * Layout the actions available as buttons or menu items
 	 *
@@ -375,7 +363,11 @@ class CosmozBottomBar extends hauntedPolymer(useBottomBar)(PolymerElement) {
 			return this._setHasMenuItems(false);
 		}
 
-		this._distribute(this.getBoundingClientRect().width);
+		const toolbarElements = elements.slice(0, this.maxToolbarItems),
+			menuElements = elements.slice(toolbarElements.length);
+		toolbarElements.forEach((el) => this._moveElement(el, true));
+		menuElements.forEach((el) => this._moveElement(el));
+		this._setHasMenuItems(menuElements.length > 0);
 	}
 
 	_moveElement(element, toToolbar) {
@@ -399,7 +391,6 @@ class CosmozBottomBar extends hauntedPolymer(useBottomBar)(PolymerElement) {
 			this._matchHeightElement,
 			this.barHeight,
 		);
-		this._distribute(entry.contentRect?.width);
 	}
 
 	_showHideBottomBar(visible) {
