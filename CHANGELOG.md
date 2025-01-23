@@ -1,3 +1,10 @@
+## [8.0.1](https://github.com/neovici/cosmoz-bottom-bar/compare/v8.0.0...v8.0.1) (2025-01-23)
+
+
+### Bug Fixes
+
+* revert changes of collecting actions in dropdown ([#170](https://github.com/neovici/cosmoz-bottom-bar/issues/170)) ([7279c90](https://github.com/neovici/cosmoz-bottom-bar/commit/7279c902ff9baec0ce3f75643c7a35b96af47537))
+
 # [8.0.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v7.5.1...v8.0.0) (2025-01-07)
 
 
