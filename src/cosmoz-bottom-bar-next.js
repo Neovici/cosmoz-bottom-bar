@@ -5,7 +5,7 @@ import { component, useLayoutEffect } from '@pionjs/pion';
 import { useHost } from '@neovici/cosmoz-utils/hooks/use-host';
 import { style } from './cosmoz-bottom-bar-next.style.js';
 import { toggleSize } from '@neovici/cosmoz-collapse/toggle';
-import { sheet } from '@neovici/cosmoz-utils';
+import { useActivity } from '@neovici/cosmoz-utils/keybindings/use-activity';
 import '@neovici/cosmoz-dropdown';
 
 const BOTTOM_BAR_TOOLBAR_SLOT = 'bottom-bar-toolbar';
@@ -120,6 +120,20 @@ const _layoutActions = (host, maxToolbarItems) => {
 	host.toggleAttribute('has-menu-items', menuElements.length > 0);
 };
 
+export const openMenu = Symbol('openMenu');
+
+const openActionsMenu = (host) => {
+	const dropdown = host.shadowRoot.querySelector('#dropdown');
+
+	if (dropdown.hasAttribute('hidden')) return;
+
+	//TODO: Clean up when open function is implemented for cosmoz-dropdown-menu
+	dropdown.shadowRoot
+		.querySelector('cosmoz-dropdown')
+		.shadowRoot.getElementById('dropdownButton')
+		.click();
+};
+
 /**
  * `<cosmoz-bottom-bar>` is a horizontal responsive bottom toolbar containing items that
  * can be used for actions.
@@ -142,6 +156,16 @@ const _layoutActions = (host, maxToolbarItems) => {
 // eslint-disable-next-line max-statements
 const CosmozBottomBar = ({ active = false, maxToolbarItems = 1 }) => {
 	const host = useHost();
+
+	useActivity(
+		{
+			activity: openMenu,
+			callback: () => openActionsMenu(host),
+			check: () => host.active && !host.hasAttribute('hide-actions'),
+			element: () => host.shadowRoot.querySelector('#dropdown'),
+		},
+		[host.active],
+	);
 
 	const toggle = toggleSize('height');
 
@@ -203,6 +227,6 @@ customElements.define(
 	'cosmoz-bottom-bar-next',
 	component(CosmozBottomBar, {
 		observedAttributes: ['active'],
-		styleSheets: [sheet(style)],
+		styleSheets: [style],
 	}),
 );
