@@ -1,3 +1,10 @@
+# [8.1.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v8.0.1...v8.1.0) (2025-01-25)
+
+
+### Features
+
+* sync new features to cosmoz-bottom-bar-next ([#169](https://github.com/neovici/cosmoz-bottom-bar/issues/169)) ([c61e4d3](https://github.com/neovici/cosmoz-bottom-bar/commit/c61e4d342b0735c6bfd137f403d9c0318df4e9ff))
+
 ## [8.0.1](https://github.com/neovici/cosmoz-bottom-bar/compare/v8.0.0...v8.0.1) (2025-01-23)
 
 
