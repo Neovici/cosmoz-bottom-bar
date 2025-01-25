@@ -17,6 +17,7 @@ export const style = css`
 			rgba(230, 230, 230, 0.8)
 		);
 		box-shadow: var(--cosmoz-bottom-bar-shadow, none);
+		z-index: 1;
 
 		--cosmoz-dropdown-anchor-spacing: 12px 6px;
 		--paper-button: {
@@ -50,7 +51,7 @@ export const style = css`
 		margin-right: auto;
 		white-space: nowrap;
 	}
-	#bottomBarToolbar::slotted(:not(slot)) {
+	#bottomBarToolbar::slotted(:not(slot):not([unstyled])) {
 		margin: 0 0.29em;
 		min-width: 40px;
 		min-height: 40px;

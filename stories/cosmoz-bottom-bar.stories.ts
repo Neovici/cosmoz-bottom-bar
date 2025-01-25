@@ -19,8 +19,8 @@ const CosmozBottomBarTemplate = ({
 	hideButton3?: boolean;
 	hideButton4?: boolean;
 	hideButton5?: boolean;
-}) => {
-	return html`<cosmoz-bottom-bar-next
+}) => html`
+	<cosmoz-bottom-bar-next
 		id="bottomBar"
 		?active=${active}
 		.maxToolbarItems=${maxToolbarItems}
@@ -35,8 +35,8 @@ const CosmozBottomBarTemplate = ({
 			>Button 4</paper-button
 		>
 		<paper-button ?hidden=${hideButton5}>Button 5</paper-button>
-	</cosmoz-bottom-bar-next>`;
-};
+	</cosmoz-bottom-bar-next>
+`;
 
 const CosmozBottomBarEmptyTemplate = ({
 	active,
@@ -44,15 +44,15 @@ const CosmozBottomBarEmptyTemplate = ({
 }: {
 	active?: boolean;
 	maxToolbarItems?: number;
-}) => {
-	return html`<cosmoz-bottom-bar-next
+}) => html`
+	<cosmoz-bottom-bar-next
 		id="bottomBar"
 		?active=${active}
 		.maxToolbarItems=${maxToolbarItems}
 	>
 		<span slot="info">Bottom bar demo</span>
-	</cosmoz-bottom-bar-next>`;
-};
+	</cosmoz-bottom-bar-next>
+`;
 
 const meta: Meta = {
 	title: 'Cosmoz Bottom Bar',
