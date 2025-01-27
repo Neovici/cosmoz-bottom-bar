@@ -3,7 +3,7 @@
 import { html } from 'lit-html';
 import { component, useLayoutEffect } from '@pionjs/pion';
 import { useHost } from '@neovici/cosmoz-utils/hooks/use-host';
-import { style } from './cosmoz-bottom-bar-next.style.js';
+import { style } from './cosmoz-bottom-bar.style.js';
 import { toggleSize } from '@neovici/cosmoz-collapse/toggle';
 import { useActivity } from '@neovici/cosmoz-utils/keybindings/use-activity';
 import '@neovici/cosmoz-dropdown';
@@ -224,7 +224,7 @@ const CosmozBottomBar = ({ active = false, maxToolbarItems = 1 }) => {
 export default CosmozBottomBar;
 
 customElements.define(
-	'cosmoz-bottom-bar-next',
+	'cosmoz-bottom-bar',
 	component(CosmozBottomBar, {
 		observedAttributes: ['active'],
 		styleSheets: [style],

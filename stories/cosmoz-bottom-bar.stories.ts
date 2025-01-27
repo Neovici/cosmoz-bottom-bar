@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/web-components';
 import { html } from 'lit-html';
-import '../src/cosmoz-bottom-bar-next';
+import '../cosmoz-bottom-bar';
 import '@polymer/paper-button/paper-button.js';
 
 const CosmozBottomBarTemplate = ({
@@ -20,7 +20,7 @@ const CosmozBottomBarTemplate = ({
 	hideButton4?: boolean;
 	hideButton5?: boolean;
 }) => html`
-	<cosmoz-bottom-bar-next
+	<cosmoz-bottom-bar
 		id="bottomBar"
 		?active=${active}
 		.maxToolbarItems=${maxToolbarItems}
@@ -35,7 +35,7 @@ const CosmozBottomBarTemplate = ({
 			>Button 4</paper-button
 		>
 		<paper-button ?hidden=${hideButton5}>Button 5</paper-button>
-	</cosmoz-bottom-bar-next>
+	</cosmoz-bottom-bar>
 `;
 
 const CosmozBottomBarEmptyTemplate = ({
@@ -45,13 +45,13 @@ const CosmozBottomBarEmptyTemplate = ({
 	active?: boolean;
 	maxToolbarItems?: number;
 }) => html`
-	<cosmoz-bottom-bar-next
+	<cosmoz-bottom-bar
 		id="bottomBar"
 		?active=${active}
 		.maxToolbarItems=${maxToolbarItems}
 	>
 		<span slot="info">Bottom bar demo</span>
-	</cosmoz-bottom-bar-next>
+	</cosmoz-bottom-bar>
 `;
 
 const meta: Meta = {
