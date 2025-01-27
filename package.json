@@ -18,8 +18,7 @@
 	"author": "Neovici Development",
 	"main": "cosmoz-bottom-bar.js",
 	"exports": {
-		".": "./cosmoz-bottom-bar.js",
-		"./next": "./src/cosmoz-bottom-bar-next.js"
+		".": "./cosmoz-bottom-bar.js"
 	},
 	"directories": {
 		"test": "test"

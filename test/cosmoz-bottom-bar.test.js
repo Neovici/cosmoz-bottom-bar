@@ -1,10 +1,22 @@
-import { assert, fixture, html, aTimeout } from '@open-wc/testing';
-
-import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer';
+import { assert, fixture, html, nextFrame, aTimeout } from '@open-wc/testing';
 
 import '../cosmoz-bottom-bar.js';
 
-const isElement = ({ nodeType: type }) => type === Node.ELEMENT_NODE;
+const getToolbarElements = (bottomBar) => {
+	const slot = bottomBar.shadowRoot.querySelector(
+		'slot[name="bottom-bar-toolbar"]',
+	);
+	return slot?.assignedElements() ?? [];
+};
+
+const getMenuElements = (bottomBar) => {
+	const slot = bottomBar.shadowRoot.querySelector(
+		'slot[name="bottom-bar-menu"]',
+	);
+	return slot?.assignedElements() ?? [];
+};
+
+const visibleFilter = (item) => item.offsetWidth > 0 && item.offsetHeight > 0;
 
 suite('bottomBarWithoutMenu', () => {
 	let bottomBar;
@@ -18,24 +30,39 @@ suite('bottomBarWithoutMenu', () => {
 				></div>
 			</cosmoz-bottom-bar>
 		`);
-		bottomBar._layoutDebouncer.flush();
+		await nextFrame();
+		// Wait for layout
+		const toolbarSlot = bottomBar.shadowRoot.querySelector(
+			'slot[name="bottom-bar-toolbar"]',
+		);
+		toolbarSlot.dispatchEvent(new Event('slotchange'));
+		await nextFrame();
 	});
 
-	test('button should be placed in toolbar', () => {
-		const item =
-				FlattenedNodesObserver.getFlattenedNodes(bottomBar).find(isElement),
-			slot = item.getAttribute('slot');
+	test('button should be placed in toolbar', async () => {
+		const toolbarElements = getToolbarElements(bottomBar);
+		const item = toolbarElements[0];
 
+		// Test slot assignment
 		assert.equal(item.id, 'bottomBarWithoutMenuItem');
-		assert.equal(slot, 'bottom-bar-toolbar');
+		assert.equal(item.getAttribute('slot'), 'bottom-bar-toolbar');
+
+		// Test actual DOM presence
+		const toolbarSlot = bottomBar.shadowRoot.querySelector(
+			'slot[name="bottom-bar-toolbar"]',
+		);
+		const assignedElements = toolbarSlot.assignedElements();
 		assert.equal(
+			assignedElements[0],
 			item,
-			FlattenedNodesObserver.getFlattenedNodes(bottomBar.$.bottomBarToolbar)[0],
+			'Item should be present in toolbar slot',
 		);
 	});
 
-	test('menu button should be hidden', () => {
-		assert.isTrue(bottomBar.$.dropdown.hidden);
+	test('menu button should be hidden', async () => {
+		assert.isFalse(bottomBar.hasAttribute('has-menu-items'));
+		const dropdown = bottomBar.shadowRoot.querySelector('cosmoz-dropdown-menu');
+		assert.equal(getComputedStyle(dropdown).display, 'none');
 	});
 });
 
@@ -55,39 +82,53 @@ suite('bottomBarWithOverflowingButton', () => {
 				></div>
 			</cosmoz-bottom-bar>
 		`);
-		bottomBar._layoutDebouncer.flush();
+		await nextFrame();
 	});
 
-	test('First button should be placed in toolbar', () => {
-		const item =
-				FlattenedNodesObserver.getFlattenedNodes(bottomBar).find(isElement),
-			slot = item.getAttribute('slot');
+	test('First button should be placed in toolbar', async () => {
+		const toolbarElements = getToolbarElements(bottomBar);
+		const item = toolbarElements[0];
 
-		assert.equal(slot, 'bottom-bar-toolbar');
+		// Test slot assignment
 		assert.equal(item.id, 'bottomBarWithOverflowingButtonItem1');
+		assert.equal(item.getAttribute('slot'), 'bottom-bar-toolbar');
+
+		// Test actual DOM presence
+		const toolbarSlot = bottomBar.shadowRoot.querySelector(
+			'slot[name="bottom-bar-toolbar"]',
+		);
+		const assignedElements = toolbarSlot.assignedElements();
 		assert.equal(
+			assignedElements[0],
 			item,
-			FlattenedNodesObserver.getFlattenedNodes(bottomBar.$.bottomBarToolbar)[0],
+			'Item should be present in toolbar slot',
 		);
 	});
 
-	test('Second button should be placed in menu', () => {
-		const item =
-				FlattenedNodesObserver.getFlattenedNodes(bottomBar).filter(
-					isElement,
-				)[1],
-			slot = item.getAttribute('slot');
-		assert.equal(slot, 'bottom-bar-menu');
+	test('Second button should be placed in menu', async () => {
+		const menuElements = getMenuElements(bottomBar);
+		const item = menuElements[0];
+
+		// Test slot assignment
 		assert.equal(item.id, 'bottomBarWithOverflowingButtonItem2');
+		assert.equal(item.getAttribute('slot'), 'bottom-bar-menu');
+
+		// Test actual DOM presence
+		const menuSlot = bottomBar.shadowRoot.querySelector(
+			'slot[name="bottom-bar-menu"]',
+		);
+		const assignedElements = menuSlot.assignedElements();
 		assert.equal(
+			assignedElements[0],
 			item,
-			FlattenedNodesObserver.getFlattenedNodes(bottomBar.$.bottomBarMenu)[0],
+			'Item should be present in menu slot',
 		);
 	});
 
-	test('menu button should be visible', () => {
-		bottomBar._layoutDebouncer.flush(); //flush again to update hidden
-		assert.isFalse(bottomBar.$.dropdown.hidden);
+	test('menu button should be visible', async () => {
+		assert.isTrue(bottomBar.hasAttribute('has-menu-items'));
+		const dropdown = bottomBar.shadowRoot.querySelector('#dropdown');
+		assert.isFalse(dropdown.hasAttribute('hidden'));
 	});
 });
 
@@ -97,7 +138,7 @@ suite('bottomBarMaxToolbarItems', () => {
 	setup(async () => {
 		bottomBar = await fixture(html`
 			<cosmoz-bottom-bar
-				max-toolbar-items="3"
+				.maxToolbarItems=${3}
 				style="min-width: 400px; max-width: 400px"
 			>
 				<div
@@ -118,39 +159,43 @@ suite('bottomBarMaxToolbarItems', () => {
 				></div>
 			</cosmoz-bottom-bar>
 		`);
-		bottomBar._layoutDebouncer.flush();
+		await nextFrame();
 	});
 
-	test('Toolbar should not contains more than max-toolbar-items', () => {
-		const toolBarNodes = FlattenedNodesObserver.getFlattenedNodes(
-				bottomBar.$.bottomBarToolbar,
-			),
-			item1 = toolBarNodes[0],
-			item2 = toolBarNodes[1],
-			item3 = toolBarNodes[2],
-			item4 = FlattenedNodesObserver.getFlattenedNodes(
-				bottomBar.$.bottomBarMenu,
-			)[0];
+	test('Toolbar should not contains more than max-toolbar-items', async () => {
+		const toolbarSlot = bottomBar.shadowRoot.querySelector(
+			'slot[name="bottom-bar-toolbar"]',
+		);
+		const menuSlot = bottomBar.shadowRoot.querySelector(
+			'slot[name="bottom-bar-menu"]',
+		);
+		const toolbarElements = toolbarSlot.assignedElements();
+		const menuElements = menuSlot.assignedElements();
 
-		assert.equal(toolBarNodes.length, 3);
-		assert.equal(item1.id, 'bottomBarMaxToolbarItemsItem1');
-		assert.equal(item2.id, 'bottomBarMaxToolbarItemsItem2');
-		assert.equal(item3.id, 'bottomBarMaxToolbarItemsItem3');
-		assert.equal(item4.id, 'bottomBarMaxToolbarItemsItem4');
+		// Check toolbar items
+		assert.equal(
+			toolbarElements.length,
+			3,
+			'Should have exactly 3 toolbar items',
+		);
+		assert.equal(toolbarElements[0].id, 'bottomBarMaxToolbarItemsItem1');
+		assert.equal(toolbarElements[1].id, 'bottomBarMaxToolbarItemsItem2');
+		assert.equal(toolbarElements[2].id, 'bottomBarMaxToolbarItemsItem3');
+
+		// Check menu items
+		assert.equal(menuElements[0].id, 'bottomBarMaxToolbarItemsItem4');
 	});
 });
 
 suite('bottomBarWithHiddenButton', () => {
-	let bottomBar, toolbar, menu;
-
-	const visibleFilter = (item) => item.offsetWidth > 0 && item.offsetHeight > 0;
+	let bottomBar, toolbarSlot, menuSlot;
 
 	setup(async () => {
 		bottomBar = await fixture(html`
 			<cosmoz-bottom-bar
 				active
+				.maxToolbarItems=${3}
 				style="min-width: 400px; max-width: 410px"
-				max-toolbar-items="3"
 			>
 				<div
 					id="bottomBarWithHiddenButtonItem1"
@@ -172,33 +217,54 @@ suite('bottomBarWithHiddenButton', () => {
 				></div>
 			</cosmoz-bottom-bar>
 		`);
-		toolbar = bottomBar.$.bottomBarToolbar;
-		menu = bottomBar.$.bottomBarMenu;
-		bottomBar._layoutDebouncer.flush();
+		toolbarSlot = bottomBar.shadowRoot.querySelector(
+			'slot[name="bottom-bar-toolbar"]',
+		);
+		menuSlot = bottomBar.shadowRoot.querySelector(
+			'slot[name="bottom-bar-menu"]',
+		);
+		await nextFrame();
+		// Wait for layout
+		toolbarSlot.dispatchEvent(new Event('slotchange'));
+		await nextFrame();
 	});
 
-	test('Hidden items should not affect layout', () => {
-		const toolbarItems = FlattenedNodesObserver.getFlattenedNodes(toolbar),
-			menuItems = FlattenedNodesObserver.getFlattenedNodes(menu),
-			item1 = toolbarItems[0],
-			item3 = toolbarItems[1],
-			visibleMenuItems = menuItems.filter(visibleFilter).length,
-			visibleToolbarCount = toolbarItems.filter(visibleFilter).length;
+	test('Hidden items should not affect layout', async () => {
+		const toolbarElements = toolbarSlot.assignedElements();
+		const menuElements = menuSlot.assignedElements();
+		const visibleToolbarElements = toolbarElements.filter(visibleFilter);
 
-		assert.equal(item1.id, 'bottomBarWithHiddenButtonItem1');
-		assert.equal(item3.id, 'bottomBarWithHiddenButtonItem3');
+		assert.equal(
+			visibleToolbarElements.length,
+			2,
+			'Should have 2 visible toolbar items',
+		);
+		assert.equal(
+			visibleToolbarElements[0].id,
+			'bottomBarWithHiddenButtonItem1',
+		);
+		assert.equal(
+			visibleToolbarElements[1].id,
+			'bottomBarWithHiddenButtonItem3',
+		);
 
-		assert.equal(visibleToolbarCount, 2);
-		assert.equal(visibleMenuItems, 0);
-		assert.isTrue(bottomBar.$.dropdown.hidden);
+		const visibleMenuElements = menuElements.filter(visibleFilter);
+		assert.equal(
+			visibleMenuElements.length,
+			0,
+			'Should have no visible menu items',
+		);
+
+		assert.isFalse(bottomBar.hasAttribute('has-menu-items'));
+		const dropdown = bottomBar.shadowRoot.querySelector('cosmoz-dropdown-menu');
+		assert.equal(getComputedStyle(dropdown).display, 'none');
 	});
 
 	test('Unhiding item', async () => {
-		const toolBarNodes = FlattenedNodesObserver.getFlattenedNodes(toolbar),
-			item1 = toolBarNodes[0],
-			menuItems = FlattenedNodesObserver.getFlattenedNodes(menu),
-			item2 = menuItems[0],
-			item3 = toolBarNodes[1];
+		const toolbarElements = toolbarSlot.assignedElements();
+		const item1 = toolbarElements[0];
+		const item2 = bottomBar.querySelector('#bottomBarWithHiddenButtonItem2');
+		const item3 = toolbarElements[1];
 
 		assert.equal(item1.id, 'bottomBarWithHiddenButtonItem1');
 		assert.equal(item2.id, 'bottomBarWithHiddenButtonItem2');
@@ -206,39 +272,48 @@ suite('bottomBarWithHiddenButton', () => {
 
 		item2.hidden = false;
 		item2.removeAttribute('hidden');
-		bottomBar._debounceLayoutActions();
-		bottomBar._layoutDebouncer.flush();
 
-		const newToolBarNodes = FlattenedNodesObserver.getFlattenedNodes(toolbar);
+		// Trigger a slot change event to force layout update
+		toolbarSlot.dispatchEvent(new Event('slotchange'));
+		await nextFrame();
 
-		assert.include(newToolBarNodes, item2);
+		const newToolbarElements = toolbarSlot.assignedElements();
+		assert.include(
+			newToolbarElements,
+			item2,
+			'Unhidden item should be in toolbar',
+		);
 	});
 });
 
 suite('height management', () => {
-	const initBar = async ({ matchParent }) => {
-		const r = await fixture(html`
-			<div
-				id="heightManagementParent"
-				style="min-height: 100px; max-height: 100px"
-			>
-				<cosmoz-bottom-bar ?match-parent=${matchParent}>
-					<div style="width: 50px; height: 32px; background: red"></div>
-				</cosmoz-bottom-bar>
-			</div>
+	let bottomBar;
+
+	setup(async () => {
+		bottomBar = await fixture(html`
+			<cosmoz-bottom-bar>
+				<div style="width: 50px; height: 32px; background: red"></div>
+			</cosmoz-bottom-bar>
 		`);
-
-		return r.querySelector('cosmoz-bottom-bar');
-	};
-
-	test('setting matchParent to true should set bottom-bar height to the height of the parent', async () => {
-		const bottomBar = await initBar({ matchParent: true });
-		assert.equal(bottomBar.computedBarHeight, 100);
+		await nextFrame();
 	});
 
-	test('setting matchParent to false should set bottom-bar height to the height of the bar', async () => {
-		const bottomBar = await initBar({ matchParent: false });
-		assert.equal(bottomBar.computedBarHeight, bottomBar.barHeight);
+	test('should have bar with default height', async () => {
+		const bar = bottomBar.shadowRoot.querySelector('#bar');
+		assert.equal(getComputedStyle(bar).height, '64px'); // Fixed height from CSS
+	});
+
+	test('should transition max-height when active', async () => {
+		bottomBar.setAttribute('active', '');
+		await nextFrame();
+		await aTimeout(330); // Wait for transition
+		assert.equal(getComputedStyle(bottomBar).display, 'block');
+	});
+
+	test('should be hidden when not active', async () => {
+		await nextFrame();
+		await aTimeout(330); // Wait for transition
+		assert.equal(getComputedStyle(bottomBar).display, 'none');
 	});
 });
 
@@ -247,21 +322,24 @@ suite('toggle bottom bar', () => {
 
 	setup(async () => {
 		bottomBar = await fixture(html`
-			<cosmoz-bottom-bar style="min-height: 100px; max-height: 100px">
+			<cosmoz-bottom-bar>
 				<div style="width: 50px; height: 32px; background: red"></div>
 			</cosmoz-bottom-bar>
 		`);
+		await nextFrame();
+		await aTimeout(330); // Wait for transition
 	});
 
-	test('menu should not be visible on screen', () => {
-		assert.isFalse(bottomBar.visible);
+	test('should not be visible initially', () => {
+		assert.isFalse(bottomBar.hasAttribute('active'));
+		assert.equal(getComputedStyle(bottomBar).display, 'none');
 	});
 
-	test('menu should be visible on screen', async () => {
-		bottomBar.active = true;
-		bottomBar._layoutDebouncer.flush();
-		assert.isTrue(bottomBar.visible);
-		await aTimeout(330);
-		assert.equal(bottomBar.style.display, '');
+	test('should be visible when active', async () => {
+		bottomBar.setAttribute('active', '');
+		await nextFrame();
+		await aTimeout(330); // Wait for transition
+		assert.isTrue(bottomBar.hasAttribute('active'));
+		assert.equal(getComputedStyle(bottomBar).display, 'block');
 	});
 });
