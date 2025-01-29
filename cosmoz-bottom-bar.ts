@@ -3,7 +3,7 @@
 import { html } from 'lit-html';
 import { component, useLayoutEffect } from '@pionjs/pion';
 import { useHost } from '@neovici/cosmoz-utils/hooks/use-host';
-import { style } from './cosmoz-bottom-bar.style.js';
+import { style } from './cosmoz-bottom-bar.style';
 import { toggleSize } from '@neovici/cosmoz-collapse/toggle';
 import { useActivity } from '@neovici/cosmoz-utils/keybindings/use-activity';
 import '@neovici/cosmoz-dropdown';
@@ -11,7 +11,7 @@ import '@neovici/cosmoz-dropdown';
 const BOTTOM_BAR_TOOLBAR_SLOT = 'bottom-bar-toolbar';
 const BOTTOM_BAR_MENU_SLOT = 'bottom-bar-menu';
 
-const _moveElement = (element, toToolbar) => {
+const _moveElement = (element: HTMLElement, toToolbar: boolean) => {
 	const slot = toToolbar ? BOTTOM_BAR_TOOLBAR_SLOT : BOTTOM_BAR_MENU_SLOT;
 	const tabindex = '0';
 
@@ -19,64 +19,60 @@ const _moveElement = (element, toToolbar) => {
 	element.setAttribute('tabindex', tabindex);
 };
 
-const _isActionNode = (node) => {
+const _isActionNode = (node: Node): node is HTMLElement => {
+	if (node.nodeType !== Node.ELEMENT_NODE) {
+		return false;
+	}
+
+	const element = node as HTMLElement;
+
 	return (
-		node.nodeType === Node.ELEMENT_NODE &&
-		node.getAttribute('slot') !== 'info' &&
-		node.tagName !== 'TEMPLATE' &&
-		node.tagName !== 'STYLE' &&
-		node.tagName !== 'DOM-REPEAT' &&
-		node.tagName !== 'DOM-IF' &&
-		node.getAttribute('slot') !== 'extra'
+		!['extra', 'info'].includes(element.getAttribute('slot') ?? '') &&
+		!['TEMPLATE', 'STYLE', 'DOM-REPEAT', 'DOM-IF'].includes(element.tagName)
 	);
 };
 
-const getFlattenedNodes = (element) => {
-	const childNodes = [...element.childNodes];
+const getFlattenedNodes = (element: HTMLElement): Node[] => {
+	const childNodes = Array.from(element.childNodes);
 
 	for (let i = 0; i < element.childNodes.length; i++) {
-		const node = element.childNodes[i];
-		if (node.tagName === 'SLOT') {
-			// remove current slot element
-			childNodes.splice(i, 1);
+		const node = childNodes[i];
+		if (!(node instanceof HTMLSlotElement)) continue;
 
-			// append slot elements to the current index
-			const slotElements = node.assignedElements({ flatten: true });
-			for (let j = 0; j < slotElements.length; j++) {
-				const slotElement = slotElements[j];
-
-				childNodes.splice(i + j, 0, slotElement);
-			}
-		}
+		// replace the slot node with its assigned elements
+		const slottedElements = node.assignedElements({ flatten: true });
+		childNodes.splice(i, 1, ...slottedElements);
+		i += slottedElements.length - 1;
 	}
 
 	return childNodes;
 };
 
-const _getElements = (host) => {
+const _getElements = (host: HTMLElement): HTMLElement[] => {
 	const elements = getFlattenedNodes(host)
 		.filter(_isActionNode)
 		.filter((element) => !element.hidden)
-		.sort((a, b) => (a.dataset.index ?? 0) - (b.dataset.index ?? 0));
+		.sort(
+			(a, b) => Number(a.dataset.index ?? 0) - Number(b.dataset.index ?? 0),
+		);
 
 	if (elements.length === 0) {
 		return elements;
 	}
 
-	const topPriorityAction = elements.reduce(
-		(top, element) => {
-			return parseInt(top.dataset.priority ?? 0, 10) >=
-				parseInt(element.dataset.priority ?? 0, 10)
-				? top
-				: element;
-		},
-		{ dataset: { priority: '-1000' } },
-		[],
-	);
+	const initial: { dataset: { priority?: string } } = {
+		dataset: { priority: '-1000' },
+	};
+	const topPriorityAction = elements.reduce((top, element) => {
+		return Number(top.dataset.priority ?? 0) >=
+			Number(element.dataset.priority ?? 0)
+			? top
+			: element;
+	}, initial);
 
 	return [
-		topPriorityAction,
-		...elements.filter((e) => e !== topPriorityAction),
+		topPriorityAction as HTMLElement,
+		...elements.filter((e): e is HTMLElement => e !== topPriorityAction),
 	];
 };
 
@@ -102,7 +98,7 @@ const _getElements = (host) => {
  * @param {*} maxToolbarItems Maximum items for the toolbar
  * @returns {void}
  */
-const _layoutActions = (host, maxToolbarItems) => {
+const _layoutActions = (host: HTMLElement, maxToolbarItems: number) => {
 	// eslint-disable-line max-statements
 	const elements = _getElements(host);
 	const hasActions = elements.length > 0;
@@ -116,22 +112,26 @@ const _layoutActions = (host, maxToolbarItems) => {
 	const menuElements = elements.slice(toolbarElements.length);
 
 	toolbarElements.forEach((el) => _moveElement(el, true));
-	menuElements.forEach((el) => _moveElement(el));
+	menuElements.forEach((el) => _moveElement(el, false));
 	host.toggleAttribute('has-menu-items', menuElements.length > 0);
 };
 
 export const openMenu = Symbol('openMenu');
 
-const openActionsMenu = (host) => {
-	const dropdown = host.shadowRoot.querySelector('#dropdown');
+const openActionsMenu = (host: HTMLElement) => {
+	const dropdown = host.shadowRoot?.querySelector('#dropdown');
 
-	if (dropdown.hasAttribute('hidden')) return;
+	if (!dropdown || dropdown.hasAttribute('hidden')) return;
 
 	//TODO: Clean up when open function is implemented for cosmoz-dropdown-menu
-	dropdown.shadowRoot
-		.querySelector('cosmoz-dropdown')
-		.shadowRoot.getElementById('dropdownButton')
-		.click();
+	const cosmozDropdown =
+			dropdown.shadowRoot?.querySelector<HTMLElement>('cosmoz-dropdown'),
+		button =
+			cosmozDropdown?.shadowRoot?.querySelector<HTMLButtonElement>(
+				'dropdownButton',
+			);
+
+	button?.click();
 };
 
 /**
@@ -153,18 +153,23 @@ const openActionsMenu = (host) => {
  * @element cosmoz-bottom-bar
  * @demo demo/bottom-bar-next.html Basic Demo
  */
-// eslint-disable-next-line max-statements
-const CosmozBottomBar = ({ active = false, maxToolbarItems = 1 }) => {
+
+type Props = HTMLElement & {
+	active?: boolean;
+	maxToolbarItems?: number;
+};
+
+const CosmozBottomBar = ({ active = false, maxToolbarItems = 1 }: Props) => {
 	const host = useHost();
 
 	useActivity(
 		{
 			activity: openMenu,
 			callback: () => openActionsMenu(host),
-			check: () => host.active && !host.hasAttribute('hide-actions'),
-			element: () => host.shadowRoot.querySelector('#dropdown'),
+			check: () => active && !host.hasAttribute('hide-actions'),
+			element: () => host.shadowRoot?.querySelector('#dropdown'),
 		},
-		[host.active],
+		[active],
 	);
 
 	const toggle = toggleSize('height');

@@ -16,16 +16,15 @@
 	},
 	"license": "Apache-2.0",
 	"author": "Neovici Development",
-	"main": "cosmoz-bottom-bar.js",
+	"main": "cosmoz-bottom-bar.ts",
 	"exports": {
-		".": "./cosmoz-bottom-bar.js"
+		".": "./cosmoz-bottom-bar.ts"
 	},
 	"directories": {
 		"test": "test"
 	},
 	"files": [
-		"cosmoz-*.js",
-		"src/**/*.js"
+		"cosmoz-*.ts"
 	],
 	"scripts": {
 		"lint": "eslint --cache --ext .js .",
