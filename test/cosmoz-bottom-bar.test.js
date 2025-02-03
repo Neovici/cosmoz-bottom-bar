@@ -1,6 +1,6 @@
 import { assert, fixture, html, nextFrame, aTimeout } from '@open-wc/testing';
 
-import '../cosmoz-bottom-bar.ts';
+import '../src/cosmoz-bottom-bar.ts';
 
 const getToolbarElements = (bottomBar) => {
 	const slot = bottomBar.shadowRoot.querySelector(
