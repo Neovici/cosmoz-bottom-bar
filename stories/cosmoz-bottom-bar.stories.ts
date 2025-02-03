@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/web-components';
 import { html } from 'lit-html';
-import '../cosmoz-bottom-bar';
+import '../src/cosmoz-bottom-bar';
 import '@polymer/paper-button/paper-button.js';
 
 const CosmozBottomBarTemplate = ({
