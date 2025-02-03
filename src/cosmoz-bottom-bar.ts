@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 /* eslint-disable max-lines */
 import { html } from 'lit-html';
+import { html as polymerHtml } from '@polymer/polymer/polymer-element.js';
 import { component, css, useLayoutEffect } from '@pionjs/pion';
 import { useHost } from '@neovici/cosmoz-utils/hooks/use-host';
 import { toggleSize } from '@neovici/cosmoz-collapse/toggle';
@@ -155,19 +156,17 @@ const _getElements = (host: HTMLElement): HTMLElement[] => {
 		return elements;
 	}
 
-	const initial: { dataset: { priority?: string } } = {
-		dataset: { priority: '-1000' },
-	};
-	const topPriorityAction = elements.reduce((top, element) => {
-		return Number(top.dataset.priority ?? 0) >=
-			Number(element.dataset.priority ?? 0)
-			? top
-			: element;
-	}, initial);
+	const topPriorityAction = elements.reduce(
+		(top, element) =>
+			Number(top.dataset.priority ?? 0) >= Number(element.dataset.priority ?? 0)
+				? top
+				: element,
+		elements[0],
+	);
 
 	return [
-		topPriorityAction as HTMLElement,
-		...elements.filter((e): e is HTMLElement => e !== topPriorityAction),
+		topPriorityAction,
+		...elements.filter((e) => e !== topPriorityAction),
 	];
 };
 
@@ -223,7 +222,7 @@ const openActionsMenu = (host: HTMLElement) => {
 			dropdown.shadowRoot?.querySelector<HTMLElement>('cosmoz-dropdown'),
 		button =
 			cosmozDropdown?.shadowRoot?.querySelector<HTMLButtonElement>(
-				'dropdownButton',
+				'#dropdownButton',
 			);
 
 	button?.click();
@@ -330,3 +329,12 @@ customElements.define(
 		styleSheets: [style],
 	}),
 );
+
+const tmplt = `
+	<slot name="extra" slot="extra"></slot>
+	<slot name="bottom-bar-toolbar" slot="bottom-bar-toolbar"></slot>
+	<slot name="bottom-bar-menu" slot="bottom-bar-menu"></slot>
+`;
+
+export const bottomBarSlots = html(Object.assign([tmplt], { raw: [tmplt] })),
+	bottomBarSlotsPolymer = polymerHtml(Object.assign([tmplt], { raw: [tmplt] }));
