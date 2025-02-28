@@ -1,13 +1,12 @@
 /* eslint-disable max-len */
-/* eslint-disable max-lines */
 import { html } from 'lit-html';
 import { map } from 'lit-html/directives/map.js';
 import { html as polymerHtml } from '@polymer/polymer/polymer-element.js';
 import {
 	component,
 	css,
+	useEffect,
 	useLayoutEffect,
-	useRef,
 	useState,
 } from '@pionjs/pion';
 import { useHost } from '@neovici/cosmoz-utils/hooks/use-host';
@@ -167,10 +166,19 @@ type Props = HTMLElement & {
 	maxToolbarItems?: number;
 };
 
+// TODO: Use order style attr to sort on priority
+
 const CosmozBottomBar = ({ active = false, maxToolbarItems = 1 }: Props) => {
 	const host = useHost();
-	const [allButtons, setAllButtons] = useState<HTMLElement[]>([]),
-		[visibleButtons, setVisibleButtons] = useState<Set<HTMLElement>>(new Set());
+	// const [allButtons, setAllButtons] = useState<HTMLElement[]>([]),
+	// 	[visibleButtons, setVisibleButtons] = useState<Set<HTMLElement>>(new Set());
+	const [buttonStates, setButtonStates] = useState<{
+		visible: Set<HTMLElement>;
+		overflown: Set<HTMLElement>;
+	}>({
+		visible: new Set(),
+		overflown: new Set(),
+	});
 
 	useActivity(
 		{
@@ -182,44 +190,22 @@ const CosmozBottomBar = ({ active = false, maxToolbarItems = 1 }: Props) => {
 		[active],
 	);
 
-	const buttonRefs = useRef(new Map<string, HTMLElement>());
-	const buttonIdRef = useRef<number>(0);
-
-	const sortElementsByPriority = (elements: HTMLElement[]) => {
-		return elements.toSorted((a, b) => {
-			const aPriority = parseInt(a.dataset.priority || '0', 10);
-			const bPriority = parseInt(b.dataset.priority || '0', 10);
-
-			return bPriority - aPriority;
-		});
-	};
-
-	const ensureButtonId = (element: HTMLElement): string => {
-		// Check if we've already assigned an ID
-		if (!element.dataset.buttonId) {
-			// Generate a unique ID if none exists
-			const newId = `button-${buttonIdRef.current++}`;
-			element.dataset.buttonId = newId;
-		}
-
-		return element.dataset.buttonId;
-	};
-
 	const calculateDistribution = () => {
-		allButtons.forEach(ensureButtonId);
+		const allButtons = [...buttonStates.visible, ...buttonStates.overflown];
+
+		allButtons.forEach((btn) => {
+			if (!btn.style.order) {
+				btn.style.order = `-${btn.dataset.priority || '0'}`;
+			}
+		});
 
 		const effectiveVisibleSize =
-			visibleButtons.size >= 0 ? visibleButtons.size : allButtons.length;
+			buttonStates.visible.size > 0
+				? buttonStates.visible.size
+				: allButtons.length;
 
 		const toolbarLimit = Math.min(maxToolbarItems, effectiveVisibleSize);
 		const toolbarElements = allButtons.slice(0, toolbarLimit);
-		const menuElements = allButtons.slice(toolbarLimit);
-
-		buttonRefs.current.clear();
-		allButtons.forEach((el) => {
-			const id = el.dataset.buttonId;
-			if (id) buttonRefs.current.set(id, el);
-		});
 
 		allButtons.forEach((el) => {
 			if (toolbarElements.includes(el)) {
@@ -229,10 +215,12 @@ const CosmozBottomBar = ({ active = false, maxToolbarItems = 1 }: Props) => {
 			}
 		});
 
+		const menuElements = allButtons.slice(toolbarLimit);
+
 		host.toggleAttribute('has-menu-items', menuElements.length > 0);
 
 		return menuElements.map((el) => ({
-			id: el.dataset.buttonId!,
+			victim: el,
 			text: el.textContent?.trim() || '',
 		}));
 	};
@@ -241,15 +229,10 @@ const CosmozBottomBar = ({ active = false, maxToolbarItems = 1 }: Props) => {
 		visible: Set<HTMLElement>,
 		overflown: Set<HTMLElement>,
 	) => {
-		const allButtons = [...visible, ...overflown].sort((a, b) => {
-			// eslint-disable-next-line no-bitwise
-			return a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING
-				? -1
-				: 1;
+		setButtonStates({
+			visible,
+			overflown,
 		});
-
-		setAllButtons(allButtons);
-		setVisibleButtons(visible);
 	};
 
 	const toggle = toggleSize('height');
@@ -257,27 +240,6 @@ const CosmozBottomBar = ({ active = false, maxToolbarItems = 1 }: Props) => {
 	useLayoutEffect(() => {
 		toggle(host, active);
 	}, [active]);
-
-	const handleMenuClick = (e: Event, buttonId: string) => {
-		if (!buttonId) return;
-
-		console.log(buttonRefs.current);
-
-		const element = buttonRefs.current.get(buttonId);
-		if (!element) {
-			return;
-		}
-
-		e.stopPropagation();
-
-		element.dispatchEvent(
-			new MouseEvent('click', {
-				bubbles: true,
-				cancelable: true,
-				view: window,
-			}),
-		);
-	};
 
 	return html`<div id="bar" part="bar">
 			<div id="info" part="info"><slot name="info"></slot></div>
@@ -321,7 +283,7 @@ const CosmozBottomBar = ({ active = false, maxToolbarItems = 1 }: Props) => {
 						${map(
 							calculateDistribution(),
 							(item) => html`
-								<paper-button @click=${(e) => handleMenuClick(e, item.id)}
+								<paper-button @click=${() => item.victim.click()}
 									>${item.text}</paper-button
 								>
 							`,

@@ -1,10 +1,14 @@
 import { AttributePart, noChange } from 'lit-html';
-import { Directive, directive } from 'lit-html/directive.js';
+import { Directive, directive, DirectiveResult } from 'lit-html/directive.js';
 
 type OnOverflow = (
 	visibleElements: Set<HTMLElement>,
 	overflownElements: Set<HTMLElement>,
 ) => void;
+
+function isEntryHidden(el: IntersectionObserverEntry) {
+	return el.boundingClientRect.height === 0;
+}
 
 class OverflowDirective extends Directive {
 	_observer?: IntersectionObserver;
@@ -34,16 +38,18 @@ class OverflowDirective extends Directive {
 
 		this._observer = new IntersectionObserver(
 			(entries) => {
-				console.log('entries', entries);
 				entries.forEach((entry) => {
 					const el = entry.target as HTMLElement;
 
 					if (entry.intersectionRatio === 1) {
 						visibleElements.add(el);
 						overflownElements.delete(el);
-					} else {
-						overflownElements.add(el);
+					} else if (isEntryHidden(entry)) {
 						visibleElements.delete(el);
+						overflownElements.delete(el);
+					} else {
+						visibleElements.delete(el);
+						overflownElements.add(el);
 					}
 
 					onOverflow(visibleElements, overflownElements);
@@ -52,13 +58,16 @@ class OverflowDirective extends Directive {
 			{ root: this._container, threshold: 1 },
 		);
 
-		// this._observer.observe(this._container);
 		for (const c of elements) {
 			this._observer.observe(c);
 		}
 	}
 }
 
-const overflow = directive(OverflowDirective);
+interface Overflow {
+	(onOverflow: OnOverflow): DirectiveResult<typeof OverflowDirective>;
+}
+
+const overflow = directive(OverflowDirective) as Overflow;
 
 export default overflow;
