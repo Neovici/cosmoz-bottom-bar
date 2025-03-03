@@ -1,8 +1,10 @@
+/* eslint-disable no-console */
 import type { Meta, StoryObj } from '@storybook/web-components';
 import { html } from 'lit-html';
 import '../src/cosmoz-bottom-bar';
 import '@polymer/paper-button/paper-button.js';
-import { component } from '@pionjs/pion';
+import { component, useState } from '@pionjs/pion';
+import { map } from 'lit-html/directives/map.js';
 
 const CosmozBottomBarStory = ({
 	active,
@@ -21,48 +23,84 @@ const CosmozBottomBarStory = ({
 	hideButton4?: boolean;
 	hideButton5?: boolean;
 }) => {
+	const [inputValue, setInputValue] = useState(0);
+	const [buttons, setButtons] = useState<
+		{
+			hidden: boolean;
+			onClick: () => void;
+			priority: number;
+			text: string;
+		}[]
+	>([
+		{
+			hidden: false,
+			onClick: () => console.log('!!Button 1 clicked'),
+			priority: 1,
+			text: 'Button 1',
+		},
+		{
+			hidden: false,
+			onClick: () => console.log('!!Button 2 clicked'),
+			priority: 2,
+			text: 'Button 2',
+		},
+		{
+			hidden: false,
+			onClick: () => console.log('!!Button 3 clicked'),
+			priority: 3,
+			text: 'Button 3',
+		},
+		{
+			hidden: false,
+			onClick: () => console.log('!!Button 4 clicked'),
+			priority: 4,
+			text: 'Button 4',
+		},
+		{
+			hidden: false,
+			onClick: () => console.log('!!Button 5 clicked'),
+			priority: 5,
+			text: 'Button 5',
+		},
+	]);
+
 	return html`
+		<input
+			value=${inputValue}
+			placeholder="priority"
+			type="number"
+			@input=${(e) => setInputValue(e.target.value)}
+		/>
+		<paper-button
+			@click=${() =>
+				setButtons([
+					...buttons,
+					{
+						hidden: false,
+						onClick: () => console.log('!!Button clicked'),
+						priority: +inputValue,
+						text: 'Button ' + inputValue,
+					},
+				])}
+			>Add btn</paper-button
+		>
+
 		<cosmoz-bottom-bar
 			id="bottomBar"
 			?active=${active}
 			.maxToolbarItems=${maxToolbarItems}
 		>
 			<span slot="info">Bottom bar demo</span>
-			<paper-button
-				?hidden=${hideButton1}
-				@click=${() => console.log!('!!Button 1 clicked')}
-				slot="bottom-bar-toolbar"
-				data-priority="5"
-				>Button 1</paper-button
-			>
-			<paper-button
-				?hidden=${hideButton2}
-				@click=${() => console.log('!!Button 2 clicked')}
-				slot="bottom-bar-toolbar"
-				data-priority="4"
-				>Button 2</paper-button
-			>
-			<paper-button
-				?hidden=${hideButton3}
-				@click=${() => console.log('!!Button 3 clicked')}
-				slot="bottom-bar-toolbar"
-				data-priority="3"
-				>Button 3</paper-button
-			>
-			<paper-button
-				?hidden=${hideButton4}
-				@click=${() => console.log('!!Button 4 clicked')}
-				slot="bottom-bar-toolbar"
-				data-priority="2"
-				>Button 4</paper-button
-			>
-			<paper-button
-				?hidden=${hideButton5}
-				@click=${() => console.log('!!Button 5 clicked')}
-				slot="bottom-bar-toolbar"
-				data-priority="7"
-				>Button 5</paper-button
-			>
+			${map(
+				buttons,
+				(btn) =>
+					html`<paper-button
+						slot="bottom-bar-toolbar"
+						@click=${btn.onClick}
+						data-priority=${btn.priority}
+						>${btn.text}</paper-button
+					>`,
+			)}()
 		</cosmoz-bottom-bar>
 	`;
 };

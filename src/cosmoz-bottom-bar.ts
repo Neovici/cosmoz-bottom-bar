@@ -2,13 +2,7 @@
 import { html } from 'lit-html';
 import { map } from 'lit-html/directives/map.js';
 import { html as polymerHtml } from '@polymer/polymer/polymer-element.js';
-import {
-	component,
-	css,
-	useEffect,
-	useLayoutEffect,
-	useState,
-} from '@pionjs/pion';
+import { component, css, useLayoutEffect, useState } from '@pionjs/pion';
 import { useHost } from '@neovici/cosmoz-utils/hooks/use-host';
 import { toggleSize } from '@neovici/cosmoz-collapse/toggle';
 import { useActivity } from '@neovici/cosmoz-utils/keybindings/use-activity';
@@ -75,14 +69,6 @@ const style = css`
 		min-width: 0;
 		max-height: 40px;
 		outline: 2px blue dashed;
-	}
-
-	#actions {
-		display: flex;
-		align-items: center;
-		flex: 0 0 auto;
-		margin-left: 8px;
-		z-index: 2;
 	}
 
 	#bottomBarToolbar::slotted(:not(slot):not([unstyled])) {
@@ -170,8 +156,6 @@ type Props = HTMLElement & {
 
 const CosmozBottomBar = ({ active = false, maxToolbarItems = 1 }: Props) => {
 	const host = useHost();
-	// const [allButtons, setAllButtons] = useState<HTMLElement[]>([]),
-	// 	[visibleButtons, setVisibleButtons] = useState<Set<HTMLElement>>(new Set());
 	const [buttonStates, setButtonStates] = useState<{
 		visible: Set<HTMLElement>;
 		overflown: Set<HTMLElement>;
@@ -193,36 +177,42 @@ const CosmozBottomBar = ({ active = false, maxToolbarItems = 1 }: Props) => {
 	const calculateDistribution = () => {
 		const allButtons = [...buttonStates.visible, ...buttonStates.overflown];
 
-		allButtons.forEach((btn) => {
-			if (!btn.style.order) {
-				btn.style.order = `-${btn.dataset.priority || '0'}`;
-			}
-		});
+		if (!allButtons.length) {
+			return [];
+		}
 
-		const effectiveVisibleSize =
-			buttonStates.visible.size > 0
+		const processedButtons = allButtons
+			.map((btn) => ({
+				element: btn,
+				priority: Number(btn.dataset.priority ?? 0),
+			}))
+			.sort((a, b) => {
+				return b.priority - a.priority;
+			});
+
+		const toolbarLimit = Math.min(
+			maxToolbarItems,
+			buttonStates.visible.size >= 0
 				? buttonStates.visible.size
-				: allButtons.length;
+				: allButtons.length,
+		);
 
-		const toolbarLimit = Math.min(maxToolbarItems, effectiveVisibleSize);
-		const toolbarElements = allButtons.slice(0, toolbarLimit);
-
-		allButtons.forEach((el) => {
-			if (toolbarElements.includes(el)) {
-				el.style.visibility = 'visible';
-			} else {
-				el.style.visibility = 'hidden';
-			}
+		processedButtons.forEach(({ element, priority }, i) => {
+			const isVisible = i < toolbarLimit;
+			element.style.visibility = isVisible ? 'visible' : 'hidden';
+			element.style.order = isVisible ? String(-priority) : 'unset';
 		});
 
-		const menuElements = allButtons.slice(toolbarLimit);
+		const menuButtons = processedButtons
+			.slice(toolbarLimit)
+			.map(({ element }) => ({
+				toolbarButton: element,
+				text: element.textContent?.trim() || '',
+			}));
 
-		host.toggleAttribute('has-menu-items', menuElements.length > 0);
+		host.toggleAttribute('has-menu-items', menuButtons.length > 0);
 
-		return menuElements.map((el) => ({
-			victim: el,
-			text: el.textContent?.trim() || '',
-		}));
+		return menuButtons;
 	};
 
 	const handleOverflow = (
@@ -250,48 +240,47 @@ const CosmozBottomBar = ({ active = false, maxToolbarItems = 1 }: Props) => {
 					${overflow(handleOverflow)}
 				></slot>
 			</div>
-			<div id="actions">
-				<cosmoz-dropdown-menu id="dropdown">
-					<svg
-						slot="button"
-						width="4"
-						height="16"
-						viewBox="0 0 4 16"
-						fill="none"
-						xmlns="http://www.w3.org/2000/svg"
-					>
-						<path
-							fill-rule="evenodd"
-							clip-rule="evenodd"
-							d="M1.50996e-07 2C1.02714e-07 3.10457 0.89543 4 2 4C3.10457 4 4 3.10457 4 2C4 0.89543 3.10457 -3.91405e-08 2 -8.74228e-08C0.895431 -1.35705e-07 1.99278e-07 0.89543 1.50996e-07 2Z"
-							fill="white"
-						/>
-						<path
-							fill-rule="evenodd"
-							clip-rule="evenodd"
-							d="M1.50996e-07 8C1.02714e-07 9.10457 0.89543 10 2 10C3.10457 10 4 9.10457 4 8C4 6.89543 3.10457 6 2 6C0.895431 6 1.99278e-07 6.89543 1.50996e-07 8Z"
-							fill="white"
-						/>
-						<path
-							fill-rule="evenodd"
-							clip-rule="evenodd"
-							d="M1.50996e-07 14C1.02714e-07 15.1046 0.89543 16 2 16C3.10457 16 4 15.1046 4 14C4 12.8954 3.10457 12 2 12C0.895431 12 1.99278e-07 12.8954 1.50996e-07 14Z"
-							fill="white"
-						/>
-					</svg>
-					<slot id="bottomBarMenu" name="bottom-bar-menu">
-						${map(
-							calculateDistribution(),
-							(item) => html`
-								<paper-button @click=${() => item.victim.click()}
-									>${item.text}</paper-button
-								>
-							`,
-						)}
-					</slot>
-				</cosmoz-dropdown-menu>
-				<slot name="extra" id="extraSlot"></slot>
-			</div>
+
+			<cosmoz-dropdown-menu id="dropdown">
+				<svg
+					slot="button"
+					width="4"
+					height="16"
+					viewBox="0 0 4 16"
+					fill="none"
+					xmlns="http://www.w3.org/2000/svg"
+				>
+					<path
+						fill-rule="evenodd"
+						clip-rule="evenodd"
+						d="M1.50996e-07 2C1.02714e-07 3.10457 0.89543 4 2 4C3.10457 4 4 3.10457 4 2C4 0.89543 3.10457 -3.91405e-08 2 -8.74228e-08C0.895431 -1.35705e-07 1.99278e-07 0.89543 1.50996e-07 2Z"
+						fill="white"
+					/>
+					<path
+						fill-rule="evenodd"
+						clip-rule="evenodd"
+						d="M1.50996e-07 8C1.02714e-07 9.10457 0.89543 10 2 10C3.10457 10 4 9.10457 4 8C4 6.89543 3.10457 6 2 6C0.895431 6 1.99278e-07 6.89543 1.50996e-07 8Z"
+						fill="white"
+					/>
+					<path
+						fill-rule="evenodd"
+						clip-rule="evenodd"
+						d="M1.50996e-07 14C1.02714e-07 15.1046 0.89543 16 2 16C3.10457 16 4 15.1046 4 14C4 12.8954 3.10457 12 2 12C0.895431 12 1.99278e-07 12.8954 1.50996e-07 14Z"
+						fill="white"
+					/>
+				</svg>
+				<slot id="bottomBarMenu" name="bottom-bar-menu">
+					${map(
+						calculateDistribution(),
+						(item) => html`
+							<paper-button @click=${() => item.toolbarButton.click()}
+								>${item.text}</paper-button
+							>
+						`,
+					)}
+				</slot>
+			</cosmoz-dropdown-menu>
+			<slot name="extra" id="extraSlot"></slot>
 		</div>
 		<div hidden style="display:none">
 			<slot id="content"></slot>
