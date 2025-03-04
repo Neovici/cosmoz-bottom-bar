@@ -6,77 +6,70 @@ import '@polymer/paper-button/paper-button.js';
 import { component, useState } from '@pionjs/pion';
 import { map } from 'lit-html/directives/map.js';
 
+interface CosmozBottomBarStoryProps {
+	active?: boolean;
+	maxToolbarItems?: number;
+}
+
 const CosmozBottomBarStory = ({
 	active,
 	maxToolbarItems,
-	hideButton1,
-	hideButton2,
-	hideButton3,
-	hideButton4,
-	hideButton5,
 }: {
 	active?: boolean;
 	maxToolbarItems?: number;
-	hideButton1?: boolean;
-	hideButton2?: boolean;
-	hideButton3?: boolean;
-	hideButton4?: boolean;
-	hideButton5?: boolean;
 }) => {
 	const [inputValue, setInputValue] = useState(0);
 	const [buttons, setButtons] = useState<
 		{
-			hidden: boolean;
 			onClick: () => void;
 			priority: number;
 			text: string;
 		}[]
 	>([
 		{
-			hidden: false,
 			onClick: () => console.log('!!Button 1 clicked'),
 			priority: 1,
 			text: 'Button 1',
 		},
 		{
-			hidden: false,
 			onClick: () => console.log('!!Button 2 clicked'),
 			priority: 2,
 			text: 'Button 2',
 		},
 		{
-			hidden: false,
 			onClick: () => console.log('!!Button 3 clicked'),
 			priority: 3,
 			text: 'Button 3',
 		},
 		{
-			hidden: false,
 			onClick: () => console.log('!!Button 4 clicked'),
 			priority: 4,
 			text: 'Button 4',
 		},
 		{
-			hidden: false,
 			onClick: () => console.log('!!Button 5 clicked'),
 			priority: 5,
 			text: 'Button 5',
 		},
 	]);
 
+	const handleInput = (e: InputEvent) => {
+		const target = e.target as HTMLInputElement;
+		setInputValue(Number.parseInt(target.value, 10));
+	};
+
 	return html`
 		<input
 			value=${inputValue}
 			placeholder="priority"
 			type="number"
-			@input=${(e) => setInputValue(e.target.value)}
+			@input=${handleInput}
 		/>
 		<paper-button
 			@click=${() =>
 				setButtons([
 					...buttons,
 					{
-						hidden: false,
 						onClick: () => console.log('!!Button clicked'),
 						priority: +inputValue,
 						text: 'Button ' + inputValue,
@@ -100,7 +93,7 @@ const CosmozBottomBarStory = ({
 						data-priority=${btn.priority}
 						>${btn.text}</paper-button
 					>`,
-			)}()
+			)}
 		</cosmoz-bottom-bar>
 	`;
 };
@@ -108,27 +101,14 @@ const CosmozBottomBarStory = ({
 customElements.define(
 	'cosmoz-bottom-bar-story',
 	component(CosmozBottomBarStory, {
-		observedAttributes: [
-			'active',
-			'maxToolbarItems',
-			'hideButton1',
-			'hideButton2',
-			'hideButton3',
-			'hideButton4',
-			'hideButton5',
-		],
+		observedAttributes: ['active', 'max-toolbar-items'],
 	}),
 );
 
-const CosmozBottomBarTemplate = (args) =>
+const CosmozBottomBarTemplate = (args: CosmozBottomBarStoryProps) =>
 	html`<cosmoz-bottom-bar-story
 		?active=${args.active}
 		.maxToolbarItems=${args.maxToolbarItems}
-		?hideButton1=${args.hideButton1}
-		?hideButton2=${args.hideButton2}
-		?hideButton3=${args.hideButton3}
-		?hideButton4=${args.hideButton4}
-		?hideButton5=${args.hideButton5}
 	></cosmoz-bottom-bar-story>`;
 
 const CosmozBottomBarEmptyTemplate = ({
@@ -153,11 +133,6 @@ const meta: Meta = {
 	argTypes: {
 		active: { control: 'boolean' },
 		maxToolbarItems: { control: 'number' },
-		hideButton1: { control: 'boolean' },
-		hideButton2: { control: 'boolean' },
-		hideButton3: { control: 'boolean' },
-		hideButton4: { control: 'boolean' },
-		hideButton5: { control: 'boolean' },
 	},
 	parameters: {
 		docs: {

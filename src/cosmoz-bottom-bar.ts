@@ -41,8 +41,17 @@ const style = css`
 		};
 	}
 
+	:host([force-open]) {
+		transition: none;
+	}
+
+	[hidden],
+	::slotted([hidden]) {
+		display: none !important;
+	}
+
 	#bar {
-		max-height: 64px;
+		height: 64px;
 		padding: 0 3%;
 		display: flex;
 		align-items: center;
@@ -50,11 +59,8 @@ const style = css`
 
 	#info {
 		flex: 0 0 auto;
-		min-width: 100px;
 		padding-right: 3%;
 		white-space: nowrap;
-		position: relative;
-		z-index: 2;
 	}
 
 	#buttonContainer {
@@ -68,7 +74,6 @@ const style = css`
 		margin: 0 8px;
 		min-width: 0;
 		max-height: 40px;
-		outline: 2px blue dashed;
 	}
 
 	#bottomBarToolbar::slotted(:not(slot):not([unstyled])) {
@@ -92,6 +97,18 @@ const style = css`
 		line-height: 40px;
 		overflow: hidden;
 		flex: 0 0 auto;
+	}
+
+	#bottomBarToolbar::slotted(:not(slot)[disabled]) {
+		opacity: var(--cosmoz-button-disabled-opacity, 0.15);
+		pointer-events: none;
+	}
+
+	#bottomBarToolbar::slotted(:not(slot):hover) {
+		background: var(
+			--cosmoz-bottom-bar-button-hover-bg-color,
+			var(--cosmoz-button-hover-bg-color, #3a3f44)
+		);
 	}
 
 	#dropdown::part(content) {
@@ -151,8 +168,6 @@ type Props = HTMLElement & {
 	active?: boolean;
 	maxToolbarItems?: number;
 };
-
-// TODO: Use order style attr to sort on priority
 
 const CosmozBottomBar = ({ active = false, maxToolbarItems = 1 }: Props) => {
 	const host = useHost();
@@ -272,9 +287,9 @@ const CosmozBottomBar = ({ active = false, maxToolbarItems = 1 }: Props) => {
 				<slot id="bottomBarMenu" name="bottom-bar-menu">
 					${map(
 						calculateDistribution(),
-						(item) => html`
-							<paper-button @click=${() => item.toolbarButton.click()}
-								>${item.text}</paper-button
+						(menuButton) => html`
+							<paper-button @click=${() => menuButton.toolbarButton.click()}
+								>${menuButton.text}</paper-button
 							>
 						`,
 					)}
