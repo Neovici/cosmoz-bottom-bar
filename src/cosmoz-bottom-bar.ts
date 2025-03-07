@@ -1,17 +1,113 @@
 /* eslint-disable max-len */
 /* eslint-disable max-lines */
 import { html } from 'lit-html';
-import { component, useLayoutEffect } from '@pionjs/pion';
+import { html as polymerHtml } from '@polymer/polymer/polymer-element.js';
+import { component, css, useLayoutEffect } from '@pionjs/pion';
 import { useHost } from '@neovici/cosmoz-utils/hooks/use-host';
-import { style } from './cosmoz-bottom-bar-next.style.js';
 import { toggleSize } from '@neovici/cosmoz-collapse/toggle';
 import { useActivity } from '@neovici/cosmoz-utils/keybindings/use-activity';
 import '@neovici/cosmoz-dropdown';
 
+const style = css`
+	:host {
+		display: block;
+		overflow: hidden;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		max-width: 100%; /* Firefox fix */
+		background-color: inherit;
+		transition: max-height 0.3s ease;
+		flex: none;
+		background-color: var(
+			--cosmoz-bottom-bar-bg-color,
+			rgba(230, 230, 230, 0.8)
+		);
+		box-shadow: var(--cosmoz-bottom-bar-shadow, none);
+		z-index: 1;
+
+		--cosmoz-dropdown-anchor-spacing: 12px 6px;
+		--paper-button: {
+			background-color: inherit;
+			text-transform: none;
+			border: 0;
+			border-radius: 0;
+			font-size: inherit;
+			color: inherit;
+			font-weight: inherit;
+			margin: 0;
+			padding: 0;
+		};
+	}
+	:host([force-open]) {
+		transition: none;
+	}
+	[hidden],
+	::slotted([hidden]) {
+		display: none !important;
+	}
+	#bar {
+		height: 64px;
+		padding: 0 3%;
+		display: flex;
+		align-items: center;
+	}
+	#info {
+		min-width: 5px;
+		padding-right: 3%;
+		margin-right: auto;
+		white-space: nowrap;
+	}
+	#bottomBarToolbar::slotted(:not(slot):not([unstyled])) {
+		margin: 0 0.29em;
+		min-width: 40px;
+		min-height: 40px;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		background: var(
+			--cosmoz-bottom-bar-button-bg-color,
+			var(--cosmoz-button-bg-color, #101010)
+		);
+		color: var(
+			--cosmoz-bottom-bar-button-color,
+			var(--cosmoz-button-color, #fff)
+		);
+		border-radius: 6px;
+		padding: 0 18px;
+		font-size: 14px;
+		font-weight: 500;
+		line-height: 40px;
+	}
+
+	#bottomBarToolbar::slotted(:not(slot)[disabled]) {
+		opacity: var(--cosmoz-button-disabled-opacity, 0.15);
+		pointer-events: none;
+	}
+	#bottomBarToolbar::slotted(:not(slot):hover) {
+		background: var(
+			--cosmoz-bottom-bar-button-hover-bg-color,
+			var(--cosmoz-button-hover-bg-color, #3a3f44)
+		);
+	}
+	#dropdown::part(content) {
+		max-width: 300px;
+	}
+
+	:host([hide-actions]) #bottomBarToolbar,
+	:host([hide-actions]) #bottomBarMenu,
+	:host([hide-actions]) #dropdown {
+		display: none;
+	}
+
+	:host(:not([has-menu-items])) cosmoz-dropdown-menu {
+		display: none;
+	}
+`;
+
 const BOTTOM_BAR_TOOLBAR_SLOT = 'bottom-bar-toolbar';
 const BOTTOM_BAR_MENU_SLOT = 'bottom-bar-menu';
 
-const _moveElement = (element, toToolbar) => {
+const _moveElement = (element: HTMLElement, toToolbar: boolean) => {
 	const slot = toToolbar ? BOTTOM_BAR_TOOLBAR_SLOT : BOTTOM_BAR_MENU_SLOT;
 	const tabindex = '0';
 
@@ -19,59 +115,53 @@ const _moveElement = (element, toToolbar) => {
 	element.setAttribute('tabindex', tabindex);
 };
 
-const _isActionNode = (node) => {
+const _isActionNode = (node: Node): node is HTMLElement => {
+	if (node.nodeType !== Node.ELEMENT_NODE) {
+		return false;
+	}
+
+	const element = node as HTMLElement;
+
 	return (
-		node.nodeType === Node.ELEMENT_NODE &&
-		node.getAttribute('slot') !== 'info' &&
-		node.tagName !== 'TEMPLATE' &&
-		node.tagName !== 'STYLE' &&
-		node.tagName !== 'DOM-REPEAT' &&
-		node.tagName !== 'DOM-IF' &&
-		node.getAttribute('slot') !== 'extra'
+		!['extra', 'info'].includes(element.getAttribute('slot') ?? '') &&
+		!['TEMPLATE', 'STYLE', 'DOM-REPEAT', 'DOM-IF'].includes(element.tagName)
 	);
 };
 
-const getFlattenedNodes = (element) => {
-	const childNodes = [...element.childNodes];
+const getFlattenedNodes = (element: HTMLElement): Node[] => {
+	const childNodes = Array.from(element.childNodes);
 
 	for (let i = 0; i < element.childNodes.length; i++) {
-		const node = element.childNodes[i];
-		if (node.tagName === 'SLOT') {
-			// remove current slot element
-			childNodes.splice(i, 1);
+		const node = childNodes[i];
+		if (!(node instanceof HTMLSlotElement)) continue;
 
-			// append slot elements to the current index
-			const slotElements = node.assignedElements({ flatten: true });
-			for (let j = 0; j < slotElements.length; j++) {
-				const slotElement = slotElements[j];
-
-				childNodes.splice(i + j, 0, slotElement);
-			}
-		}
+		// replace the slot node with its assigned elements
+		const slottedElements = node.assignedElements({ flatten: true });
+		childNodes.splice(i, 1, ...slottedElements);
+		i += slottedElements.length - 1;
 	}
 
 	return childNodes;
 };
 
-const _getElements = (host) => {
+const _getElements = (host: HTMLElement): HTMLElement[] => {
 	const elements = getFlattenedNodes(host)
 		.filter(_isActionNode)
 		.filter((element) => !element.hidden)
-		.sort((a, b) => (a.dataset.index ?? 0) - (b.dataset.index ?? 0));
+		.sort(
+			(a, b) => Number(a.dataset.index ?? 0) - Number(b.dataset.index ?? 0),
+		);
 
 	if (elements.length === 0) {
 		return elements;
 	}
 
 	const topPriorityAction = elements.reduce(
-		(top, element) => {
-			return parseInt(top.dataset.priority ?? 0, 10) >=
-				parseInt(element.dataset.priority ?? 0, 10)
+		(top, element) =>
+			Number(top.dataset.priority ?? 0) >= Number(element.dataset.priority ?? 0)
 				? top
-				: element;
-		},
-		{ dataset: { priority: '-1000' } },
-		[],
+				: element,
+		elements[0],
 	);
 
 	return [
@@ -102,7 +192,7 @@ const _getElements = (host) => {
  * @param {*} maxToolbarItems Maximum items for the toolbar
  * @returns {void}
  */
-const _layoutActions = (host, maxToolbarItems) => {
+const _layoutActions = (host: HTMLElement, maxToolbarItems: number) => {
 	// eslint-disable-line max-statements
 	const elements = _getElements(host);
 	const hasActions = elements.length > 0;
@@ -116,22 +206,26 @@ const _layoutActions = (host, maxToolbarItems) => {
 	const menuElements = elements.slice(toolbarElements.length);
 
 	toolbarElements.forEach((el) => _moveElement(el, true));
-	menuElements.forEach((el) => _moveElement(el));
+	menuElements.forEach((el) => _moveElement(el, false));
 	host.toggleAttribute('has-menu-items', menuElements.length > 0);
 };
 
 export const openMenu = Symbol('openMenu');
 
-const openActionsMenu = (host) => {
-	const dropdown = host.shadowRoot.querySelector('#dropdown');
+const openActionsMenu = (host: HTMLElement) => {
+	const dropdown = host.shadowRoot?.querySelector('#dropdown');
 
-	if (dropdown.hasAttribute('hidden')) return;
+	if (!dropdown || dropdown.hasAttribute('hidden')) return;
 
 	//TODO: Clean up when open function is implemented for cosmoz-dropdown-menu
-	dropdown.shadowRoot
-		.querySelector('cosmoz-dropdown')
-		.shadowRoot.getElementById('dropdownButton')
-		.click();
+	const cosmozDropdown =
+			dropdown.shadowRoot?.querySelector<HTMLElement>('cosmoz-dropdown'),
+		button =
+			cosmozDropdown?.shadowRoot?.querySelector<HTMLButtonElement>(
+				'#dropdownButton',
+			);
+
+	button?.click();
 };
 
 /**
@@ -153,18 +247,23 @@ const openActionsMenu = (host) => {
  * @element cosmoz-bottom-bar
  * @demo demo/bottom-bar-next.html Basic Demo
  */
-// eslint-disable-next-line max-statements
-const CosmozBottomBar = ({ active = false, maxToolbarItems = 1 }) => {
+
+type Props = HTMLElement & {
+	active?: boolean;
+	maxToolbarItems?: number;
+};
+
+const CosmozBottomBar = ({ active = false, maxToolbarItems = 1 }: Props) => {
 	const host = useHost();
 
 	useActivity(
 		{
 			activity: openMenu,
 			callback: () => openActionsMenu(host),
-			check: () => host.active && !host.hasAttribute('hide-actions'),
-			element: () => host.shadowRoot.querySelector('#dropdown'),
+			check: () => active && !host.hasAttribute('hide-actions'),
+			element: () => host.shadowRoot?.querySelector('#dropdown'),
 		},
-		[host.active],
+		[active],
 	);
 
 	const toggle = toggleSize('height');
@@ -224,9 +323,18 @@ const CosmozBottomBar = ({ active = false, maxToolbarItems = 1 }) => {
 export default CosmozBottomBar;
 
 customElements.define(
-	'cosmoz-bottom-bar-next',
+	'cosmoz-bottom-bar',
 	component(CosmozBottomBar, {
 		observedAttributes: ['active'],
 		styleSheets: [style],
 	}),
 );
+
+const tmplt = `
+	<slot name="extra" slot="extra"></slot>
+	<slot name="bottom-bar-toolbar" slot="bottom-bar-toolbar"></slot>
+	<slot name="bottom-bar-menu" slot="bottom-bar-menu"></slot>
+`;
+
+export const bottomBarSlots = html(Object.assign([tmplt], { raw: [tmplt] })),
+	bottomBarSlotsPolymer = polymerHtml(Object.assign([tmplt], { raw: [tmplt] }));
