@@ -18,7 +18,7 @@ const CosmozBottomBarStory = ({
 	active?: boolean;
 	maxToolbarItems?: number;
 }) => {
-	const [inputValue, setInputValue] = useState(0);
+	const [inputValue, setInputValue] = useState<string>('');
 	const [buttons, setButtons] = useState<
 		{
 			onClick: () => void;
@@ -55,28 +55,34 @@ const CosmozBottomBarStory = ({
 
 	const handleInput = (e: InputEvent) => {
 		const target = e.target as HTMLInputElement;
-		setInputValue(Number.parseInt(target.value, 10));
+		setInputValue(target.value);
+	};
+
+	const addButton = () => {
+		if (!inputValue) {
+			return;
+		}
+
+		setButtons([
+			...buttons,
+			{
+				onClick: () => console.log('!!Button ' + inputValue + ' clicked'),
+				priority: +inputValue,
+				text: 'Button ' + inputValue,
+			},
+		]);
+		setInputValue('');
 	};
 
 	return html`
 		<input
-			value=${inputValue}
+			.value=${inputValue}
 			placeholder="priority"
 			type="number"
 			@input=${handleInput}
+			@keypress=${(e: KeyboardEvent) => e.key === 'Enter' && addButton()}
 		/>
-		<paper-button
-			@click=${() =>
-				setButtons([
-					...buttons,
-					{
-						onClick: () => console.log('!!Button clicked'),
-						priority: +inputValue,
-						text: 'Button ' + inputValue,
-					},
-				])}
-			>Add btn</paper-button
-		>
+		<paper-button @click=${addButton}>Add btn</paper-button>
 
 		<cosmoz-bottom-bar
 			id="bottomBar"

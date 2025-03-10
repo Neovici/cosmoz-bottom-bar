@@ -2,7 +2,13 @@
 import { html } from 'lit-html';
 import { map } from 'lit-html/directives/map.js';
 import { html as polymerHtml } from '@polymer/polymer/polymer-element.js';
-import { component, css, useLayoutEffect, useState } from '@pionjs/pion';
+import {
+	component,
+	css,
+	useLayoutEffect,
+	useMemo,
+	useState,
+} from '@pionjs/pion';
 import { useHost } from '@neovici/cosmoz-utils/hooks/use-host';
 import { toggleSize } from '@neovici/cosmoz-collapse/toggle';
 import { useActivity } from '@neovici/cosmoz-utils/keybindings/use-activity';
@@ -189,7 +195,7 @@ const CosmozBottomBar = ({ active = false, maxToolbarItems = 1 }: Props) => {
 		[active],
 	);
 
-	const calculateDistribution = () => {
+	const calculateDistribution = useMemo(() => {
 		const allButtons = [...buttonStates.visible, ...buttonStates.overflown];
 
 		if (!allButtons.length) {
@@ -214,8 +220,13 @@ const CosmozBottomBar = ({ active = false, maxToolbarItems = 1 }: Props) => {
 
 		processedButtons.forEach(({ element, priority }, i) => {
 			const isVisible = i < toolbarLimit;
-			element.style.visibility = isVisible ? 'visible' : 'hidden';
-			element.style.order = isVisible ? String(-priority) : 'unset';
+
+			if (isVisible) {
+				element.style.visibility = 'visible';
+				element.style.order = String(-priority);
+			} else {
+				element.style.visibility = 'hidden';
+			}
 		});
 
 		const menuButtons = processedButtons
@@ -228,7 +239,7 @@ const CosmozBottomBar = ({ active = false, maxToolbarItems = 1 }: Props) => {
 		host.toggleAttribute('has-menu-items', menuButtons.length > 0);
 
 		return menuButtons;
-	};
+	}, [buttonStates]);
 
 	const handleOverflow = (
 		visible: Set<HTMLElement>,
@@ -286,7 +297,7 @@ const CosmozBottomBar = ({ active = false, maxToolbarItems = 1 }: Props) => {
 				</svg>
 				<slot id="bottomBarMenu" name="bottom-bar-menu">
 					${map(
-						calculateDistribution(),
+						calculateDistribution,
 						(menuButton) => html`
 							<paper-button @click=${() => menuButton.toolbarButton.click()}
 								>${menuButton.text}</paper-button

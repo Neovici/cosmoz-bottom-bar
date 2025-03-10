@@ -1,5 +1,6 @@
 import { AttributePart, noChange } from 'lit-html';
-import { Directive, directive, DirectiveResult } from 'lit-html/directive.js';
+import { AsyncDirective } from 'lit-html/async-directive.js';
+import { directive, DirectiveResult } from 'lit-html/directive.js';
 
 type OnOverflow = (
 	visibleElements: Set<HTMLElement>,
@@ -10,17 +11,20 @@ function isEntryHidden(el: IntersectionObserverEntry) {
 	return el.boundingClientRect.height === 0;
 }
 
-class OverflowDirective extends Directive {
+class OverflowDirective extends AsyncDirective {
 	_observer?: IntersectionObserver;
-	_container?: HTMLElement | null;
+	_partRef?: HTMLSlotElement | null;
 
 	render() {
 		return noChange;
 	}
 
 	update(part: AttributePart, [onOverflow]: [OnOverflow]) {
+		if (part.element.tagName !== 'SLOT') {
+			throw new Error('Overflow directive must be used on a slot element');
+		}
+
 		const slot = part.element as HTMLSlotElement;
-		this._container = slot.parentElement;
 
 		slot.addEventListener('slotchange', () => {
 			this.overflow(slot, onOverflow);
@@ -51,15 +55,26 @@ class OverflowDirective extends Directive {
 						visibleElements.delete(el);
 						overflownElements.add(el);
 					}
-
-					onOverflow(visibleElements, overflownElements);
 				});
+				onOverflow(visibleElements, overflownElements);
 			},
-			{ root: this._container, threshold: 1 },
+			{ root: this._partRef?.parentElement, threshold: 1 },
 		);
 
 		for (const c of elements) {
 			this._observer.observe(c);
+		}
+	}
+
+	disconnected() {
+		this._observer?.disconnect();
+	}
+
+	reconnected(): void {
+		if (this._partRef) {
+			for (const c of this._partRef.assignedElements()) {
+				this._observer?.observe(c);
+			}
 		}
 	}
 }
