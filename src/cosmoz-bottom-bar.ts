@@ -5,11 +5,11 @@ import { html as polymerHtml } from '@polymer/polymer/polymer-element.js';
 import {
 	component,
 	css,
+	useEffect,
 	useLayoutEffect,
 	useMemo,
 	useState,
 } from '@pionjs/pion';
-import { useHost } from '@neovici/cosmoz-utils/hooks/use-host';
 import { toggleSize } from '@neovici/cosmoz-collapse/toggle';
 import { useActivity } from '@neovici/cosmoz-utils/keybindings/use-activity';
 import '@neovici/cosmoz-dropdown';
@@ -170,20 +170,65 @@ const openActionsMenu = (host: HTMLElement) => {
  * @demo demo/bottom-bar-next.html Basic Demo
  */
 
-type Props = HTMLElement & {
+type Host = HTMLElement & {
 	active?: boolean;
 	maxToolbarItems?: number;
 };
 
-const CosmozBottomBar = ({ active = false, maxToolbarItems = 1 }: Props) => {
-	const host = useHost();
-	const [buttonStates, setButtonStates] = useState<{
-		visible: Set<HTMLElement>;
-		overflown: Set<HTMLElement>;
-	}>({
-		visible: new Set(),
-		overflown: new Set(),
+const useMenuButtons = (host: Host) => {
+	const [buttonStates, setButtonStates] = useState({
+		visible: new Set<HTMLElement>(),
+		overflowing: new Set<HTMLElement>(),
 	});
+
+	const allButtons = useMemo(
+		() => [...buttonStates.visible, ...buttonStates.overflowing],
+		[buttonStates],
+	);
+
+	const processedButtons = useMemo(
+		() =>
+			allButtons
+				.map((btn) => ({
+					element: btn,
+					priority: Number(btn.dataset.priority ?? 0),
+					text: btn.textContent?.trim() || '',
+				}))
+				.toSorted((a, b) => b.priority - a.priority),
+		[allButtons],
+	);
+
+	const { maxToolbarItems = 1 } = host;
+	const toolbarLimit = Math.min(
+		maxToolbarItems,
+		buttonStates.visible.size >= 0
+			? buttonStates.visible.size
+			: allButtons.length,
+	);
+	
+
+	useEffect(() => {
+		processedButtons.forEach(({ element, priority }, i) => {
+			const isVisible = i < toolbarLimit;
+			element.style.visibility = isVisible ? 'visible' : 'hidden';
+			element.style.order = String(-priority);
+		});
+	}, [processedButtons, toolbarLimit]);
+
+	const menuButtons = useMemo(
+		() => processedButtons.slice(toolbarLimit),
+		[processedButtons, toolbarLimit],
+	);
+
+	useEffect(() => {
+		host.toggleAttribute('has-menu-items', menuButtons.length > 0);
+	}, [menuButtons.length]);
+
+	return { setButtonStates, menuButtons };
+};
+
+const CosmozBottomBar = (host: Host) => {
+	const { active = false } = host;
 
 	useActivity(
 		{
@@ -195,63 +240,9 @@ const CosmozBottomBar = ({ active = false, maxToolbarItems = 1 }: Props) => {
 		[active],
 	);
 
-	const calculateDistribution = useMemo(() => {
-		const allButtons = [...buttonStates.visible, ...buttonStates.overflown];
+	const { setButtonStates, menuButtons } = useMenuButtons(host);
 
-		if (!allButtons.length) {
-			return [];
-		}
-
-		const processedButtons = allButtons
-			.map((btn) => ({
-				element: btn,
-				priority: Number(btn.dataset.priority ?? 0),
-			}))
-			.sort((a, b) => {
-				return b.priority - a.priority;
-			});
-
-		const toolbarLimit = Math.min(
-			maxToolbarItems,
-			buttonStates.visible.size >= 0
-				? buttonStates.visible.size
-				: allButtons.length,
-		);
-
-		processedButtons.forEach(({ element, priority }, i) => {
-			const isVisible = i < toolbarLimit;
-
-			if (isVisible) {
-				element.style.visibility = 'visible';
-				element.style.order = String(-priority);
-			} else {
-				element.style.visibility = 'hidden';
-			}
-		});
-
-		const menuButtons = processedButtons
-			.slice(toolbarLimit)
-			.map(({ element }) => ({
-				toolbarButton: element,
-				text: element.textContent?.trim() || '',
-			}));
-
-		host.toggleAttribute('has-menu-items', menuButtons.length > 0);
-
-		return menuButtons;
-	}, [buttonStates]);
-
-	const handleOverflow = (
-		visible: Set<HTMLElement>,
-		overflown: Set<HTMLElement>,
-	) => {
-		setButtonStates({
-			visible,
-			overflown,
-		});
-	};
-
-	const toggle = toggleSize('height');
+	const toggle = useMemo(() => toggleSize('height'), []);
 
 	useLayoutEffect(() => {
 		toggle(host, active);
@@ -263,7 +254,7 @@ const CosmozBottomBar = ({ active = false, maxToolbarItems = 1 }: Props) => {
 				<slot
 					id="bottomBarToolbar"
 					name="bottom-bar-toolbar"
-					${overflow(handleOverflow)}
+					${overflow(setButtonStates)}
 				></slot>
 			</div>
 
@@ -297,9 +288,9 @@ const CosmozBottomBar = ({ active = false, maxToolbarItems = 1 }: Props) => {
 				</svg>
 				<slot id="bottomBarMenu" name="bottom-bar-menu">
 					${map(
-						calculateDistribution,
+						menuButtons,
 						(menuButton) => html`
-							<paper-button @click=${() => menuButton.toolbarButton.click()}
+							<paper-button @click=${() => menuButton.element.click()}
 								>${menuButton.text}</paper-button
 							>
 						`,

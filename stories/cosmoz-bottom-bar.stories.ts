@@ -1,54 +1,49 @@
-/* eslint-disable no-console */
+/* eslint-disable no-alert */
 import type { Meta, StoryObj } from '@storybook/web-components';
 import { html } from 'lit-html';
 import '../src/cosmoz-bottom-bar';
 import '@polymer/paper-button/paper-button.js';
 import { component, useState } from '@pionjs/pion';
 import { map } from 'lit-html/directives/map.js';
+import { ifDefined } from 'lit-html/directives/if-defined.js';
 
 interface CosmozBottomBarStoryProps {
 	active?: boolean;
 	maxToolbarItems?: number;
 }
 
-const CosmozBottomBarStory = ({
-	active,
-	maxToolbarItems,
-}: {
-	active?: boolean;
-	maxToolbarItems?: number;
-}) => {
+const CosmozBottomBarStory = (
+	host: HTMLElement & CosmozBottomBarStoryProps,
+) => {
+	const { active, maxToolbarItems } = host;
 	const [inputValue, setInputValue] = useState<string>('');
 	const [buttons, setButtons] = useState<
 		{
 			onClick: () => void;
-			priority: number;
+			priority?: number;
 			text: string;
 		}[]
 	>([
 		{
-			onClick: () => console.log('!!Button 1 clicked'),
-			priority: 1,
+			onClick: () => alert('!!Button 1 clicked'),
+			priority: 10,
 			text: 'Button 1',
 		},
 		{
-			onClick: () => console.log('!!Button 2 clicked'),
-			priority: 2,
+			onClick: () => alert('!!Button 2 clicked'),
 			text: 'Button 2',
 		},
 		{
-			onClick: () => console.log('!!Button 3 clicked'),
-			priority: 3,
+			onClick: () => alert('!!Button 3 clicked'),
 			text: 'Button 3',
 		},
 		{
-			onClick: () => console.log('!!Button 4 clicked'),
-			priority: 4,
+			onClick: () => alert('!!Button 4 clicked'),
+			priority: 5,
 			text: 'Button 4',
 		},
 		{
-			onClick: () => console.log('!!Button 5 clicked'),
-			priority: 5,
+			onClick: () => alert('!!Button 5 clicked'),
 			text: 'Button 5',
 		},
 	]);
@@ -66,12 +61,17 @@ const CosmozBottomBarStory = ({
 		setButtons([
 			...buttons,
 			{
-				onClick: () => console.log('!!Button ' + inputValue + ' clicked'),
+				onClick: () => alert('!!Button ' + inputValue + ' clicked'),
 				priority: +inputValue,
 				text: 'Button ' + inputValue,
 			},
 		]);
 		setInputValue('');
+	};
+
+	const reconnect = () => {
+		const node = host.shadowRoot!.querySelector('cosmoz-bottom-bar')!;
+		host.shadowRoot!.appendChild(node);
 	};
 
 	return html`
@@ -83,6 +83,7 @@ const CosmozBottomBarStory = ({
 			@keypress=${(e: KeyboardEvent) => e.key === 'Enter' && addButton()}
 		/>
 		<paper-button @click=${addButton}>Add btn</paper-button>
+		<paper-button @click=${reconnect}>Test reconnect</paper-button>
 
 		<cosmoz-bottom-bar
 			id="bottomBar"
@@ -96,7 +97,7 @@ const CosmozBottomBarStory = ({
 					html`<paper-button
 						slot="bottom-bar-toolbar"
 						@click=${btn.onClick}
-						data-priority=${btn.priority}
+						data-priority=${ifDefined(btn.priority)}
 						>${btn.text}</paper-button
 					>`,
 			)}

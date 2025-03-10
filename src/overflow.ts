@@ -1,19 +1,26 @@
 import { AttributePart, noChange } from 'lit-html';
 import { AsyncDirective } from 'lit-html/async-directive.js';
-import { directive, DirectiveResult } from 'lit-html/directive.js';
+import { directive, DirectiveResult, PartInfo } from 'lit-html/directive.js';
 
-type OnOverflow = (
-	visibleElements: Set<HTMLElement>,
-	overflownElements: Set<HTMLElement>,
-) => void;
+type OnOverflow = (opts: {
+	visible: Set<HTMLElement>;
+	overflowing: Set<HTMLElement>;
+}) => void;
 
 function isEntryHidden(el: IntersectionObserverEntry) {
 	return el.boundingClientRect.height === 0;
 }
 
 class OverflowDirective extends AsyncDirective {
-	_observer?: IntersectionObserver;
-	_partRef?: HTMLSlotElement | null;
+	observer?: IntersectionObserver;
+	slot?: HTMLSlotElement;
+	onOverflow?: OnOverflow;
+
+	constructor(part: PartInfo) {
+		super(part);
+
+		this.setupObserver = this.setupObserver.bind(this);
+	}
 
 	render() {
 		return noChange;
@@ -24,58 +31,74 @@ class OverflowDirective extends AsyncDirective {
 			throw new Error('Overflow directive must be used on a slot element');
 		}
 
-		const slot = part.element as HTMLSlotElement;
+		this.onOverflow = onOverflow;
 
-		slot.addEventListener('slotchange', () => {
-			this.overflow(slot, onOverflow);
-		});
+		const hasChanged = this.slot !== part.element;
+		if (hasChanged) {
+			this.slot = part.element as HTMLSlotElement;
+			this.setupListener();
+		}
 
 		return noChange;
 	}
 
-	overflow(element: HTMLSlotElement, onOverflow: OnOverflow) {
-		this._observer?.disconnect();
+	setupListener() {
+		this.teardownListener();
+		this.slot?.addEventListener('slotchange', this.setupObserver);
+	}
 
-		const elements = Array.from(element.assignedElements()) as HTMLElement[];
-		const visibleElements: Set<HTMLElement> = new Set();
-		const overflownElements: Set<HTMLElement> = new Set();
+	teardownListener() {
+		this.slot?.removeEventListener('slotchange', this.setupObserver);
+	}
 
-		this._observer = new IntersectionObserver(
+	setupObserver() {
+		if (!this.slot || !this.onOverflow) return;
+		const { slot, onOverflow } = this;
+		this.teardownObserver();
+
+		const visible: Set<HTMLElement> = new Set();
+		const overflowing: Set<HTMLElement> = new Set();
+
+		this.observer = new IntersectionObserver(
 			(entries) => {
 				entries.forEach((entry) => {
 					const el = entry.target as HTMLElement;
 
 					if (entry.intersectionRatio === 1) {
-						visibleElements.add(el);
-						overflownElements.delete(el);
+						visible.add(el);
+						overflowing.delete(el);
 					} else if (isEntryHidden(entry)) {
-						visibleElements.delete(el);
-						overflownElements.delete(el);
+						visible.delete(el);
+						overflowing.delete(el);
 					} else {
-						visibleElements.delete(el);
-						overflownElements.add(el);
+						visible.delete(el);
+						overflowing.add(el);
 					}
 				});
-				onOverflow(visibleElements, overflownElements);
+
+				onOverflow({ visible, overflowing });
 			},
-			{ root: this._partRef?.parentElement, threshold: 1 },
+			{ root: slot.parentElement, threshold: 1 },
 		);
 
+		const elements = Array.from(slot.assignedElements()) as HTMLElement[];
 		for (const c of elements) {
-			this._observer.observe(c);
+			this.observer.observe(c);
 		}
+	}
+
+	teardownObserver() {
+		this.observer?.disconnect();
 	}
 
 	disconnected() {
-		this._observer?.disconnect();
+		this.teardownListener();
+		this.teardownObserver();
 	}
 
 	reconnected(): void {
-		if (this._partRef) {
-			for (const c of this._partRef.assignedElements()) {
-				this._observer?.observe(c);
-			}
-		}
+		this.setupListener();
+		this.setupObserver();
 	}
 }
 
