@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { html } from 'lit-html';
+import { ChildPart, html } from 'lit-html';
 import { map } from 'lit-html/directives/map.js';
 import { html as polymerHtml } from '@polymer/polymer/polymer-element.js';
 import {
@@ -14,6 +14,7 @@ import { toggleSize } from '@neovici/cosmoz-collapse/toggle';
 import { useActivity } from '@neovici/cosmoz-utils/keybindings/use-activity';
 import '@neovici/cosmoz-dropdown';
 import overflow from './overflow';
+import { asyncDirective } from './async-directive';
 
 const style = css`
 	:host {
@@ -227,6 +228,18 @@ const useMenuButtons = (host: Host) => {
 	return { setButtonStates, menuButtons };
 };
 
+const testtt = asyncDirective((part: ChildPart, [start]: [number]) => {
+	const [state, setState] = useState(start);
+
+	useEffect(() => {
+		const t = setInterval(() => setState((t) => t + 1), 1000);
+		return () => clearInterval(t);
+	}, []);
+
+	return state;
+});
+
+
 const CosmozBottomBar = (host: Host) => {
 	const { active = false } = host;
 
@@ -248,7 +261,7 @@ const CosmozBottomBar = (host: Host) => {
 		toggle(host, active);
 	}, [active]);
 
-	return html`<div id="bar" part="bar">
+	return html`<div id="bar" part="bar">${testtt(10)}
 			<div id="info" part="info"><slot name="info"></slot></div>
 			<div id="buttonContainer">
 				<slot
