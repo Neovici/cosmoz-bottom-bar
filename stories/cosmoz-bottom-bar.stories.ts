@@ -1,11 +1,11 @@
 /* eslint-disable no-alert */
+import { component, useState } from '@pionjs/pion';
+import '@polymer/paper-button/paper-button.js';
 import type { Meta, StoryObj } from '@storybook/web-components';
 import { html } from 'lit-html';
-import '../src/cosmoz-bottom-bar';
-import '@polymer/paper-button/paper-button.js';
-import { component, useState } from '@pionjs/pion';
-import { map } from 'lit-html/directives/map.js';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
+import { map } from 'lit-html/directives/map.js';
+import '../src/cosmoz-bottom-bar';
 
 interface CosmozBottomBarStoryProps {
 	active?: boolean;

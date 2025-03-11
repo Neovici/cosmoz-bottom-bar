@@ -1,0 +1,28 @@
+diff --git a/node_modules/@pionjs/pion/lib/core.d.ts b/node_modules/@pionjs/pion/lib/core.d.ts
+index 2503699..532bb71 100644
+--- a/node_modules/@pionjs/pion/lib/core.d.ts
++++ b/node_modules/@pionjs/pion/lib/core.d.ts
+@@ -2,8 +2,8 @@ import { ChildPart } from "lit-html";
+ import { ComponentCreator } from "./component";
+ import { ContextCreator } from "./create-context";
+ type Component<P> = HTMLElement & P;
+-type ComponentOrVirtualComponent<T extends HTMLElement | ChildPart, P extends object> = T extends HTMLElement ? Component<P> : ChildPart;
+-type GenericRenderer<T extends HTMLElement | ChildPart, P extends object = {}> = (this: ComponentOrVirtualComponent<T, P>, ...args: any[]) => unknown | void;
++type ComponentOrVirtualComponent<T, P extends object> = T extends HTMLElement ? Component<P> : T;
++type GenericRenderer<T, P extends object = {}> = (this: ComponentOrVirtualComponent<T, P>, ...args: any[]) => unknown | void;
+ type RenderResult = {
+     setConnected: (isConnected: boolean) => void;
+ };
+diff --git a/node_modules/@pionjs/pion/lib/scheduler.d.ts b/node_modules/@pionjs/pion/lib/scheduler.d.ts
+index b2f28b0..082febb 100644
+--- a/node_modules/@pionjs/pion/lib/scheduler.d.ts
++++ b/node_modules/@pionjs/pion/lib/scheduler.d.ts
+@@ -2,7 +2,7 @@ import { State } from "./state";
+ import { commitSymbol, phaseSymbol, updateSymbol, effectsSymbol, Phase, EffectsSymbols } from "./symbols";
+ import { GenericRenderer, ComponentOrVirtualComponent } from "./core";
+ import { ChildPart } from "lit-html";
+-declare abstract class BaseScheduler<P extends object, T extends HTMLElement | ChildPart, R extends GenericRenderer<T, P>, H extends ComponentOrVirtualComponent<T, P>> {
++declare abstract class BaseScheduler<P extends object, T, R extends GenericRenderer<T, P>, H extends ComponentOrVirtualComponent<T, P>> {
+     renderer: R;
+     host: H;
+     state: State<H>;
