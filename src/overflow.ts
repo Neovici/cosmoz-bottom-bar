@@ -96,7 +96,7 @@ class OverflowDirective extends AsyncDirective {
 		this.teardownObserver();
 	}
 
-	reconnected(): void {
+	reconnected() {
 		this.setupListener();
 		this.setupObserver();
 	}

@@ -205,7 +205,6 @@ const useMenuButtons = (host: Host) => {
 			? buttonStates.visible.size
 			: allButtons.length,
 	);
-	
 
 	useEffect(() => {
 		processedButtons.forEach(({ element, priority }, i) => {
@@ -216,7 +215,14 @@ const useMenuButtons = (host: Host) => {
 	}, [processedButtons, toolbarLimit]);
 
 	const menuButtons = useMemo(
-		() => processedButtons.slice(toolbarLimit),
+		() =>
+			processedButtons
+				.slice(toolbarLimit)
+				.sort(
+					(a, b) =>
+						b.element.compareDocumentPosition(a.element) -
+						a.element.compareDocumentPosition(b.element),
+				),
 		[processedButtons, toolbarLimit],
 	);
 
