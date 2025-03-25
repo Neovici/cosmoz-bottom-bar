@@ -1,4 +1,5 @@
 {
-	"extends": "./node_modules/@neovici/cfg/eslint"
+	"extends": "./node_modules/@neovici/cfg/eslint",
+	"ignorePatterns": ["dist/*"]
 }
 
