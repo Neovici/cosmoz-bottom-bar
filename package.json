@@ -72,14 +72,14 @@
 		"@polymer/paper-toggle-button": "^3.0.0",
 		"@semantic-release/changelog": "^6.0.0",
 		"@semantic-release/git": "^10.0.0",
-		"@storybook/addon-essentials": "^7.0.0",
+		"@storybook/addon-essentials": "^8.6.9",
 		"@storybook/addon-links": "^7.0.0",
-		"@storybook/builder-vite": "7.6.17",
+		"@storybook/builder-vite": "8.6.9",
 		"@storybook/storybook-deployer": "^2.8.5",
-		"@storybook/web-components": "7.6.17",
+		"@storybook/web-components": "8.6.9",
 		"@types/mocha": "^10.0.6",
-		"@web/storybook-builder": "^0.1.9",
-		"@web/storybook-framework-web-components": "^0.1.1",
+		"@web/storybook-builder": "^0.2.1",
+		"@web/storybook-framework-web-components": "^0.2.0",
 		"@webcomponents/webcomponentsjs": "^2.5.0",
 		"esbuild": "^0.25.0",
 		"eslint": "^8.57.1",
@@ -88,7 +88,7 @@
 		"rollup-plugin-esbuild": "^6.1.1",
 		"semantic-release": "^24.0.0",
 		"sinon": "^19.0.0",
-		"storybook": "^7.6.17",
+		"storybook": "^8.6.9",
 		"typescript": "^5.0.0"
 	}
 }
