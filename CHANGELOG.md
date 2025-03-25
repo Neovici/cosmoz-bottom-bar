@@ -1,3 +1,10 @@
+## [8.1.1](https://github.com/neovici/cosmoz-bottom-bar/compare/v8.1.0...v8.1.1) (2025-03-25)
+
+
+### Bug Fixes
+
+* commitlint config and update ([928e34e](https://github.com/neovici/cosmoz-bottom-bar/commit/928e34e089f7041da08e586dec6ca4cbfcf74f26))
+
 # [8.1.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v8.0.1...v8.1.0) (2025-01-25)
 
 
