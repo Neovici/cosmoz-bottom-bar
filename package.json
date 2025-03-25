@@ -53,11 +53,6 @@
 	"publishConfig": {
 		"access": "public"
 	},
-	"commitlint": {
-		"extends": [
-			"@commitlint/config-conventional"
-		]
-	},
 	"dependencies": {
 		"@neovici/cosmoz-collapse": "^1.5.0",
 		"@neovici/cosmoz-dropdown": "^4.0.0 || ^5.0.0",
