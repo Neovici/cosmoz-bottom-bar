@@ -1,12 +1,19 @@
 /* eslint-disable max-len */
-/* eslint-disable max-lines */
 import { html } from 'lit-html';
+import { map } from 'lit-html/directives/map.js';
 import { html as polymerHtml } from '@polymer/polymer/polymer-element.js';
-import { component, css, useLayoutEffect } from '@pionjs/pion';
-import { useHost } from '@neovici/cosmoz-utils/hooks/use-host';
+import {
+	component,
+	css,
+	useEffect,
+	useLayoutEffect,
+	useMemo,
+	useState,
+} from '@pionjs/pion';
 import { toggleSize } from '@neovici/cosmoz-collapse/toggle';
 import { useActivity } from '@neovici/cosmoz-utils/keybindings/use-activity';
 import '@neovici/cosmoz-dropdown';
+import overflow from './overflow';
 
 const style = css`
 	:host {
@@ -39,25 +46,42 @@ const style = css`
 			padding: 0;
 		};
 	}
+
 	:host([force-open]) {
 		transition: none;
 	}
+
 	[hidden],
 	::slotted([hidden]) {
 		display: none !important;
 	}
+
 	#bar {
 		height: 64px;
 		padding: 0 3%;
 		display: flex;
 		align-items: center;
 	}
+
 	#info {
-		min-width: 5px;
+		flex: 0 0 auto;
 		padding-right: 3%;
-		margin-right: auto;
 		white-space: nowrap;
 	}
+
+	#buttonContainer {
+		display: flex;
+		flex: 1 1 auto;
+		overflow: hidden;
+		flex-wrap: wrap;
+		justify-content: flex-start;
+		flex-direction: row-reverse;
+		position: relative;
+		margin: 0 8px;
+		min-width: 0;
+		max-height: 40px;
+	}
+
 	#bottomBarToolbar::slotted(:not(slot):not([unstyled])) {
 		margin: 0 0.29em;
 		min-width: 40px;
@@ -77,18 +101,23 @@ const style = css`
 		font-size: 14px;
 		font-weight: 500;
 		line-height: 40px;
+		overflow: hidden;
+		flex: 0 0 auto;
+		visibility: hidden;
 	}
 
 	#bottomBarToolbar::slotted(:not(slot)[disabled]) {
 		opacity: var(--cosmoz-button-disabled-opacity, 0.15);
 		pointer-events: none;
 	}
+
 	#bottomBarToolbar::slotted(:not(slot):hover) {
 		background: var(
 			--cosmoz-bottom-bar-button-hover-bg-color,
 			var(--cosmoz-button-hover-bg-color, #3a3f44)
 		);
 	}
+
 	#dropdown::part(content) {
 		max-width: 300px;
 	}
@@ -103,112 +132,6 @@ const style = css`
 		display: none;
 	}
 `;
-
-const BOTTOM_BAR_TOOLBAR_SLOT = 'bottom-bar-toolbar';
-const BOTTOM_BAR_MENU_SLOT = 'bottom-bar-menu';
-
-const _moveElement = (element: HTMLElement, toToolbar: boolean) => {
-	const slot = toToolbar ? BOTTOM_BAR_TOOLBAR_SLOT : BOTTOM_BAR_MENU_SLOT;
-	const tabindex = '0';
-
-	element.setAttribute('slot', slot);
-	element.setAttribute('tabindex', tabindex);
-};
-
-const _isActionNode = (node: Node): node is HTMLElement => {
-	if (node.nodeType !== Node.ELEMENT_NODE) {
-		return false;
-	}
-
-	const element = node as HTMLElement;
-
-	return (
-		!['extra', 'info'].includes(element.getAttribute('slot') ?? '') &&
-		!['TEMPLATE', 'STYLE', 'DOM-REPEAT', 'DOM-IF'].includes(element.tagName)
-	);
-};
-
-const getFlattenedNodes = (element: HTMLElement): Node[] => {
-	const childNodes = Array.from(element.childNodes);
-
-	for (let i = 0; i < element.childNodes.length; i++) {
-		const node = childNodes[i];
-		if (!(node instanceof HTMLSlotElement)) continue;
-
-		// replace the slot node with its assigned elements
-		const slottedElements = node.assignedElements({ flatten: true });
-		childNodes.splice(i, 1, ...slottedElements);
-		i += slottedElements.length - 1;
-	}
-
-	return childNodes;
-};
-
-const _getElements = (host: HTMLElement): HTMLElement[] => {
-	const elements = getFlattenedNodes(host)
-		.filter(_isActionNode)
-		.filter((element) => !element.hidden)
-		.sort(
-			(a, b) => Number(a.dataset.index ?? 0) - Number(b.dataset.index ?? 0),
-		);
-
-	if (elements.length === 0) {
-		return elements;
-	}
-
-	const topPriorityAction = elements.reduce(
-		(top, element) =>
-			Number(top.dataset.priority ?? 0) >= Number(element.dataset.priority ?? 0)
-				? top
-				: element,
-		elements[0],
-	);
-
-	return [
-		topPriorityAction,
-		...elements.filter((e) => e !== topPriorityAction),
-	];
-};
-
-/**
- * Layout the actions available as buttons or menu items
- *
- * If the window is resizing down, just make sure that all buttons fits, and if not,
- * move one to menu and call itself async (to allow re-rendering) and see if we fit.
- * Repeat until the button fits or no buttons are left.
- *
- * If the window is sizing up, try to place a menu item out as a button, call itself
- * async (to allow re-rendering) and see if we fit - if we don't, remove the button again.
- *
- * We also need to keep track of `_scalingUp` between calls since the resize might fire
- * a lot of events, and we don't want to be starting multiple "calculation processes"
- * since this will result in an infinite loop.
- *
- * The actual layouting of actions will be performed by adding or removing the 'button'
- * attribute from the action, which will cause it to match different content insertion
- * points.
- *
- * @param {*} host The current element
- * @param {*} maxToolbarItems Maximum items for the toolbar
- * @returns {void}
- */
-const _layoutActions = (host: HTMLElement, maxToolbarItems: number) => {
-	// eslint-disable-line max-statements
-	const elements = _getElements(host);
-	const hasActions = elements.length > 0;
-
-	if (!hasActions) {
-		// No need to render if we don't have any actions
-		return host.toggleAttribute('has-menu-items', false);
-	}
-
-	const toolbarElements = elements.slice(0, maxToolbarItems);
-	const menuElements = elements.slice(toolbarElements.length);
-
-	toolbarElements.forEach((el) => _moveElement(el, true));
-	menuElements.forEach((el) => _moveElement(el, false));
-	host.toggleAttribute('has-menu-items', menuElements.length > 0);
-};
 
 export const openMenu = Symbol('openMenu');
 
@@ -248,13 +171,71 @@ const openActionsMenu = (host: HTMLElement) => {
  * @demo demo/bottom-bar-next.html Basic Demo
  */
 
-type Props = HTMLElement & {
+type Host = HTMLElement & {
 	active?: boolean;
 	maxToolbarItems?: number;
 };
 
-const CosmozBottomBar = ({ active = false, maxToolbarItems = 1 }: Props) => {
-	const host = useHost();
+const useMenuButtons = (host: Host) => {
+	const [buttonStates, setButtonStates] = useState({
+		visible: new Set<HTMLElement>(),
+		overflowing: new Set<HTMLElement>(),
+	});
+
+	const allButtons = useMemo(
+		() => [...buttonStates.visible, ...buttonStates.overflowing],
+		[buttonStates],
+	);
+
+	const processedButtons = useMemo(
+		() =>
+			allButtons
+				.map((btn) => ({
+					element: btn,
+					priority: Number(btn.dataset.priority ?? 0),
+					text: btn.textContent?.trim() || '',
+				}))
+				.toSorted((a, b) => b.priority - a.priority),
+		[allButtons],
+	);
+
+	const { maxToolbarItems = 1 } = host;
+	const toolbarLimit = Math.min(
+		maxToolbarItems,
+		buttonStates.visible.size >= 0
+			? buttonStates.visible.size
+			: allButtons.length,
+	);
+
+	useEffect(() => {
+		processedButtons.forEach(({ element, priority }, i) => {
+			const isVisible = i < toolbarLimit;
+			element.style.visibility = isVisible ? 'visible' : 'hidden';
+			element.style.order = String(-priority);
+		});
+	}, [processedButtons, toolbarLimit]);
+
+	const menuButtons = useMemo(
+		() =>
+			processedButtons
+				.slice(toolbarLimit)
+				.sort(
+					(a, b) =>
+						b.element.compareDocumentPosition(a.element) -
+						a.element.compareDocumentPosition(b.element),
+				),
+		[processedButtons, toolbarLimit],
+	);
+
+	useEffect(() => {
+		host.toggleAttribute('has-menu-items', menuButtons.length > 0);
+	}, [menuButtons.length]);
+
+	return { setButtonStates, menuButtons };
+};
+
+const CosmozBottomBar = (host: Host) => {
+	const { active = false } = host;
 
 	useActivity(
 		{
@@ -266,23 +247,24 @@ const CosmozBottomBar = ({ active = false, maxToolbarItems = 1 }: Props) => {
 		[active],
 	);
 
-	const toggle = toggleSize('height');
+	const { setButtonStates, menuButtons } = useMenuButtons(host);
+
+	const toggle = useMemo(() => toggleSize('height'), []);
 
 	useLayoutEffect(() => {
 		toggle(host, active);
 	}, [active]);
 
-	const slotChangeHandler = () => {
-		_layoutActions(host, maxToolbarItems);
-	};
-
 	return html`<div id="bar" part="bar">
 			<div id="info" part="info"><slot name="info"></slot></div>
-			<slot
-				id="bottomBarToolbar"
-				name="bottom-bar-toolbar"
-				@slotchange=${slotChangeHandler}
-			></slot>
+			<div id="buttonContainer">
+				<slot
+					id="bottomBarToolbar"
+					name="bottom-bar-toolbar"
+					${overflow(setButtonStates)}
+				></slot>
+			</div>
+
 			<cosmoz-dropdown-menu id="dropdown">
 				<svg
 					slot="button"
@@ -311,12 +293,21 @@ const CosmozBottomBar = ({ active = false, maxToolbarItems = 1 }: Props) => {
 						fill="white"
 					/>
 				</svg>
-				<slot id="bottomBarMenu" name="bottom-bar-menu"></slot>
+				<slot id="bottomBarMenu" name="bottom-bar-menu">
+					${map(
+						menuButtons,
+						(menuButton) => html`
+							<paper-button @click=${() => menuButton.element.click()}
+								>${menuButton.text}</paper-button
+							>
+						`,
+					)}
+				</slot>
 			</cosmoz-dropdown-menu>
 			<slot name="extra" id="extraSlot"></slot>
 		</div>
 		<div hidden style="display:none">
-			<slot id="content" @slotchange=${slotChangeHandler}></slot>
+			<slot id="content"></slot>
 		</div>`;
 };
 
@@ -325,7 +316,7 @@ export default CosmozBottomBar;
 customElements.define(
 	'cosmoz-bottom-bar',
 	component(CosmozBottomBar, {
-		observedAttributes: ['active'],
+		observedAttributes: ['active', 'max-toolbar-items'],
 		styleSheets: [style],
 	}),
 );
