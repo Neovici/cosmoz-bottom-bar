@@ -103,6 +103,7 @@ const style = css`
 		line-height: 40px;
 		overflow: hidden;
 		flex: 0 0 auto;
+		visibility: hidden;
 	}
 
 	#bottomBarToolbar::slotted(:not(slot)[disabled]) {
