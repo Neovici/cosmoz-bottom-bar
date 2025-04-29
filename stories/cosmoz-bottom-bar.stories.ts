@@ -123,7 +123,6 @@ const CosmozBottomBarStory = (
 				buttons,
 				(btn) =>
 					html`<paper-button
-						slot="bottom-bar-toolbar"
 						@click=${btn.onClick}
 						data-priority=${ifDefined(btn.priority)}
 						>${btn.text}</paper-button

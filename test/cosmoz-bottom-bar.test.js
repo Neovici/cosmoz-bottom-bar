@@ -44,7 +44,6 @@ suite('bottomBarWithoutMenu', () => {
 				<div
 					style="width: 50px; height: 32px; background: red"
 					id="bottomBarWithoutMenuItem"
-					slot="bottom-bar-toolbar"
 				></div>
 			</cosmoz-bottom-bar>
 		`);
@@ -83,12 +82,10 @@ suite('bottomBarWithOverflowingButton', () => {
 				<div
 					style="width: 200px; height: 32px; background: green"
 					id="bottomBarWithOverflowingButtonItem1"
-					slot="bottom-bar-toolbar"
 				></div>
 				<div
 					style="width: 200px; height:32px; background: limegreen"
 					id="bottomBarWithOverflowingButtonItem2"
-					slot="bottom-bar-toolbar"
 				></div>
 			</cosmoz-bottom-bar>
 		`);
@@ -150,22 +147,18 @@ suite('bottomBarMaxToolbarItems', () => {
 				<div
 					id="bottomBarMaxToolbarItemsItem1"
 					style="width: 50px; height: 32px; background: red"
-					slot="bottom-bar-toolbar"
 				></div>
 				<div
 					id="bottomBarMaxToolbarItemsItem2"
 					style="width: 50px; height: 32px; background: blue"
-					slot="bottom-bar-toolbar"
 				></div>
 				<div
 					id="bottomBarMaxToolbarItemsItem3"
 					style="width: 50px; height: 32px; background: green"
-					slot="bottom-bar-toolbar"
 				></div>
 				<div
 					id="bottomBarMaxToolbarItemsItem4"
 					style="width: 50px; height: 32px; background: black"
-					slot="bottom-bar-toolbar"
 				></div>
 			</cosmoz-bottom-bar>
 		`);
@@ -211,24 +204,20 @@ suite('bottomBarWithHiddenButton', () => {
 				<div
 					id="bottomBarWithHiddenButtonItem1"
 					style="width: 150px; height: 32px; background: red"
-					slot="bottom-bar-toolbar"
 				></div>
 				<div
 					id="bottomBarWithHiddenButtonItem2"
 					hidden
 					style="width: 150px; height: 32px; background: blue"
-					slot="bottom-bar-toolbar"
 				></div>
 				<div
 					id="bottomBarWithHiddenButtonItem3"
 					style="width: 150px; height: 32px; background: green"
-					slot="bottom-bar-toolbar"
 				></div>
 				<div
 					id="bottomBarWithHiddenButtonItem4"
 					hidden
 					style="width: 150px; height: 32px; background: purple"
-					slot="bottom-bar-toolbar"
 				></div>
 			</cosmoz-bottom-bar>
 		`);
@@ -324,10 +313,7 @@ suite('height management', () => {
 	setup(async () => {
 		bottomBar = await fixture(html`
 			<cosmoz-bottom-bar>
-				<div
-					style="width: 50px; height: 32px; background: red"
-					slot="bottom-bar-toolbar"
-				></div>
+				<div style="width: 50px; height: 32px; background: red"></div>
 			</cosmoz-bottom-bar>
 		`);
 		await nextFrame();
@@ -359,10 +345,7 @@ suite('toggle bottom bar', () => {
 	setup(async () => {
 		bottomBar = await fixture(html`
 			<cosmoz-bottom-bar>
-				<div
-					style="width: 50px; height: 32px; background: red"
-					slot="bottom-bar-toolbar"
-				></div>
+				<div style="width: 50px; height: 32px; background: red"></div>
 			</cosmoz-bottom-bar>
 		`);
 		await nextFrame();
