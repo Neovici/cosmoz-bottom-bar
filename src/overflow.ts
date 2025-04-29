@@ -43,7 +43,9 @@ const setupObserver = (slot: HTMLSlotElement, onOverflow: OnOverflow) => {
 	);
 
 	const observe = () => {
-		const elements = Array.from(slot.assignedElements()) as HTMLElement[];
+		const elements = Array.from(
+			slot.assignedElements({ flatten: true }),
+		) as HTMLElement[];
 		for (const c of elements) {
 			observer.observe(c);
 		}
