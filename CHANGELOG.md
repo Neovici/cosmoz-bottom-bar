@@ -1,3 +1,10 @@
+## [9.0.1](https://github.com/neovici/cosmoz-bottom-bar/compare/v9.0.0...v9.0.1) (2025-04-29)
+
+
+### Bug Fixes
+
+* **overflow:** nested slots are not handled properly ([#187](https://github.com/neovici/cosmoz-bottom-bar/issues/187)) ([b144a33](https://github.com/neovici/cosmoz-bottom-bar/commit/b144a336fd3c940a14a4f7c8f82046211b73dd0a))
+
 # [9.0.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v8.1.1...v9.0.0) (2025-04-29)
 
 
