@@ -16,20 +16,17 @@
 	},
 	"license": "Apache-2.0",
 	"author": "Neovici Development",
-	"main": "cosmoz-bottom-bar.js",
+	"main": "dist/index.js",
 	"exports": {
-		".": "./cosmoz-bottom-bar.js",
-		"./next": "./src/cosmoz-bottom-bar-next.js"
-	},
-	"directories": {
-		"test": "test"
+		".": "./dist/index.js"
 	},
 	"files": [
-		"cosmoz-*.js",
-		"src/**/*.js"
+		"dist/*",
+		"types"
 	],
 	"scripts": {
-		"lint": "eslint --cache --ext .js .",
+		"lint": "tsc && eslint --cache .",
+		"build": "tsc -p tsconfig.build.json",
 		"start": "npm run storybook:start",
 		"test": "wtr --coverage",
 		"test:watch": "wtr --watch",
