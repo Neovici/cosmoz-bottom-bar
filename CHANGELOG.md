@@ -1,3 +1,19 @@
+# [9.0.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v8.1.1...v9.0.0) (2025-04-29)
+
+
+### Features
+
+* pion version ([#171](https://github.com/neovici/cosmoz-bottom-bar/issues/171)) ([62c8c61](https://github.com/neovici/cosmoz-bottom-bar/commit/62c8c61471b3ea9c8f7a5fd15280b2cc4d8fa149))
+
+
+### BREAKING CHANGES
+
+* Migrate to Pion, TS and new Overflow directive.
+
+* fix: remove named slots
+* Whatever is projected needs to have textContent,
+otherwise it won't show up in the menu.
+
 ## [8.1.1](https://github.com/neovici/cosmoz-bottom-bar/compare/v8.1.0...v8.1.1) (2025-03-25)
 
 
