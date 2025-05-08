@@ -1,3 +1,10 @@
+## [9.0.2](https://github.com/neovici/cosmoz-bottom-bar/compare/v9.0.1...v9.0.2) (2025-05-08)
+
+
+### Bug Fixes
+
+* **overflow:** old elements did not clean up on slotchange ([#189](https://github.com/neovici/cosmoz-bottom-bar/issues/189)) ([ac87a76](https://github.com/neovici/cosmoz-bottom-bar/commit/ac87a76941b8ed080d486714fa2efeed2d09d421))
+
 ## [9.0.1](https://github.com/neovici/cosmoz-bottom-bar/compare/v9.0.0...v9.0.1) (2025-04-29)
 
 
