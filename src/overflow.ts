@@ -18,15 +18,18 @@ const check = (part: AttributePart) => {
 };
 
 const setupObserver = (slot: HTMLSlotElement, onOverflow: OnOverflow) => {
-	const visible: Set<HTMLElement> = new Set();
-	const overflowing: Set<HTMLElement> = new Set();
+	let visible: Set<HTMLElement> = new Set();
+	let overflowing: Set<HTMLElement> = new Set();
 
 	const observer: IntersectionObserver = new IntersectionObserver(
 		(entries) => {
 			entries.forEach((entry) => {
 				const el = entry.target as HTMLElement;
 
-				if (entry.intersectionRatio === 1) {
+				if (
+					entry.boundingClientRect.width === entry.intersectionRect.width &&
+					entry.intersectionRect.height !== 0
+				) {
 					visible.add(el);
 					overflowing.delete(el);
 				} else if (isEntryHidden(entry)) {
@@ -39,16 +42,30 @@ const setupObserver = (slot: HTMLSlotElement, onOverflow: OnOverflow) => {
 			});
 			onOverflow({ visible, overflowing });
 		},
-		{ root: slot.parentElement, threshold: 1 },
+		{ root: slot.parentElement, threshold: [0, 0.5, 1] },
 	);
 
 	const observe = () => {
 		const elements = Array.from(
 			slot.assignedElements({ flatten: true }),
 		) as HTMLElement[];
+		const newVisible: typeof visible = new Set();
+		const newOverflowing: typeof overflowing = new Set();
+
 		for (const c of elements) {
-			observer.observe(c);
+			if (visible.has(c)) {
+				newVisible.add(c);
+			} else if (overflowing.has(c)) {
+				newOverflowing.add(c);
+			} else {
+				observer.observe(c);
+				newVisible.add(c);
+			}
 		}
+
+		visible = newVisible;
+		overflowing = newOverflowing;
+		onOverflow({ visible, overflowing });
 	};
 
 	observe();
