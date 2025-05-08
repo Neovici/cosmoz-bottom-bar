@@ -1,3 +1,10 @@
+## [9.0.3](https://github.com/neovici/cosmoz-bottom-bar/compare/v9.0.2...v9.0.3) (2025-05-08)
+
+
+### Bug Fixes
+
+* **overflow:** hidden elements are considered visible ([#190](https://github.com/neovici/cosmoz-bottom-bar/issues/190)) ([6d28ca4](https://github.com/neovici/cosmoz-bottom-bar/commit/6d28ca4e23ecf0fc957574ce4499b74d6446bccb))
+
 ## [9.0.2](https://github.com/neovici/cosmoz-bottom-bar/compare/v9.0.1...v9.0.2) (2025-05-08)
 
 
