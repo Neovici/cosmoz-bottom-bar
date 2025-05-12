@@ -1,3 +1,10 @@
+## [9.0.4](https://github.com/neovici/cosmoz-bottom-bar/compare/v9.0.3...v9.0.4) (2025-05-12)
+
+
+### Bug Fixes
+
+* new overflowing elements flicker ([#191](https://github.com/neovici/cosmoz-bottom-bar/issues/191)) ([11e46a9](https://github.com/neovici/cosmoz-bottom-bar/commit/11e46a9d52a9ce44e6212345070c029e902c1704))
+
 ## [9.0.3](https://github.com/neovici/cosmoz-bottom-bar/compare/v9.0.2...v9.0.3) (2025-05-08)
 
 
