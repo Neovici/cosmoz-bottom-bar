@@ -58,9 +58,6 @@ const setupObserver = (slot: HTMLSlotElement, onOverflow: OnOverflow) => {
 			} else if (overflowing.has(c)) {
 				newOverflowing.add(c);
 			} else {
-				if (c.getBoundingClientRect().height !== 0) {
-					newVisible.add(c);
-				}
 				observer.observe(c);
 			}
 		}
