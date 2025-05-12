@@ -200,12 +200,7 @@ const useMenuButtons = (host: Host) => {
 	);
 
 	const { maxToolbarItems = 1 } = host;
-	const toolbarLimit = Math.min(
-		maxToolbarItems,
-		buttonStates.visible.size >= 0
-			? buttonStates.visible.size
-			: allButtons.length,
-	);
+	const toolbarLimit = Math.min(maxToolbarItems, buttonStates.visible.size);
 
 	useEffect(() => {
 		processedButtons.forEach(({ element, priority }, i) => {
