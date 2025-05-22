@@ -21814,10 +21814,6 @@ const style = css`
 	:host(:not([has-menu-items])) cosmoz-dropdown-menu {
 		display: none;
 	}
-
-	cosmoz-dropdown-menu paper-button {
-		border-radius: 0;
-	}
 `;
 const openMenu = Symbol("openMenu");
 const openActionsMenu = (host) => {
@@ -21918,9 +21914,9 @@ const CosmozBottomBar = (host) => {
 			${o$2(
     menuButtons,
     (menuButton) => x`
-					<paper-button @click=${() => menuButton.element.click()}
-						>${menuButton.text}</paper-button
-					>
+					<button @click=${() => menuButton.element.click()}>
+						${menuButton.text}
+					</button>
 				`
   )}
 		</cosmoz-dropdown-menu>

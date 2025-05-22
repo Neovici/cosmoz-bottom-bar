@@ -7720,7 +7720,7 @@ if (window.CONFIG_TYPE === "DEVELOPMENT") {
 }
 
 const importers = {
-  "./stories/cosmoz-bottom-bar.stories.ts": () => import('./cosmoz-bottom-bar.stories-CLQBMIGC.js')
+  "./stories/cosmoz-bottom-bar.stories.ts": () => import('./cosmoz-bottom-bar.stories-DG-OHPTS.js')
 };
 function importFn(path) {
   return importers[path]();
