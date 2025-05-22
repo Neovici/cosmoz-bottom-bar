@@ -1,3 +1,10 @@
+## [9.0.5](https://github.com/neovici/cosmoz-bottom-bar/compare/v9.0.4...v9.0.5) (2025-05-22)
+
+
+### Bug Fixes
+
+* menu buttons rounded ([4fb53b5](https://github.com/neovici/cosmoz-bottom-bar/commit/4fb53b577f6d102d537ff1a6bfccd3a13d6b0e03))
+
 ## [9.0.4](https://github.com/neovici/cosmoz-bottom-bar/compare/v9.0.3...v9.0.4) (2025-05-12)
 
 
