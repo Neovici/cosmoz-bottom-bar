@@ -34,17 +34,6 @@ const style = css`
 		z-index: 1;
 
 		--cosmoz-dropdown-anchor-spacing: 12px 6px;
-		--paper-button: {
-			background-color: inherit;
-			text-transform: none;
-			border: 0;
-			border-radius: 0;
-			font-size: inherit;
-			color: inherit;
-			font-weight: inherit;
-			margin: 0;
-			padding: 0;
-		};
 	}
 
 	:host([force-open]) {
@@ -287,9 +276,9 @@ const CosmozBottomBar = (host: Host) => {
 			${map(
 				menuButtons,
 				(menuButton) => html`
-					<paper-button @click=${() => menuButton.element.click()}
-						>${menuButton.text}</paper-button
-					>
+					<button @click=${() => menuButton.element.click()}>
+						${menuButton.text}
+					</button>
 				`,
 			)}
 		</cosmoz-dropdown-menu>
