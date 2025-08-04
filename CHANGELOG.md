@@ -1,3 +1,10 @@
+## [9.1.1](https://github.com/neovici/cosmoz-bottom-bar/compare/v9.1.0...v9.1.1) (2025-08-04)
+
+
+### Bug Fixes
+
+* automerge workflow ([1ee0b92](https://github.com/neovici/cosmoz-bottom-bar/commit/1ee0b92be4f8c4759aac0c0029ab69e2c32da644))
+
 # [9.1.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v9.0.5...v9.1.0) (2025-07-21)
 
 
