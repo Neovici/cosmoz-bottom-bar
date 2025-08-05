@@ -1,3 +1,10 @@
+## [9.1.2](https://github.com/neovici/cosmoz-bottom-bar/compare/v9.1.1...v9.1.2) (2025-08-05)
+
+
+### Bug Fixes
+
+* **deps:** bump cosmoz-dropdown 5.3.0 to 6.2.1 ([49debab](https://github.com/neovici/cosmoz-bottom-bar/commit/49debab67cb2a7ad6416484bdf8c9a114474ed85))
+
 ## [9.1.1](https://github.com/neovici/cosmoz-bottom-bar/compare/v9.1.0...v9.1.1) (2025-08-04)
 
 
