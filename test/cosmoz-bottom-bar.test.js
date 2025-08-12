@@ -2,6 +2,8 @@ import { assert, fixture, html, nextFrame, aTimeout } from '@open-wc/testing';
 
 import '../src/cosmoz-bottom-bar.ts';
 
+// TODO: this should be a function in bottomBar that is imported here.
+// Use that definition of hidden not ours.
 const getVisibleToolbarElements = (bottomBar) => {
 	const children = Array.from(bottomBar.children);
 
@@ -10,6 +12,7 @@ const getVisibleToolbarElements = (bottomBar) => {
 			!el.hidden &&
 			!el.hasAttribute('hidden') &&
 			el.style.visibility !== 'hidden' &&
+			el.dataset.visibility !== 'hidden' &&
 			el.offsetWidth > 0 &&
 			el.offsetHeight > 0,
 	);

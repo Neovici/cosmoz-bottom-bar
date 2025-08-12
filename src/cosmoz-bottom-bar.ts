@@ -92,7 +92,13 @@ const style = css`
 		line-height: 40px;
 		overflow: hidden;
 		flex: 0 0 auto;
+	}
+	#bottomBarToolbar::slotted(
+			:not(slot):not([unstyled])[data-visibility='hidden']
+		) {
 		visibility: hidden;
+		width: 100%;
+		order: 9999;
 	}
 
 	#bottomBarToolbar::slotted(:not(slot)[disabled]) {
@@ -194,7 +200,7 @@ const useMenuButtons = (host: Host) => {
 	useEffect(() => {
 		processedButtons.forEach(({ element, priority }, i) => {
 			const isVisible = i < toolbarLimit;
-			element.style.visibility = isVisible ? 'visible' : 'hidden';
+			element.dataset.visibility = isVisible ? 'visible' : 'hidden';
 			element.style.order = String(-priority);
 		});
 	}, [processedButtons, toolbarLimit]);
@@ -239,13 +245,13 @@ const CosmozBottomBar = (host: Host) => {
 		toggle(host, active);
 	}, [active]);
 
-	return html`<div id="bar" part="bar">
+	return html` <div id="bar" part="bar">
 		<div id="info" part="info"><slot name="info"></slot></div>
-		<div id="buttonContainer">
+		<div id="buttonContainer" part="buttons">
 			<slot id="bottomBarToolbar" ${overflow(setButtonStates)}></slot>
 		</div>
 
-		<cosmoz-dropdown-menu id="dropdown">
+		<cosmoz-dropdown-menu id="dropdown" part="dropdown">
 			<svg
 				slot="button"
 				width="4"
@@ -258,19 +264,19 @@ const CosmozBottomBar = (host: Host) => {
 					fill-rule="evenodd"
 					clip-rule="evenodd"
 					d="M1.50996e-07 2C1.02714e-07 3.10457 0.89543 4 2 4C3.10457 4 4 3.10457 4 2C4 0.89543 3.10457 -3.91405e-08 2 -8.74228e-08C0.895431 -1.35705e-07 1.99278e-07 0.89543 1.50996e-07 2Z"
-					fill="white"
+					fill="currentColor"
 				/>
 				<path
 					fill-rule="evenodd"
 					clip-rule="evenodd"
 					d="M1.50996e-07 8C1.02714e-07 9.10457 0.89543 10 2 10C3.10457 10 4 9.10457 4 8C4 6.89543 3.10457 6 2 6C0.895431 6 1.99278e-07 6.89543 1.50996e-07 8Z"
-					fill="white"
+					fill="currentColor"
 				/>
 				<path
 					fill-rule="evenodd"
 					clip-rule="evenodd"
 					d="M1.50996e-07 14C1.02714e-07 15.1046 0.89543 16 2 16C3.10457 16 4 15.1046 4 14C4 12.8954 3.10457 12 2 12C0.895431 12 1.99278e-07 12.8954 1.50996e-07 14Z"
-					fill="white"
+					fill="currentColor"
 				/>
 			</svg>
 			${map(
