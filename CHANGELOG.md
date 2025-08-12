@@ -1,3 +1,10 @@
+# [9.2.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v9.1.2...v9.2.0) (2025-08-12)
+
+
+### Features
+
+* **botom-bar:** adjust hidden/overflowing state ([f47ec5f](https://github.com/neovici/cosmoz-bottom-bar/commit/f47ec5fef7d0d677bd7ba473c6a28e66cdaf1f88))
+
 ## [9.1.2](https://github.com/neovici/cosmoz-bottom-bar/compare/v9.1.1...v9.1.2) (2025-08-05)
 
 
