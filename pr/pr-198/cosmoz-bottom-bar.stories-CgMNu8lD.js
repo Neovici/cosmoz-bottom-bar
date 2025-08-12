@@ -21580,10 +21580,11 @@ const style$1 = css `
 			--cosmoz-dropdown-button-bg-color,
 			var(--cosmoz-button-bg-color, #101010)
 		);
-		color: var(
+		--color: var(
 			--cosmoz-dropdown-button-color,
 			var(--cosmoz-button-color, #fff)
 		);
+		color: var(--color);
 		border-radius: var(--cosmoz-dropdown-button-radius, 50%);
 		width: var(
 			--cosmoz-dropdown-button-width,
@@ -21600,6 +21601,7 @@ const style$1 = css `
 			--cosmoz-dropdown-button-hover-bg-color,
 			var(--cosmoz-button-hover-bg-color, #3a3f44)
 		);
+		color: var(--cosmoz-dropdown-button-hover-color, var(--color));
 	}
 	::slotted(svg) {
 		pointer-events: none;
