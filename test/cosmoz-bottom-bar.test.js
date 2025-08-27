@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { assert, fixture, html, nextFrame, aTimeout } from '@open-wc/testing';
 
 import '../src/cosmoz-bottom-bar.ts';
@@ -366,5 +367,115 @@ suite('toggle bottom bar', () => {
 		await aTimeout(330);
 		assert.isTrue(bottomBar.hasAttribute('active'));
 		assert.equal(getComputedStyle(bottomBar).display, 'block');
+	});
+});
+
+suite('bottomBarWithOverflowingButtonAfterOffscreenRendering', () => {
+	let wrapper;
+	let bottomBar;
+	let currentState;
+
+	setup(async () => {
+		wrapper = await fixture(html`
+			<div style="display:none">
+				<cosmoz-bottom-bar
+					style="min-width: 350px; max-width: 350px; height: 32px;"
+					@reflow=${(ev) => {
+						currentState = ev.detail;
+					}}
+				>
+					<div
+						style="width: 200px; height: 32px; background: green"
+						id="bottomBarWithOverflowingButtonItem1"
+					></div>
+					<div
+						style="width: 200px; height:32px; background: limegreen"
+						id="bottomBarWithOverflowingButtonItem2"
+					></div>
+					<div
+						style="width: 200px; height:32px; background: red; display:none;"
+						id="bottomBarWithOverflowingButtonItem3"
+					></div>
+					<div
+						style="width: 200px; height:32px; background: blue"
+						id="bottomBarWithOverflowingButtonItem4"
+					></div>
+				</cosmoz-bottom-bar>
+			</div>
+		`);
+		bottomBar = wrapper.firstElementChild;
+
+		await nextFrame();
+	});
+
+	test('buttons are all hidden when rendered off-screen', async () => {
+		const firstButton = bottomBar.querySelector(
+			'#bottomBarWithOverflowingButtonItem1',
+		);
+
+		assert.notInclude(currentState.visible, firstButton);
+		assert.notInclude(currentState.overflowing, firstButton);
+		assert.include(currentState.hidden, firstButton);
+
+		const secondButton = bottomBar.querySelector(
+			'#bottomBarWithOverflowingButtonItem2',
+		);
+
+		assert.notInclude(currentState.visible, secondButton);
+		assert.notInclude(currentState.overflowing, secondButton);
+		assert.include(currentState.hidden, secondButton);
+
+		const thirdButton = bottomBar.querySelector(
+			'#bottomBarWithOverflowingButtonItem3',
+		);
+
+		assert.notInclude(currentState.visible, thirdButton);
+		assert.notInclude(currentState.overflowing, thirdButton);
+		assert.include(currentState.hidden, thirdButton);
+
+		const fourthButton = bottomBar.querySelector(
+			'#bottomBarWithOverflowingButtonItem4',
+		);
+
+		assert.notInclude(currentState.visible, fourthButton);
+		assert.notInclude(currentState.overflowing, fourthButton);
+		assert.include(currentState.hidden, fourthButton);
+	});
+
+	test('buttons are in correct after becoming visible', async () => {
+		wrapper.style.display = 'block';
+		await nextFrame();
+
+		const firstButton = bottomBar.querySelector(
+			'#bottomBarWithOverflowingButtonItem1',
+		);
+
+		assert.include(currentState.visible, firstButton);
+		assert.notInclude(currentState.overflowing, firstButton);
+		assert.notInclude(currentState.hidden, firstButton);
+
+		const secondButton = bottomBar.querySelector(
+			'#bottomBarWithOverflowingButtonItem2',
+		);
+
+		assert.notInclude(currentState.visible, secondButton);
+		assert.include(currentState.overflowing, secondButton);
+		assert.notInclude(currentState.hidden, secondButton);
+
+		const thirdButton = bottomBar.querySelector(
+			'#bottomBarWithOverflowingButtonItem3',
+		);
+
+		assert.notInclude(currentState.visible, thirdButton);
+		assert.notInclude(currentState.overflowing, thirdButton);
+		assert.include(currentState.hidden, thirdButton);
+
+		const fourthButton = bottomBar.querySelector(
+			'#bottomBarWithOverflowingButtonItem4',
+		);
+
+		assert.notInclude(currentState.visible, fourthButton);
+		assert.include(currentState.overflowing, fourthButton);
+		assert.notInclude(currentState.hidden, fourthButton);
 	});
 });
