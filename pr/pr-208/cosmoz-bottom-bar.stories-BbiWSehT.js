@@ -21649,14 +21649,25 @@ var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "sy
 function isEntryHidden(el) {
   return el.boundingClientRect.height === 0;
 }
+function isElementHidden(el) {
+  return el.getBoundingClientRect().height === 0;
+}
 const check = (part) => {
   if (part.element.tagName !== "SLOT") {
     throw new Error("Overflow directive must be used on a slot element");
   }
 };
+function reconcileHiddenElements(hidden, overflowing) {
+  hidden.forEach((el) => {
+    if (isElementHidden(el)) return;
+    overflowing.add(el);
+    hidden.delete(el);
+  });
+}
 const setupObserver = (slot, onOverflow) => {
   let visible = /* @__PURE__ */ new Set();
   let overflowing = /* @__PURE__ */ new Set();
+  let hidden = /* @__PURE__ */ new Set();
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
@@ -21664,15 +21675,19 @@ const setupObserver = (slot, onOverflow) => {
         if (entry.boundingClientRect.width === entry.intersectionRect.width && entry.intersectionRect.height !== 0) {
           visible.add(el);
           overflowing.delete(el);
+          hidden.delete(el);
         } else if (isEntryHidden(entry)) {
           visible.delete(el);
           overflowing.delete(el);
+          hidden.add(el);
         } else {
           visible.delete(el);
           overflowing.add(el);
+          hidden.delete(el);
         }
       });
-      onOverflow({ visible, overflowing });
+      reconcileHiddenElements(hidden, overflowing);
+      onOverflow({ visible, overflowing, hidden });
     },
     { root: slot.parentElement, threshold: [0, 0.5, 1] }
   );
@@ -21682,18 +21697,22 @@ const setupObserver = (slot, onOverflow) => {
     );
     const newVisible = /* @__PURE__ */ new Set();
     const newOverflowing = /* @__PURE__ */ new Set();
+    const newHidden = /* @__PURE__ */ new Set();
     for (const c of elements) {
       if (visible.has(c)) {
         newVisible.add(c);
       } else if (overflowing.has(c)) {
         newOverflowing.add(c);
+      } else if (hidden.has(c)) {
+        newHidden.add(c);
       } else {
         observer.observe(c);
       }
     }
     visible = newVisible;
     overflowing = newOverflowing;
-    onOverflow({ visible, overflowing });
+    hidden = newHidden;
+    onOverflow({ visible, overflowing, hidden });
   };
   observe();
   slot.addEventListener("slotchange", observe);
@@ -21854,6 +21873,11 @@ const useMenuButtons = (host) => {
     visible: /* @__PURE__ */ new Set(),
     overflowing: /* @__PURE__ */ new Set()
   });
+  useEffect(() => {
+    host.dispatchEvent(
+      new CustomEvent("reflow", { detail: buttonStates })
+    );
+  }, [buttonStates]);
   const allButtons = useMemo(
     () => [...buttonStates.visible, ...buttonStates.overflowing],
     [buttonStates]
