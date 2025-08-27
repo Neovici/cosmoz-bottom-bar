@@ -177,6 +177,12 @@ const useMenuButtons = (host: Host) => {
 		overflowing: new Set<HTMLElement>(),
 	});
 
+	useEffect(() => {
+		host.dispatchEvent(
+			new CustomEvent('reflow', { detail: buttonStates }),
+		);
+	}, [buttonStates]);
+
 	const allButtons = useMemo(
 		() => [...buttonStates.visible, ...buttonStates.overflowing],
 		[buttonStates],
