@@ -1,3 +1,15 @@
+# [9.3.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v9.2.0...v9.3.0) (2025-08-27)
+
+
+### Bug Fixes
+
+* off-screen rendering bug ([edab3ad](https://github.com/neovici/cosmoz-bottom-bar/commit/edab3adfa103bbe427da7b9812fbe559216cd262))
+
+
+### Features
+
+* emit reflow event to notify when the button state changes ([3c72d2c](https://github.com/neovici/cosmoz-bottom-bar/commit/3c72d2c7679187e028a998d996519534a1224215))
+
 # [9.2.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v9.1.2...v9.2.0) (2025-08-12)
 
 
