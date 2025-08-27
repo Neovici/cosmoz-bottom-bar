@@ -442,7 +442,7 @@ suite('bottomBarWithOverflowingButtonAfterOffscreenRendering', () => {
 		assert.include(currentState.hidden, fourthButton);
 	});
 
-	test('buttons are in correct after becoming visible', async () => {
+	test('buttons are in correct state after becoming visible', async () => {
 		wrapper.style.display = 'block';
 		await nextFrame();
 
