@@ -79,7 +79,7 @@
 		"@web/storybook-framework-web-components": "^0.2.0",
 		"@webcomponents/webcomponentsjs": "^2.5.0",
 		"esbuild": "^0.25.0",
-		"eslint": "^8.57.1",
+		"eslint": "^9.34.0",
 		"http-server": "^14.1.1",
 		"husky": "^9.1.1",
 		"rollup-plugin-esbuild": "^6.1.1",
