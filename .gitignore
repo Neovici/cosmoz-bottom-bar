@@ -11,5 +11,6 @@ idea/
 
 # Storybook
 storybook-static/
+.eslintcache
 
 dist
