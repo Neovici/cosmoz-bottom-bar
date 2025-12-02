@@ -1,18 +1,19 @@
 /* eslint-disable max-len */
-import { html } from 'lit-html';
-import { map } from 'lit-html/directives/map.js';
-import { html as polymerHtml } from '@polymer/polymer/polymer-element.js';
+import { toggleSize } from '@neovici/cosmoz-collapse/toggle';
+import '@neovici/cosmoz-dropdown';
+import { useActivity } from '@neovici/cosmoz-utils/keybindings/use-activity';
 import {
 	component,
 	css,
 	useEffect,
 	useLayoutEffect,
 	useMemo,
+	useRef,
 	useState,
 } from '@pionjs/pion';
-import { toggleSize } from '@neovici/cosmoz-collapse/toggle';
-import { useActivity } from '@neovici/cosmoz-utils/keybindings/use-activity';
-import '@neovici/cosmoz-dropdown';
+import { html as polymerHtml } from '@polymer/polymer/polymer-element.js';
+import { html } from 'lit-html';
+import { map } from 'lit-html/directives/map.js';
 import overflow from './overflow';
 
 const style = css`
@@ -94,8 +95,8 @@ const style = css`
 		flex: 0 0 auto;
 	}
 	#bottomBarToolbar::slotted(
-			:not(slot):not([unstyled])[data-visibility='hidden']
-		) {
+		:not(slot):not([unstyled])[data-visibility='hidden']
+	) {
 		visibility: hidden;
 		width: 100%;
 		order: 9999;
@@ -169,6 +170,7 @@ const openActionsMenu = (host: HTMLElement) => {
 type Host = HTMLElement & {
 	active?: boolean;
 	maxToolbarItems?: number;
+	skipAnimationOnMount?: boolean;
 };
 
 const useMenuButtons = (host: Host) => {
@@ -178,9 +180,7 @@ const useMenuButtons = (host: Host) => {
 	});
 
 	useEffect(() => {
-		host.dispatchEvent(
-			new CustomEvent('reflow', { detail: buttonStates }),
-		);
+		host.dispatchEvent(new CustomEvent('reflow', { detail: buttonStates }));
 	}, [buttonStates]);
 
 	const allButtons = useMemo(
@@ -231,7 +231,8 @@ const useMenuButtons = (host: Host) => {
 };
 
 const CosmozBottomBar = (host: Host) => {
-	const { active = false } = host;
+	const { active = false, skipAnimationOnMount } = host;
+	const mounted = useRef(false);
 
 	useActivity(
 		{
@@ -248,7 +249,13 @@ const CosmozBottomBar = (host: Host) => {
 	const toggle = useMemo(() => toggleSize('height'), []);
 
 	useLayoutEffect(() => {
-		toggle(host, active);
+		if (!mounted.current && skipAnimationOnMount) {
+			toggle(host, active, { duration: 0 });
+		} else {
+			toggle(host, active);
+		}
+
+		mounted.current = true;
 	}, [active]);
 
 	return html` <div id="bar" part="bar">
@@ -303,7 +310,11 @@ export default CosmozBottomBar;
 customElements.define(
 	'cosmoz-bottom-bar',
 	component(CosmozBottomBar, {
-		observedAttributes: ['active', 'max-toolbar-items'],
+		observedAttributes: [
+			'active',
+			'max-toolbar-items',
+			'skip-animation-on-mount',
+		],
 		styleSheets: [style],
 	}),
 );
