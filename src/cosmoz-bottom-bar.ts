@@ -170,7 +170,6 @@ const openActionsMenu = (host: HTMLElement) => {
 type Host = HTMLElement & {
 	active?: boolean;
 	maxToolbarItems?: number;
-	skipAnimationOnMount?: boolean;
 };
 
 const useMenuButtons = (host: Host) => {
@@ -231,7 +230,7 @@ const useMenuButtons = (host: Host) => {
 };
 
 const CosmozBottomBar = (host: Host) => {
-	const { active = false, skipAnimationOnMount } = host;
+	const { active = false } = host;
 	const mounted = useRef(false);
 
 	useActivity(
@@ -249,7 +248,7 @@ const CosmozBottomBar = (host: Host) => {
 	const toggle = useMemo(() => toggleSize('height'), []);
 
 	useLayoutEffect(() => {
-		if (!mounted.current && skipAnimationOnMount) {
+		if (!mounted.current) {
 			toggle(host, active, { duration: 0 });
 		} else {
 			toggle(host, active);
@@ -310,11 +309,7 @@ export default CosmozBottomBar;
 customElements.define(
 	'cosmoz-bottom-bar',
 	component(CosmozBottomBar, {
-		observedAttributes: [
-			'active',
-			'max-toolbar-items',
-			'skip-animation-on-mount',
-		],
+		observedAttributes: ['active', 'max-toolbar-items'],
 		styleSheets: [style],
 	}),
 );
