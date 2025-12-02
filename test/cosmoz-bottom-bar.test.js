@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import { assert, fixture, html, nextFrame, aTimeout } from '@open-wc/testing';
+import { assert, aTimeout, fixture, html, nextFrame } from '@open-wc/testing';
 
 import '../src/cosmoz-bottom-bar.ts';
 
@@ -44,7 +44,7 @@ suite('bottomBarWithoutMenu', () => {
 
 	setup(async () => {
 		bottomBar = await fixture(html`
-			<cosmoz-bottom-bar style="min-width: 200px; max-width: 200px">
+			<cosmoz-bottom-bar active style="min-width: 200px; max-width: 200px">
 				<div
 					style="width: 50px; height: 32px; background: red"
 					id="bottomBarWithoutMenuItem"
@@ -82,7 +82,7 @@ suite('bottomBarWithOverflowingButton', () => {
 
 	setup(async () => {
 		bottomBar = await fixture(html`
-			<cosmoz-bottom-bar style="min-width: 350px; max-width: 350px">
+			<cosmoz-bottom-bar active style="min-width: 350px; max-width: 350px">
 				<div
 					style="width: 200px; height: 32px; background: green"
 					id="bottomBarWithOverflowingButtonItem1"
@@ -145,6 +145,7 @@ suite('bottomBarMaxToolbarItems', () => {
 	setup(async () => {
 		bottomBar = await fixture(html`
 			<cosmoz-bottom-bar
+				active
 				.maxToolbarItems=${3}
 				style="min-width: 400px; max-width: 400px"
 			>
@@ -379,6 +380,7 @@ suite('bottomBarWithOverflowingButtonAfterOffscreenRendering', () => {
 		wrapper = await fixture(html`
 			<div style="display:none">
 				<cosmoz-bottom-bar
+					active
 					style="min-width: 350px; max-width: 350px; height: 32px;"
 					@reflow=${(ev) => {
 						currentState = ev.detail;
