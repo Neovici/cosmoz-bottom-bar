@@ -1,3 +1,16 @@
+# [9.4.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v9.3.0...v9.4.0) (2025-12-02)
+
+
+### Bug Fixes
+
+* add active prop to bottom-bar components rendered in tests ([9097ac2](https://github.com/neovici/cosmoz-bottom-bar/commit/9097ac2fdb162d77d9c2cfbdd01136b618410b42))
+
+
+### Features
+
+* add option to skip toggle animation on mount ([987cb19](https://github.com/neovici/cosmoz-bottom-bar/commit/987cb19101fd2c01616f9871414f337e67ce0a1b))
+* skip toggle animation on mount ([7ad974a](https://github.com/neovici/cosmoz-bottom-bar/commit/7ad974a4a0130214023ae034fa5fa8b51533e4ac))
+
 # [9.3.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v9.2.0...v9.3.0) (2025-08-27)
 
 
