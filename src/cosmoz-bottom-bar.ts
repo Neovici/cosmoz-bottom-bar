@@ -87,6 +87,7 @@ const style = css`
 			var(--cosmoz-button-color, #fff)
 		);
 		border-radius: 6px;
+		border-color: transparent;
 		padding: 0 18px;
 		font-size: 14px;
 		font-weight: 500;
