@@ -1,3 +1,10 @@
+# [9.5.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v9.4.0...v9.5.0) (2025-12-09)
+
+
+### Features
+
+* dark theme bottom bar toolbar ([#268](https://github.com/neovici/cosmoz-bottom-bar/issues/268)) ([09d2d49](https://github.com/neovici/cosmoz-bottom-bar/commit/09d2d49c0fad58e9cd5674ee61fb71379ce4f5c9))
+
 # [9.4.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v9.3.0...v9.4.0) (2025-12-02)
 
 
