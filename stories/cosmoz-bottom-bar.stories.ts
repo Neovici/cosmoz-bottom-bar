@@ -1,7 +1,7 @@
 /* eslint-disable no-alert */
 import { component, useState } from '@pionjs/pion';
 import '@polymer/paper-button/paper-button.js';
-import type { Meta, StoryObj } from '@storybook/web-components';
+import type { Meta, StoryObj } from '@storybook/web-components-vite';
 import { html } from 'lit-html';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { map } from 'lit-html/directives/map.js';
