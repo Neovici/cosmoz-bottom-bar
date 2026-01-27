@@ -119,6 +119,30 @@ const style = css`
 		max-width: 300px;
 	}
 
+	#dropdown::part(button) {
+		border: none;
+		cursor: pointer;
+		outline: none;
+		background: var(
+			--cosmoz-bottom-bar-button-bg-color,
+			var(--cosmoz-button-bg-color, #101010)
+		);
+		color: var(
+			--cosmoz-bottom-bar-button-color,
+			var(--cosmoz-button-color, #fff)
+		);
+		border-radius: 50%;
+		width: 40px;
+		height: 40px;
+	}
+
+	#dropdown::part(button):hover {
+		background: var(
+			--cosmoz-bottom-bar-button-hover-bg-color,
+			var(--cosmoz-button-hover-bg-color, #3a3f44)
+		);
+	}
+
 	:host([hide-actions]) #bottomBarToolbar,
 	:host([hide-actions]) #bottomBarMenu,
 	:host([hide-actions]) #dropdown {
