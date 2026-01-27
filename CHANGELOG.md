@@ -1,3 +1,20 @@
+# [10.0.0](https://github.com/Neovici/cosmoz-bottom-bar/compare/v9.5.0...v10.0.0) (2026-01-27)
+
+
+### Bug Fixes
+
+* repository URL case sensitivity ([661a1f8](https://github.com/Neovici/cosmoz-bottom-bar/commit/661a1f891a84de759dce4ccb33942ed688ff2921))
+
+
+### Features
+
+* add button styling for cosmoz-dropdown v7 compatibility ([#292](https://github.com/Neovici/cosmoz-bottom-bar/issues/292)) ([126e33d](https://github.com/Neovici/cosmoz-bottom-bar/commit/126e33d9789f911e1cda5019f264b7cf2c3dd68f))
+
+
+### BREAKING CHANGES
+
+* requires @neovici/cosmoz-dropdown@^7.0.0
+
 # [9.5.0](https://github.com/neovici/cosmoz-bottom-bar/compare/v9.4.0...v9.5.0) (2025-12-09)
 
 
