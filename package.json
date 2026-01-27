@@ -6,13 +6,13 @@
     "polymer",
     "web-components"
   ],
-  "homepage": "https://github.com/neovici/cosmoz-bottom-bar#readme",
+  "homepage": "https://github.com/Neovici/cosmoz-bottom-bar#readme",
   "bugs": {
-    "url": "https://github.com/neovici/cosmoz-bottom-bar/issues"
+    "url": "https://github.com/Neovici/cosmoz-bottom-bar/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/neovici/cosmoz-bottom-bar.git"
+    "url": "git+https://github.com/Neovici/cosmoz-bottom-bar.git"
   },
   "license": "Apache-2.0",
   "author": "Neovici Development",
