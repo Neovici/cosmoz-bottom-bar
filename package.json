@@ -27,6 +27,7 @@
   "scripts": {
     "lint": "tsc && eslint --cache .",
     "build": "tsc -p tsconfig.build.json",
+    "check:duplicates": "check-duplicate-components",
     "start": "npm run storybook:start",
     "test": "wtr --coverage",
     "test:watch": "wtr --watch",
@@ -61,7 +62,7 @@
   "devDependencies": {
     "@commitlint/cli": "^20.1.0",
     "@commitlint/config-conventional": "^20.0.0",
-    "@neovici/cfg": "^2.0.0",
+    "@neovici/cfg": "^2.8.0",
     "@open-wc/testing": "^4.0.0",
     "@polymer/iron-icon": "^3.0.1",
     "@polymer/iron-icons": "^3.0.1",
@@ -74,13 +75,14 @@
     "@webcomponents/webcomponentsjs": "^2.5.0",
     "esbuild": "^0.27.0",
     "eslint": "^9.0.0",
+    "eslint-plugin-storybook": "10.2.0",
     "http-server": "^14.1.1",
     "husky": "^9.1.1",
+    "lint-staged": "^16.2.7",
     "rollup-plugin-esbuild": "^6.1.1",
     "semantic-release": "^25.0.1",
     "sinon": "^21.0.0",
     "storybook": "^10.1.11",
-    "typescript": "^5.0.0",
-    "eslint-plugin-storybook": "10.2.0"
+    "typescript": "^5.0.0"
   }
 }
