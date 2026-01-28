@@ -1,3 +1,10 @@
+# [10.1.0](https://github.com/Neovici/cosmoz-bottom-bar/compare/v10.0.0...v10.1.0) (2026-01-28)
+
+
+### Features
+
+* add duplicate web component check ([#294](https://github.com/Neovici/cosmoz-bottom-bar/issues/294)) ([2c02f05](https://github.com/Neovici/cosmoz-bottom-bar/commit/2c02f053efc7430c235fe1fa1f8d45a8301d9404))
+
 # [10.0.0](https://github.com/Neovici/cosmoz-bottom-bar/compare/v9.5.0...v10.0.0) (2026-01-27)
 
 
