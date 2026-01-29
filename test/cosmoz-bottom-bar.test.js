@@ -152,6 +152,48 @@ suite('bottomBarWithOverflowingButton', () => {
 	});
 });
 
+suite('bottomBarWithTitleOnlyButtons', () => {
+	let bottomBar;
+
+	setup(async () => {
+		bottomBar = await fixture(html`
+			<cosmoz-bottom-bar active style="min-width: 350px; max-width: 350px">
+				<div
+					style="width: 200px; height: 32px; background: green"
+					title="First Action"
+					id="titleOnlyItem1"
+				></div>
+				<div
+					style="width: 200px; height:32px; background: limegreen"
+					title="Second Action"
+					id="titleOnlyItem2"
+				></div>
+			</cosmoz-bottom-bar>
+		`);
+
+		await nextFrame();
+	});
+
+	test('menu buttons should use title attribute from source button', async () => {
+		const dropdown = bottomBar.shadowRoot.querySelector('#dropdown');
+		const menuButtonEls = dropdown.querySelectorAll('button');
+
+		assert.isAbove(menuButtonEls.length, 0, 'Should have menu buttons');
+
+		const menuButton = menuButtonEls[0];
+		assert.equal(
+			menuButton.textContent.trim(),
+			'Second Action',
+			'Menu button text should come from source button title attribute',
+		);
+		assert.equal(
+			menuButton.getAttribute('title'),
+			'Second Action',
+			'Menu button should have title attribute',
+		);
+	});
+});
+
 suite('bottomBarMaxToolbarItems', () => {
 	let bottomBar;
 	let visibleToolbarElements;
