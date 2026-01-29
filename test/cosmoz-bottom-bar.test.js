@@ -135,6 +135,21 @@ suite('bottomBarWithOverflowingButton', () => {
 			'Dropdown should not be hidden',
 		);
 	});
+
+	test('menu buttons should have title attribute', async () => {
+		const dropdown = bottomBar.shadowRoot.querySelector('#dropdown');
+		const menuButtonEls = dropdown.querySelectorAll('button');
+
+		assert.isAbove(menuButtonEls.length, 0, 'Should have menu buttons');
+
+		menuButtonEls.forEach((button) => {
+			assert.equal(
+				button.getAttribute('title'),
+				button.textContent.trim(),
+				'Menu button should have title matching its text content',
+			);
+		});
+	});
 });
 
 suite('bottomBarMaxToolbarItems', () => {

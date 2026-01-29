@@ -319,7 +319,10 @@ const CosmozBottomBar = (host: Host) => {
 			${map(
 				menuButtons,
 				(menuButton) => html`
-					<button @click=${() => menuButton.element.click()}>
+					<button
+						title=${menuButton.text}
+						@click=${() => menuButton.element.click()}
+					>
 						${menuButton.text}
 					</button>
 				`,
