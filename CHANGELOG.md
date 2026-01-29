@@ -1,3 +1,10 @@
+# [10.2.0](https://github.com/Neovici/cosmoz-bottom-bar/compare/v10.1.0...v10.2.0) (2026-01-29)
+
+
+### Features
+
+* add title attribute to overflow menu buttons ([#295](https://github.com/Neovici/cosmoz-bottom-bar/issues/295)) ([380ce80](https://github.com/Neovici/cosmoz-bottom-bar/commit/380ce80171e379758eaa247a0e4df24a75f64b49))
+
 # [10.1.0](https://github.com/Neovici/cosmoz-bottom-bar/compare/v10.0.0...v10.1.0) (2026-01-28)
 
 
