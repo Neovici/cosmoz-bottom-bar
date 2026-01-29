@@ -218,7 +218,7 @@ const useMenuButtons = (host: Host) => {
 				.map((btn) => ({
 					element: btn,
 					priority: Number(btn.dataset.priority ?? 0),
-					text: btn.textContent?.trim() || '',
+					text: btn.getAttribute('title') || btn.textContent?.trim() || '',
 				}))
 				.toSorted((a, b) => b.priority - a.priority),
 		[allButtons],
