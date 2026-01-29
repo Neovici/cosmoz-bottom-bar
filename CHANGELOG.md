@@ -1,3 +1,10 @@
+## [10.2.1](https://github.com/Neovici/cosmoz-bottom-bar/compare/v10.2.0...v10.2.1) (2026-01-29)
+
+
+### Bug Fixes
+
+* read title attribute from source button for menu text ([#296](https://github.com/Neovici/cosmoz-bottom-bar/issues/296)) ([0f87670](https://github.com/Neovici/cosmoz-bottom-bar/commit/0f87670437165bfa5cbc29e572f2b02c3818d0da))
+
 # [10.2.0](https://github.com/Neovici/cosmoz-bottom-bar/compare/v10.1.0...v10.2.0) (2026-01-29)
 
 
