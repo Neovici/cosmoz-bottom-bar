@@ -1,3 +1,10 @@
+## [10.2.2](https://github.com/Neovici/cosmoz-bottom-bar/compare/v10.2.1...v10.2.2) (2026-01-30)
+
+
+### Bug Fixes
+
+* match v8 look ([14708b5](https://github.com/Neovici/cosmoz-bottom-bar/commit/14708b5ecaa7b1ffd22ae3be574dd6c1e04f1cad))
+
 ## [10.2.1](https://github.com/Neovici/cosmoz-bottom-bar/compare/v10.2.0...v10.2.1) (2026-01-29)
 
 
