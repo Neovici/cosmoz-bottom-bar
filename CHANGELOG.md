@@ -1,3 +1,10 @@
+## [10.2.3](https://github.com/Neovici/cosmoz-bottom-bar/compare/v10.2.2...v10.2.3) (2026-01-30)
+
+
+### Bug Fixes
+
+* elements show up and then dissapear ([#298](https://github.com/Neovici/cosmoz-bottom-bar/issues/298)) ([4e348d2](https://github.com/Neovici/cosmoz-bottom-bar/commit/4e348d242f4e9bd73bf49c00868488effbe2975d))
+
 ## [10.2.2](https://github.com/Neovici/cosmoz-bottom-bar/compare/v10.2.1...v10.2.2) (2026-01-30)
 
 
