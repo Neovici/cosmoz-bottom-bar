@@ -67,7 +67,7 @@ const style = css`
 		justify-content: flex-start;
 		flex-direction: row-reverse;
 		position: relative;
-		margin: 0 8px;
+		margin: 0;
 		min-width: 0;
 		max-height: 40px;
 	}
@@ -131,7 +131,7 @@ const style = css`
 			--cosmoz-bottom-bar-button-color,
 			var(--cosmoz-button-color, #fff)
 		);
-		border-radius: 50%;
+		border-radius: 2px;
 		width: 40px;
 		height: 40px;
 	}
