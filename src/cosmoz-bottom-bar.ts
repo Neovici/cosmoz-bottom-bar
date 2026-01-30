@@ -103,6 +103,10 @@ const style = css`
 		order: 9999;
 	}
 
+	#bottomBarToolbar::slotted(:not(slot):not([unstyled]):not([processed])) {
+		visibility: hidden;
+	}
+
 	#bottomBarToolbar::slotted(:not(slot)[disabled]) {
 		opacity: var(--cosmoz-button-disabled-opacity, 0.15);
 		pointer-events: none;
@@ -230,6 +234,7 @@ const useMenuButtons = (host: Host) => {
 	useEffect(() => {
 		processedButtons.forEach(({ element, priority }, i) => {
 			const isVisible = i < toolbarLimit;
+			element.toggleAttribute('processed', true);
 			element.dataset.visibility = isVisible ? 'visible' : 'hidden';
 			element.style.order = String(-priority);
 		});
