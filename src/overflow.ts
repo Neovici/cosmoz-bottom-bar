@@ -41,11 +41,13 @@ const setupObserver = (slot: HTMLSlotElement, onOverflow: OnOverflow) => {
 	let visible: Set<HTMLElement> = new Set();
 	let overflowing: Set<HTMLElement> = new Set();
 	let hidden: Set<HTMLElement> = new Set();
+	let pending: Set<HTMLElement> = new Set();
 
 	const observer: IntersectionObserver = new IntersectionObserver(
 		(entries) => {
 			entries.forEach((entry) => {
 				const el = entry.target as HTMLElement;
+				pending.delete(el);
 
 				if (
 					entry.boundingClientRect.width === entry.intersectionRect.width &&
@@ -72,30 +74,43 @@ const setupObserver = (slot: HTMLSlotElement, onOverflow: OnOverflow) => {
 		{ root: slot.parentElement, threshold: [0, 0.5, 1] },
 	);
 
+	const classifyElements = (elements: HTMLElement[]) => {
+		const result = {
+			visible: new Set<HTMLElement>(),
+			overflowing: new Set<HTMLElement>(),
+			hidden: new Set<HTMLElement>(),
+			pending: new Set<HTMLElement>(),
+		};
+
+		for (const c of elements) {
+			if (visible.has(c)) {
+				result.visible.add(c);
+			} else if (overflowing.has(c)) {
+				result.overflowing.add(c);
+			} else if (hidden.has(c)) {
+				result.hidden.add(c);
+			} else if (pending.has(c)) {
+				result.pending.add(c);
+			} else {
+				observer.observe(c);
+				result.pending.add(c);
+			}
+		}
+
+		return result;
+	};
+
 	const observe = () => {
 		const elements = Array.from(
 			slot.assignedElements({ flatten: true }),
 		) as HTMLElement[];
-		const newVisible: typeof visible = new Set();
-		const newOverflowing: typeof overflowing = new Set();
-		const newHidden: typeof hidden = new Set();
 
-		for (const c of elements) {
-			if (visible.has(c)) {
-				newVisible.add(c);
-			} else if (overflowing.has(c)) {
-				newOverflowing.add(c);
-			} else if (hidden.has(c)) {
-				newHidden.add(c);
-			} else {
-				observer.observe(c);
-			}
+		({ visible, overflowing, hidden, pending } = classifyElements(elements));
+
+		// Only call onOverflow if no elements are pending classification
+		if (pending.size === 0) {
+			onOverflow({ visible, overflowing, hidden });
 		}
-
-		visible = newVisible;
-		overflowing = newOverflowing;
-		hidden = newHidden;
-		onOverflow({ visible, overflowing, hidden });
 	};
 
 	observe();
