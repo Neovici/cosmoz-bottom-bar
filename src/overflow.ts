@@ -74,46 +74,38 @@ const setupObserver = (slot: HTMLSlotElement, onOverflow: OnOverflow) => {
 		{ root: slot.parentElement, threshold: [0, 0.5, 1] },
 	);
 
-	const classifyElement = (
-		c: HTMLElement,
-		sets: {
-			newVisible: Set<HTMLElement>;
-			newOverflowing: Set<HTMLElement>;
-			newHidden: Set<HTMLElement>;
-			newPending: Set<HTMLElement>;
-		},
-	) => {
-		if (visible.has(c)) {
-			sets.newVisible.add(c);
-		} else if (overflowing.has(c)) {
-			sets.newOverflowing.add(c);
-		} else if (hidden.has(c)) {
-			sets.newHidden.add(c);
-		} else if (pending.has(c)) {
-			sets.newPending.add(c);
-		} else {
-			observer.observe(c);
-			sets.newPending.add(c);
+	const classifyElements = (elements: HTMLElement[]) => {
+		const result = {
+			visible: new Set<HTMLElement>(),
+			overflowing: new Set<HTMLElement>(),
+			hidden: new Set<HTMLElement>(),
+			pending: new Set<HTMLElement>(),
+		};
+
+		for (const c of elements) {
+			if (visible.has(c)) {
+				result.visible.add(c);
+			} else if (overflowing.has(c)) {
+				result.overflowing.add(c);
+			} else if (hidden.has(c)) {
+				result.hidden.add(c);
+			} else if (pending.has(c)) {
+				result.pending.add(c);
+			} else {
+				observer.observe(c);
+				result.pending.add(c);
+			}
 		}
+
+		return result;
 	};
 
 	const observe = () => {
 		const elements = Array.from(
 			slot.assignedElements({ flatten: true }),
 		) as HTMLElement[];
-		const sets = {
-			newVisible: new Set<HTMLElement>(),
-			newOverflowing: new Set<HTMLElement>(),
-			newHidden: new Set<HTMLElement>(),
-			newPending: new Set<HTMLElement>(),
-		};
 
-		elements.forEach((c) => classifyElement(c, sets));
-
-		visible = sets.newVisible;
-		overflowing = sets.newOverflowing;
-		hidden = sets.newHidden;
-		pending = sets.newPending;
+		({ visible, overflowing, hidden, pending } = classifyElements(elements));
 
 		// Only call onOverflow if no elements are pending classification
 		if (pending.size === 0) {
