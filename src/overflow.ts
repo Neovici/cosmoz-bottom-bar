@@ -41,11 +41,13 @@ const setupObserver = (slot: HTMLSlotElement, onOverflow: OnOverflow) => {
 	let visible: Set<HTMLElement> = new Set();
 	let overflowing: Set<HTMLElement> = new Set();
 	let hidden: Set<HTMLElement> = new Set();
+	let pending: Set<HTMLElement> = new Set();
 
 	const observer: IntersectionObserver = new IntersectionObserver(
 		(entries) => {
 			entries.forEach((entry) => {
 				const el = entry.target as HTMLElement;
+				pending.delete(el);
 
 				if (
 					entry.boundingClientRect.width === entry.intersectionRect.width &&
@@ -72,30 +74,51 @@ const setupObserver = (slot: HTMLSlotElement, onOverflow: OnOverflow) => {
 		{ root: slot.parentElement, threshold: [0, 0.5, 1] },
 	);
 
+	const classifyElement = (
+		c: HTMLElement,
+		sets: {
+			newVisible: Set<HTMLElement>;
+			newOverflowing: Set<HTMLElement>;
+			newHidden: Set<HTMLElement>;
+			newPending: Set<HTMLElement>;
+		},
+	) => {
+		if (visible.has(c)) {
+			sets.newVisible.add(c);
+		} else if (overflowing.has(c)) {
+			sets.newOverflowing.add(c);
+		} else if (hidden.has(c)) {
+			sets.newHidden.add(c);
+		} else if (pending.has(c)) {
+			sets.newPending.add(c);
+		} else {
+			observer.observe(c);
+			sets.newPending.add(c);
+		}
+	};
+
 	const observe = () => {
 		const elements = Array.from(
 			slot.assignedElements({ flatten: true }),
 		) as HTMLElement[];
-		const newVisible: typeof visible = new Set();
-		const newOverflowing: typeof overflowing = new Set();
-		const newHidden: typeof hidden = new Set();
+		const sets = {
+			newVisible: new Set<HTMLElement>(),
+			newOverflowing: new Set<HTMLElement>(),
+			newHidden: new Set<HTMLElement>(),
+			newPending: new Set<HTMLElement>(),
+		};
 
-		for (const c of elements) {
-			if (visible.has(c)) {
-				newVisible.add(c);
-			} else if (overflowing.has(c)) {
-				newOverflowing.add(c);
-			} else if (hidden.has(c)) {
-				newHidden.add(c);
-			} else {
-				observer.observe(c);
-			}
+		elements.forEach((c) => classifyElement(c, sets));
+
+		visible = sets.newVisible;
+		overflowing = sets.newOverflowing;
+		hidden = sets.newHidden;
+		pending = sets.newPending;
+
+		// Only call onOverflow if no elements are pending classification
+		if (pending.size === 0) {
+			onOverflow({ visible, overflowing, hidden });
 		}
-
-		visible = newVisible;
-		overflowing = newOverflowing;
-		hidden = newHidden;
-		onOverflow({ visible, overflowing, hidden });
 	};
 
 	observe();

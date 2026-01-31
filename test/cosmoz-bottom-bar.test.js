@@ -428,6 +428,65 @@ suite('toggle bottom bar', () => {
 	});
 });
 
+suite('bottomBarWithOverlay', () => {
+	test('no reflow should report zero visible buttons when buttons fit', async () => {
+		const reflowStates = [];
+		await fixture(html`
+			<div style="position: relative; min-width: 400px; max-width: 400px;">
+				<cosmoz-bottom-bar
+					active
+					.maxToolbarItems=${3}
+					style="min-width: 400px; max-width: 400px"
+					@reflow=${(ev) => reflowStates.push(ev.detail)}
+				>
+					<div
+						style="width: 50px; height: 32px; background: red"
+						id="overlayTestBtn1"
+					></div>
+					<div
+						style="width: 50px; height: 32px; background: green"
+						id="overlayTestBtn2"
+					></div>
+				</cosmoz-bottom-bar>
+				<div
+					id="overlay"
+					style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 999; background: rgba(0,0,0,0.5);"
+				></div>
+			</div>
+		`);
+		await nextFrame();
+		await aTimeout(100);
+
+		// Check that we received reflow events
+		assert.isAbove(
+			reflowStates.length,
+			0,
+			'Should have received reflow events',
+		);
+
+		// The final reflow should have visible buttons
+		const finalState = reflowStates[reflowStates.length - 1];
+		assert.isAbove(
+			finalState.visible.size,
+			0,
+			'Final reflow should report visible buttons',
+		);
+
+		// Check for bad intermediate states where visible + overflowing = 0
+		// The first reflow may have empty sets (initial useState value), so skip it
+		// Any subsequent empty reflows indicate a race condition bug
+		const reflowsAfterInit = reflowStates.slice(1);
+		const badReflows = reflowsAfterInit.filter(
+			(state) => state.visible.size === 0 && state.overflowing.size === 0,
+		);
+		assert.equal(
+			badReflows.length,
+			0,
+			'No reflow after initialization should have zero visible and zero overflowing buttons',
+		);
+	});
+});
+
 suite('bottomBarWithOverflowingButtonAfterOffscreenRendering', () => {
 	let wrapper;
 	let bottomBar;
