@@ -75,7 +75,7 @@
     "@webcomponents/webcomponentsjs": "^2.5.0",
     "esbuild": "^0.27.0",
     "eslint": "^9.0.0",
-    "eslint-plugin-storybook": "10.2.7",
+    "eslint-plugin-storybook": "10.2.8",
     "http-server": "^14.1.1",
     "husky": "^9.1.1",
     "lint-staged": "^16.2.7",
