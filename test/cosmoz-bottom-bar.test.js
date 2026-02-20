@@ -3,44 +3,20 @@ import { assert, aTimeout, fixture, html, nextFrame } from '@open-wc/testing';
 
 import '../src/cosmoz-bottom-bar.ts';
 
-// TODO: this should be a function in bottomBar that is imported here.
-// Use that definition of hidden not ours.
-const getVisibleToolbarElements = (bottomBar) => {
-	const children = Array.from(bottomBar.children);
-
-	return children.filter(
-		(el) =>
-			!el.hidden &&
-			!el.hasAttribute('hidden') &&
-			el.style.visibility !== 'hidden' &&
-			el.dataset.visibility !== 'hidden' &&
-			el.offsetWidth > 0 &&
-			el.offsetHeight > 0,
-	);
+const getToolbarElements = (bottomBar) => {
+	return Array.from(
+		bottomBar.querySelectorAll('[slot="bottom-bar-toolbar"]'),
+	).filter((el) => !el.hidden);
 };
 
-const getMenuItems = (bottomBar) => {
-	const allNonHiddenElements = Array.from(bottomBar.children).filter(
-		(el) => !el.hidden && !el.hasAttribute('hidden'),
-	);
-	const visibleToolbarElements = getVisibleToolbarElements(bottomBar);
-
-	const menuItems = allNonHiddenElements.filter(
-		(el) => !visibleToolbarElements.includes(el),
-	);
-
-	const hasMenuItems = bottomBar.hasAttribute('has-menu-items');
-
-	return {
-		hasMenuItems,
-		menuItems,
-	};
+const getMenuElements = (bottomBar) => {
+	return Array.from(
+		bottomBar.querySelectorAll('[slot="bottom-bar-menu"]'),
+	).filter((el) => !el.hidden);
 };
 
 suite('bottomBarWithoutMenu', () => {
 	let bottomBar;
-	let visibleToolbarElements;
-	let hasMenuItems;
 
 	setup(async () => {
 		bottomBar = await fixture(html`
@@ -53,21 +29,16 @@ suite('bottomBarWithoutMenu', () => {
 		`);
 
 		await nextFrame();
-		visibleToolbarElements = getVisibleToolbarElements(bottomBar);
-		({ hasMenuItems } = getMenuItems(bottomBar));
 	});
 
-	test('button should be visible in toolbar', async () => {
+	test('button should be in toolbar slot', async () => {
+		const toolbarElements = getToolbarElements(bottomBar);
 		const item = bottomBar.querySelector('#bottomBarWithoutMenuItem');
-		assert.include(
-			visibleToolbarElements,
-			item,
-			'Item should be visible in the toolbar',
-		);
+		assert.include(toolbarElements, item, 'Item should be in the toolbar slot');
 	});
 
 	test('menu button should be hidden', async () => {
-		assert.isFalse(hasMenuItems);
+		assert.isFalse(bottomBar.hasAttribute('has-menu-items'));
 
 		const dropdown = bottomBar.shadowRoot.querySelector('cosmoz-dropdown-menu');
 		assert.equal(getComputedStyle(dropdown).display, 'none');
@@ -76,9 +47,6 @@ suite('bottomBarWithoutMenu', () => {
 
 suite('bottomBarWithOverflowingButton', () => {
 	let bottomBar;
-	let visibleToolbarElements;
-	let menuItems;
-	let hasMenuItems;
 
 	setup(async () => {
 		bottomBar = await fixture(html`
@@ -95,109 +63,59 @@ suite('bottomBarWithOverflowingButton', () => {
 		`);
 
 		await nextFrame();
-		({ menuItems, hasMenuItems } = getMenuItems(bottomBar));
-		visibleToolbarElements = getVisibleToolbarElements(bottomBar);
 	});
 
-	test('First button should be visible in toolbar', async () => {
+	test('First button should be in toolbar slot', async () => {
+		const toolbarElements = getToolbarElements(bottomBar);
 		const item = bottomBar.querySelector(
 			'#bottomBarWithOverflowingButtonItem1',
 		);
 		assert.include(
-			visibleToolbarElements,
+			toolbarElements,
 			item,
-			'First item should be visible in the toolbar',
+			'First item should be in the toolbar slot',
 		);
 	});
 
-	test('Second button should not be visible in toolbar', async () => {
+	test('Second button should be in menu slot', async () => {
+		const menuElements = getMenuElements(bottomBar);
 		const item = bottomBar.querySelector(
 			'#bottomBarWithOverflowingButtonItem2',
 		);
-		assert.notInclude(
-			visibleToolbarElements,
-			item,
-			'Second item should not be visible in the toolbar',
-		);
 		assert.include(
-			menuItems,
+			menuElements,
 			item,
-			'Second item should be part of menu elements',
+			'Second item should be in the menu slot',
 		);
 	});
 
 	test('menu button should be visible', async () => {
-		assert.isTrue(hasMenuItems, 'Should have has-menu-items attribute');
-
-		const dropdown = bottomBar.shadowRoot.querySelector('#dropdown');
-		assert.isFalse(
-			dropdown.hasAttribute('hidden'),
-			'Dropdown should not be hidden',
+		assert.isTrue(
+			bottomBar.hasAttribute('has-menu-items'),
+			'Should have has-menu-items attribute',
 		);
 	});
 
-	test('menu buttons should have title attribute', async () => {
-		const dropdown = bottomBar.shadowRoot.querySelector('#dropdown');
-		const menuButtonEls = dropdown.querySelectorAll('button');
+	test('menu items should be the actual elements (not clones)', async () => {
+		const menuSlot = bottomBar.shadowRoot.querySelector('#bottomBarMenu');
+		const assignedElements = menuSlot.assignedElements({ flatten: true });
 
-		assert.isAbove(menuButtonEls.length, 0, 'Should have menu buttons');
+		assert.isAbove(assignedElements.length, 0, 'Should have menu items');
 
-		menuButtonEls.forEach((button) => {
-			assert.equal(
-				button.getAttribute('title'),
-				button.textContent.trim(),
-				'Menu button should have title matching its text content',
-			);
-		});
-	});
-});
-
-suite('bottomBarWithTitleOnlyButtons', () => {
-	let bottomBar;
-
-	setup(async () => {
-		bottomBar = await fixture(html`
-			<cosmoz-bottom-bar active style="min-width: 350px; max-width: 350px">
-				<div
-					style="width: 200px; height: 32px; background: green"
-					title="First Action"
-					id="titleOnlyItem1"
-				></div>
-				<div
-					style="width: 200px; height:32px; background: limegreen"
-					title="Second Action"
-					id="titleOnlyItem2"
-				></div>
-			</cosmoz-bottom-bar>
-		`);
-
-		await nextFrame();
-	});
-
-	test('menu buttons should use title attribute from source button', async () => {
-		const dropdown = bottomBar.shadowRoot.querySelector('#dropdown');
-		const menuButtonEls = dropdown.querySelectorAll('button');
-
-		assert.isAbove(menuButtonEls.length, 0, 'Should have menu buttons');
-
-		const menuButton = menuButtonEls[0];
-		assert.equal(
-			menuButton.textContent.trim(),
-			'Second Action',
-			'Menu button text should come from source button title attribute',
+		// The menu items should be the same DOM elements, not synthetic clones
+		const item = bottomBar.querySelector(
+			'#bottomBarWithOverflowingButtonItem2',
 		);
-		assert.equal(
-			menuButton.getAttribute('title'),
-			'Second Action',
-			'Menu button should have title attribute',
+		assert.include(
+			assignedElements,
+			item,
+			'Menu slot should contain the actual element, not a clone',
 		);
 	});
 });
 
 suite('bottomBarMaxToolbarItems', () => {
 	let bottomBar;
-	let visibleToolbarElements;
-	let menuItems;
 
 	setup(async () => {
 		bottomBar = await fixture(html`
@@ -225,36 +143,87 @@ suite('bottomBarMaxToolbarItems', () => {
 			</cosmoz-bottom-bar>
 		`);
 		await nextFrame();
-
-		visibleToolbarElements = getVisibleToolbarElements(bottomBar);
-		({ menuItems } = getMenuItems(bottomBar));
 	});
 
 	test('Toolbar should not contain more than max-toolbar-items', async () => {
+		const toolbarElements = getToolbarElements(bottomBar);
+		const menuElements = getMenuElements(bottomBar);
+
 		assert.equal(
-			visibleToolbarElements.length,
+			toolbarElements.length,
 			3,
-			'Should have exactly 3 visible items in toolbar',
+			'Should have exactly 3 items in toolbar slot',
 		);
 
-		const item1 = bottomBar.querySelector('#bottomBarMaxToolbarItemsItem1');
-		const item2 = bottomBar.querySelector('#bottomBarMaxToolbarItemsItem2');
-		const item3 = bottomBar.querySelector('#bottomBarMaxToolbarItemsItem3');
+		assert.equal(
+			menuElements.length,
+			1,
+			'Should have exactly 1 item in menu slot',
+		);
+
 		const item4 = bottomBar.querySelector('#bottomBarMaxToolbarItemsItem4');
+		assert.include(menuElements, item4, 'Item 4 should be in menu');
+	});
+});
 
-		assert.include(visibleToolbarElements, item1, 'Item 1 should be visible');
-		assert.include(visibleToolbarElements, item2, 'Item 2 should be visible');
-		assert.include(visibleToolbarElements, item3, 'Item 3 should be visible');
+suite('bottomBarWithPriority', () => {
+	let bottomBar;
 
-		assert.include(menuItems, item4, 'Item 4 should be in menu');
+	setup(async () => {
+		bottomBar = await fixture(html`
+			<cosmoz-bottom-bar
+				active
+				.maxToolbarItems=${1}
+				style="min-width: 400px; max-width: 400px"
+			>
+				<div
+					id="lowPriorityItem"
+					data-priority="1"
+					style="width: 50px; height: 32px; background: red"
+				></div>
+				<div
+					id="highPriorityItem"
+					data-priority="10"
+					style="width: 50px; height: 32px; background: blue"
+				></div>
+				<div
+					id="noPriorityItem"
+					style="width: 50px; height: 32px; background: green"
+				></div>
+			</cosmoz-bottom-bar>
+		`);
+		await nextFrame();
+	});
+
+	test('Highest priority item should be in toolbar', async () => {
+		const toolbarElements = getToolbarElements(bottomBar);
+		const highPriorityItem = bottomBar.querySelector('#highPriorityItem');
+		assert.include(
+			toolbarElements,
+			highPriorityItem,
+			'High priority item should be in toolbar',
+		);
+	});
+
+	test('Lower priority items should be in menu', async () => {
+		const menuElements = getMenuElements(bottomBar);
+		const lowPriorityItem = bottomBar.querySelector('#lowPriorityItem');
+		const noPriorityItem = bottomBar.querySelector('#noPriorityItem');
+		assert.include(
+			menuElements,
+			lowPriorityItem,
+			'Low priority item should be in menu',
+		);
+		assert.include(
+			menuElements,
+			noPriorityItem,
+			'No priority item should be in menu',
+		);
 	});
 });
 
 suite('bottomBarWithHiddenButton', () => {
 	let bottomBar;
-	let visibleToolbarElements;
-	let menuItems;
-	let hasMenuItems;
 
 	setup(async () => {
 		bottomBar = await fixture(html`
@@ -285,32 +254,22 @@ suite('bottomBarWithHiddenButton', () => {
 		`);
 
 		await nextFrame();
-
-		visibleToolbarElements = getVisibleToolbarElements(bottomBar);
-		({ menuItems, hasMenuItems } = getMenuItems(bottomBar));
 	});
 
 	test('Hidden items should not affect layout', async () => {
+		const toolbarElements = getToolbarElements(bottomBar);
+		const menuElements = getMenuElements(bottomBar);
+
 		assert.equal(
-			visibleToolbarElements.length,
+			toolbarElements.length,
 			2,
-			'Should have 2 visible toolbar items with 500px width',
+			'Should have 2 items in toolbar (hidden items excluded)',
 		);
-
-		assert.equal(
-			visibleToolbarElements[0].id,
-			'bottomBarWithHiddenButtonItem1',
-			'First element should be visible',
+		assert.equal(menuElements.length, 0, 'Should have no menu items');
+		assert.isFalse(
+			bottomBar.hasAttribute('has-menu-items'),
+			'Should not have has-menu-items attribute',
 		);
-
-		assert.equal(
-			visibleToolbarElements[1].id,
-			'bottomBarWithHiddenButtonItem3',
-			'Third element (second non-hidden) should be visible',
-		);
-
-		assert.equal(menuItems.length, 0, 'Should have no menu items');
-		assert.isFalse(hasMenuItems, 'Should not have has-menu-items attribute');
 
 		const dropdown = bottomBar.shadowRoot.querySelector('cosmoz-dropdown-menu');
 		assert.equal(
@@ -320,51 +279,28 @@ suite('bottomBarWithHiddenButton', () => {
 		);
 	});
 
-	test('Unhiding item affects layout appropriately', async () => {
-		const item1 = bottomBar.querySelector('#bottomBarWithHiddenButtonItem1');
+	test('Unhiding item triggers relayout', async () => {
 		const item2 = bottomBar.querySelector('#bottomBarWithHiddenButtonItem2');
-		const item3 = bottomBar.querySelector('#bottomBarWithHiddenButtonItem3');
-
-		assert.include(
-			visibleToolbarElements,
-			item1,
-			'Item 1 should initially be visible',
-		);
-		assert.notInclude(
-			visibleToolbarElements,
-			item2,
-			'Item 2 should initially be hidden',
-		);
-		assert.include(
-			visibleToolbarElements,
-			item3,
-			'Item 3 should initially be visible',
-		);
 
 		item2.hidden = false;
 		item2.removeAttribute('hidden');
 
 		await nextFrame();
+		await aTimeout(100);
 
-		const newVisibleElements = getVisibleToolbarElements(bottomBar);
-		const { menuItems: newMenuItems, hasMenuItems: newHasMenuItems } =
-			getMenuItems(bottomBar);
+		const toolbarElements = getToolbarElements(bottomBar);
+		const menuElements = getMenuElements(bottomBar);
 
-		const item2Visible = newVisibleElements.includes(item2);
-		const item2InMenu = newMenuItems.includes(item2);
-
-		assert.isTrue(
-			item2Visible || item2InMenu,
-			'Unhidden item2 should either be visible in toolbar or moved to menu',
+		// Now we have 3 non-hidden items, maxToolbarItems is 3
+		assert.equal(
+			toolbarElements.length,
+			3,
+			'Should have 3 items in toolbar after unhiding',
 		);
-
-		assert.isTrue(
-			newMenuItems.length > 0,
-			'Should have items in the menu when not all visible items fit',
-		);
-		assert.isTrue(
-			newHasMenuItems,
-			'Should have has-menu-items attribute when not all visible items fit',
+		assert.equal(
+			menuElements.length,
+			0,
+			'Should have no menu items with 3 items and maxToolbarItems=3',
 		);
 	});
 });
@@ -428,172 +364,97 @@ suite('toggle bottom bar', () => {
 	});
 });
 
-suite('bottomBarWithOverlay', () => {
-	test('no reflow should report zero visible buttons when buttons fit', async () => {
-		const reflowStates = [];
-		await fixture(html`
-			<div style="position: relative; min-width: 400px; max-width: 400px;">
-				<cosmoz-bottom-bar
-					active
-					.maxToolbarItems=${3}
-					style="min-width: 400px; max-width: 400px"
-					@reflow=${(ev) => reflowStates.push(ev.detail)}
-				>
-					<div
-						style="width: 50px; height: 32px; background: red"
-						id="overlayTestBtn1"
-					></div>
-					<div
-						style="width: 50px; height: 32px; background: green"
-						id="overlayTestBtn2"
-					></div>
-				</cosmoz-bottom-bar>
+suite('slot-based distribution', () => {
+	test('items with slot="bottom-bar-toolbar" should stay in toolbar', async () => {
+		const bottomBar = await fixture(html`
+			<cosmoz-bottom-bar active>
 				<div
-					id="overlay"
-					style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 999; background: rgba(0,0,0,0.5);"
+					slot="bottom-bar-toolbar"
+					id="preSlottedToolbar"
+					style="width: 50px; height: 32px; background: red"
 				></div>
-			</div>
+			</cosmoz-bottom-bar>
 		`);
 		await nextFrame();
-		await aTimeout(100);
 
-		// Check that we received reflow events
-		assert.isAbove(
-			reflowStates.length,
-			0,
-			'Should have received reflow events',
-		);
-
-		// The final reflow should have visible buttons
-		const finalState = reflowStates[reflowStates.length - 1];
-		assert.isAbove(
-			finalState.visible.size,
-			0,
-			'Final reflow should report visible buttons',
-		);
-
-		// Check for bad intermediate states where visible + overflowing = 0
-		// The first reflow may have empty sets (initial useState value), so skip it
-		// Any subsequent empty reflows indicate a race condition bug
-		const reflowsAfterInit = reflowStates.slice(1);
-		const badReflows = reflowsAfterInit.filter(
-			(state) => state.visible.size === 0 && state.overflowing.size === 0,
-		);
+		const item = bottomBar.querySelector('#preSlottedToolbar');
 		assert.equal(
-			badReflows.length,
-			0,
-			'No reflow after initialization should have zero visible and zero overflowing buttons',
+			item.getAttribute('slot'),
+			'bottom-bar-toolbar',
+			'Pre-slotted toolbar item should remain in toolbar slot',
 		);
 	});
-});
 
-suite('bottomBarWithOverflowingButtonAfterOffscreenRendering', () => {
-	let wrapper;
-	let bottomBar;
-	let currentState;
-
-	setup(async () => {
-		wrapper = await fixture(html`
-			<div style="display:none">
-				<cosmoz-bottom-bar
-					active
-					style="min-width: 350px; max-width: 350px; height: 32px;"
-					@reflow=${(ev) => {
-						currentState = ev.detail;
-					}}
-				>
-					<div
-						style="width: 200px; height: 32px; background: green"
-						id="bottomBarWithOverflowingButtonItem1"
-					></div>
-					<div
-						style="width: 200px; height:32px; background: limegreen"
-						id="bottomBarWithOverflowingButtonItem2"
-					></div>
-					<div
-						style="width: 200px; height:32px; background: red; display:none;"
-						id="bottomBarWithOverflowingButtonItem3"
-					></div>
-					<div
-						style="width: 200px; height:32px; background: blue"
-						id="bottomBarWithOverflowingButtonItem4"
-					></div>
-				</cosmoz-bottom-bar>
-			</div>
+	test('items are distributed from default slot to named slots', async () => {
+		const bottomBar = await fixture(html`
+			<cosmoz-bottom-bar active .maxToolbarItems=${1}>
+				<div
+					id="item1"
+					style="width: 50px; height: 32px; background: red"
+				></div>
+				<div
+					id="item2"
+					style="width: 50px; height: 32px; background: blue"
+				></div>
+			</cosmoz-bottom-bar>
 		`);
-		bottomBar = wrapper.firstElementChild;
-
-		await nextFrame();
-	});
-
-	test('buttons are all hidden when rendered off-screen', async () => {
-		const firstButton = bottomBar.querySelector(
-			'#bottomBarWithOverflowingButtonItem1',
-		);
-
-		assert.notInclude(currentState.visible, firstButton);
-		assert.notInclude(currentState.overflowing, firstButton);
-		assert.include(currentState.hidden, firstButton);
-
-		const secondButton = bottomBar.querySelector(
-			'#bottomBarWithOverflowingButtonItem2',
-		);
-
-		assert.notInclude(currentState.visible, secondButton);
-		assert.notInclude(currentState.overflowing, secondButton);
-		assert.include(currentState.hidden, secondButton);
-
-		const thirdButton = bottomBar.querySelector(
-			'#bottomBarWithOverflowingButtonItem3',
-		);
-
-		assert.notInclude(currentState.visible, thirdButton);
-		assert.notInclude(currentState.overflowing, thirdButton);
-		assert.include(currentState.hidden, thirdButton);
-
-		const fourthButton = bottomBar.querySelector(
-			'#bottomBarWithOverflowingButtonItem4',
-		);
-
-		assert.notInclude(currentState.visible, fourthButton);
-		assert.notInclude(currentState.overflowing, fourthButton);
-		assert.include(currentState.hidden, fourthButton);
-	});
-
-	test('buttons are in correct state after becoming visible', async () => {
-		wrapper.style.display = 'block';
 		await nextFrame();
 
-		const firstButton = bottomBar.querySelector(
-			'#bottomBarWithOverflowingButtonItem1',
+		const item1 = bottomBar.querySelector('#item1');
+		const item2 = bottomBar.querySelector('#item2');
+
+		// After distribution, items should have been moved to named slots
+		assert.isTrue(
+			item1.getAttribute('slot') === 'bottom-bar-toolbar' ||
+				item2.getAttribute('slot') === 'bottom-bar-toolbar',
+			'One item should be in toolbar slot',
 		);
-
-		assert.include(currentState.visible, firstButton);
-		assert.notInclude(currentState.overflowing, firstButton);
-		assert.notInclude(currentState.hidden, firstButton);
-
-		const secondButton = bottomBar.querySelector(
-			'#bottomBarWithOverflowingButtonItem2',
+		assert.isTrue(
+			item1.getAttribute('slot') === 'bottom-bar-menu' ||
+				item2.getAttribute('slot') === 'bottom-bar-menu',
+			'One item should be in menu slot',
 		);
+	});
 
-		assert.notInclude(currentState.visible, secondButton);
-		assert.include(currentState.overflowing, secondButton);
-		assert.notInclude(currentState.hidden, secondButton);
+	test('CSS classes are applied correctly', async () => {
+		const bottomBar = await fixture(html`
+			<cosmoz-bottom-bar active .maxToolbarItems=${1}>
+				<div
+					id="item1"
+					data-priority="10"
+					style="width: 50px; height: 32px; background: red"
+				></div>
+				<div
+					id="item2"
+					style="width: 50px; height: 32px; background: blue"
+				></div>
+			</cosmoz-bottom-bar>
+		`);
+		await nextFrame();
 
-		const thirdButton = bottomBar.querySelector(
-			'#bottomBarWithOverflowingButtonItem3',
-		);
+		const toolbarItems = getToolbarElements(bottomBar);
+		const menuItems = getMenuElements(bottomBar);
 
-		assert.notInclude(currentState.visible, thirdButton);
-		assert.notInclude(currentState.overflowing, thirdButton);
-		assert.include(currentState.hidden, thirdButton);
+		toolbarItems.forEach((item) => {
+			assert.isTrue(
+				item.classList.contains('cosmoz-bottom-bar-toolbar'),
+				'Toolbar items should have toolbar class',
+			);
+			assert.isFalse(
+				item.classList.contains('cosmoz-bottom-bar-menu'),
+				'Toolbar items should not have menu class',
+			);
+		});
 
-		const fourthButton = bottomBar.querySelector(
-			'#bottomBarWithOverflowingButtonItem4',
-		);
-
-		assert.notInclude(currentState.visible, fourthButton);
-		assert.include(currentState.overflowing, fourthButton);
-		assert.notInclude(currentState.hidden, fourthButton);
+		menuItems.forEach((item) => {
+			assert.isTrue(
+				item.classList.contains('cosmoz-bottom-bar-menu'),
+				'Menu items should have menu class',
+			);
+			assert.isFalse(
+				item.classList.contains('cosmoz-bottom-bar-toolbar'),
+				'Menu items should not have toolbar class',
+			);
+		});
 	});
 });
