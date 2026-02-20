@@ -1,3 +1,29 @@
+# [11.0.0](https://github.com/Neovici/cosmoz-bottom-bar/compare/v10.2.4...v11.0.0) (2026-02-20)
+
+
+* feat!: revert to slot-based menu distribution ([#318](https://github.com/Neovici/cosmoz-bottom-bar/issues/318)) ([f525170](https://github.com/Neovici/cosmoz-bottom-bar/commit/f525170d273e62eda19703cbc9a5bea9467f6d2f))
+
+
+### BREAKING CHANGES
+
+* Reverts from IntersectionObserver-based overflow
+detection to the v8-style slot-based distribution mechanism.
+
+Children are now collected from a hidden staging slot and distributed
+to named slots (bottom-bar-toolbar and bottom-bar-menu) based on
+maxToolbarItems and data-priority, instead of using an
+IntersectionObserver to detect overflow.
+
+This means:
+- Menu items are the actual DOM elements (slotted into the dropdown),
+  not synthetic clone buttons
+- Consumers must use slot='bottom-bar-toolbar' / slot='bottom-bar-menu'
+  for re-distribution through parent components (via bottomBarSlots)
+- The overflow.ts IntersectionObserver directive is removed
+
+The Pion/TS component architecture, CSS styling, cosmoz-collapse
+toggle animation, and keybinding support are all preserved from v10.
+
 ## [10.2.4](https://github.com/Neovici/cosmoz-bottom-bar/compare/v10.2.3...v10.2.4) (2026-01-31)
 
 
