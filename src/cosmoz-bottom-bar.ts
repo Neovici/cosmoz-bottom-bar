@@ -303,39 +303,54 @@ const CosmozBottomBar = (host: Host) => {
 		[maxToolbarItems],
 	);
 
-	// Observe hidden attribute changes on children to trigger relayout
-	useEffect(() => {
-		const observer = new MutationObserver(() => doLayout());
+	// Store the hidden attribute observer so onSlotChange can re-observe
+	const hiddenObserver = useRef<MutationObserver | null>(null);
 
-		// Observe the host's direct children for hidden attribute changes
-		const observeChildren = () => {
-			observer.disconnect();
-			Array.from(host.children).forEach((child) => {
-				if (isActionNode(child)) {
-					observer.observe(child, {
-						attributes: true,
-						attributeFilter: ['hidden'],
-					});
-				}
+	const observeActionNodes = useCallback(() => {
+		const observer = hiddenObserver.current;
+		if (!observer) return;
+		observer.disconnect();
+		// Get the actual action nodes (including through nested slots).
+		// This is critical for the bottomBarSlots pattern where host.children
+		// are <slot> elements and real action nodes are projected through them.
+		const actionNodes = getFlattenedNodes(host).filter(isActionNode);
+		actionNodes.forEach((node) => {
+			observer.observe(node as HTMLElement, {
+				attributes: true,
+				attributeFilter: ['hidden'],
 			});
-		};
+		});
+	}, []);
 
-		observeChildren();
+	// Observe hidden attribute changes on children to trigger relayout.
+	useEffect(() => {
+		hiddenObserver.current = new MutationObserver(() => {
+			observeActionNodes();
+			doLayout();
+		});
 
-		// Re-observe when children change
+		observeActionNodes();
+
+		// Re-observe when direct children change (handles dynamically added elements)
 		const childObserver = new MutationObserver(() => {
-			observeChildren();
+			observeActionNodes();
 			doLayout();
 		});
 		childObserver.observe(host, { childList: true });
 
 		return () => {
-			observer.disconnect();
+			hiddenObserver.current?.disconnect();
+			hiddenObserver.current = null;
 			childObserver.disconnect();
 		};
 	}, [doLayout]);
 
-	const onSlotChange = useCallback(() => doLayout(), [doLayout]);
+	const onSlotChange = useCallback(() => {
+		// Re-observe after slot changes, since new elements
+		// may have appeared through nested slots
+		observeActionNodes();
+		doLayout();
+	}, [doLayout]);
 
 	return html` <div id="bar" part="bar">
 			<div id="info" part="info"><slot name="info"></slot></div>
