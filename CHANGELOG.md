@@ -1,3 +1,10 @@
+## [11.0.1](https://github.com/Neovici/cosmoz-bottom-bar/compare/v11.0.0...v11.0.1) (2026-02-24)
+
+
+### Bug Fixes
+
+* hidden attribute tracking through nested slot re-projection ([#325](https://github.com/Neovici/cosmoz-bottom-bar/issues/325)) ([6e366d0](https://github.com/Neovici/cosmoz-bottom-bar/commit/6e366d0541a07860e8433fd0a85e8a361991edba))
+
 # [11.0.0](https://github.com/Neovici/cosmoz-bottom-bar/compare/v10.2.4...v11.0.0) (2026-02-20)
 
 
