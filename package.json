@@ -78,7 +78,7 @@
     "eslint-plugin-storybook": "10.3.6",
     "http-server": "^14.1.1",
     "husky": "^9.1.1",
-    "lint-staged": "^16.2.7",
+    "lint-staged": "^17.0.4",
     "rollup-plugin-esbuild": "^6.1.1",
     "semantic-release": "^25.0.1",
     "sinon": "^21.0.0",
