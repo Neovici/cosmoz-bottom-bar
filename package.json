@@ -61,7 +61,7 @@
   },
   "devDependencies": {
     "@commitlint/cli": "^20.1.0",
-    "@commitlint/config-conventional": "^20.0.0",
+    "@commitlint/config-conventional": "^21.0.1",
     "@neovici/cfg": "^2.8.0",
     "@open-wc/testing": "^4.0.0",
     "@polymer/iron-icon": "^3.0.1",
