@@ -1,5 +1,11 @@
 ## [11.0.1](https://github.com/Neovici/cosmoz-bottom-bar/compare/v11.0.0...v11.0.1) (2026-02-24)
 
+## 11.1.1
+
+### Patch Changes
+
+- 538708c: Add missing `changeset` npm script so release workflow can publish successfully.
+
 ## 11.1.0
 
 ### Minor Changes
