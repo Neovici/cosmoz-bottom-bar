@@ -37,17 +37,6 @@
     "storybook:deploy": "storybook-to-ghpages",
     "storybook:preview": "npm run storybook:build && http-server -d ./storybook-static/"
   },
-  "release": {
-    "plugins": [
-      "@semantic-release/commit-analyzer",
-      "@semantic-release/release-notes-generator",
-      "@semantic-release/changelog",
-      "@semantic-release/github",
-      "@semantic-release/npm",
-      "@semantic-release/git"
-    ],
-    "branch": "master"
-  },
   "publishConfig": {
     "access": "public"
   },
@@ -68,8 +57,6 @@
     "@polymer/iron-icons": "^3.0.1",
     "@polymer/paper-button": "^3.0.0",
     "@polymer/paper-toggle-button": "^3.0.0",
-    "@semantic-release/changelog": "^6.0.0",
-    "@semantic-release/git": "^10.0.0",
     "@storybook/web-components-vite": "^10.1.11",
     "@types/mocha": "^10.0.6",
     "@webcomponents/webcomponentsjs": "^2.5.0",
@@ -80,7 +67,7 @@
     "husky": "^9.1.1",
     "lint-staged": "^17.0.4",
     "rollup-plugin-esbuild": "^6.1.1",
-    "semantic-release": "^25.0.1",
+    "@changesets/cli": "^2.28.0",
     "sinon": "^22.0.0",
     "storybook": "^10.1.11",
     "typescript": "^6.0.3"
