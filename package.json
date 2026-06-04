@@ -27,6 +27,7 @@
   "scripts": {
     "lint": "tsc && eslint --cache .",
     "build": "tsc -p tsconfig.build.json",
+    "changeset": "changeset",
     "check:duplicates": "check-duplicate-components",
     "start": "npm run storybook:start",
     "test": "wtr --coverage",
