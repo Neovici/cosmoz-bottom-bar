@@ -17,3 +17,8 @@ dist
 
 /npmrc
 .envrc
+
+# Codecov uploader artifacts
+codecov
+codecov.SHA256SUM
+codecov.SHA256SUM.sig
