@@ -1,5 +1,11 @@
 ## [11.0.1](https://github.com/Neovici/cosmoz-bottom-bar/compare/v11.0.0...v11.0.1) (2026-02-24)
 
+## 11.1.2-beta.1
+
+### Patch Changes
+
+- 6256933: Set main cosmoz-button style to button anchor
+
 ## 11.1.2-beta.0
 
 ### Patch Changes
