@@ -42,22 +42,22 @@
     "access": "public"
   },
   "dependencies": {
+    "@neovici/cosmoz-button": "^1.1.1",
     "@neovici/cosmoz-collapse": "^1.5.0",
-    "@neovici/cosmoz-dropdown": "^7.0.0",
+    "@neovici/cosmoz-dropdown": "^7.7.2-beta.1",
+    "@neovici/cosmoz-icons": "^1.6.0",
+    "@neovici/cosmoz-tokens": "^3.5.0",
     "@neovici/cosmoz-utils": "^6.13.1",
     "@pionjs/pion": "^2.5.2",
     "@polymer/polymer": "^3.3.0",
     "lit-html": "^2.0.0 || ^3.0.0"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.28.0",
     "@commitlint/cli": "^21.0.1",
     "@commitlint/config-conventional": "^21.0.1",
     "@neovici/cfg": "^2.8.0",
     "@open-wc/testing": "^4.0.0",
-    "@polymer/iron-icon": "^3.0.1",
-    "@polymer/iron-icons": "^3.0.1",
-    "@polymer/paper-button": "^3.0.0",
-    "@polymer/paper-toggle-button": "^3.0.0",
     "@storybook/web-components-vite": "^10.1.11",
     "@types/mocha": "^10.0.6",
     "@webcomponents/webcomponentsjs": "^2.5.0",
@@ -68,7 +68,6 @@
     "husky": "^9.1.1",
     "lint-staged": "^17.0.4",
     "rollup-plugin-esbuild": "^6.1.1",
-    "@changesets/cli": "^2.28.0",
     "sinon": "^22.0.0",
     "storybook": "^10.1.11",
     "typescript": "^6.0.3"

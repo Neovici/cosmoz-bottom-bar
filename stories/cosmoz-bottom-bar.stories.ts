@@ -1,6 +1,6 @@
 /* eslint-disable no-alert */
+import '@neovici/cosmoz-button';
 import { component, useState } from '@pionjs/pion';
-import '@polymer/paper-button/paper-button.js';
 import type { Meta, StoryObj } from '@storybook/web-components-vite';
 import { html } from 'lit-html';
 import { ifDefined } from 'lit-html/directives/if-defined.js';
@@ -24,7 +24,7 @@ function shuffleArray<T>(array: T[]): T[] {
 }
 
 const CosmozBottomBarStory = (
-	host: HTMLElement & CosmozBottomBarStoryProps,
+	host: HTMLElement & CosmozBottomBarStoryProps
 ) => {
 	const { active, maxToolbarItems } = host;
 	const [inputValue, setInputValue] = useState<string>('');
@@ -67,9 +67,9 @@ const CosmozBottomBarStory = (
 						text: 'Button ' + randomNum,
 						priority: randomNum,
 					};
-				}),
-			),
-		),
+				})
+			)
+		)
 	);
 
 	const handleInput = (e: InputEvent) => {
@@ -107,11 +107,11 @@ const CosmozBottomBarStory = (
 			@keypress=${(e: KeyboardEvent) =>
 				e.key === 'Enter' && addButton(inputValue)}
 		/>
-		<paper-button @click=${() => addButton(inputValue)}>Add btn</paper-button>
-		<paper-button @click=${() => addButton(undefined)}
-			>Add noprio btn</paper-button
+		<cosmoz-button @click=${() => addButton(inputValue)}>Add btn</cosmoz-button>
+		<cosmoz-button @click=${() => addButton(undefined)}
+			>Add noprio btn</cosmoz-button
 		>
-		<paper-button @click=${reconnect}>Test reconnect</paper-button>
+		<cosmoz-button @click=${reconnect}>Test reconnect</cosmoz-button>
 
 		<cosmoz-bottom-bar
 			id="bottomBar"
@@ -122,11 +122,12 @@ const CosmozBottomBarStory = (
 			${map(
 				buttons,
 				(btn) =>
-					html`<paper-button
+					html`<button
 						@click=${btn.onClick}
 						data-priority=${ifDefined(btn.priority)}
-						>${btn.text}</paper-button
-					>`,
+					>
+						${btn.text}
+					</button>`
 			)}
 		</cosmoz-bottom-bar>
 	`;
@@ -136,7 +137,7 @@ customElements.define(
 	'cosmoz-bottom-bar-story',
 	component(CosmozBottomBarStory, {
 		observedAttributes: ['active', 'max-toolbar-items'],
-	}),
+	})
 );
 
 const CosmozBottomBarTemplate = (args: CosmozBottomBarStoryProps) =>
