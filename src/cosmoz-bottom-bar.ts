@@ -1,4 +1,3 @@
- 
 import { toggleSize } from '@neovici/cosmoz-collapse/toggle';
 import '@neovici/cosmoz-dropdown';
 import { dotsVerticalIcon } from '@neovici/cosmoz-icons/untitled';
@@ -93,6 +92,26 @@ const style = css`
 	}
 
 	#bottomBarToolbar::slotted(:not(slot):hover) {
+		background-color: var(--cz-color-bg-brand-solid-hover);
+	}
+
+	#dropdown::part(content) {
+		max-width: 300px;
+	}
+
+	#dropdown::part(button) {
+		cursor: pointer;
+		transition: background-color 0.15s ease, box-shadow 0.15s ease;
+		border: none;
+		width: 40px;
+		height: 40px;
+		border-radius: var(--cz-radius-md);
+		background-color: var(--cz-color-bg-brand-solid);
+		color: var(--cz-color-text-on-brand);
+		box-shadow: var(--cz-shadow-xs-skeumorphic);
+	}
+
+	#dropdown::part(button):hover {
 		background-color: var(--cz-color-bg-brand-solid-hover);
 	}
 
