@@ -79,7 +79,6 @@ const style = css`
 		font-size: var(--cz-text-sm);
 		line-height: var(--cz-text-sm-line-height);
 		border-radius: var(--cz-radius-md);
-
 		background-color: var(--cz-color-bg-brand-solid);
 		color: var(--cz-color-text-on-brand);
 		box-shadow: var(--cz-shadow-xs-skeumorphic);
