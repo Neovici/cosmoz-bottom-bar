@@ -75,7 +75,6 @@ const style = css`
 		border: none;
 
 		text-align: center;
-		height: 40px;
 		padding: calc(var(--cz-spacing) * 2.5) calc(var(--cz-spacing) * 4);
 		font-size: var(--cz-text-sm);
 		line-height: var(--cz-text-sm-line-height);
