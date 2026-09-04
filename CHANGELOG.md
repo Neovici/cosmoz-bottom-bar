@@ -1,5 +1,16 @@
 ## [11.0.1](https://github.com/Neovici/cosmoz-bottom-bar/compare/v11.0.0...v11.0.1) (2026-02-24)
 
+## 12.0.0
+
+### Major Changes
+
+- 301c793: Migrate bottom-bar styling to cosmoz-tokens design tokens (`--cz-*`) and drop legacy `--cosmoz-bottom-bar-button-*` CSS custom properties; modernize dependencies. Slotted buttons are now expected to use token-based styles (@neovici/cosmoz-button, @neovici/cosmoz-dropdown ^8).
+
+### Patch Changes
+
+- 301c793: Set main cosmoz-dropdown toggle button style to cosmoz-tokens design tokens (`--cz-*`)
+- 301c793: Remove the fixed height of slotted items
+
 ## 11.1.1
 
 ### Patch Changes
