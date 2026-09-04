@@ -1,25 +1,5 @@
 ## [11.0.1](https://github.com/Neovici/cosmoz-bottom-bar/compare/v11.0.0...v11.0.1) (2026-02-24)
 
-## 11.1.2-beta.2
-
-### Patch Changes
-
-- Set main cosmoz-button style to button anchor
-- 7a3e1a5: Remove the fixed height of slotted items
-- Migrate bottom-bar styling to design tokens and modernize dependencies
-
-## 11.1.2-beta.1
-
-### Patch Changes
-
-- 6256933: Set main cosmoz-button style to button anchor
-
-## 11.1.2-beta.0
-
-### Patch Changes
-
-- 949c779: Migrate bottom-bar styling to design tokens and modernize dependencies
-
 ## 11.1.1
 
 ### Patch Changes
