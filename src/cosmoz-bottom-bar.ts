@@ -84,12 +84,12 @@ const style = css`
 		box-shadow: var(--cz-shadow-xs-skeumorphic);
 	}
 
-	#bottomBarToolbar::slotted(:not(slot)[disabled]) {
+	#bottomBarToolbar::slotted(:not(slot):not([unstyled])[disabled]) {
 		opacity: var(--cosmoz-button-disabled-opacity, 0.15);
 		pointer-events: none;
 	}
 
-	#bottomBarToolbar::slotted(:not(slot):hover) {
+	#bottomBarToolbar::slotted(:not(slot):not([unstyled]):hover) {
 		background-color: var(--cz-color-bg-brand-solid-hover);
 	}
 
