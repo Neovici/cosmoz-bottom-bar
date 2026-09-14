@@ -1,5 +1,11 @@
 ## [11.0.1](https://github.com/Neovici/cosmoz-bottom-bar/compare/v11.0.0...v11.0.1) (2026-02-24)
 
+## 12.0.1
+
+### Patch Changes
+
+- 845a520: Exempt unstyled slotted buttons from hover and disabled styles
+
 ## 12.0.0
 
 ### Major Changes
