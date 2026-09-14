@@ -1,5 +1,3 @@
-## [11.0.1](https://github.com/Neovici/cosmoz-bottom-bar/compare/v11.0.0...v11.0.1) (2026-02-24)
-
 ## 12.0.1
 
 ### Patch Changes
@@ -28,6 +26,8 @@
 ### Minor Changes
 
 - 9cd7147: Migrate from semantic-release to changesets for version management and release flows.
+
+## [11.0.1](https://github.com/Neovici/cosmoz-bottom-bar/compare/v11.0.0...v11.0.1) (2026-02-24)
 
 ### Bug Fixes
 
