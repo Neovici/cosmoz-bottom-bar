@@ -1,3 +1,9 @@
+## 12.0.2
+
+### Patch Changes
+
+- d7b2f6d: Give slotted toolbar actions a fixed 40px height so they line up with the overflow menu and pager buttons
+
 ## 12.0.1
 
 ### Patch Changes
