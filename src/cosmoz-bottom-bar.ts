@@ -62,7 +62,14 @@ const style = css`
 		white-space: nowrap;
 	}
 
-	#bottomBarToolbar::slotted(:not(slot):not([unstyled])) {
+	/*
+	 * Toolbar actions are painted as brand buttons, since most consumers slot a
+	 * bare <button> or <a>. An element that styles itself must be left alone or
+	 * it is painted twice: the host gets this 40px padded box and the component's
+	 * own button overflows it. cosmoz-button is excluded by tag, anything else
+	 * opts out with [unstyled].
+	 */
+	#bottomBarToolbar::slotted(:not(slot):not([unstyled]):not(cosmoz-button)) {
 		margin: 0 0.29em;
 		text-overflow: ellipsis;
 		white-space: nowrap;
@@ -86,12 +93,16 @@ const style = css`
 		box-shadow: var(--cz-shadow-xs-skeumorphic);
 	}
 
-	#bottomBarToolbar::slotted(:not(slot):not([unstyled])[disabled]) {
+	#bottomBarToolbar::slotted(
+			:not(slot):not([unstyled]):not(cosmoz-button)[disabled]
+		) {
 		opacity: var(--cosmoz-button-disabled-opacity, 0.15);
 		pointer-events: none;
 	}
 
-	#bottomBarToolbar::slotted(:not(slot):not([unstyled]):hover) {
+	#bottomBarToolbar::slotted(
+			:not(slot):not([unstyled]):not(cosmoz-button):hover
+		) {
 		background-color: var(--cz-color-bg-brand-solid-hover);
 	}
 

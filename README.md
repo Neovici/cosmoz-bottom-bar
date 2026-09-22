@@ -63,6 +63,40 @@ Example:
 </cosmoz-bottom-bar>
 ```
 
+## Styling slotted actions
+
+Actions slotted into the toolbar are painted as brand buttons, because most
+consumers slot a bare `<button>` or `<a>`:
+
+```html
+<cosmoz-bottom-bar active>
+	<button>Save</button>
+</cosmoz-bottom-bar>
+```
+
+An element that already styles itself has to be left alone, or it gets painted
+twice — the bar gives the host a 40px padded box and the component's own button
+overflows it, which reads as two stacked buttons.
+
+`cosmoz-button` is excluded by tag, so it needs no attribute:
+
+```html
+<cosmoz-bottom-bar active>
+	<cosmoz-button>Save</cosmoz-button>
+</cosmoz-bottom-bar>
+```
+
+Any other self-styling element opts out with `unstyled`:
+
+```html
+<cosmoz-bottom-bar active>
+	<my-fancy-button unstyled>Save</my-fancy-button>
+</cosmoz-bottom-bar>
+```
+
+`unstyled` also suppresses the bar's `[disabled]` and `:hover` rules, so an
+opted-out element owns all of its own states.
+
 ## Releasing
 
 This project uses [changesets](https://github.com/changesets/changesets) for versioning and releases.

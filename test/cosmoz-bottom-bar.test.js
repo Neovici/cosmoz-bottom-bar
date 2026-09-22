@@ -1,6 +1,7 @@
 /* eslint-disable max-lines */
 import { assert, aTimeout, fixture, html, nextFrame } from '@open-wc/testing';
 
+import '@neovici/cosmoz-button';
 import '../src/cosmoz-bottom-bar.ts';
 
 const getToolbarElements = (bottomBar) => {
@@ -1044,5 +1045,42 @@ suite('slot-based distribution', () => {
 				'Menu items should not have toolbar class',
 			);
 		});
+	});
+});
+
+suite('slotted action styling', () => {
+	let bottomBar;
+
+	setup(async () => {
+		bottomBar = await fixture(html`
+			<cosmoz-bottom-bar active max-toolbar-items="3">
+				<button id="plain">Plain</button>
+				<cosmoz-button id="self-styled">Cosmoz</cosmoz-button>
+				<button id="opted-out" unstyled>Opted out</button>
+			</cosmoz-bottom-bar>
+		`);
+
+		await nextFrame();
+		await nextFrame();
+	});
+
+	// `cursor: pointer` comes from the toolbar's button styling and from nothing
+	// else, so it is a token-free probe for whether the bar painted an element.
+	const isPainted = (id) =>
+		getComputedStyle(bottomBar.querySelector(`#${id}`)).cursor === 'pointer';
+
+	test('paints a bare button', () => {
+		assert.isTrue(isPainted('plain'), 'a bare button should be styled as one');
+	});
+
+	test('leaves cosmoz-button alone', () => {
+		assert.isFalse(
+			isPainted('self-styled'),
+			'cosmoz-button styles itself; painting it too stacks two buttons',
+		);
+	});
+
+	test('leaves [unstyled] alone', () => {
+		assert.isFalse(isPainted('opted-out'), '[unstyled] should opt out');
 	});
 });
