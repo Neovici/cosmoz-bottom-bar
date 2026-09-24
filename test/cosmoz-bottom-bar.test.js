@@ -164,6 +164,15 @@ suite('bottomBarMaxToolbarItems', () => {
 		const item4 = bottomBar.querySelector('#bottomBarMaxToolbarItemsItem4');
 		assert.include(menuElements, item4, 'Item 4 should be in menu');
 	});
+
+	test('Changing max-toolbar-items relayouts', async () => {
+		bottomBar.maxToolbarItems = 1;
+		await nextFrame();
+
+		assert.equal(getToolbarElements(bottomBar).length, 1);
+		assert.equal(getMenuElements(bottomBar).length, 3);
+		assert.isTrue(bottomBar.hasAttribute('has-menu-items'));
+	});
 });
 
 suite('bottomBarWithPriority', () => {

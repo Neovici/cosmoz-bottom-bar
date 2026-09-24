@@ -312,6 +312,7 @@ const CosmozBottomBar = (host: Host) => {
 		});
 
 		observeActionNodes();
+		doLayout();
 
 		// Re-observe when direct children change (handles dynamically added elements)
 		const childObserver = new MutationObserver(() => {
