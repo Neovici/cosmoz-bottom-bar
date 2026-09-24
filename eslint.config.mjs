@@ -19,4 +19,13 @@ export default [
 		ignores: ['coverage/*', 'dist/*', 'storybook-static/*'],
 	},
 	...storybookConfigs['flat/recommended'],
+	{
+		rules: {
+			// The rule resolves addons by package name and can't see subpath presets.
+			'storybook/no-uninstalled-addons': [
+				'error',
+				{ ignore: ['@neovici/cfg/storybook/preset.mjs'] },
+			],
+		},
+	},
 ];
