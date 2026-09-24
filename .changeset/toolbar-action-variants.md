@@ -21,6 +21,10 @@ itself, which means the full `variant` and `size` range works:
 </cosmoz-bottom-bar>
 ```
 
+Actions that overflow into the menu are switched to `variant="tertiary"
+size="sm"` so they read as menu rows, and get their own `variant` and `size`
+back when they return to the toolbar.
+
 **Breaking:** plain `<button>` elements are no longer styled by the bar.
 Swap them for `cosmoz-button` with the variant you want. `unstyled` is no
 longer needed and has no effect.

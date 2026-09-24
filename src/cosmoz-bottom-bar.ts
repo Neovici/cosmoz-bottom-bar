@@ -67,6 +67,11 @@ const style = css`
 		max-width: 300px;
 	}
 
+	#bottomBarMenu::slotted(cosmoz-button) {
+		padding: 0;
+		background: none;
+	}
+
 	#dropdown::part(button) {
 		cursor: pointer;
 		transition: background-color 0.15s ease, box-shadow 0.15s ease;
@@ -168,6 +173,11 @@ const getElements = (host: HTMLElement): HTMLElement[] => {
 	];
 };
 
+type Look = { variant: string | null; size: string | null };
+
+const menuLook: Look = { variant: 'tertiary', size: 'sm' },
+	authoredLooks = new WeakMap<HTMLElement, Look>();
+
 const moveElement = (
 	element: HTMLElement,
 	toToolbar: boolean,
@@ -177,6 +187,20 @@ const moveElement = (
 	const slot = toToolbar ? BOTTOM_BAR_TOOLBAR_SLOT : BOTTOM_BAR_MENU_SLOT;
 	element.setAttribute('slot', slot);
 	element.setAttribute('tabindex', '0');
+
+	if (!authoredLooks.has(element)) {
+		authoredLooks.set(element, {
+			variant: element.getAttribute('variant'),
+			size: element.getAttribute('size'),
+		});
+	}
+	const look = toToolbar ? authoredLooks.get(element)! : menuLook;
+	Object.entries(look).forEach(([name, value]) =>
+		value == null
+			? element.removeAttribute(name)
+			: element.setAttribute(name, value)
+	);
+
 	element.classList.toggle(menuClass, !toToolbar);
 	element.classList.toggle(toolbarClass, toToolbar);
 };
