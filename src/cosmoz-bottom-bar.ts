@@ -76,12 +76,12 @@ const style = css`
 		cursor: pointer;
 		transition: background-color 0.15s ease, box-shadow 0.15s ease;
 		border: none;
-		width: 40px;
-		height: 40px;
+		width: var(--cz-control-height-md);
+		height: var(--cz-control-height-md);
 		border-radius: var(--cz-radius-md);
 		background-color: var(--cz-color-bg-brand-solid);
 		color: var(--cz-color-text-on-brand);
-		box-shadow: var(--cz-shadow-xs-skeumorphic);
+		box-shadow: var(--cz-shadow-xs);
 	}
 
 	#dropdown::part(button):hover {

@@ -29,5 +29,8 @@ back when they return to the toolbar.
 Swap them for `cosmoz-button` with the variant you want. `unstyled` is no
 longer needed and has no effect.
 
+The ⋮ menu button is sized with `--cz-control-height-md`, so it matches a
+default `cosmoz-button`.
+
 Also upgrades to cosmoz-tokens v4, where dark values follow the page's
 `color-scheme` rather than a CSS class.
