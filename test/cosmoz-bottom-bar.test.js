@@ -5,13 +5,13 @@ import '../src/cosmoz-bottom-bar.ts';
 
 const getToolbarElements = (bottomBar) => {
 	return Array.from(
-		bottomBar.querySelectorAll('[slot="bottom-bar-toolbar"]'),
+		bottomBar.querySelectorAll('[slot="bottom-bar-toolbar"]')
 	).filter((el) => !el.hidden);
 };
 
 const getMenuElements = (bottomBar) => {
 	return Array.from(
-		bottomBar.querySelectorAll('[slot="bottom-bar-menu"]'),
+		bottomBar.querySelectorAll('[slot="bottom-bar-menu"]')
 	).filter((el) => !el.hidden);
 };
 
@@ -68,31 +68,31 @@ suite('bottomBarWithOverflowingButton', () => {
 	test('First button should be in toolbar slot', async () => {
 		const toolbarElements = getToolbarElements(bottomBar);
 		const item = bottomBar.querySelector(
-			'#bottomBarWithOverflowingButtonItem1',
+			'#bottomBarWithOverflowingButtonItem1'
 		);
 		assert.include(
 			toolbarElements,
 			item,
-			'First item should be in the toolbar slot',
+			'First item should be in the toolbar slot'
 		);
 	});
 
 	test('Second button should be in menu slot', async () => {
 		const menuElements = getMenuElements(bottomBar);
 		const item = bottomBar.querySelector(
-			'#bottomBarWithOverflowingButtonItem2',
+			'#bottomBarWithOverflowingButtonItem2'
 		);
 		assert.include(
 			menuElements,
 			item,
-			'Second item should be in the menu slot',
+			'Second item should be in the menu slot'
 		);
 	});
 
 	test('menu button should be visible', async () => {
 		assert.isTrue(
 			bottomBar.hasAttribute('has-menu-items'),
-			'Should have has-menu-items attribute',
+			'Should have has-menu-items attribute'
 		);
 	});
 
@@ -104,12 +104,12 @@ suite('bottomBarWithOverflowingButton', () => {
 
 		// The menu items should be the same DOM elements, not synthetic clones
 		const item = bottomBar.querySelector(
-			'#bottomBarWithOverflowingButtonItem2',
+			'#bottomBarWithOverflowingButtonItem2'
 		);
 		assert.include(
 			assignedElements,
 			item,
-			'Menu slot should contain the actual element, not a clone',
+			'Menu slot should contain the actual element, not a clone'
 		);
 	});
 });
@@ -152,13 +152,13 @@ suite('bottomBarMaxToolbarItems', () => {
 		assert.equal(
 			toolbarElements.length,
 			3,
-			'Should have exactly 3 items in toolbar slot',
+			'Should have exactly 3 items in toolbar slot'
 		);
 
 		assert.equal(
 			menuElements.length,
 			1,
-			'Should have exactly 1 item in menu slot',
+			'Should have exactly 1 item in menu slot'
 		);
 
 		const item4 = bottomBar.querySelector('#bottomBarMaxToolbarItemsItem4');
@@ -201,7 +201,7 @@ suite('bottomBarWithPriority', () => {
 		assert.include(
 			toolbarElements,
 			highPriorityItem,
-			'High priority item should be in toolbar',
+			'High priority item should be in toolbar'
 		);
 	});
 
@@ -212,12 +212,48 @@ suite('bottomBarWithPriority', () => {
 		assert.include(
 			menuElements,
 			lowPriorityItem,
-			'Low priority item should be in menu',
+			'Low priority item should be in menu'
 		);
 		assert.include(
 			menuElements,
 			noPriorityItem,
-			'No priority item should be in menu',
+			'No priority item should be in menu'
+		);
+	});
+});
+
+suite('bottomBarMenuGroups', () => {
+	let bottomBar;
+
+	setup(async () => {
+		bottomBar = await fixture(html`
+			<cosmoz-bottom-bar active>
+				<button id="a" data-group="Handle" data-priority="10">A</button>
+				<button id="b" data-group="Handle">B</button>
+				<button id="c" data-group="Edit">C</button>
+				<button id="d" data-group="Edit">D</button>
+				<button id="e">E</button>
+			</cosmoz-bottom-bar>
+		`);
+
+		await nextFrame();
+	});
+
+	test('marks menu items that start a new group', () => {
+		assert.deepEqual(
+			getMenuElements(bottomBar).map((el) => [
+				el.id,
+				el.hasAttribute('data-group-start'),
+			]),
+			[
+				['b', false],
+				['c', true],
+				['d', false],
+				['e', true],
+			]
+		);
+		assert.isFalse(
+			bottomBar.querySelector('#a').hasAttribute('data-group-start')
 		);
 	});
 });
@@ -263,19 +299,19 @@ suite('bottomBarWithHiddenButton', () => {
 		assert.equal(
 			toolbarElements.length,
 			2,
-			'Should have 2 items in toolbar (hidden items excluded)',
+			'Should have 2 items in toolbar (hidden items excluded)'
 		);
 		assert.equal(menuElements.length, 0, 'Should have no menu items');
 		assert.isFalse(
 			bottomBar.hasAttribute('has-menu-items'),
-			'Should not have has-menu-items attribute',
+			'Should not have has-menu-items attribute'
 		);
 
 		const dropdown = bottomBar.shadowRoot.querySelector('cosmoz-dropdown-menu');
 		assert.equal(
 			getComputedStyle(dropdown).display,
 			'none',
-			'Dropdown should be hidden',
+			'Dropdown should be hidden'
 		);
 	});
 
@@ -295,12 +331,12 @@ suite('bottomBarWithHiddenButton', () => {
 		assert.equal(
 			toolbarElements.length,
 			3,
-			'Should have 3 items in toolbar after unhiding',
+			'Should have 3 items in toolbar after unhiding'
 		);
 		assert.equal(
 			menuElements.length,
 			0,
-			'Should have no menu items with 3 items and maxToolbarItems=3',
+			'Should have no menu items with 3 items and maxToolbarItems=3'
 		);
 	});
 });
@@ -338,7 +374,7 @@ suite('hidden tracking - reproduction tests', () => {
 		const slot = hidden1.getAttribute('slot');
 		assert.isTrue(
 			slot === 'bottom-bar-toolbar' || slot === 'bottom-bar-menu',
-			`Unhidden item should be in toolbar or menu slot, got slot="${slot}"`,
+			`Unhidden item should be in toolbar or menu slot, got slot="${slot}"`
 		);
 
 		// Both items should be in toolbar (maxToolbarItems=3, only 2 items)
@@ -347,7 +383,7 @@ suite('hidden tracking - reproduction tests', () => {
 		assert.include(
 			toolbarElements,
 			hidden1,
-			'Previously hidden item should be in toolbar',
+			'Previously hidden item should be in toolbar'
 		);
 	});
 
@@ -435,7 +471,7 @@ suite('hidden tracking - reproduction tests', () => {
 		assert.equal(menuElements.length, 0, 'After hiding: 0 menu items');
 		assert.isFalse(
 			bottomBar.hasAttribute('has-menu-items'),
-			'No menu items attribute',
+			'No menu items attribute'
 		);
 	});
 
@@ -569,7 +605,7 @@ suite('hidden tracking - reproduction tests', () => {
 		assert.isTrue(
 			slotAfterUnhide === 'bottom-bar-toolbar' ||
 				slotAfterUnhide === 'bottom-bar-menu',
-			`After unhide, item should have a named slot, got: "${slotAfterUnhide}"`,
+			`After unhide, item should have a named slot, got: "${slotAfterUnhide}"`
 		);
 	});
 
@@ -603,7 +639,7 @@ suite('hidden tracking - reproduction tests', () => {
 		assert.equal(
 			toolbarElements.length,
 			1,
-			'After adding hidden: 1 toolbar item',
+			'After adding hidden: 1 toolbar item'
 		);
 
 		// Now unhide it
@@ -615,12 +651,12 @@ suite('hidden tracking - reproduction tests', () => {
 		assert.equal(
 			toolbarElements.length,
 			2,
-			'After unhiding dynamic: 2 toolbar items',
+			'After unhiding dynamic: 2 toolbar items'
 		);
 		assert.include(
 			toolbarElements,
 			newEl,
-			'Dynamic element should be in toolbar',
+			'Dynamic element should be in toolbar'
 		);
 	});
 });
@@ -698,7 +734,7 @@ suite('hidden tracking - edge cases with slotchange', () => {
 		assert.equal(
 			getToolbarElements(bottomBar).length,
 			0,
-			'No toolbar items initially',
+			'No toolbar items initially'
 		);
 
 		// Unhide all at once
@@ -759,7 +795,7 @@ suite('hidden tracking - edge cases with slotchange', () => {
 		assert.include(
 			toolbarElements,
 			sc2,
-			'Highest priority item should be in toolbar',
+			'Highest priority item should be in toolbar'
 		);
 		assert.equal(menuElements.length, 2, '2 menu items');
 	});
@@ -791,7 +827,7 @@ suite('hidden tracking - edge cases with slotchange', () => {
 		assert.isTrue(
 			prevSlot2.getAttribute('slot') === 'bottom-bar-toolbar' ||
 				prevSlot2.getAttribute('slot') === 'bottom-bar-menu',
-			'Should have a slot from initial layout',
+			'Should have a slot from initial layout'
 		);
 
 		// Hide it
@@ -869,11 +905,11 @@ suite('hidden tracking - nested slot (bottomBarSlots pattern)', () => {
 		const slot3 = nested3.getAttribute('slot');
 		assert.isTrue(
 			slot1 === 'bottom-bar-toolbar' || slot1 === 'bottom-bar-menu',
-			'nested1 should have a named slot',
+			'nested1 should have a named slot'
 		);
 		assert.isTrue(
 			slot3 === 'bottom-bar-toolbar' || slot3 === 'bottom-bar-menu',
-			'nested3 should have a named slot',
+			'nested3 should have a named slot'
 		);
 	});
 
@@ -888,7 +924,7 @@ suite('hidden tracking - nested slot (bottomBarSlots pattern)', () => {
 		const slot = nested2.getAttribute('slot');
 		assert.isTrue(
 			slot === 'bottom-bar-toolbar' || slot === 'bottom-bar-menu',
-			`After unhide, nested item should have a named slot, got: "${slot}"`,
+			`After unhide, nested item should have a named slot, got: "${slot}"`
 		);
 	});
 });
@@ -969,7 +1005,7 @@ suite('slot-based distribution', () => {
 		assert.equal(
 			item.getAttribute('slot'),
 			'bottom-bar-toolbar',
-			'Pre-slotted toolbar item should remain in toolbar slot',
+			'Pre-slotted toolbar item should remain in toolbar slot'
 		);
 	});
 
@@ -995,12 +1031,12 @@ suite('slot-based distribution', () => {
 		assert.isTrue(
 			item1.getAttribute('slot') === 'bottom-bar-toolbar' ||
 				item2.getAttribute('slot') === 'bottom-bar-toolbar',
-			'One item should be in toolbar slot',
+			'One item should be in toolbar slot'
 		);
 		assert.isTrue(
 			item1.getAttribute('slot') === 'bottom-bar-menu' ||
 				item2.getAttribute('slot') === 'bottom-bar-menu',
-			'One item should be in menu slot',
+			'One item should be in menu slot'
 		);
 	});
 
@@ -1026,22 +1062,22 @@ suite('slot-based distribution', () => {
 		toolbarItems.forEach((item) => {
 			assert.isTrue(
 				item.classList.contains('cosmoz-bottom-bar-toolbar'),
-				'Toolbar items should have toolbar class',
+				'Toolbar items should have toolbar class'
 			);
 			assert.isFalse(
 				item.classList.contains('cosmoz-bottom-bar-menu'),
-				'Toolbar items should not have menu class',
+				'Toolbar items should not have menu class'
 			);
 		});
 
 		menuItems.forEach((item) => {
 			assert.isTrue(
 				item.classList.contains('cosmoz-bottom-bar-menu'),
-				'Menu items should have menu class',
+				'Menu items should have menu class'
 			);
 			assert.isFalse(
 				item.classList.contains('cosmoz-bottom-bar-toolbar'),
-				'Menu items should not have toolbar class',
+				'Menu items should not have toolbar class'
 			);
 		});
 	});

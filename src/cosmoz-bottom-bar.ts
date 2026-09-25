@@ -95,6 +95,13 @@ const style = css`
 		background-color: var(--cz-color-bg-brand-solid-hover);
 	}
 
+	#bottomBarMenu::slotted([data-group-start]) {
+		margin-top: var(--cz-spacing);
+		border-top: 1px solid var(--cz-color-border-secondary);
+		border-top-left-radius: 0;
+		border-top-right-radius: 0;
+	}
+
 	#dropdown::part(content) {
 		max-width: 300px;
 	}
@@ -204,13 +211,15 @@ const moveElement = (
 	element: HTMLElement,
 	toToolbar: boolean,
 	toolbarClass: string,
-	menuClass: string
+	menuClass: string,
+	groupStart = false
 ) => {
 	const slot = toToolbar ? BOTTOM_BAR_TOOLBAR_SLOT : BOTTOM_BAR_MENU_SLOT;
 	element.setAttribute('slot', slot);
 	element.setAttribute('tabindex', '0');
 	element.classList.toggle(menuClass, !toToolbar);
 	element.classList.toggle(toolbarClass, toToolbar);
+	element.toggleAttribute('data-group-start', groupStart);
 };
 
 const layoutActions = (
@@ -233,7 +242,15 @@ const layoutActions = (
 	toolbarElements.forEach((el) =>
 		moveElement(el, true, toolbarClass, menuClass)
 	);
-	menuElements.forEach((el) => moveElement(el, false, toolbarClass, menuClass));
+	menuElements.forEach((el, i) =>
+		moveElement(
+			el,
+			false,
+			toolbarClass,
+			menuClass,
+			i > 0 && el.dataset.group !== menuElements[i - 1].dataset.group
+		)
+	);
 	host.toggleAttribute('has-menu-items', menuElements.length > 0);
 };
 
@@ -250,7 +267,8 @@ const layoutActions = (
  * - `bottom-bar-menu` for items shown in the overflow dropdown
  *
  * The top `maxToolbarItems` (sorted by `data-priority`) are placed in the toolbar,
- * the rest go to the menu.
+ * the rest go to the menu. Menu items with a different `data-group` than the item
+ * above them get a divider.
  *
  * @element cosmoz-bottom-bar
  */
