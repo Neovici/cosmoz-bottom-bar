@@ -81,7 +81,10 @@ const style = css`
 		font-size: var(--cz-text-sm);
 		line-height: var(--cz-text-sm-line-height);
 		border-radius: var(--cz-radius-md);
-		background-color: var(--cz-color-bg-brand-solid);
+		background-color: light-dark(
+			var(--cz-color-gray-800),
+			var(--cz-color-gray-700)
+		);
 		color: var(--cz-color-text-on-brand);
 		box-shadow: var(--cz-shadow-xs-skeumorphic);
 	}
@@ -92,7 +95,10 @@ const style = css`
 	}
 
 	#bottomBarToolbar::slotted(:not(slot):not([unstyled]):hover) {
-		background-color: var(--cz-color-bg-brand-solid-hover);
+		background-color: light-dark(
+			var(--cz-color-gray-700),
+			var(--cz-color-gray-600)
+		);
 	}
 
 	#dropdown::part(content) {
@@ -106,13 +112,19 @@ const style = css`
 		width: 40px;
 		height: 40px;
 		border-radius: var(--cz-radius-md);
-		background-color: var(--cz-color-bg-brand-solid);
+		background-color: light-dark(
+			var(--cz-color-gray-800),
+			var(--cz-color-gray-700)
+		);
 		color: var(--cz-color-text-on-brand);
 		box-shadow: var(--cz-shadow-xs-skeumorphic);
 	}
 
 	#dropdown::part(button):hover {
-		background-color: var(--cz-color-bg-brand-solid-hover);
+		background-color: light-dark(
+			var(--cz-color-gray-700),
+			var(--cz-color-gray-600)
+		);
 	}
 
 	:host([hide-actions]) #bottomBarToolbar,
