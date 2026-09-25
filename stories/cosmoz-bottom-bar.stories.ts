@@ -208,3 +208,56 @@ export const Empty: StoryObj = {
 		},
 	},
 };
+
+const groupedActions = [
+	{ text: 'Activate', group: 'Handle' },
+	{ text: 'Mark as done', group: 'Handle' },
+	{ text: 'Investigate invoice', group: 'Assign' },
+	{ text: 'Set invoice flow', group: 'Assign' },
+	{ text: 'Change buyer', group: 'Edit' },
+	{ text: 'Change supplier', group: 'Edit' },
+	{ text: 'Update exchange rate', group: 'Edit' },
+	{ text: 'Comment', group: 'Communicate' },
+	{ text: 'Send by email', group: 'Communicate' },
+	{ text: 'Reindex invoice', group: 'Support' },
+	{ text: 'Move to archive', group: 'Close' },
+];
+
+customElements.define(
+	'cosmoz-bottom-bar-grouped-story',
+	component(
+		({ active, maxToolbarItems }: HTMLElement & CosmozBottomBarStoryProps) =>
+			html`<cosmoz-bottom-bar
+				?active=${active}
+				.maxToolbarItems=${maxToolbarItems}
+			>
+				<span slot="info">Grouped menu demo</span>
+				${map(
+					groupedActions,
+					({ text, group }) =>
+						html`<button data-group=${group}>${text}</button>`
+				)}
+			</cosmoz-bottom-bar>`,
+		{ observedAttributes: ['active'] }
+	)
+);
+
+export const Grouped: StoryObj = {
+	render: ({ active, maxToolbarItems }) =>
+		html`<cosmoz-bottom-bar-grouped-story
+			?active=${active}
+			.maxToolbarItems=${maxToolbarItems}
+		></cosmoz-bottom-bar-grouped-story>`,
+	args: {
+		active: true,
+		maxToolbarItems: 1,
+	},
+	parameters: {
+		docs: {
+			description: {
+				story:
+					'Menu items with a different `data-group` than the item above them get a divider',
+			},
+		},
+	},
+};
