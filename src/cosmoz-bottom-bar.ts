@@ -70,6 +70,7 @@ const style = css`
 	#bottomBarMenu::slotted([variant]) {
 		padding: 0;
 		background: none;
+		--cosmoz-button-justify-content: flex-start;
 	}
 
 	#dropdown::part(button) {
