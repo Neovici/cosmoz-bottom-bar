@@ -67,7 +67,7 @@ const style = css`
 		max-width: 300px;
 	}
 
-	#bottomBarMenu::slotted(cosmoz-button) {
+	#bottomBarMenu::slotted([variant]) {
 		padding: 0;
 		background: none;
 	}
@@ -178,6 +178,13 @@ type Look = { variant: string | null; size: string | null };
 const menuLook: Look = { variant: 'tertiary', size: 'sm' },
 	authoredLooks = new WeakMap<HTMLElement, Look>();
 
+// Elements that observe `variant` (cosmoz-button and wrappers around it) own
+// their look; the bar only picks the variant and size for where it puts them.
+const takesLook = (element: HTMLElement) =>
+	(
+		element.constructor as { observedAttributes?: string[] }
+	).observedAttributes?.includes('variant') ?? false;
+
 const moveElement = (
 	element: HTMLElement,
 	toToolbar: boolean,
@@ -188,18 +195,20 @@ const moveElement = (
 	element.setAttribute('slot', slot);
 	element.setAttribute('tabindex', '0');
 
-	if (!authoredLooks.has(element)) {
-		authoredLooks.set(element, {
-			variant: element.getAttribute('variant'),
-			size: element.getAttribute('size'),
-		});
+	if (takesLook(element)) {
+		if (!authoredLooks.has(element)) {
+			authoredLooks.set(element, {
+				variant: element.getAttribute('variant'),
+				size: element.getAttribute('size'),
+			});
+		}
+		const look = toToolbar ? authoredLooks.get(element)! : menuLook;
+		Object.entries(look).forEach(([name, value]) =>
+			value == null
+				? element.removeAttribute(name)
+				: element.setAttribute(name, value)
+		);
 	}
-	const look = toToolbar ? authoredLooks.get(element)! : menuLook;
-	Object.entries(look).forEach(([name, value]) =>
-		value == null
-			? element.removeAttribute(name)
-			: element.setAttribute(name, value)
-	);
 
 	element.classList.toggle(menuClass, !toToolbar);
 	element.classList.toggle(toolbarClass, toToolbar);

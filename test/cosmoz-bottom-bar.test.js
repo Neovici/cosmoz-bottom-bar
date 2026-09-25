@@ -1,6 +1,7 @@
 /* eslint-disable max-lines */
 import { assert, aTimeout, fixture, html, nextFrame } from '@open-wc/testing';
 
+import '@neovici/cosmoz-button';
 import '../src/cosmoz-bottom-bar.ts';
 
 const getToolbarElements = (bottomBar) => {
@@ -1060,10 +1061,10 @@ suite('action look', () => {
 	test('menu items render as tertiary sm, toolbar items keep their own look', async () => {
 		const bottomBar = await fixture(html`
 			<cosmoz-bottom-bar active>
-				<button id="primary" data-priority="2">Approve</button>
-				<button id="delete" variant="destructive" data-priority="1">
+				<cosmoz-button id="primary" data-priority="2">Approve</cosmoz-button>
+				<cosmoz-button id="delete" variant="destructive" data-priority="1">
 					Delete
-				</button>
+				</cosmoz-button>
 			</cosmoz-bottom-bar>
 		`);
 		await nextFrame();
@@ -1080,5 +1081,20 @@ suite('action look', () => {
 
 		assert.equal(deleteButton.getAttribute('variant'), 'destructive');
 		assert.isFalse(deleteButton.hasAttribute('size'));
+	});
+
+	test('leaves the look of plain elements alone', async () => {
+		const bottomBar = await fixture(html`
+			<cosmoz-bottom-bar active>
+				<button id="first" data-priority="2">Approve</button>
+				<button id="second" data-priority="1">Delete</button>
+			</cosmoz-bottom-bar>
+		`);
+		await nextFrame();
+
+		const second = bottomBar.querySelector('#second');
+		assert.equal(second.getAttribute('slot'), 'bottom-bar-menu');
+		assert.isFalse(second.hasAttribute('variant'));
+		assert.isFalse(second.hasAttribute('size'));
 	});
 });
