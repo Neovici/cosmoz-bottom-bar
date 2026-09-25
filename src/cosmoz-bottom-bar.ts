@@ -68,7 +68,7 @@ const style = css`
 		white-space: nowrap;
 		flex: 0 0 auto;
 		cursor: pointer;
-		font-weight: var(--cz-font-weight-semibold);
+		font-weight: var(--cz-font-weight-medium);
 		text-decoration: none;
 		transition: background-color 0.15s ease, box-shadow 0.15s ease;
 		white-space: nowrap;
@@ -76,14 +76,14 @@ const style = css`
 
 		text-align: center;
 		box-sizing: border-box;
-		height: 40px;
-		padding: calc(var(--cz-spacing) * 2.5) calc(var(--cz-spacing) * 4);
+		height: 32px;
+		padding: calc(var(--cz-spacing) * 1.5) calc(var(--cz-spacing) * 3);
 		font-size: var(--cz-text-sm);
 		line-height: var(--cz-text-sm-line-height);
 		border-radius: var(--cz-radius-md);
 		background-color: var(--cz-color-bg-brand-solid);
 		color: var(--cz-color-text-on-brand);
-		box-shadow: var(--cz-shadow-xs-skeumorphic);
+		box-shadow: var(--cz-shadow-xs);
 	}
 
 	#bottomBarToolbar::slotted(:not(slot):not([unstyled])[disabled]) {
@@ -103,12 +103,12 @@ const style = css`
 		cursor: pointer;
 		transition: background-color 0.15s ease, box-shadow 0.15s ease;
 		border: none;
-		width: 40px;
-		height: 40px;
+		width: 32px;
+		height: 32px;
 		border-radius: var(--cz-radius-md);
 		background-color: var(--cz-color-bg-brand-solid);
 		color: var(--cz-color-text-on-brand);
-		box-shadow: var(--cz-shadow-xs-skeumorphic);
+		box-shadow: var(--cz-shadow-xs);
 	}
 
 	#dropdown::part(button):hover {
