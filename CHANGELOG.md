@@ -1,3 +1,13 @@
+## 12.1.0
+
+### Minor Changes
+
+- 71bbe2c: Slimmer, flat toolbar buttons
+
+  Toolbar actions and the overflow (⋮) button are 32px tall (was 40px), with
+  `text-sm` medium-weight text and a plain `--cz-shadow-xs` instead of the
+  skeuomorphic shadow. This matches the default `cosmoz-button`.
+
 ## 12.0.2
 
 ### Patch Changes
