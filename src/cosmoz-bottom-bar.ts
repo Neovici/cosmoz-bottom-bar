@@ -78,8 +78,8 @@ const style = css`
 		box-sizing: border-box;
 		height: 32px;
 		padding: calc(var(--cz-spacing) * 1.5) calc(var(--cz-spacing) * 3);
-		font-size: 0.8125rem;
-		line-height: 1.25rem;
+		font-size: var(--cz-text-sm);
+		line-height: var(--cz-text-sm-line-height);
 		border-radius: var(--cz-radius-md);
 		background-color: var(--cz-color-bg-brand-solid);
 		color: var(--cz-color-text-on-brand);
