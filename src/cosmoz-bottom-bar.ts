@@ -66,7 +66,7 @@ const style = css`
 
 	.menu {
 		max-width: 300px;
-		max-height: var(--cosmoz-dropdown-menu-max-height, calc(96dvh - 64px));
+		max-height: var(--cosmoz-dropdown-menu-max-height, min(60dvh, 30rem));
 		overflow-y: auto;
 		background: var(
 			--cosmoz-dropdown-menu-bg-color,
