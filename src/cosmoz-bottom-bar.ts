@@ -1,5 +1,7 @@
 import { toggleSize } from '@neovici/cosmoz-collapse/toggle';
+import '@neovici/cosmoz-button';
 import '@neovici/cosmoz-dropdown';
+import '@neovici/cosmoz-dropdown/cosmoz-dropdown-next';
 import { dotsVerticalIcon } from '@neovici/cosmoz-icons/untitled';
 import { useActivity } from '@neovici/cosmoz-utils/keybindings/use-activity';
 import {
@@ -36,7 +38,6 @@ const style = css`
 		box-shadow: var(--cosmoz-bottom-bar-shadow, none);
 		z-index: 1;
 
-		--cosmoz-dropdown-anchor-spacing: 12px 6px;
 	}
 
 	:host([force-open]) {
@@ -63,8 +64,16 @@ const style = css`
 		white-space: nowrap;
 	}
 
-	#dropdown::part(content) {
+	.menu {
 		max-width: 300px;
+		max-height: var(--cosmoz-dropdown-menu-max-height, calc(96dvh - 64px));
+		overflow-y: auto;
+		background: var(
+			--cosmoz-dropdown-menu-bg-color,
+			var(--cz-color-bg-primary)
+		);
+		box-shadow: var(--cosmoz-dropdown-box-shadow, var(--cz-shadow-sm));
+		border-radius: var(--cosmoz-dropdown-border-radius, var(--cz-radius-sm));
 	}
 
 	#bottomBarMenu::slotted([variant]) {
@@ -73,49 +82,28 @@ const style = css`
 		--cosmoz-button-justify-content: flex-start;
 	}
 
-	#dropdown::part(button) {
-		cursor: pointer;
-		transition: background-color 0.15s ease, box-shadow 0.15s ease;
-		border: none;
-		width: var(--cz-control-height-md);
-		height: var(--cz-control-height-md);
-		border-radius: var(--cz-radius-md);
-		background-color: var(--cz-color-bg-brand-solid);
-		color: var(--cz-color-text-on-brand);
-		box-shadow: var(--cz-shadow-xs);
-	}
-
-	#dropdown::part(button):hover {
-		background-color: var(--cz-color-bg-brand-solid-hover);
-	}
-
 	:host([hide-actions]) #bottomBarToolbar,
 	:host([hide-actions]) #bottomBarMenu,
 	:host([hide-actions]) #dropdown {
 		display: none;
 	}
 
-	:host(:not([has-menu-items])) cosmoz-dropdown-menu {
+	:host(:not([has-menu-items])) #dropdown {
 		display: none;
 	}
 `;
 
 export const openMenu = Symbol('openMenu');
 
+const closeMenu = (e: Event) => {
+	const dropdown = (e.currentTarget as HTMLElement).closest<
+		HTMLElement & { opened?: boolean }
+	>('#dropdown');
+	if (dropdown) dropdown.opened = false;
+};
+
 const openActionsMenu = (host: HTMLElement) => {
-	const dropdown = host.shadowRoot?.querySelector('#dropdown');
-
-	if (!dropdown || dropdown.hasAttribute('hidden')) return;
-
-	//TODO: Clean up when open function is implemented for cosmoz-dropdown-menu
-	const cosmozDropdown =
-			dropdown.shadowRoot?.querySelector<HTMLElement>('cosmoz-dropdown'),
-		button =
-			cosmozDropdown?.shadowRoot?.querySelector<HTMLButtonElement>(
-				'#dropdownButton'
-			);
-
-	button?.click();
+	host.shadowRoot?.querySelector<HTMLElement>('#menuButton')?.click();
 };
 
 const isActionNode = (node: Node): node is HTMLElement =>
@@ -352,10 +340,25 @@ const CosmozBottomBar = (host: Host) => {
 				name="bottom-bar-toolbar"
 				@slotchange=${onSlotChange}
 			></slot>
-			<cosmoz-dropdown-menu id="dropdown" part="dropdown">
-				${dotsVerticalIcon({ slot: 'button' })}
-				<slot id="bottomBarMenu" name="bottom-bar-menu"></slot>
-			</cosmoz-dropdown-menu>
+			<cosmoz-dropdown-next
+				id="dropdown"
+				part="dropdown"
+				placement="top span-left"
+			>
+				<cosmoz-button
+					id="menuButton"
+					slot="button"
+					icon-only
+					aria-label="More actions"
+				>
+					${dotsVerticalIcon()}
+				</cosmoz-button>
+				<div class="menu" part="menu" @click=${closeMenu}>
+					<cosmoz-dropdown-list>
+						<slot id="bottomBarMenu" name="bottom-bar-menu"></slot>
+					</cosmoz-dropdown-list>
+				</div>
+			</cosmoz-dropdown-next>
 			<slot name="extra" id="extraSlot"></slot>
 		</div>
 		<div hidden style="display:none">
