@@ -1,5 +1,7 @@
 import { toggleSize } from '@neovici/cosmoz-collapse/toggle';
+import '@neovici/cosmoz-button';
 import '@neovici/cosmoz-dropdown';
+import '@neovici/cosmoz-dropdown/cosmoz-dropdown-next';
 import { dotsVerticalIcon } from '@neovici/cosmoz-icons/untitled';
 import { useActivity } from '@neovici/cosmoz-utils/keybindings/use-activity';
 import {
@@ -36,7 +38,6 @@ const style = css`
 		box-shadow: var(--cosmoz-bottom-bar-shadow, none);
 		z-index: 1;
 
-		--cosmoz-dropdown-anchor-spacing: 12px 6px;
 	}
 
 	:host([force-open]) {
@@ -53,6 +54,7 @@ const style = css`
 		padding: 0 3%;
 		display: flex;
 		align-items: center;
+		gap: 0.58em;
 	}
 
 	#info {
@@ -62,57 +64,22 @@ const style = css`
 		white-space: nowrap;
 	}
 
-	#bottomBarToolbar::slotted(:not(slot):not([unstyled])) {
-		margin: 0 0.29em;
-		text-overflow: ellipsis;
-		white-space: nowrap;
-		flex: 0 0 auto;
-		cursor: pointer;
-		font-weight: var(--cz-font-weight-medium);
-		text-decoration: none;
-		transition: background-color 0.15s ease, box-shadow 0.15s ease;
-		white-space: nowrap;
-		border: none;
-
-		text-align: center;
-		box-sizing: border-box;
-		height: 32px;
-		padding: calc(var(--cz-spacing) * 1.5) calc(var(--cz-spacing) * 3);
-		font-size: var(--cz-text-sm);
-		line-height: var(--cz-text-sm-line-height);
-		border-radius: var(--cz-radius-md);
-		background-color: var(--cz-color-bg-brand-solid);
-		color: var(--cz-color-text-on-brand);
-		box-shadow: var(--cz-shadow-xs);
-	}
-
-	#bottomBarToolbar::slotted(:not(slot):not([unstyled])[disabled]) {
-		opacity: var(--cosmoz-button-disabled-opacity, 0.15);
-		pointer-events: none;
-	}
-
-	#bottomBarToolbar::slotted(:not(slot):not([unstyled]):hover) {
-		background-color: var(--cz-color-bg-brand-solid-hover);
-	}
-
-	#dropdown::part(content) {
+	.menu {
 		max-width: 300px;
+		max-height: var(--cosmoz-dropdown-menu-max-height, min(60dvh, 30rem));
+		overflow-y: auto;
+		background: var(
+			--cosmoz-dropdown-menu-bg-color,
+			var(--cz-color-bg-primary)
+		);
+		box-shadow: var(--cosmoz-dropdown-box-shadow, var(--cz-shadow-sm));
+		border-radius: var(--cosmoz-dropdown-border-radius, var(--cz-radius-sm));
 	}
 
-	#dropdown::part(button) {
-		cursor: pointer;
-		transition: background-color 0.15s ease, box-shadow 0.15s ease;
-		border: none;
-		width: 32px;
-		height: 32px;
-		border-radius: var(--cz-radius-md);
-		background-color: var(--cz-color-bg-brand-solid);
-		color: var(--cz-color-text-on-brand);
-		box-shadow: var(--cz-shadow-xs);
-	}
-
-	#dropdown::part(button):hover {
-		background-color: var(--cz-color-bg-brand-solid-hover);
+	#bottomBarMenu::slotted([variant]) {
+		padding: 0;
+		background: none;
+		--cosmoz-button-justify-content: flex-start;
 	}
 
 	:host([hide-actions]) #bottomBarToolbar,
@@ -121,27 +88,22 @@ const style = css`
 		display: none;
 	}
 
-	:host(:not([has-menu-items])) cosmoz-dropdown-menu {
+	:host(:not([has-menu-items])) #dropdown {
 		display: none;
 	}
 `;
 
 export const openMenu = Symbol('openMenu');
 
+const closeMenu = (e: Event) => {
+	const dropdown = (e.currentTarget as HTMLElement).closest<
+		HTMLElement & { opened?: boolean }
+	>('#dropdown');
+	if (dropdown) dropdown.opened = false;
+};
+
 const openActionsMenu = (host: HTMLElement) => {
-	const dropdown = host.shadowRoot?.querySelector('#dropdown');
-
-	if (!dropdown || dropdown.hasAttribute('hidden')) return;
-
-	//TODO: Clean up when open function is implemented for cosmoz-dropdown-menu
-	const cosmozDropdown =
-			dropdown.shadowRoot?.querySelector<HTMLElement>('cosmoz-dropdown'),
-		button =
-			cosmozDropdown?.shadowRoot?.querySelector<HTMLButtonElement>(
-				'#dropdownButton'
-			);
-
-	button?.click();
+	host.shadowRoot?.querySelector<HTMLElement>('#menuButton')?.click();
 };
 
 const isActionNode = (node: Node): node is HTMLElement =>
@@ -200,6 +162,18 @@ const getElements = (host: HTMLElement): HTMLElement[] => {
 	];
 };
 
+type Look = { variant: string | null; size: string | null };
+
+const menuLook: Look = { variant: 'tertiary', size: 'sm' },
+	authoredLooks = new WeakMap<HTMLElement, Look>();
+
+// Elements that observe `variant` (cosmoz-button and wrappers around it) own
+// their look; the bar only picks the variant and size for where it puts them.
+const takesLook = (element: HTMLElement) =>
+	(
+		element.constructor as { observedAttributes?: string[] }
+	).observedAttributes?.includes('variant') ?? false;
+
 const moveElement = (
 	element: HTMLElement,
 	toToolbar: boolean,
@@ -209,6 +183,22 @@ const moveElement = (
 	const slot = toToolbar ? BOTTOM_BAR_TOOLBAR_SLOT : BOTTOM_BAR_MENU_SLOT;
 	element.setAttribute('slot', slot);
 	element.setAttribute('tabindex', '0');
+
+	if (takesLook(element)) {
+		if (!authoredLooks.has(element)) {
+			authoredLooks.set(element, {
+				variant: element.getAttribute('variant'),
+				size: element.getAttribute('size'),
+			});
+		}
+		const look = toToolbar ? authoredLooks.get(element)! : menuLook;
+		Object.entries(look).forEach(([name, value]) =>
+			value == null
+				? element.removeAttribute(name)
+				: element.setAttribute(name, value)
+		);
+	}
+
 	element.classList.toggle(menuClass, !toToolbar);
 	element.classList.toggle(toolbarClass, toToolbar);
 };
@@ -320,6 +310,7 @@ const CosmozBottomBar = (host: Host) => {
 		});
 
 		observeActionNodes();
+		doLayout();
 
 		// Re-observe when direct children change (handles dynamically added elements)
 		const childObserver = new MutationObserver(() => {
@@ -349,10 +340,25 @@ const CosmozBottomBar = (host: Host) => {
 				name="bottom-bar-toolbar"
 				@slotchange=${onSlotChange}
 			></slot>
-			<cosmoz-dropdown-menu id="dropdown" part="dropdown">
-				${dotsVerticalIcon({ slot: 'button' })}
-				<slot id="bottomBarMenu" name="bottom-bar-menu"></slot>
-			</cosmoz-dropdown-menu>
+			<cosmoz-dropdown-next
+				id="dropdown"
+				part="dropdown"
+				placement="top span-left"
+			>
+				<cosmoz-button
+					id="menuButton"
+					slot="button"
+					icon-only
+					aria-label="More actions"
+				>
+					${dotsVerticalIcon()}
+				</cosmoz-button>
+				<div class="menu" part="menu" @click=${closeMenu}>
+					<cosmoz-dropdown-list>
+						<slot id="bottomBarMenu" name="bottom-bar-menu"></slot>
+					</cosmoz-dropdown-list>
+				</div>
+			</cosmoz-dropdown-next>
 			<slot name="extra" id="extraSlot"></slot>
 		</div>
 		<div hidden style="display:none">

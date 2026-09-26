@@ -6,11 +6,10 @@ export default {
 		(story, context) => {
 			const isDark = context.globals?.theme === 'dark';
 
-			if (isDark) {
-				document.documentElement.classList.add('dark-mode');
-			} else {
-				document.documentElement.classList.remove('dark-mode');
-			}
+			// tokens v4 resolves dark values through CSS light-dark(), which
+			// follows color-scheme; the .dark-mode class no longer flips them.
+			document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
+			document.documentElement.classList.toggle('dark-mode', isDark);
 
 			return html`
 				<style>
