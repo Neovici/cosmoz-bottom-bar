@@ -32,8 +32,11 @@ so wrappers get the same treatment as long as they forward `variant` and
 Swap them for `cosmoz-button` with the variant you want. `unstyled` is no
 longer needed and has no effect.
 
-The ⋮ menu button is sized with `--cz-control-height-md`, so it matches a
-default `cosmoz-button`.
+The ⋮ menu button is an `icon-only` `cosmoz-button` inside
+`cosmoz-dropdown-next`, so it matches the actions next to it. The old
+dropdown's `button` and `content` parts are gone; style the menu through the
+new `menu` part or `--cosmoz-dropdown-menu-*` custom properties. The menu
+closes when a row is clicked.
 
 Also upgrades to cosmoz-tokens v4, where dark values follow the page's
 `color-scheme` rather than a CSS class.
