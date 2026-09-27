@@ -1,3 +1,9 @@
+## 12.1.1
+
+### Patch Changes
+
+- 99bae0e: Lower the bar from 64px to 48px so it fits the 32px buttons.
+
 ## 12.1.0
 
 ### Minor Changes
