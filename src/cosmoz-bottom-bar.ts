@@ -49,7 +49,7 @@ const style = css`
 	}
 
 	#bar {
-		height: 64px;
+		height: 48px;
 		padding: 0 3%;
 		display: flex;
 		align-items: center;
