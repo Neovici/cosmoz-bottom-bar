@@ -66,7 +66,9 @@ const style = css`
 		margin: 0 0.29em;
 		text-overflow: ellipsis;
 		white-space: nowrap;
-		flex: 0 0 auto;
+		flex: 0 1 auto;
+		min-width: 0;
+		overflow: hidden;
 		cursor: pointer;
 		font-weight: var(--cz-font-weight-medium);
 		text-decoration: none;
