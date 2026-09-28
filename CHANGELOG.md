@@ -1,3 +1,13 @@
+## 12.2.0
+
+### Minor Changes
+
+- 3870edc: Allow `@neovici/cosmoz-tokens` ^3 || ^4 (light-dark() adoption)
+
+### Patch Changes
+
+- 91ca487: Let the toolbar action shrink and truncate its label, so a long label no longer pushes the menu and extra slot out of a narrow bar.
+
 ## 12.1.1
 
 ### Patch Changes
