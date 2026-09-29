@@ -38,5 +38,6 @@ dropdown's `button` and `content` parts are gone; style the menu through the
 new `menu` part or `--cosmoz-dropdown-menu-*` custom properties. The menu
 closes when a row is clicked.
 
-Also upgrades to cosmoz-tokens v4, where dark values follow the page's
-`color-scheme` rather than a CSS class.
+Requires `@neovici/cosmoz-tokens` ^4.8.0, whose control height tokens size
+the buttons. Dark values follow the page's `color-scheme` rather than a CSS
+class.
