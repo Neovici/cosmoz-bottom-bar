@@ -66,9 +66,7 @@ const style = css`
 		margin: 0 0.29em;
 		text-overflow: ellipsis;
 		white-space: nowrap;
-		flex: 0 1 auto;
-		min-width: 0;
-		overflow: hidden;
+		flex: 0 0 auto;
 		cursor: pointer;
 		font-weight: var(--cz-font-weight-medium);
 		text-decoration: none;
@@ -82,10 +80,14 @@ const style = css`
 		padding: calc(var(--cz-spacing) * 1.5) calc(var(--cz-spacing) * 3);
 		font-size: var(--cz-text-sm);
 		line-height: var(--cz-text-sm-line-height);
-		border-radius: var(--cz-radius-md);
-		background-color: var(--cz-color-bg-brand-solid);
-		color: var(--cz-color-text-on-brand);
-		box-shadow: var(--cz-shadow-xs);
+		border-radius: var(--cosmoz-bottom-bar-action-radius, var(--cz-radius-md));
+		background-color: var(
+			--cosmoz-bottom-bar-action-background,
+			var(--cz-color-bg-brand-solid)
+		);
+		background-image: var(--cosmoz-bottom-bar-action-sheen, none);
+		color: var(--cosmoz-bottom-bar-action-color, var(--cz-color-text-on-brand));
+		box-shadow: var(--cosmoz-bottom-bar-action-shadow, var(--cz-shadow-xs));
 	}
 
 	#bottomBarToolbar::slotted(:not(slot):not([unstyled])[disabled]) {
@@ -94,7 +96,10 @@ const style = css`
 	}
 
 	#bottomBarToolbar::slotted(:not(slot):not([unstyled]):hover) {
-		background-color: var(--cz-color-bg-brand-solid-hover);
+		background-color: var(
+			--cosmoz-bottom-bar-action-hover-background,
+			var(--cz-color-bg-brand-solid-hover)
+		);
 	}
 
 	#dropdown::part(content) {
@@ -107,14 +112,27 @@ const style = css`
 		border: none;
 		width: 32px;
 		height: 32px;
-		border-radius: var(--cz-radius-md);
-		background-color: var(--cz-color-bg-brand-solid);
-		color: var(--cz-color-text-on-brand);
-		box-shadow: var(--cz-shadow-xs);
+		border-radius: var(--cosmoz-bottom-bar-action-radius, var(--cz-radius-md));
+		background-color: var(
+			--cosmoz-bottom-bar-action-background,
+			var(--cz-color-bg-brand-solid)
+		);
+		background-image: var(--cosmoz-bottom-bar-action-sheen, none);
+		color: var(--cosmoz-bottom-bar-action-color, var(--cz-color-text-on-brand));
+		box-shadow: var(--cosmoz-bottom-bar-action-shadow, var(--cz-shadow-xs));
 	}
 
 	#dropdown::part(button):hover {
-		background-color: var(--cz-color-bg-brand-solid-hover);
+		background-color: var(
+			--cosmoz-bottom-bar-action-hover-background,
+			var(--cz-color-bg-brand-solid-hover)
+		);
+	}
+
+	#dropdown::part(button):focus-visible,
+	#bottomBarToolbar::slotted(:not(slot):focus-visible) {
+		outline: 2px solid var(--cz-color-focus-ring);
+		outline-offset: 2px;
 	}
 
 	:host([hide-actions]) #bottomBarToolbar,
