@@ -1,6 +1,7 @@
 /* eslint-disable max-lines */
 import { assert, aTimeout, fixture, html, nextFrame } from '@open-wc/testing';
 
+import '@neovici/cosmoz-button';
 import '../src/cosmoz-bottom-bar.ts';
 
 const getToolbarElements = (bottomBar) => {
@@ -40,7 +41,7 @@ suite('bottomBarWithoutMenu', () => {
 	test('menu button should be hidden', async () => {
 		assert.isFalse(bottomBar.hasAttribute('has-menu-items'));
 
-		const dropdown = bottomBar.shadowRoot.querySelector('cosmoz-dropdown-menu');
+		const dropdown = bottomBar.shadowRoot.querySelector('#dropdown');
 		assert.equal(getComputedStyle(dropdown).display, 'none');
 	});
 });
@@ -164,6 +165,15 @@ suite('bottomBarMaxToolbarItems', () => {
 		const item4 = bottomBar.querySelector('#bottomBarMaxToolbarItemsItem4');
 		assert.include(menuElements, item4, 'Item 4 should be in menu');
 	});
+
+	test('Changing max-toolbar-items relayouts', async () => {
+		bottomBar.maxToolbarItems = 1;
+		await nextFrame();
+
+		assert.equal(getToolbarElements(bottomBar).length, 1);
+		assert.equal(getMenuElements(bottomBar).length, 3);
+		assert.isTrue(bottomBar.hasAttribute('has-menu-items'));
+	});
 });
 
 suite('bottomBarWithPriority', () => {
@@ -271,7 +281,7 @@ suite('bottomBarWithHiddenButton', () => {
 			'Should not have has-menu-items attribute'
 		);
 
-		const dropdown = bottomBar.shadowRoot.querySelector('cosmoz-dropdown-menu');
+		const dropdown = bottomBar.shadowRoot.querySelector('#dropdown');
 		assert.equal(
 			getComputedStyle(dropdown).display,
 			'none',
@@ -1044,5 +1054,72 @@ suite('slot-based distribution', () => {
 				'Menu items should not have toolbar class'
 			);
 		});
+	});
+});
+
+suite('action look', () => {
+	test('menu items render as tertiary sm, toolbar items keep their own look', async () => {
+		const bottomBar = await fixture(html`
+			<cosmoz-bottom-bar active>
+				<cosmoz-button id="primary" data-priority="2">Approve</cosmoz-button>
+				<cosmoz-button id="delete" variant="destructive" data-priority="1">
+					Delete
+				</cosmoz-button>
+			</cosmoz-bottom-bar>
+		`);
+		await nextFrame();
+
+		const deleteButton = bottomBar.querySelector('#delete');
+		assert.equal(deleteButton.getAttribute('variant'), 'tertiary');
+		assert.equal(deleteButton.getAttribute('size'), 'sm');
+
+		const primary = bottomBar.querySelector('#primary');
+		assert.isFalse(primary.hasAttribute('variant'));
+
+		primary.hidden = true;
+		await aTimeout(100);
+
+		assert.equal(deleteButton.getAttribute('variant'), 'destructive');
+		assert.isFalse(deleteButton.hasAttribute('size'));
+	});
+
+	test('leaves the look of plain elements alone', async () => {
+		const bottomBar = await fixture(html`
+			<cosmoz-bottom-bar active>
+				<button id="first" data-priority="2">Approve</button>
+				<button id="second" data-priority="1">Delete</button>
+			</cosmoz-bottom-bar>
+		`);
+		await nextFrame();
+
+		const second = bottomBar.querySelector('#second');
+		assert.equal(second.getAttribute('slot'), 'bottom-bar-menu');
+		assert.isFalse(second.hasAttribute('variant'));
+		assert.isFalse(second.hasAttribute('size'));
+	});
+});
+
+suite('menu button', () => {
+	test('is an icon-only cosmoz-button that opens the menu, and an item click closes it', async () => {
+		const bottomBar = await fixture(html`
+			<cosmoz-bottom-bar active>
+				<cosmoz-button data-priority="2">Approve</cosmoz-button>
+				<cosmoz-button id="delete" data-priority="1">Delete</cosmoz-button>
+			</cosmoz-bottom-bar>
+		`);
+		await nextFrame();
+
+		const dropdown = bottomBar.shadowRoot.querySelector('#dropdown'),
+			menuButton = bottomBar.shadowRoot.querySelector('#menuButton');
+		assert.equal(menuButton.tagName, 'COSMOZ-BUTTON');
+		assert.isTrue(menuButton.hasAttribute('icon-only'));
+
+		menuButton.click();
+		await nextFrame();
+		assert.isTrue(dropdown.opened);
+
+		bottomBar.querySelector('#delete').click();
+		await nextFrame();
+		assert.isFalse(dropdown.opened);
 	});
 });
