@@ -917,7 +917,7 @@ suite('height management', () => {
 
 	test('should have bar with default height', async () => {
 		const bar = bottomBar.shadowRoot.querySelector('#bar');
-		assert.equal(getComputedStyle(bar).height, '64px');
+		assert.equal(getComputedStyle(bar).height, '48px');
 	});
 
 	test('should transition max-height when active', async () => {

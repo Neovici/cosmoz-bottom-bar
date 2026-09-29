@@ -1,5 +1,5 @@
-import { toggleSize } from '@neovici/cosmoz-collapse/toggle';
 import '@neovici/cosmoz-button';
+import { toggleSize } from '@neovici/cosmoz-collapse/toggle';
 import '@neovici/cosmoz-dropdown';
 import '@neovici/cosmoz-dropdown/cosmoz-dropdown-next';
 import { dotsVerticalIcon } from '@neovici/cosmoz-icons/untitled';
@@ -37,7 +37,6 @@ const style = css`
 		border-top: 1px solid var(--cz-color-border-secondary);
 		box-shadow: var(--cosmoz-bottom-bar-shadow, none);
 		z-index: 1;
-
 	}
 
 	:host([force-open]) {
@@ -50,7 +49,7 @@ const style = css`
 	}
 
 	#bar {
-		height: 64px;
+		height: 48px;
 		padding: 0 3%;
 		display: flex;
 		align-items: center;
@@ -62,6 +61,11 @@ const style = css`
 		padding-right: 3%;
 		margin-right: auto;
 		white-space: nowrap;
+	}
+
+	#bottomBarToolbar::slotted(*) {
+		flex: 0 1 auto;
+		min-width: 0;
 	}
 
 	.menu {
