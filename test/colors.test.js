@@ -20,6 +20,15 @@ suite('bottom bar button colors', () => {
 		assert.equal(style.color, 'rgb(4, 5, 6)');
 	});
 
+	test('slotted buttons are raised with the action shadow', async () => {
+		const bar = await render('--cz-shadow-action: rgb(1, 2, 3) 0px 1px 2px 0px');
+		await nextFrame();
+		assert.equal(
+			getComputedStyle(bar.querySelector('button')).boxShadow,
+			'rgb(1, 2, 3) 0px 1px 2px 0px'
+		);
+	});
+
 	test('falls back to the brand fill without action tokens', async () => {
 		const bar = await render('--cz-color-bg-brand-solid: rgb(9, 9, 9)');
 		await nextFrame();

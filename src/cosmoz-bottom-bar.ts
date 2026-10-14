@@ -88,7 +88,8 @@ const style = css`
 			var(--cz-color-bg-brand-solid)
 		);
 		color: var(--cz-color-text-on-action, var(--cz-color-text-on-brand));
-		box-shadow: var(--cz-shadow-xs);
+		background-image: var(--cz-action-sheen, none);
+		box-shadow: var(--cz-shadow-action, var(--cz-shadow-xs));
 	}
 
 	#bottomBarToolbar::slotted(:not(slot):not([unstyled])[disabled]) {
@@ -119,7 +120,8 @@ const style = css`
 			var(--cz-color-bg-brand-solid)
 		);
 		color: var(--cz-color-text-on-action, var(--cz-color-text-on-brand));
-		box-shadow: var(--cz-shadow-xs);
+		background-image: var(--cz-action-sheen, none);
+		box-shadow: var(--cz-shadow-action, var(--cz-shadow-xs));
 	}
 
 	#dropdown::part(button):hover {
