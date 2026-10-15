@@ -83,9 +83,10 @@ const style = css`
 		font-size: var(--cz-text-sm);
 		line-height: var(--cz-text-sm-line-height);
 		border-radius: var(--cz-radius-md);
-		background-color: var(--cz-color-bg-brand-solid);
-		color: var(--cz-color-text-on-brand);
-		box-shadow: var(--cz-shadow-xs);
+		background-color: var(--cz-color-bg-action-solid);
+		color: var(--cz-color-text-on-action);
+		background-image: var(--cz-action-sheen, none);
+		box-shadow: var(--cz-shadow-action);
 	}
 
 	#bottomBarToolbar::slotted(:not(slot):not([unstyled])[disabled]) {
@@ -94,7 +95,7 @@ const style = css`
 	}
 
 	#bottomBarToolbar::slotted(:not(slot):not([unstyled]):hover) {
-		background-color: var(--cz-color-bg-brand-solid-hover);
+		background-color: var(--cz-color-bg-action-solid-hover);
 	}
 
 	#dropdown::part(content) {
@@ -108,13 +109,14 @@ const style = css`
 		width: 32px;
 		height: 32px;
 		border-radius: var(--cz-radius-md);
-		background-color: var(--cz-color-bg-brand-solid);
-		color: var(--cz-color-text-on-brand);
-		box-shadow: var(--cz-shadow-xs);
+		background-color: var(--cz-color-bg-action-solid);
+		color: var(--cz-color-text-on-action);
+		background-image: var(--cz-action-sheen, none);
+		box-shadow: var(--cz-shadow-action);
 	}
 
 	#dropdown::part(button):hover {
-		background-color: var(--cz-color-bg-brand-solid-hover);
+		background-color: var(--cz-color-bg-action-solid-hover);
 	}
 
 	:host([hide-actions]) #bottomBarToolbar,
