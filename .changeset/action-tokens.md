@@ -7,5 +7,4 @@ Fill and raise buttons with the `action` tokens
 Buttons now read `--cz-color-bg-action-solid`, `--cz-color-bg-action-solid-hover`
 and `--cz-color-text-on-action`, so they stay gray while the brand hue marks
 selection. Their depth comes from `--cz-shadow-action` and `--cz-action-sheen`,
-matching primary `cosmoz-button`s. Everything falls back to the previous
-values, so older cosmoz-tokens versions render as before.
+matching primary `cosmoz-button`s. Requires `@neovici/cosmoz-tokens` 4.9.0.
