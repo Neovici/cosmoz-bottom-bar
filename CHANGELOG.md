@@ -1,3 +1,20 @@
+## 12.2.0
+
+### Minor Changes
+
+- ee344fb: Fill and raise buttons with the `action` tokens
+
+  Buttons now read `--cz-color-bg-action-solid`, `--cz-color-bg-action-solid-hover`
+  and `--cz-color-text-on-action`, so they stay gray while the brand hue marks
+  selection. Their depth comes from `--cz-shadow-action` and `--cz-action-sheen`,
+  matching primary `cosmoz-button`s. Requires `@neovici/cosmoz-tokens` 4.9.0.
+
+- 3870edc: Allow `@neovici/cosmoz-tokens` ^3 || ^4 (light-dark() adoption)
+
+### Patch Changes
+
+- 91ca487: Let the toolbar action shrink and truncate its label, so a long label no longer pushes the menu and extra slot out of a narrow bar.
+
 ## 12.1.1
 
 ### Patch Changes
