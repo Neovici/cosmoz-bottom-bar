@@ -222,6 +222,42 @@ suite('bottomBarWithPriority', () => {
 	});
 });
 
+suite('bottomBarMenuGroups', () => {
+	let bottomBar;
+
+	setup(async () => {
+		bottomBar = await fixture(html`
+			<cosmoz-bottom-bar active>
+				<button id="a" data-group="Handle" data-priority="10">A</button>
+				<button id="b" data-group="Handle">B</button>
+				<button id="c" data-group="Edit">C</button>
+				<button id="d" data-group="Edit">D</button>
+				<button id="e">E</button>
+			</cosmoz-bottom-bar>
+		`);
+
+		await nextFrame();
+	});
+
+	test('marks menu items that start a new group', () => {
+		assert.deepEqual(
+			getMenuElements(bottomBar).map((el) => [
+				el.id,
+				el.hasAttribute('data-group-start'),
+			]),
+			[
+				['b', false],
+				['c', true],
+				['d', false],
+				['e', true],
+			]
+		);
+		assert.isFalse(
+			bottomBar.querySelector('#a').hasAttribute('data-group-start')
+		);
+	});
+});
+
 suite('bottomBarWithHiddenButton', () => {
 	let bottomBar;
 
