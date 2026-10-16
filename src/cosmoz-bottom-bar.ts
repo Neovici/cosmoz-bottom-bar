@@ -25,15 +25,13 @@ const style = css`
 		overflow: hidden;
 		bottom: 0;
 		left: 0;
-		box-sizing: border-box;
 		width: 100%;
-		margin: 0;
 		max-width: 100%; /* Firefox fix */
 		transition: max-height 0.3s ease;
 		flex: none;
 		background-color: var(
 			--cosmoz-bottom-bar-bg-color,
-			var(--cz-color-bg-primary)
+			var(--cz-color-bg-secondary)
 		);
 		border-top: 1px solid var(--cz-color-border-secondary);
 		box-shadow: var(--cosmoz-bottom-bar-shadow, none);
