@@ -1138,6 +1138,14 @@ suite('menu button', () => {
 			menuButton = bottomBar.shadowRoot.querySelector('#menuButton');
 		assert.equal(menuButton.tagName, 'COSMOZ-BUTTON');
 		assert.isTrue(menuButton.hasAttribute('icon-only'));
+		const appearance = (host) => {
+			const style = getComputedStyle(host.shadowRoot.querySelector('button'));
+			return [style.backgroundColor, style.backgroundImage, style.color];
+		};
+		assert.deepEqual(
+			appearance(menuButton),
+			appearance(getToolbarElements(bottomBar)[0]),
+		);
 
 		menuButton.click();
 		await nextFrame();

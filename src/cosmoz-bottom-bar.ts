@@ -370,7 +370,7 @@ const CosmozBottomBar = (host: Host) => {
 				<cosmoz-button
 					id="menuButton"
 					slot="button"
-					variant="secondary"
+					variant="primary"
 					icon-only
 					aria-label="More actions"
 				>
