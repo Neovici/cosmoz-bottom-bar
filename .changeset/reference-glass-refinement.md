@@ -2,4 +2,4 @@
 "@neovici/cosmoz-bottom-bar": patch
 ---
 
-Use the shared translucent toolbar material and sheen for the floating action bar.
+Keep the action-bar container flat and integrated with the workspace; action buttons own their appearance.

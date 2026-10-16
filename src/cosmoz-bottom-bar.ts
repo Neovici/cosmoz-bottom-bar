@@ -26,29 +26,17 @@ const style = css`
 		bottom: 0;
 		left: 0;
 		box-sizing: border-box;
-		width: calc(100% - var(--cz-spacing) * 4);
-		margin: var(--cz-spacing) calc(var(--cz-spacing) * 2)
-			calc(var(--cz-spacing) * 2);
+		width: 100%;
+		margin: 0;
 		max-width: 100%; /* Firefox fix */
-		background-color: inherit;
 		transition: max-height 0.3s ease;
 		flex: none;
 		background-color: var(
 			--cosmoz-bottom-bar-bg-color,
-			var(
-				--cz-color-bg-glass-toolbar,
-				var(--cz-color-bg-glass-panel, var(--cz-color-bg-secondary))
-			)
+			var(--cz-color-bg-primary)
 		);
-		background-image: var(--cz-glass-sheen, none);
-		border: 1px solid
-			var(--cz-color-border-glass, var(--cz-color-border-primary));
-		border-radius: var(--cz-radius-4xl);
-		backdrop-filter: var(--cz-backdrop-filter-glass, none);
-		box-shadow: var(
-			--cosmoz-bottom-bar-shadow,
-			var(--cz-shadow-glass-toolbar, var(--cz-shadow-xs))
-		);
+		border-top: 1px solid var(--cz-color-border-secondary);
+		box-shadow: var(--cosmoz-bottom-bar-shadow, none);
 		z-index: 1;
 	}
 
