@@ -35,15 +35,19 @@ const style = css`
 		flex: none;
 		background-color: var(
 			--cosmoz-bottom-bar-bg-color,
-			var(--cz-color-bg-glass-panel, var(--cz-color-bg-secondary))
+			var(
+				--cz-color-bg-glass-toolbar,
+				var(--cz-color-bg-glass-panel, var(--cz-color-bg-secondary))
+			)
 		);
+		background-image: var(--cz-glass-sheen, none);
 		border: 1px solid
 			var(--cz-color-border-glass, var(--cz-color-border-primary));
 		border-radius: var(--cz-radius-4xl);
 		backdrop-filter: var(--cz-backdrop-filter-glass, none);
 		box-shadow: var(
 			--cosmoz-bottom-bar-shadow,
-			var(--cz-shadow-glass, var(--cz-shadow-xs))
+			var(--cz-shadow-glass-toolbar, var(--cz-shadow-xs))
 		);
 		z-index: 1;
 	}
