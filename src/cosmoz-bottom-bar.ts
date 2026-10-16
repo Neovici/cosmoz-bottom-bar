@@ -23,17 +23,26 @@ const style = css`
 		overflow: hidden;
 		bottom: 0;
 		left: 0;
-		width: 100%;
+		box-sizing: border-box;
+		width: calc(100% - var(--cz-spacing) * 4);
+		margin: var(--cz-spacing) calc(var(--cz-spacing) * 2)
+			calc(var(--cz-spacing) * 2);
 		max-width: 100%; /* Firefox fix */
 		background-color: inherit;
 		transition: max-height 0.3s ease;
 		flex: none;
 		background-color: var(
 			--cosmoz-bottom-bar-bg-color,
-			var(--cz-color-bg-secondary)
+			var(--cz-color-bg-glass-panel, var(--cz-color-bg-secondary))
 		);
-		border-top: 1px solid var(--cz-color-border-secondary);
-		box-shadow: var(--cosmoz-bottom-bar-shadow, none);
+		border: 1px solid
+			var(--cz-color-border-glass, var(--cz-color-border-primary));
+		border-radius: var(--cz-radius-4xl);
+		backdrop-filter: var(--cz-backdrop-filter-glass, none);
+		box-shadow: var(
+			--cosmoz-bottom-bar-shadow,
+			var(--cz-shadow-glass, var(--cz-shadow-xs))
+		);
 		z-index: 1;
 
 		--cosmoz-dropdown-anchor-spacing: 12px 6px;
@@ -62,7 +71,9 @@ const style = css`
 		white-space: nowrap;
 	}
 
-	#bottomBarToolbar::slotted(:not(slot):not([unstyled])) {
+	#bottomBarToolbar::slotted(
+		:not(slot):not([unstyled]):not(cosmoz-button):not(cz-button)
+	) {
 		margin: 0 0.29em;
 		text-overflow: ellipsis;
 		white-space: nowrap;
@@ -72,7 +83,9 @@ const style = css`
 		cursor: pointer;
 		font-weight: var(--cz-font-weight-medium);
 		text-decoration: none;
-		transition: background-color 0.15s ease, box-shadow 0.15s ease;
+		transition:
+			background-color 0.15s ease,
+			box-shadow 0.15s ease;
 		white-space: nowrap;
 		border: none;
 
@@ -82,20 +95,33 @@ const style = css`
 		padding: calc(var(--cz-spacing) * 1.5) calc(var(--cz-spacing) * 3);
 		font-size: var(--cz-text-sm);
 		line-height: var(--cz-text-sm-line-height);
-		border-radius: var(--cz-radius-md);
-		background-color: var(--cz-color-bg-action-solid);
+		border-radius: var(--cz-radius-full);
+		background-color: var(
+			--cz-color-bg-glass-action,
+			var(--cz-color-bg-action-solid)
+		);
 		color: var(--cz-color-text-on-action);
-		background-image: var(--cz-action-sheen, none);
-		box-shadow: var(--cz-shadow-action);
+		background-image: var(
+			--cz-glass-action-sheen,
+			var(--cz-action-sheen, none)
+		);
+		box-shadow: var(--cz-shadow-glass-action, var(--cz-shadow-action));
 	}
 
-	#bottomBarToolbar::slotted(:not(slot):not([unstyled])[disabled]) {
-		opacity: var(--cosmoz-button-disabled-opacity, 0.15);
+	#bottomBarToolbar::slotted(
+		:not(slot):not([unstyled]):not(cosmoz-button):not(cz-button)[disabled]
+	) {
+		opacity: var(--cz-opacity-disabled, 0.45);
 		pointer-events: none;
 	}
 
-	#bottomBarToolbar::slotted(:not(slot):not([unstyled]):hover) {
-		background-color: var(--cz-color-bg-action-solid-hover);
+	#bottomBarToolbar::slotted(
+		:not(slot):not([unstyled]):not(cosmoz-button):not(cz-button):hover
+	) {
+		background-color: var(
+			--cz-color-bg-glass-action-hover,
+			var(--cz-color-bg-action-solid-hover)
+		);
 	}
 
 	#dropdown::part(content) {
@@ -104,19 +130,54 @@ const style = css`
 
 	#dropdown::part(button) {
 		cursor: pointer;
-		transition: background-color 0.15s ease, box-shadow 0.15s ease;
-		border: none;
-		width: 32px;
-		height: 32px;
-		border-radius: var(--cz-radius-md);
-		background-color: var(--cz-color-bg-action-solid);
-		color: var(--cz-color-text-on-action);
-		background-image: var(--cz-action-sheen, none);
-		box-shadow: var(--cz-shadow-action);
+		width: var(--cz-control-height-md);
+		height: var(--cz-control-height-md);
+		border: 1px solid
+			var(--cz-color-border-glass, var(--cz-color-border-primary));
+		border-radius: var(--cz-radius-full);
+		background:
+			var(--cz-glass-sheen, none),
+			var(--cz-color-bg-glass, var(--cz-color-bg-tertiary));
+		color: var(--cz-color-text-primary);
+		box-shadow: var(--cz-shadow-glass, var(--cz-shadow-xs));
 	}
 
 	#dropdown::part(button):hover {
-		background-color: var(--cz-color-bg-action-solid-hover);
+		background-color: var(
+			--cz-color-bg-glass-hover,
+			var(--cz-color-bg-secondary-hover)
+		);
+	}
+
+	#dropdown::part(button):focus-visible,
+	#bottomBarToolbar::slotted(:focus-visible) {
+		outline: 2px solid var(--cz-color-focus-ring);
+		outline-offset: 2px;
+	}
+
+	#bottomBarToolbar::slotted(
+		:not(slot):not([unstyled]):not(cosmoz-button):not(cz-button):active
+	) {
+		box-shadow: var(--cz-shadow-pressed-3d);
+	}
+
+	@media (forced-colors: active) {
+		#dropdown::part(button),
+		#bottomBarToolbar::slotted(
+			:not(slot):not([unstyled]):not(cosmoz-button):not(cz-button)
+		) {
+			border: 1px solid ButtonText;
+			color: ButtonText;
+			background: ButtonFace;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		:host,
+		#dropdown::part(button),
+		#bottomBarToolbar::slotted(*) {
+			transition: none;
+		}
 	}
 
 	:host([hide-actions]) #bottomBarToolbar,
@@ -142,7 +203,7 @@ const openActionsMenu = (host: HTMLElement) => {
 			dropdown.shadowRoot?.querySelector<HTMLElement>('cosmoz-dropdown'),
 		button =
 			cosmozDropdown?.shadowRoot?.querySelector<HTMLButtonElement>(
-				'#dropdownButton'
+				'#dropdownButton',
 			);
 
 	button?.click();
@@ -182,7 +243,7 @@ const getElements = (host: HTMLElement): HTMLElement[] => {
 		.sort(
 			(a, b) =>
 				(Number((a as HTMLElement).dataset.index) || 0) -
-				(Number((b as HTMLElement).dataset.index) || 0)
+				(Number((b as HTMLElement).dataset.index) || 0),
 		) as HTMLElement[];
 
 	if (elements.length === 0) {
@@ -195,7 +256,7 @@ const getElements = (host: HTMLElement): HTMLElement[] => {
 			parseInt(element.dataset.priority ?? '0', 10)
 				? top
 				: element,
-		{ dataset: { priority: '-1000' } } as unknown as HTMLElement
+		{ dataset: { priority: '-1000' } } as unknown as HTMLElement,
 	);
 
 	return [
@@ -208,7 +269,7 @@ const moveElement = (
 	element: HTMLElement,
 	toToolbar: boolean,
 	toolbarClass: string,
-	menuClass: string
+	menuClass: string,
 ) => {
 	const slot = toToolbar ? BOTTOM_BAR_TOOLBAR_SLOT : BOTTOM_BAR_MENU_SLOT;
 	element.setAttribute('slot', slot);
@@ -220,7 +281,7 @@ const moveElement = (
 const layoutActions = (
 	host: HTMLElement & { maxToolbarItems?: number },
 	toolbarClass: string,
-	menuClass: string
+	menuClass: string,
 ) => {
 	const elements = getElements(host),
 		{ maxToolbarItems = 1 } = host,
@@ -235,7 +296,7 @@ const layoutActions = (
 		menuElements = elements.slice(toolbarElements.length);
 
 	toolbarElements.forEach((el) =>
-		moveElement(el, true, toolbarClass, menuClass)
+		moveElement(el, true, toolbarClass, menuClass),
 	);
 	menuElements.forEach((el) => moveElement(el, false, toolbarClass, menuClass));
 	host.toggleAttribute('has-menu-items', menuElements.length > 0);
@@ -277,7 +338,7 @@ const CosmozBottomBar = (host: Host) => {
 			check: () => active && !host.hasAttribute('hide-actions'),
 			element: () => host.shadowRoot?.querySelector('#dropdown'),
 		},
-		[active]
+		[active],
 	);
 
 	const toggle = useMemo(() => toggleSize('height'), []);
@@ -294,7 +355,7 @@ const CosmozBottomBar = (host: Host) => {
 
 	const doLayout = useCallback(
 		() => layoutActions(host, toolbarClass, menuClass),
-		[maxToolbarItems]
+		[maxToolbarItems],
 	);
 
 	// Store the hidden attribute observer so onSlotChange can re-observe
@@ -371,7 +432,7 @@ customElements.define(
 	component(CosmozBottomBar, {
 		observedAttributes: ['active', 'max-toolbar-items'],
 		styleSheets: [style],
-	})
+	}),
 );
 
 const tmplt = `
