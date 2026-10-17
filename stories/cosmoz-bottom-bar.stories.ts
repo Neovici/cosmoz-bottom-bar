@@ -122,12 +122,12 @@ const CosmozBottomBarStory = (
 			${map(
 				buttons,
 				(btn) =>
-					html`<button
+					html`<cosmoz-button
 						@click=${btn.onClick}
 						data-priority=${ifDefined(btn.priority)}
 					>
 						${btn.text}
-					</button>`
+					</cosmoz-button>`
 			)}
 		</cosmoz-bottom-bar>
 	`;
