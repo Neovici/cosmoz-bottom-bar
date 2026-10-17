@@ -19,6 +19,13 @@ On viewports below 900px the bar uses the shared glass surface and 44px control
 height tokens. The existing background and shadow custom properties still allow
 consumer theming.
 
+Mobile overflow actions open in a rounded panel with 12px viewport gutters,
+48px full-width rows and a scrolling list capped at 55dvh. The panel uses the
+shared glass highlight, border and shadow tokens over an opaque surface for
+readability. `--cosmoz-dropdown-menu-max-height` can lower the list's height.
+Desktop retains the compact anchored menu. Dropdown 8.1.0 or later supplies the
+scroll container and native popover dismissal.
+
 Example:
 
 <!---
