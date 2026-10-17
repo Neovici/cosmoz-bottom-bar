@@ -51,7 +51,7 @@ const style = css`
 		height: calc(
 			var(--cz-control-height-md, 32px) + var(--cz-spacing, 4px) * 4
 		);
-		padding: 0 calc(var(--cz-spacing, 4px) * 2);
+		padding: 0 3%;
 		display: flex;
 		align-items: center;
 		gap: calc(var(--cz-spacing, 4px) * 2);
@@ -322,7 +322,6 @@ const CosmozBottomBar = (host: Host) => {
 		});
 
 		observeActionNodes();
-		doLayout();
 
 		// Re-observe when direct children change (handles dynamically added elements)
 		const childObserver = new MutationObserver(() => {
