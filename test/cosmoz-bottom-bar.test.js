@@ -1,5 +1,12 @@
 /* eslint-disable max-lines */
-import { assert, aTimeout, fixture, html, nextFrame, waitUntil } from '@open-wc/testing';
+import {
+	assert,
+	aTimeout,
+	fixture,
+	html,
+	nextFrame,
+	waitUntil,
+} from '@open-wc/testing';
 
 import '@neovici/cosmoz-button';
 import '../src/cosmoz-bottom-bar.ts';
@@ -165,7 +172,6 @@ suite('bottomBarMaxToolbarItems', () => {
 		const item4 = bottomBar.querySelector('#bottomBarMaxToolbarItemsItem4');
 		assert.include(menuElements, item4, 'Item 4 should be in menu');
 	});
-
 });
 
 suite('bottomBarWithPriority', () => {
@@ -907,9 +913,9 @@ suite('height management', () => {
 		await nextFrame();
 	});
 
-	test('should have bar with default height', async () => {
+	test('reserves 44px for mobile controls plus bar padding', async () => {
 		const bar = bottomBar.shadowRoot.querySelector('#bar');
-		assert.equal(getComputedStyle(bar).height, '48px');
+		assert.equal(getComputedStyle(bar).height, '60px');
 	});
 
 	test('should transition max-height when active', async () => {
@@ -1136,7 +1142,7 @@ suite('menu button', () => {
 		};
 		assert.deepEqual(
 			appearance(menuButton),
-			appearance(getToolbarElements(bottomBar)[0]),
+			appearance(getToolbarElements(bottomBar)[0])
 		);
 
 		menuButton.click();
@@ -1155,7 +1161,7 @@ suite('responsive action count', () => {
 			html`<cosmoz-bottom-bar active .maxToolbarItems=${1}>
 				<cosmoz-button>Primary action</cosmoz-button>
 				<cosmoz-button>Secondary action</cosmoz-button>
-			</cosmoz-bottom-bar>`,
+			</cosmoz-bottom-bar>`
 		);
 		const primary = bar.querySelector('cosmoz-button');
 		await waitUntil(() => primary.slot === 'bottom-bar-toolbar');
@@ -1163,6 +1169,45 @@ suite('responsive action count', () => {
 		await waitUntil(() => primary.slot === 'bottom-bar-menu');
 		assert.isTrue(bar.hasAttribute('has-menu-items'));
 		bar.maxToolbarItems = 1;
+		await waitUntil(() => primary.slot === 'bottom-bar-toolbar');
+	});
+});
+
+suite('available width', () => {
+	test('keeps overflow and extra controls reachable, then restores toolbar actions on resize', async () => {
+		const bar = await fixture(html`
+			<cosmoz-bottom-bar active style="width: 700px">
+				<cosmoz-button
+					id="primary"
+					data-priority="2"
+					style="white-space: nowrap"
+				>
+					Supplement accounting information before approving
+				</cosmoz-button>
+				<cosmoz-button>Secondary</cosmoz-button>
+				<div slot="extra" style="display: flex; flex: none">
+					<cosmoz-button>Previous</cosmoz-button>
+					<cosmoz-button>Next</cosmoz-button>
+				</div>
+			</cosmoz-bottom-bar>
+		`);
+		const primary = bar.querySelector('#primary');
+		await waitUntil(() => primary.slot === 'bottom-bar-toolbar');
+		bar.style.width = '300px';
+		await waitUntil(() => primary.slot === 'bottom-bar-menu');
+		const box = bar.getBoundingClientRect();
+		const trigger = bar.shadowRoot.querySelector('#menuButton');
+		const extra = bar.querySelector('[slot="extra"]');
+		assert.isAtMost(trigger.getBoundingClientRect().right, box.right);
+		assert.isAtMost(extra.getBoundingClientRect().right, box.right);
+		trigger.click();
+		await nextFrame();
+		assert.isTrue(bar.shadowRoot.querySelector('#dropdown').opened);
+		assert.isAbove(primary.getBoundingClientRect().height, 0);
+		primary.click();
+		await nextFrame();
+		assert.isFalse(bar.shadowRoot.querySelector('#dropdown').opened);
+		bar.style.width = '700px';
 		await waitUntil(() => primary.slot === 'bottom-bar-toolbar');
 	});
 });

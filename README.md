@@ -1,5 +1,4 @@
-cosmoz-bottom-bar
-==================
+# cosmoz-bottom-bar
 
 [![Build Status](https://github.com/Neovici/cosmoz-bottom-bar/workflows/Github%20CI/badge.svg)](https://github.com/Neovici/cosmoz-bottom-bar/actions?workflow=Github+CI)
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/Neovici/cosmoz-bottom-bar)
@@ -9,6 +8,16 @@ cosmoz-bottom-bar
 ## &lt;cosmoz-bottom-bar&gt;
 
 **cosmoz-bottom-bar** is a responsive bottom-bar that can house buttons/actions and a menu for the buttons that won't fit the available width.
+
+The highest-priority actions are shown in the toolbar, up to `maxToolbarItems`.
+Actions that exceed the available width move into the overflow menu. Resizing the
+bar restores actions when space permits. The `extra` slot stays available for
+navigation or other fixed controls. This behavior also applies inside narrow
+desktop panels, without per-view configuration.
+
+On viewports below 900px the bar uses the shared glass surface and 44px control
+height tokens. The existing background and shadow custom properties still allow
+consumer theming.
 
 Example:
 
@@ -37,6 +46,7 @@ Example:
 </custom-element-demo>
 ```
 -->
+
 ```html
 <div style="padding: 0 18px;">
 	<h3>Sample page</h3>
@@ -45,7 +55,9 @@ Example:
 	<p>Nulla pulvinar justo vel sodales sollicitudin.</p>
 	<p>Proin turpis tortor, sagittis sit amet consequat ut, tempor non velit.</p>
 	<p>Proin finibus elit libero, vitae scelerisque lacus maximus ac.</p>
-	<p>Vivamus ut finibus ligula. Mauris sollicitudin vitae orci eu scelerisque.</p>
+	<p>
+		Vivamus ut finibus ligula. Mauris sollicitudin vitae orci eu scelerisque.
+	</p>
 	<p>Duis nec placerat mauris, at tincidunt libero.</p>
 	<p>Nullam non magna eget mauris porta tempor.</p>
 	<p>Proin non sagittis enim.</p>

@@ -70,7 +70,7 @@ const style = css`
 	}
 
 	#bottomBarToolbar::slotted(*) {
-		flex: 0 1 auto;
+		flex: 0 0 auto;
 		min-width: 0;
 	}
 
@@ -86,6 +86,21 @@ const style = css`
 		padding: 0;
 		background: none;
 		--cosmoz-button-justify-content: flex-start;
+	}
+
+	@media (max-width: 899px) {
+		:host {
+			--cz-control-height-md: 44px;
+			--cz-control-height-sm: 44px;
+			background-color: var(
+				--cosmoz-bottom-bar-bg-color,
+				var(--cz-color-bg-glass)
+			);
+			background-image: var(--cz-glass-sheen);
+			border-color: var(--cz-color-border-glass);
+			box-shadow: var(--cosmoz-bottom-bar-shadow, var(--cz-shadow-glass));
+			backdrop-filter: var(--cz-backdrop-filter-glass);
+		}
 	}
 
 	@media (prefers-reduced-motion: reduce) {
@@ -237,6 +252,22 @@ const layoutActions = (
 	);
 	menuElements.forEach((el) => moveElement(el, false, toolbarClass, menuClass));
 	host.toggleAttribute('has-menu-items', menuElements.length > 0);
+
+	const bar = host.shadowRoot?.querySelector<HTMLElement>('#bar');
+	if (!bar?.clientWidth) return;
+
+	// Reserve space for the overflow trigger and caller-supplied extra controls.
+	// A flex item may fit its box while its unbreakable label overflows it.
+	const overflows = () =>
+		bar.scrollWidth > bar.clientWidth ||
+		toolbarElements.some(
+			(element) => element.scrollWidth > element.clientWidth
+		);
+
+	while (toolbarElements.length > 0 && overflows()) {
+		moveElement(toolbarElements.pop()!, false, toolbarClass, menuClass);
+		host.toggleAttribute('has-menu-items', true);
+	}
 };
 
 /**
@@ -252,7 +283,8 @@ const layoutActions = (
  * - `bottom-bar-menu` for items shown in the overflow dropdown
  *
  * The top `maxToolbarItems` (sorted by `data-priority`) are placed in the toolbar,
- * the rest go to the menu.
+ * the rest go to the menu. Toolbar items that do not fit the available width
+ * also move into the menu, leaving the info and extra slots reachable.
  *
  * @element cosmoz-bottom-bar
  */
@@ -290,10 +322,11 @@ const CosmozBottomBar = (host: Host) => {
 		mounted.current = true;
 	}, [active]);
 
-	const doLayout = useCallback(
-		() => layoutActions(host, toolbarClass, menuClass),
-		[maxToolbarItems]
-	);
+	const laidOutNodes = useRef<HTMLElement[]>([]);
+	const doLayout = useCallback(() => {
+		laidOutNodes.current = getElements(host);
+		layoutActions(host, toolbarClass, menuClass);
+	}, [maxToolbarItems]);
 
 	// Store the hidden attribute observer so onSlotChange can re-observe
 	const hiddenObserver = useRef<MutationObserver | null>(null);
@@ -329,20 +362,32 @@ const CosmozBottomBar = (host: Host) => {
 			observeActionNodes();
 			doLayout();
 		});
-		childObserver.observe(host, { childList: true });
+		childObserver.observe(host, {
+			childList: true,
+			subtree: true,
+			characterData: true,
+		});
+		const resizeObserver = new ResizeObserver(doLayout);
+		resizeObserver.observe(host);
 
 		return () => {
 			hiddenObserver.current?.disconnect();
 			hiddenObserver.current = null;
 			childObserver.disconnect();
+			resizeObserver.disconnect();
 		};
 	}, [doLayout]);
 
 	const onSlotChange = useCallback(() => {
-		// Re-observe after slot changes, since new elements
-		// may have appeared through nested slots
 		observeActionNodes();
-		doLayout();
+		const elements = getElements(host),
+			previous = laidOutNodes.current ?? [];
+		if (
+			elements.length !== previous.length ||
+			elements.some((element, index) => element !== previous[index])
+		) {
+			doLayout();
+		}
 	}, [doLayout]);
 
 	return html` <div id="bar" part="bar">
