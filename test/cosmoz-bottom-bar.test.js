@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import { assert, aTimeout, fixture, html, nextFrame } from '@open-wc/testing';
+import { assert, aTimeout, fixture, html, nextFrame, waitUntil } from '@open-wc/testing';
 
 import '@neovici/cosmoz-button';
 import '../src/cosmoz-bottom-bar.ts';
@@ -1146,5 +1146,23 @@ suite('menu button', () => {
 		bottomBar.querySelector('#delete').click();
 		await nextFrame();
 		assert.isFalse(dropdown.opened);
+	});
+});
+
+suite('responsive action count', () => {
+	test('moves the primary action into the menu when the layout becomes compact', async () => {
+		const bar = await fixture(
+			html`<cosmoz-bottom-bar active .maxToolbarItems=${1}>
+				<cosmoz-button>Primary action</cosmoz-button>
+				<cosmoz-button>Secondary action</cosmoz-button>
+			</cosmoz-bottom-bar>`,
+		);
+		const primary = bar.querySelector('cosmoz-button');
+		await waitUntil(() => primary.slot === 'bottom-bar-toolbar');
+		bar.maxToolbarItems = 0;
+		await waitUntil(() => primary.slot === 'bottom-bar-menu');
+		assert.isTrue(bar.hasAttribute('has-menu-items'));
+		bar.maxToolbarItems = 1;
+		await waitUntil(() => primary.slot === 'bottom-bar-toolbar');
 	});
 });
