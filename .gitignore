@@ -22,3 +22,4 @@ dist
 codecov
 codecov.SHA256SUM
 codecov.SHA256SUM.sig
+.npmrc
