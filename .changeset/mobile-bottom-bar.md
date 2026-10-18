@@ -6,4 +6,4 @@ Keep overflow and extra controls reachable by moving actions that exceed the ava
 
 Use a tertiary More actions trigger so overflow navigation does not compete with primary actions.
 
-Present mobile overflow actions in a wider rounded panel using shared glass tokens, 48px rows and a bounded scrolling list. Require dropdown 8.1.0 for its scroll container. Preserve the compact desktop menu.
+Present mobile overflow actions in a native modal sheet with a translated heading, Close control, 48px rows and a bounded scrolling group. Preserve the original action elements, native focus containment and Escape/backdrop dismissal. Close the sheet when switching to the compact desktop popover. Keep the mobile toolbar transparent and compact so it can sit above application navigation without an extra outlined band.

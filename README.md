@@ -15,16 +15,21 @@ bar restores actions when space permits. The `extra` slot stays available for
 navigation or other fixed controls. This behavior also applies inside narrow
 desktop panels, without per-view configuration.
 
-On viewports below 900px the bar uses the shared glass surface and 44px control
-height tokens. The existing background and shadow custom properties still allow
-consumer theming.
+On viewports below 900px the bar is transparent, with 44px controls in a compact
+52px toolbar. The background and shadow custom properties still allow consumer
+theming.
 
-Mobile overflow actions open in a rounded panel with 12px viewport gutters,
-48px full-width rows and a scrolling list capped at 55dvh. The panel uses the
-shared glass highlight, border and shadow tokens over an opaque surface for
-readability. `--cosmoz-dropdown-menu-max-height` can lower the list's height.
-Desktop retains the compact anchored menu. Dropdown 8.1.0 or later supplies the
-scroll container and native popover dismissal.
+Mobile overflow actions open in a native modal sheet. It has a translated Actions
+heading and Close control, 48px rows and a scrolling group capped at 75dvh. Shared
+glass and surface tokens keep the sheet legible over the dimmed page. Native
+focus containment, Escape and backdrop dismissal preserve keyboard access. The
+sheet closes when resizing to desktop, where the compact anchored menu remains.
+The original action elements are projected through the same named slot in both
+presentations. Nothing is cloned or submitted by the bar.
+
+Labels use the application's i18next instance, with English defaults when it has
+not been initialized. Consumers can theme the sheet through `action-sheet` and
+retain the desktop `menu`, `dropdown`, `bar` and `info` CSS parts.
 
 Example:
 

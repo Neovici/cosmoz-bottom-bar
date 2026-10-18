@@ -14,7 +14,10 @@ import {
 	useRef,
 } from '@pionjs/pion';
 import { html as polymerHtml } from '@polymer/polymer/polymer-element.js';
-import { html } from 'lit-html';
+import { t } from 'i18next';
+import { html, nothing } from 'lit-html';
+import { renderMobileActions, useMobileActions } from './mobile-actions';
+import { mobileStyles } from './mobile-actions.css';
 
 const BOTTOM_BAR_TOOLBAR_SLOT = 'bottom-bar-toolbar',
 	BOTTOM_BAR_MENU_SLOT = 'bottom-bar-menu';
@@ -88,54 +91,6 @@ const style = css`
 		--cosmoz-button-justify-content: flex-start;
 	}
 
-	@media (max-width: 899px) {
-		:host {
-			--cz-control-height-md: 44px;
-			--cz-control-height-sm: 44px;
-			background-color: var(
-				--cosmoz-bottom-bar-bg-color,
-				var(--cz-color-bg-glass)
-			);
-			background-image: var(--cz-glass-sheen);
-			border-color: var(--cz-color-border-glass);
-			box-shadow: var(--cosmoz-bottom-bar-shadow, var(--cz-shadow-glass));
-			backdrop-filter: var(--cz-backdrop-filter-glass);
-		}
-
-		.menu {
-			box-sizing: border-box;
-			width: min(360px, calc(100dvw - 24px));
-			max-width: calc(100dvw - 24px);
-			margin-inline: 12px;
-			padding: 8px;
-			border: 1px solid var(--cz-color-border-glass);
-			border-radius: var(--cz-radius-3xl, 24px);
-			background: var(--cz-glass-sheen), var(--cz-color-bg-primary);
-			box-shadow: var(--cz-shadow-glass), var(--cz-shadow-2xl);
-		}
-
-		.menu > cosmoz-dropdown-list {
-			box-sizing: border-box;
-			max-height: min(
-				var(--cosmoz-dropdown-menu-max-height, 55dvh),
-				55dvh,
-				30rem
-			);
-			padding: 0;
-			border: 0;
-			border-radius: var(--cz-radius-xl, 12px);
-			background: transparent;
-			overscroll-behavior: contain;
-		}
-
-		#bottomBarMenu::slotted(*) {
-			box-sizing: border-box;
-			width: 100%;
-			min-height: 48px;
-			--cz-control-height-sm: 48px;
-		}
-	}
-
 	@media (prefers-reduced-motion: reduce) {
 		:host {
 			transition: none;
@@ -144,11 +99,13 @@ const style = css`
 
 	:host([hide-actions]) #bottomBarToolbar,
 	:host([hide-actions]) #bottomBarMenu,
-	:host([hide-actions]) #dropdown {
+	:host([hide-actions]) #dropdown,
+	:host([hide-actions]) #menuButton {
 		display: none;
 	}
 
-	:host(:not([has-menu-items])) #dropdown {
+	:host(:not([has-menu-items])) #dropdown,
+	:host(:not([has-menu-items])) #menuButton {
 		display: none;
 	}
 `;
@@ -328,7 +285,8 @@ type Host = HTMLElement & {
 };
 
 const CosmozBottomBar = (host: Host) => {
-	const { active = false, maxToolbarItems = 1 } = host;
+	const { active = false, maxToolbarItems = 1 } = host,
+		actions = useMobileActions();
 	const mounted = useRef(false);
 	const toolbarClass = 'cosmoz-bottom-bar-toolbar';
 	const menuClass = 'cosmoz-bottom-bar-menu';
@@ -338,7 +296,7 @@ const CosmozBottomBar = (host: Host) => {
 			activity: openMenu,
 			callback: () => openActionsMenu(host),
 			check: () => active && !host.hasAttribute('hide-actions'),
-			element: () => host.shadowRoot?.querySelector('#dropdown'),
+			element: () => host.shadowRoot?.querySelector('#menuButton'),
 		},
 		[active],
 	);
@@ -411,6 +369,8 @@ const CosmozBottomBar = (host: Host) => {
 		};
 	}, [doLayout]);
 
+	useLayoutEffect(doLayout, [actions.mobile]);
+
 	const onSlotChange = useCallback(() => {
 		observeActionNodes();
 		const elements = getElements(host),
@@ -430,28 +390,48 @@ const CosmozBottomBar = (host: Host) => {
 				name="bottom-bar-toolbar"
 				@slotchange=${onSlotChange}
 			></slot>
-			<cosmoz-dropdown-next
-				id="dropdown"
-				part="dropdown"
-				placement="top span-left"
-			>
-				<cosmoz-button
-					id="menuButton"
-					slot="button"
-					variant="tertiary"
-					icon-only
-					aria-label="More actions"
-				>
-					${dotsVerticalIcon()}
-				</cosmoz-button>
-				<div class="menu" part="menu" @click=${closeMenu}>
-					<cosmoz-dropdown-list>
-						<slot id="bottomBarMenu" name="bottom-bar-menu"></slot>
-					</cosmoz-dropdown-list>
-				</div>
-			</cosmoz-dropdown-next>
+			${
+				actions.mobile
+					? html`<cosmoz-button
+							id="menuButton"
+							variant="tertiary"
+							icon-only
+							aria-label=${t('More actions') || 'More actions'}
+							aria-haspopup="dialog"
+							aria-expanded=${String(actions.opened)}
+							@click=${actions.open}
+							>${dotsVerticalIcon()}</cosmoz-button
+						>`
+					: html`<cosmoz-dropdown-next
+							id="dropdown"
+							part="dropdown"
+							placement="top span-left"
+						>
+							<cosmoz-button
+								id="menuButton"
+								slot="button"
+								variant="tertiary"
+								icon-only
+								aria-label=${t('More actions') || 'More actions'}
+								>${dotsVerticalIcon()}</cosmoz-button
+							>
+							<div class="menu" part="menu" @click=${closeMenu}>
+								<cosmoz-dropdown-list>
+									<slot id="bottomBarMenu" name="bottom-bar-menu"></slot>
+								</cosmoz-dropdown-list>
+							</div>
+						</cosmoz-dropdown-next>`
+			}
 			<slot name="extra" id="extraSlot"></slot>
 		</div>
+		${
+			actions.mobile
+				? renderMobileActions(
+						actions,
+						html`<slot id="bottomBarMenu" name="bottom-bar-menu"></slot>`,
+					)
+				: nothing
+		}
 		<div hidden style="display:none">
 			<slot id="content" @slotchange=${onSlotChange}></slot>
 		</div>`;
@@ -463,7 +443,7 @@ customElements.define(
 	'cosmoz-bottom-bar',
 	component(CosmozBottomBar, {
 		observedAttributes: ['active', 'max-toolbar-items'],
-		styleSheets: [style],
+		styleSheets: [style, mobileStyles],
 	}),
 );
 

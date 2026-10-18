@@ -50,6 +50,7 @@
     "@neovici/cosmoz-utils": "^6.13.1",
     "@pionjs/pion": "^2.5.2",
     "@polymer/polymer": "^3.3.0",
+    "i18next": "^26.5.2",
     "lit-html": "^2.0.0 || ^3.0.0"
   },
   "devDependencies": {
