@@ -79,4 +79,24 @@ suite('mobile action alignment', () => {
 		await setViewport({ width: 1024, height: 800 });
 		await waitUntil(() => primary.slot === 'bottom-bar-toolbar');
 	});
+
+	test('reserves the bar inset when an action would fit only against its outer edge', async () => {
+		await setViewport({ width: 320, height: 568 });
+		const bar = await fixture(html`
+			<cosmoz-bottom-bar active style="position: fixed; inset: auto 0 80px">
+				<cosmoz-button style="min-width:144px" data-priority="2"
+					>Assign</cosmoz-button
+				>
+				<cosmoz-button>Comment</cosmoz-button>
+				<div slot="extra" style="display:flex; flex:none; width:104px"></div>
+			</cosmoz-bottom-bar>
+		`);
+		await setViewport({ width: 321, height: 568 });
+		await setViewport({ width: 320, height: 568 });
+		const primary = bar.firstElementChild;
+		await waitUntil(() => primary.slot === 'bottom-bar-menu');
+		await setViewport({ width: 390, height: 844 });
+		await waitUntil(() => primary.slot === 'bottom-bar-toolbar');
+		assert.closeTo(primary.getBoundingClientRect().left, 12, 1);
+	});
 });

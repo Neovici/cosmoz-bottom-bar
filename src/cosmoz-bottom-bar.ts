@@ -246,6 +246,9 @@ const layoutActions = (
 	const bar = host.shadowRoot?.querySelector<HTMLElement>('#bar');
 	if (!bar?.clientWidth) return;
 	const barBounds = bar.getBoundingClientRect();
+	const barStyle = getComputedStyle(bar);
+	const contentLeft = barBounds.left + parseFloat(barStyle.paddingLeft);
+	const contentRight = barBounds.right - parseFloat(barStyle.paddingRight);
 
 	// Reserve space for the overflow trigger and caller-supplied extra controls.
 	// A flex item may fit its box while its unbreakable label overflows it.
@@ -255,8 +258,8 @@ const layoutActions = (
 			const bounds = element.getBoundingClientRect();
 			return (
 				element.scrollWidth > element.clientWidth ||
-				bounds.left < barBounds.left ||
-				bounds.right > barBounds.right
+				bounds.left < contentLeft - 0.5 ||
+				bounds.right > contentRight + 0.5
 			);
 		});
 
