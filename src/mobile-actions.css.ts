@@ -13,6 +13,21 @@ export const mobileStyles = css`
 		#bar {
 			height: 52px;
 			padding-inline: 12px;
+			justify-content: flex-end;
+		}
+
+		#info {
+			flex: 0 1 auto;
+		}
+
+		:host(:not([has-info])) #info {
+			display: none;
+		}
+
+		#bottomBarToolbar::slotted(*) {
+			flex: 1 0 auto;
+			max-inline-size: 320px;
+			margin-inline-end: auto;
 		}
 
 		#bottomBarMenu::slotted(*) {

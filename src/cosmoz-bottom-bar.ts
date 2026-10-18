@@ -245,14 +245,20 @@ const layoutActions = (
 
 	const bar = host.shadowRoot?.querySelector<HTMLElement>('#bar');
 	if (!bar?.clientWidth) return;
+	const barBounds = bar.getBoundingClientRect();
 
 	// Reserve space for the overflow trigger and caller-supplied extra controls.
 	// A flex item may fit its box while its unbreakable label overflows it.
 	const overflows = () =>
 		bar.scrollWidth > bar.clientWidth ||
-		toolbarElements.some(
-			(element) => element.scrollWidth > element.clientWidth,
-		);
+		toolbarElements.some((element) => {
+			const bounds = element.getBoundingClientRect();
+			return (
+				element.scrollWidth > element.clientWidth ||
+				bounds.left < barBounds.left ||
+				bounds.right > barBounds.right
+			);
+		});
 
 	while (toolbarElements.length > 0 && overflows()) {
 		moveElement(toolbarElements.pop()!, false, toolbarClass, menuClass);
@@ -384,7 +390,17 @@ const CosmozBottomBar = (host: Host) => {
 	}, [doLayout]);
 
 	return html` <div id="bar" part="bar">
-			<div id="info" part="info"><slot name="info"></slot></div>
+			<div id="info" part="info">
+				<slot
+					name="info"
+					@slotchange=${(event: Event) =>
+						host.toggleAttribute(
+							'has-info',
+							(event.target as HTMLSlotElement).assignedNodes({ flatten: true })
+								.length > 0,
+						)}
+				></slot>
+			</div>
 			<slot
 				id="bottomBarToolbar"
 				name="bottom-bar-toolbar"

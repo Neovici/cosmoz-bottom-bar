@@ -1196,6 +1196,9 @@ suite('available width', () => {
 				</div>
 			</cosmoz-bottom-bar>
 		`);
+		// WebKit needs a viewport change after adopting the cached media-query sheet.
+		await setViewport({ width: 1025, height: 768 });
+		await setViewport({ width: 1024, height: 768 });
 		const primary = bar.querySelector('#primary');
 		await waitUntil(() => primary.slot === 'bottom-bar-toolbar');
 		bar.style.width = '300px';
