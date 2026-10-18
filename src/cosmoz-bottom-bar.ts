@@ -14,7 +14,10 @@ import {
 	useRef,
 } from '@pionjs/pion';
 import { html as polymerHtml } from '@polymer/polymer/polymer-element.js';
-import { html } from 'lit-html';
+import { t } from 'i18next';
+import { html, nothing } from 'lit-html';
+import { renderMobileActions, useMobileActions } from './mobile-actions';
+import { mobileStyles } from './mobile-actions.css';
 
 const BOTTOM_BAR_TOOLBAR_SLOT = 'bottom-bar-toolbar',
 	BOTTOM_BAR_MENU_SLOT = 'bottom-bar-menu';
@@ -70,7 +73,7 @@ const style = css`
 	}
 
 	#bottomBarToolbar::slotted(*) {
-		flex: 0 1 auto;
+		flex: 0 0 auto;
 		min-width: 0;
 	}
 
@@ -96,11 +99,13 @@ const style = css`
 
 	:host([hide-actions]) #bottomBarToolbar,
 	:host([hide-actions]) #bottomBarMenu,
-	:host([hide-actions]) #dropdown {
+	:host([hide-actions]) #dropdown,
+	:host([hide-actions]) #menuButton {
 		display: none;
 	}
 
-	:host(:not([has-menu-items])) #dropdown {
+	:host(:not([has-menu-items])) #dropdown,
+	:host(:not([has-menu-items])) #menuButton {
 		display: none;
 	}
 `;
@@ -152,7 +157,7 @@ const getElements = (host: HTMLElement): HTMLElement[] => {
 		.sort(
 			(a, b) =>
 				(Number((a as HTMLElement).dataset.index) || 0) -
-				(Number((b as HTMLElement).dataset.index) || 0)
+				(Number((b as HTMLElement).dataset.index) || 0),
 		) as HTMLElement[];
 
 	if (elements.length === 0) {
@@ -165,7 +170,7 @@ const getElements = (host: HTMLElement): HTMLElement[] => {
 			parseInt(element.dataset.priority ?? '0', 10)
 				? top
 				: element,
-		{ dataset: { priority: '-1000' } } as unknown as HTMLElement
+		{ dataset: { priority: '-1000' } } as unknown as HTMLElement,
 	);
 
 	return [
@@ -190,7 +195,7 @@ const moveElement = (
 	element: HTMLElement,
 	toToolbar: boolean,
 	toolbarClass: string,
-	menuClass: string
+	menuClass: string,
 ) => {
 	const slot = toToolbar ? BOTTOM_BAR_TOOLBAR_SLOT : BOTTOM_BAR_MENU_SLOT;
 	element.setAttribute('slot', slot);
@@ -207,7 +212,7 @@ const moveElement = (
 		Object.entries(look).forEach(([name, value]) =>
 			value == null
 				? element.removeAttribute(name)
-				: element.setAttribute(name, value)
+				: element.setAttribute(name, value),
 		);
 	}
 
@@ -218,7 +223,7 @@ const moveElement = (
 const layoutActions = (
 	host: HTMLElement & { maxToolbarItems?: number },
 	toolbarClass: string,
-	menuClass: string
+	menuClass: string,
 ) => {
 	const elements = getElements(host),
 		{ maxToolbarItems = 1 } = host,
@@ -233,10 +238,35 @@ const layoutActions = (
 		menuElements = elements.slice(toolbarElements.length);
 
 	toolbarElements.forEach((el) =>
-		moveElement(el, true, toolbarClass, menuClass)
+		moveElement(el, true, toolbarClass, menuClass),
 	);
 	menuElements.forEach((el) => moveElement(el, false, toolbarClass, menuClass));
 	host.toggleAttribute('has-menu-items', menuElements.length > 0);
+
+	const bar = host.shadowRoot?.querySelector<HTMLElement>('#bar');
+	if (!bar?.clientWidth) return;
+	const barBounds = bar.getBoundingClientRect();
+	const barStyle = getComputedStyle(bar);
+	const contentLeft = barBounds.left + parseFloat(barStyle.paddingLeft);
+	const contentRight = barBounds.right - parseFloat(barStyle.paddingRight);
+
+	// Reserve space for the overflow trigger and caller-supplied extra controls.
+	// A flex item may fit its box while its unbreakable label overflows it.
+	const overflows = () =>
+		bar.scrollWidth > bar.clientWidth ||
+		toolbarElements.some((element) => {
+			const bounds = element.getBoundingClientRect();
+			return (
+				element.scrollWidth > element.clientWidth ||
+				bounds.left < contentLeft - 0.5 ||
+				bounds.right > contentRight + 0.5
+			);
+		});
+
+	while (toolbarElements.length > 0 && overflows()) {
+		moveElement(toolbarElements.pop()!, false, toolbarClass, menuClass);
+		host.toggleAttribute('has-menu-items', true);
+	}
 };
 
 /**
@@ -252,7 +282,8 @@ const layoutActions = (
  * - `bottom-bar-menu` for items shown in the overflow dropdown
  *
  * The top `maxToolbarItems` (sorted by `data-priority`) are placed in the toolbar,
- * the rest go to the menu.
+ * the rest go to the menu. Toolbar items that do not fit the available width
+ * also move into the menu, leaving the info and extra slots reachable.
  *
  * @element cosmoz-bottom-bar
  */
@@ -263,7 +294,8 @@ type Host = HTMLElement & {
 };
 
 const CosmozBottomBar = (host: Host) => {
-	const { active = false, maxToolbarItems = 1 } = host;
+	const { active = false, maxToolbarItems = 1 } = host,
+		actions = useMobileActions();
 	const mounted = useRef(false);
 	const toolbarClass = 'cosmoz-bottom-bar-toolbar';
 	const menuClass = 'cosmoz-bottom-bar-menu';
@@ -273,9 +305,9 @@ const CosmozBottomBar = (host: Host) => {
 			activity: openMenu,
 			callback: () => openActionsMenu(host),
 			check: () => active && !host.hasAttribute('hide-actions'),
-			element: () => host.shadowRoot?.querySelector('#dropdown'),
+			element: () => host.shadowRoot?.querySelector('#menuButton'),
 		},
-		[active]
+		[active],
 	);
 
 	const toggle = useMemo(() => toggleSize('height'), []);
@@ -290,10 +322,11 @@ const CosmozBottomBar = (host: Host) => {
 		mounted.current = true;
 	}, [active]);
 
-	const doLayout = useCallback(
-		() => layoutActions(host, toolbarClass, menuClass),
-		[maxToolbarItems]
-	);
+	const laidOutNodes = useRef<HTMLElement[]>([]);
+	const doLayout = useCallback(() => {
+		laidOutNodes.current = getElements(host);
+		layoutActions(host, toolbarClass, menuClass);
+	}, [maxToolbarItems]);
 
 	// Store the hidden attribute observer so onSlotChange can re-observe
 	const hiddenObserver = useRef<MutationObserver | null>(null);
@@ -322,57 +355,102 @@ const CosmozBottomBar = (host: Host) => {
 		});
 
 		observeActionNodes();
+		doLayout();
 
 		// Re-observe when direct children change (handles dynamically added elements)
 		const childObserver = new MutationObserver(() => {
 			observeActionNodes();
 			doLayout();
 		});
-		childObserver.observe(host, { childList: true });
+		childObserver.observe(host, {
+			childList: true,
+			subtree: true,
+			characterData: true,
+		});
+		const resizeObserver = new ResizeObserver(doLayout);
+		resizeObserver.observe(host);
 
 		return () => {
 			hiddenObserver.current?.disconnect();
 			hiddenObserver.current = null;
 			childObserver.disconnect();
+			resizeObserver.disconnect();
 		};
 	}, [doLayout]);
 
+	useLayoutEffect(doLayout, [actions.mobile]);
+
 	const onSlotChange = useCallback(() => {
-		// Re-observe after slot changes, since new elements
-		// may have appeared through nested slots
 		observeActionNodes();
-		doLayout();
+		const elements = getElements(host),
+			previous = laidOutNodes.current ?? [];
+		if (
+			elements.length !== previous.length ||
+			elements.some((element, index) => element !== previous[index])
+		) {
+			doLayout();
+		}
 	}, [doLayout]);
 
 	return html` <div id="bar" part="bar">
-			<div id="info" part="info"><slot name="info"></slot></div>
+			<div id="info" part="info">
+				<slot
+					name="info"
+					@slotchange=${(event: Event) =>
+						host.toggleAttribute(
+							'has-info',
+							(event.target as HTMLSlotElement).assignedNodes({ flatten: true })
+								.length > 0,
+						)}
+				></slot>
+			</div>
 			<slot
 				id="bottomBarToolbar"
 				name="bottom-bar-toolbar"
 				@slotchange=${onSlotChange}
 			></slot>
-			<cosmoz-dropdown-next
-				id="dropdown"
-				part="dropdown"
-				placement="top span-left"
-			>
-				<cosmoz-button
-					id="menuButton"
-					slot="button"
-					variant="primary"
-					icon-only
-					aria-label="More actions"
-				>
-					${dotsVerticalIcon()}
-				</cosmoz-button>
-				<div class="menu" part="menu" @click=${closeMenu}>
-					<cosmoz-dropdown-list>
-						<slot id="bottomBarMenu" name="bottom-bar-menu"></slot>
-					</cosmoz-dropdown-list>
-				</div>
-			</cosmoz-dropdown-next>
+			${
+				actions.mobile
+					? html`<cosmoz-button
+							id="menuButton"
+							variant="tertiary"
+							icon-only
+							aria-label=${t('More actions') || 'More actions'}
+							aria-haspopup="dialog"
+							aria-expanded=${String(actions.opened)}
+							@click=${actions.open}
+							>${dotsVerticalIcon()}</cosmoz-button
+						>`
+					: html`<cosmoz-dropdown-next
+							id="dropdown"
+							part="dropdown"
+							placement="top span-left"
+						>
+							<cosmoz-button
+								id="menuButton"
+								slot="button"
+								variant="tertiary"
+								icon-only
+								aria-label=${t('More actions') || 'More actions'}
+								>${dotsVerticalIcon()}</cosmoz-button
+							>
+							<div class="menu" part="menu" @click=${closeMenu}>
+								<cosmoz-dropdown-list>
+									<slot id="bottomBarMenu" name="bottom-bar-menu"></slot>
+								</cosmoz-dropdown-list>
+							</div>
+						</cosmoz-dropdown-next>`
+			}
 			<slot name="extra" id="extraSlot"></slot>
 		</div>
+		${
+			actions.mobile
+				? renderMobileActions(
+						actions,
+						html`<slot id="bottomBarMenu" name="bottom-bar-menu"></slot>`,
+					)
+				: nothing
+		}
 		<div hidden style="display:none">
 			<slot id="content" @slotchange=${onSlotChange}></slot>
 		</div>`;
@@ -384,8 +462,8 @@ customElements.define(
 	'cosmoz-bottom-bar',
 	component(CosmozBottomBar, {
 		observedAttributes: ['active', 'max-toolbar-items'],
-		styleSheets: [style],
-	})
+		styleSheets: [style, mobileStyles],
+	}),
 );
 
 const tmplt = `

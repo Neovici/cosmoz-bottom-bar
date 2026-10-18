@@ -1,5 +1,4 @@
-cosmoz-bottom-bar
-==================
+# cosmoz-bottom-bar
 
 [![Build Status](https://github.com/Neovici/cosmoz-bottom-bar/workflows/Github%20CI/badge.svg)](https://github.com/Neovici/cosmoz-bottom-bar/actions?workflow=Github+CI)
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/Neovici/cosmoz-bottom-bar)
@@ -9,6 +8,28 @@ cosmoz-bottom-bar
 ## &lt;cosmoz-bottom-bar&gt;
 
 **cosmoz-bottom-bar** is a responsive bottom-bar that can house buttons/actions and a menu for the buttons that won't fit the available width.
+
+The highest-priority actions are shown in the toolbar, up to `maxToolbarItems`.
+Actions that exceed the available width move into the overflow menu. Resizing the
+bar restores actions when space permits. The `extra` slot stays available for
+navigation or other fixed controls. This behavior also applies inside narrow
+desktop panels, without per-view configuration.
+
+On viewports below 900px the bar is transparent, with 44px controls in a compact
+52px toolbar. The background and shadow custom properties still allow consumer
+theming.
+
+Mobile overflow actions open in a native modal sheet. It has a translated Actions
+heading and Close control, 48px rows and a scrolling group capped at 75dvh. Shared
+glass and surface tokens keep the sheet legible over the dimmed page. Native
+focus containment, Escape and backdrop dismissal preserve keyboard access. The
+sheet closes when resizing to desktop, where the compact anchored menu remains.
+The original action elements are projected through the same named slot in both
+presentations. Nothing is cloned or submitted by the bar.
+
+Labels use the application's i18next instance, with English defaults when it has
+not been initialized. Consumers can theme the sheet through `action-sheet` and
+retain the desktop `menu`, `dropdown`, `bar` and `info` CSS parts.
 
 Example:
 
@@ -37,6 +58,7 @@ Example:
 </custom-element-demo>
 ```
 -->
+
 ```html
 <div style="padding: 0 18px;">
 	<h3>Sample page</h3>
@@ -45,7 +67,9 @@ Example:
 	<p>Nulla pulvinar justo vel sodales sollicitudin.</p>
 	<p>Proin turpis tortor, sagittis sit amet consequat ut, tempor non velit.</p>
 	<p>Proin finibus elit libero, vitae scelerisque lacus maximus ac.</p>
-	<p>Vivamus ut finibus ligula. Mauris sollicitudin vitae orci eu scelerisque.</p>
+	<p>
+		Vivamus ut finibus ligula. Mauris sollicitudin vitae orci eu scelerisque.
+	</p>
 	<p>Duis nec placerat mauris, at tincidunt libero.</p>
 	<p>Nullam non magna eget mauris porta tempor.</p>
 	<p>Proin non sagittis enim.</p>
