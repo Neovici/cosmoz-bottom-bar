@@ -2,13 +2,14 @@ import { assert, fixture, html, nextFrame, waitUntil } from '@open-wc/testing';
 import { sendKeys, sendMouse, setViewport } from '@web/test-runner-commands';
 import { changeLanguage, init } from 'i18next';
 import '../src/cosmoz-bottom-bar';
+import './theme.js';
 
 const setupMenu = async () => {
 	const bar = await fixture(html`
 		<cosmoz-bottom-bar
 			active
 			.maxToolbarItems=${0}
-			style="position: fixed; inset: auto 0 80px; --cz-spacing: 4px"
+			style="position: fixed; inset: auto 0 80px"
 		>
 			<cosmoz-button>Komplettera konteringsinformation</cosmoz-button>
 			${Array.from(

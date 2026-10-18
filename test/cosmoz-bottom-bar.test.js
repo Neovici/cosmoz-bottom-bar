@@ -11,6 +11,7 @@ import {
 import '@neovici/cosmoz-button';
 import { setViewport } from '@web/test-runner-commands';
 import '../src/cosmoz-bottom-bar.ts';
+import './theme.js';
 
 setup(() => setViewport({ width: 1024, height: 768 }));
 
@@ -1144,10 +1145,10 @@ suite('menu button', () => {
 			const style = getComputedStyle(host.shadowRoot.querySelector('button'));
 			return [style.backgroundColor, style.backgroundImage, style.color];
 		};
-		assert.deepEqual(
-			appearance(menuButton),
-			appearance(getToolbarElements(bottomBar)[0]),
+		const reference = await fixture(
+			html`<cosmoz-button variant="tertiary" icon-only>Menu</cosmoz-button>`,
 		);
+		assert.deepEqual(appearance(menuButton), appearance(reference));
 
 		menuButton.click();
 		await nextFrame();
