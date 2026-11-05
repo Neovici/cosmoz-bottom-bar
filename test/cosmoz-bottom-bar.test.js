@@ -9,8 +9,9 @@ import {
 } from '@open-wc/testing';
 
 import '@neovici/cosmoz-button';
+import '@neovici/cosmoz-utils/keybindings';
 import { sendKeys, setViewport } from '@web/test-runner-commands';
-import '../src/cosmoz-bottom-bar.ts';
+import { openMenu } from '../src/cosmoz-bottom-bar.ts';
 import './theme.js';
 
 setup(() => setViewport({ width: 1024, height: 768 }));
@@ -1236,5 +1237,44 @@ suite('menu keyboard', () => {
 		await waitUntil(() => document.activeElement === first);
 		await sendKeys({ press: 'ArrowDown' });
 		assert.equal(document.activeElement, second);
+	});
+});
+
+suite('menu shortcut', () => {
+	const noop = () => undefined;
+	const app = (register) => html`
+		<cosmoz-keybinding-provider .value=${register}>
+			<cosmoz-bottom-bar active .maxToolbarItems=${0}>
+				<cosmoz-button>First</cosmoz-button>
+			</cosmoz-bottom-bar>
+		</cosmoz-keybinding-provider>
+	`;
+
+	test('names the app\'s key for openMenu on the menu button', async () => {
+		const register = Object.assign(() => noop, {
+			bindings: [
+				[
+					{ key: 'a', ctrlKey: false, metaKey: false },
+					[openMenu],
+					{ title: 'a', description: 'Open actions menu' },
+				],
+			],
+		});
+		const el = await fixture(app(register));
+		const button = el
+			.querySelector('cosmoz-bottom-bar')
+			.shadowRoot.querySelector('#menuButton');
+		await waitUntil(() => button.hasAttribute('aria-keyshortcuts'));
+		assert.equal(button.getAttribute('aria-keyshortcuts'), 'A');
+		assert.equal(button.getAttribute('tooltip'), 'More actions (A)');
+	});
+
+	test('leaves them off when nothing is bound', async () => {
+		const el = await fixture(app(() => noop));
+		const button = el
+			.querySelector('cosmoz-bottom-bar')
+			.shadowRoot.querySelector('#menuButton');
+		assert.isFalse(button.hasAttribute('aria-keyshortcuts'));
+		assert.isFalse(button.hasAttribute('tooltip'));
 	});
 });

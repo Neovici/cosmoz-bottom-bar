@@ -3,6 +3,7 @@ import { toggleSize } from '@neovici/cosmoz-collapse/toggle';
 import '@neovici/cosmoz-dropdown';
 import '@neovici/cosmoz-dropdown/cosmoz-dropdown-next';
 import { dotsVerticalIcon } from '@neovici/cosmoz-icons/untitled';
+import { useShortcut } from '@neovici/cosmoz-utils/keybindings';
 import { useActivity } from '@neovici/cosmoz-utils/keybindings/use-activity';
 import {
 	component,
@@ -16,6 +17,7 @@ import {
 import { html as polymerHtml } from '@polymer/polymer/polymer-element.js';
 import { t } from 'i18next';
 import { html, nothing } from 'lit-html';
+import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { renderMobileActions, useMobileActions } from './mobile-actions';
 import { mobileStyles } from './mobile-actions.css';
 
@@ -310,6 +312,9 @@ const CosmozBottomBar = (host: Host) => {
 		[active],
 	);
 
+	const shortcut = useShortcut(openMenu),
+		moreActions = t('More actions') || 'More actions';
+
 	const toggle = useMemo(() => toggleSize('height'), []);
 
 	useLayoutEffect(() => {
@@ -415,7 +420,11 @@ const CosmozBottomBar = (host: Host) => {
 							id="menuButton"
 							variant="tertiary"
 							icon-only
-							aria-label=${t('More actions') || 'More actions'}
+							aria-label=${moreActions}
+							aria-keyshortcuts=${ifDefined(shortcut.keyshortcuts)}
+							tooltip=${ifDefined(
+								shortcut.label && `${moreActions} (${shortcut.label})`,
+							)}
 							aria-haspopup="dialog"
 							aria-expanded=${String(actions.opened)}
 							@click=${actions.open}
@@ -431,7 +440,11 @@ const CosmozBottomBar = (host: Host) => {
 								slot="button"
 								variant="tertiary"
 								icon-only
-								aria-label=${t('More actions') || 'More actions'}
+								aria-label=${moreActions}
+								aria-keyshortcuts=${ifDefined(shortcut.keyshortcuts)}
+								tooltip=${ifDefined(
+									shortcut.label && `${moreActions} (${shortcut.label})`,
+								)}
 								>${dotsVerticalIcon()}</cosmoz-button
 							>
 							<div class="menu" part="menu" @click=${closeMenu}>
