@@ -9,7 +9,7 @@ import {
 } from '@open-wc/testing';
 
 import '@neovici/cosmoz-button';
-import { setViewport } from '@web/test-runner-commands';
+import { sendKeys, setViewport } from '@web/test-runner-commands';
 import '../src/cosmoz-bottom-bar.ts';
 import './theme.js';
 
@@ -1217,5 +1217,24 @@ suite('available width', () => {
 		assert.isFalse(bar.shadowRoot.querySelector('#dropdown').opened);
 		bar.style.width = '700px';
 		await waitUntil(() => primary.slot === 'bottom-bar-toolbar');
+	});
+});
+
+suite('menu keyboard', () => {
+	test('opening the menu from the keyboard focuses the first item, arrows move on', async () => {
+		const bar = await fixture(html`
+			<cosmoz-bottom-bar active .maxToolbarItems=${0}>
+				<cosmoz-button id="first">First</cosmoz-button>
+				<cosmoz-button id="second">Second</cosmoz-button>
+			</cosmoz-bottom-bar>
+		`);
+		const first = bar.querySelector('#first'),
+			second = bar.querySelector('#second');
+		await waitUntil(() => second.slot === 'bottom-bar-menu');
+		bar.shadowRoot.querySelector('#menuButton').focus();
+		await sendKeys({ press: 'Enter' });
+		await waitUntil(() => document.activeElement === first);
+		await sendKeys({ press: 'ArrowDown' });
+		assert.equal(document.activeElement, second);
 	});
 });

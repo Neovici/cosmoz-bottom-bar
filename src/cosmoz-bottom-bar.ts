@@ -435,7 +435,7 @@ const CosmozBottomBar = (host: Host) => {
 								>${dotsVerticalIcon()}</cosmoz-button
 							>
 							<div class="menu" part="menu" @click=${closeMenu}>
-								<cosmoz-dropdown-list>
+								<cosmoz-dropdown-list autofocus>
 									<slot id="bottomBarMenu" name="bottom-bar-menu"></slot>
 								</cosmoz-dropdown-list>
 							</div>
